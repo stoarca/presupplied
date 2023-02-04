@@ -229,6 +229,7 @@ let KnowledgeMap = () => {
     return ret;
   }, [knowledgeGraph]);
 
+  let [mode, setMode] = React.useState<'selecting' | null>(null);
   let [hoverCell, setHoverCell] = React.useState<Cell | null>(null);
   let [selectedCells, setSelectedCells] = React.useState<Cell[]>([]);
   let [dragStart, setDragStart] = React.useState<Cell | null>(null);
@@ -237,6 +238,9 @@ let KnowledgeMap = () => {
       return;
     }
     setDragStart(hoverCell);
+    if (e.shiftKey) {
+      setMode('selecting');
+    }
 
     if (e.shiftKey || e.ctrlKey) {
       return;
@@ -264,6 +268,7 @@ let KnowledgeMap = () => {
   }, [hoverCell]);
   let handleClick = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
     setDragStart(null);
+    setMode(null);
     if (!dragStart) {
       return;
     }
@@ -275,31 +280,47 @@ let KnowledgeMap = () => {
     let dj = hoverCell.j - dragStart.j;
     if (di !== 0 || dj !== 0) { // move selection
       let selectedNodeIds = selectedCells.map(x => grid[x.i][x.j]);
-      let isOverlapWithOthers = selectedCells.some(x => {
-        let nodeId = grid[x.i + di][x.j + dj];
-        return nodeId && !selectedNodeIds.includes(nodeId);
-      });
-      if (isOverlapWithOthers) {
-        console.error('Unable to move due to intersection');
-        return;
-      }
-
-      let newNodes = knowledgeMap.nodes.map(x => {
-        if (!selectedNodeIds.includes(x.id)) {
-          return x;
+      if (mode === 'selecting') {
+        let newlySelectedCells = [];
+        let mini = Math.min(hoverCell.i, dragStart.i);
+        let maxi = Math.max(hoverCell.i, dragStart.i);
+        let minj = Math.min(hoverCell.j, dragStart.j);
+        let maxj = Math.max(hoverCell.j, dragStart.j);
+        for (let i = mini; i <= maxi; ++i) {
+          for (let j = minj; j <= maxj; ++j) {
+            if (grid[i][j]) {
+              newlySelectedCells.push({i: i, j: j});
+            }
+          }
         }
-        return {
-          ...x,
-          i: x.i + di,
-          j: x.j + dj,
+        setSelectedCells([...selectedCells, ...newlySelectedCells]);
+      } else {
+        let isOverlapWithOthers = selectedCells.some(x => {
+          let nodeId = grid[x.i + di][x.j + dj];
+          return nodeId && !selectedNodeIds.includes(nodeId);
+        });
+        if (isOverlapWithOthers) {
+          console.error('Unable to move due to intersection');
+          return;
+        }
+
+        let newNodes = knowledgeMap.nodes.map(x => {
+          if (!selectedNodeIds.includes(x.id)) {
+            return x;
+          }
+          return {
+            ...x,
+            i: x.i + di,
+            j: x.j + dj,
+          };
+        });
+        let newKnowledgeMap = {
+          ...knowledgeMap,
+          nodes: newNodes,
         };
-      });
-      let newKnowledgeMap = {
-        ...knowledgeMap,
-        nodes: newNodes,
-      };
-      setKnowledgeMap(newKnowledgeMap);
-      setSelectedCells(selectedCells.map(x => ({i: x.i + di, j: x.j + dj})));
+        setKnowledgeMap(newKnowledgeMap);
+        setSelectedCells(selectedCells.map(x => ({i: x.i + di, j: x.j + dj})));
+      }
       return;
     }
 
