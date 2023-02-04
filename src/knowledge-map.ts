@@ -1,8 +1,9 @@
 import {DepGraph} from './dependency-graph';
+import _KNOWLEDGE_MAP from './knowledge-map.json';
 
 interface GraphNode {
   id: string,
-  deps?: string[],
+  deps: string[],
   i: number,
   j: number,
 }
@@ -10,6 +11,8 @@ interface GraphNode {
 interface GraphJson {
   nodes: GraphNode[],
 }
+
+export const KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 
 export const buildGraph = (graphJson: GraphJson) => {
   let graph = new DepGraph();
@@ -24,9 +27,6 @@ export const buildGraph = (graphJson: GraphJson) => {
   }
   for (let i = 0; i < graphJson.nodes.length; ++i) {
     let node = graphJson.nodes[i];
-    if (!node.deps) {
-      continue;
-    }
 
     for (let j = 0; j < node.deps.length; ++j) {
       if (!graph.hasNode(node.deps[j])) {

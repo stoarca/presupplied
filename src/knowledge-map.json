@@ -2,6 +2,7 @@
   "nodes": [{
     "id": "REPEAT_VOWEL_SOUNDS",
     "i": 0,
-    "j": 0
+    "j": 0,
+    "deps": []
   }]
 }
