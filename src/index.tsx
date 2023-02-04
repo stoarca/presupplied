@@ -11,6 +11,11 @@ interface Cell {
   j: number,
 }
 
+let autoIncrementingId = 0;
+let genId = () => {
+  return ++autoIncrementingId;
+};
+
 let TOOLBAR_WIDTH = '350px';
 let CELL_WIDTH = 300;
 let CELL_W_PADDING = 75;
@@ -63,6 +68,67 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
     props.onChangeId(kmid, tempId);
   }, [kmid, tempId, props.onChangeId]);
 
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <input type="text"
+            ref={ref}
+            value={tempId}
+            onChange={handleChangeInput}/>
+      </div>
+      <div>
+        <button type="submit">Apply</button>
+      </div>
+    </form>
+  );
+};
+
+interface ToolbarProps {
+  knowledgeMap: typeof KNOWLEDGE_MAP,
+  selectedCells: Cell[],
+  grid: string[][],
+  onChangeId: (oldId: string, newId: string) => void,
+  onDeleteIds: (ids: string[]) => void,
+}
+
+let Toolbar = (props: ToolbarProps) => {
+  let forOne = null;
+  if (props.selectedCells.length === 1) {
+    forOne = (
+      <ToolbarForOne
+          selectedCell={props.selectedCells[0]}
+          grid={props.grid}
+          onChangeId={props.onChangeId}/>
+    );
+  }
+
+  let handleDelete = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    props.onDeleteIds(props.selectedCells.map(x => props.grid[x.i][x.j]));
+  }, [props.selectedCells, props.grid, props.onDeleteIds]);
+  let forSelected = null;
+  if (props.selectedCells.length > 0) {
+    forSelected = (
+      <div>
+        <button onClick={handleDelete}>Delete Selected</button>
+      </div>
+    );
+  }
+
+  let handleExport = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    let blob = new Blob(
+      [JSON.stringify(props.knowledgeMap, undefined, 2)],
+      {type: 'text/json'}
+    );
+    let a = document.createElement('a');
+    //a.style = 'display: none';
+    document.body.appendChild(a);
+    a.href = window.URL.createObjectURL(blob);
+    a.download = 'knowledge-map.json';
+    a.click();
+    window.URL.revokeObjectURL(a.href);
+    a.remove();
+  }, [props.knowledgeMap]);
+
   let toolbarStyle = {
     position: 'fixed',
     width: TOOLBAR_WIDTH,
@@ -73,36 +139,12 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
   } as React.CSSProperties;
   return (
     <div style={toolbarStyle}>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input type="text"
-              ref={ref}
-              value={tempId}
-              onChange={handleChangeInput}/>
-        </div>
-        <div>
-          <button type="submit">Apply</button>
-        </div>
-      </form>
+      {forOne}
+      {forSelected}
+      <div>
+        <button onClick={handleExport}>Export All</button>
+      </div>
     </div>
-  );
-};
-
-interface ToolbarProps {
-  selectedCells: Cell[],
-  grid: string[][],
-  onChangeId: (oldId: string, newId: string) => void,
-}
-
-let Toolbar = (props: ToolbarProps) => {
-  if (props.selectedCells.length !== 1) {
-    return null;
-  }
-  return (
-    <ToolbarForOne
-        selectedCell={props.selectedCells[0]}
-        grid={props.grid}
-        onChangeId={props.onChangeId}/>
   );
 };
 
@@ -154,7 +196,26 @@ let KnowledgeMap = () => {
     return () => clearInterval(interval);
   }, []);
 
-  let [knowledgeMap, setKnowledgeMap] = React.useState(KNOWLEDGE_MAP);
+  let [knowledgeMap, _setKnowledgeMap] = React.useState(KNOWLEDGE_MAP);
+  let setKnowledgeMap = React.useCallback((m: typeof KNOWLEDGE_MAP) => {
+    let acc: {[id: string]: number} = {};
+    m.nodes.forEach(x => {
+      acc[x.id] = (acc[x.id] || 0) + 1;
+      if (acc[x.id] !== 1) {
+        throw new Error('We tried to set an invalid map! Duplicate id ' + x.id);
+      }
+    });
+
+    m.nodes.forEach(x => {
+      x.deps.forEach(d => {
+        if (!acc[d]) {
+          throw new Error('Invalid dependency ' + d + ' on ' + x.id);
+        }
+      });
+    });
+
+    _setKnowledgeMap(m);
+  }, []);
   let knowledgeGraph = React.useMemo(() => {
     return buildGraph(knowledgeMap);
   }, [knowledgeMap]);
@@ -201,7 +262,7 @@ let KnowledgeMap = () => {
       return;
     }
   }, [hoverCell]);
-  let handleMouseUp = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
+  let handleClick = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
     setDragStart(null);
     if (!dragStart) {
       return;
@@ -310,7 +371,7 @@ let KnowledgeMap = () => {
       setKnowledgeMap({
         ...knowledgeMap,
         nodes: [...knowledgeMap.nodes, {
-          id: 'newnode' + knowledgeMap.nodes.length,
+          id: 'newnode' + genId(),
           i: hoverCell.i,
           j: hoverCell.j,
           deps: [],
@@ -321,32 +382,37 @@ let KnowledgeMap = () => {
   }, [dragStart, hoverCell, grid, knowledgeMap, selectedCells]);
 
   let handleChangeId = React.useCallback((oldId: string, newId: string) => {
-    let newKnowledgeMap = {
-      ...knowledgeMap,
-      nodes: [...knowledgeMap.nodes],
-    };
-    let oldNodeIndex = newKnowledgeMap.nodes.findIndex(x => x.id === oldId);
+    let oldNodeIndex = knowledgeMap.nodes.findIndex(x => x.id === oldId);
     if (oldNodeIndex === -1) {
       throw new Error('Could not find id ' + oldId);
     }
-    let newNodeIndex = newKnowledgeMap.nodes.findIndex(x => x.id === newId);
+    let newNodeIndex = knowledgeMap.nodes.findIndex(x => x.id === newId);
     if (newNodeIndex !== -1) {
       throw new Error(newId + ' already exists');
     }
-    newKnowledgeMap.nodes[oldNodeIndex] = {
-      ...newKnowledgeMap.nodes[oldNodeIndex],
-      id: newId,
-    };
-    for (let i = 0; i < newKnowledgeMap.nodes.length; ++i) {
-      let deps = newKnowledgeMap.nodes[i].deps;
-      for (let j = 0; j < deps.length; ++j) {
-        if (deps[j] === oldId) {
-          newKnowledgeMap.nodes[i].deps = [...deps];
-          newKnowledgeMap.nodes[i].deps![j] = newId;
+
+    setKnowledgeMap({
+      ...knowledgeMap,
+      nodes: knowledgeMap.nodes.map(x => {
+        if (x.id === oldId) {
+          return {...x, id: newId};
+        } else if (x.deps.includes(oldId)) {
+          return {...x, deps: x.deps.map(y => y === oldId ? newId : y)};
+        } else {
+          return x;
         }
-      }
-    }
-    setKnowledgeMap(newKnowledgeMap);
+      }),
+    });
+  }, [knowledgeMap]);
+
+  let handleDeleteIds = React.useCallback((idsToDelete: string[]) => {
+    setKnowledgeMap({
+      ...knowledgeMap,
+      nodes: knowledgeMap.nodes.filter(x => !idsToDelete.includes(x.id)).map(x => {
+        return {...x, deps: x.deps.filter(y => !idsToDelete.includes(y))};
+      }),
+    });
+    setSelectedCells([]);
   }, [knowledgeMap]);
 
   let offsetMap = new Map<string, KnowledgeNodeProps>();
@@ -418,7 +484,7 @@ let KnowledgeMap = () => {
       <div style={containerStyle}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}>
+          onClick={handleClick}>
         <svg xmlns="<http://www.w3.org/2000/svg>"
             style={svgStyle}
             width={width}
@@ -431,7 +497,9 @@ let KnowledgeMap = () => {
       </div>
       <Toolbar selectedCells={selectedCells}
           grid={grid}
-          onChangeId={handleChangeId}/>
+          knowledgeMap={knowledgeMap}
+          onChangeId={handleChangeId}
+          onDeleteIds={handleDeleteIds}/>
     </div>
   );
 };

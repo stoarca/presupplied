@@ -1,8 +1,74 @@
 {
-  "nodes": [{
-    "id": "REPEAT_VOWEL_SOUNDS",
-    "i": 0,
-    "j": 0,
-    "deps": []
-  }]
+  "nodes": [
+    {
+      "id": "REPEAT_VOWEL_SOUNDS",
+      "i": 0,
+      "j": 0,
+      "deps": []
+    },
+    {
+      "id": "REPEAT_CONSONANT_SOUNDS",
+      "i": 1,
+      "j": 0,
+      "deps": []
+    },
+    {
+      "id": "RECOGNIZE_SIMPLE_OBJECTS",
+      "i": 3,
+      "j": 0,
+      "deps": []
+    },
+    {
+      "id": "REPEAT_SOUNDS",
+      "i": 0,
+      "j": 1,
+      "deps": [
+        "REPEAT_VOWEL_SOUNDS",
+        "REPEAT_CONSONANT_SOUNDS"
+      ]
+    },
+    {
+      "id": "SPEAK_SIMPLE_OBJECTS",
+      "i": 2,
+      "j": 2,
+      "deps": [
+        "REPEAT_SOUNDS",
+        "RECOGNIZE_SIMPLE_OBJECTS"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_SIMPLE_CONCEPTS",
+      "i": 3,
+      "j": 2,
+      "deps": [
+        "RECOGNIZE_SIMPLE_OBJECTS"
+      ]
+    },
+    {
+      "id": "SPEAK_SIMPLE_CONCEPTS",
+      "i": 2,
+      "j": 3,
+      "deps": [
+        "RECOGNIZE_SIMPLE_CONCEPTS",
+        "SPEAK_SIMPLE_OBJECTS"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_OPPOSITES",
+      "i": 3,
+      "j": 3,
+      "deps": [
+        "RECOGNIZE_SIMPLE_CONCEPTS"
+      ]
+    },
+    {
+      "id": "SPEAK_OPPOSITES",
+      "i": 2,
+      "j": 4,
+      "deps": [
+        "RECOGNIZE_OPPOSITES",
+        "SPEAK_SIMPLE_CONCEPTS"
+      ]
+    }
+  ]
 }
