@@ -1,6 +1,17 @@
-import {DepGraph as _DepGraph} from 'dependency-graph';
+import {DepGraph} from 'dependency-graph';
 
-export class DepGraph<T> extends _DepGraph<T> {
+export interface GraphNode {
+  id: string,
+  deps: string[],
+  i: number,
+  j: number,
+}
+
+export interface GraphJson {
+  nodes: GraphNode[],
+}
+
+export class TechTree extends DepGraph<GraphNode> {
   _memoizedDepths!: Map<string, number>;
   _memoizedGrid!: string[][];
   _memoizedRows!: number;
@@ -9,17 +20,6 @@ export class DepGraph<T> extends _DepGraph<T> {
   constructor() {
     super();
     this.clearMemo();
-  }
-  addNodeX(node: string, deps?: string[], data?: T) {
-    this.addNode(node);
-    if (deps !== undefined) {
-      for (let i = 0; i < deps.length; ++i) {
-        this.addDependency(node, deps[i]);
-      }
-    }
-    if (typeof data !== 'undefined') {
-      this.setNodeData(node, data);
-    }
   }
   memoizedDepth(node: string): number {
     if (this._memoizedDepths.has(node)) {
@@ -41,7 +41,7 @@ export class DepGraph<T> extends _DepGraph<T> {
     if (this._memoizedRows === 0 && this._memoizedCols === 0) {
       let topSorted = this.overallOrder();
       topSorted.forEach((node) => {
-        let {i, j} = this.getNodeData(node) as {i: number, j: number};
+        let {i, j} = this.getNodeData(node);
         this._memoizedGrid[i][j] = node;
         this._memoizedRows = Math.max(i, this._memoizedRows);
         this._memoizedCols = Math.max(j, this._memoizedCols);
@@ -54,10 +54,51 @@ export class DepGraph<T> extends _DepGraph<T> {
       cols: this._memoizedCols,
     };
   }
+  getReachable(reached: Set<string>): Set<string> {
+    let reachable = new Set<string>();
+    let leaves = this.overallOrder(true);
+    leaves.forEach(x => {
+      if (!reached.has(x)) {
+        reachable.add(x)
+      }
+    });
+    reached.forEach(x => {
+      this.directDependentsOf(x).forEach(y => {
+        if (this.directDependenciesOf(y).every(z => reached.has(z))) {
+          reachable.add(y);
+        }
+      });
+    });
+    return reachable;
+  }
   clearMemo() {
+    // TODO: this can be automatically calculated so that users don't have to
     this._memoizedDepths = new Map();
     this._memoizedGrid = new Array(50).fill(0).map(x => new Array(50));
     this._memoizedRows = 0;
     this._memoizedCols = 0;
   }
 }
+
+export const buildGraph = (graphJson: GraphJson) => {
+  let graph = new TechTree();
+
+  for (let i = 0; i < graphJson.nodes.length; ++i) {
+    let node = graphJson.nodes[i];
+    graph.addNode(node.id);
+    graph.setNodeData(node.id, node);
+  }
+  for (let i = 0; i < graphJson.nodes.length; ++i) {
+    let node = graphJson.nodes[i];
+
+    for (let j = 0; j < node.deps.length; ++j) {
+      if (!graph.hasNode(node.deps[j])) {
+        throw new Error(
+          node.id + ' has dep on ' + node.deps[j] + ' which does not exist!'
+        );
+      }
+      graph.addDependency(node.id, node.deps[j]);
+    }
+  }
+  return graph;
+};

@@ -494,7 +494,7 @@
     {
       "id": "READ_ANY_FRACTION_UNDER_1",
       "i": 13,
-      "j": 13,
+      "j": 14,
       "deps": [
         "READ_ANY_NUMBER",
         "WRITTEN_FRACTION_MORE_LESS"
@@ -542,7 +542,7 @@
     {
       "id": "WRITTEN_FRACTION_MORE_LESS",
       "i": 13,
-      "j": 12,
+      "j": 13,
       "deps": [
         "VISUAL_FRACTION_MORE_LESS",
         "READ_SIMPLE_FRACTIONS"
@@ -569,7 +569,7 @@
     {
       "id": "VISUAL_FRACTION_OVER_1",
       "i": 13,
-      "j": 14,
+      "j": 15,
       "deps": [
         "READ_ANY_FRACTION_UNDER_1"
       ]
@@ -577,7 +577,7 @@
     {
       "id": "READ_ANY_FRACTION_OVER_1",
       "i": 13,
-      "j": 15,
+      "j": 16,
       "deps": [
         "VISUAL_FRACTION_OVER_1"
       ]
@@ -669,7 +669,7 @@
     {
       "id": "ADD_2_FRACTIONS_UNDER_1_SAME_DENOM",
       "i": 15,
-      "j": 14,
+      "j": 15,
       "deps": [
         "READ_ANY_FRACTION_UNDER_1",
         "ADD_TWO_POS_2_DIGIT_NUMBERS"
@@ -678,10 +678,11 @@
     {
       "id": "ADD_2_FRACTIONS_OVER_1_SAME_DENOM",
       "i": 15,
-      "j": 16,
+      "j": 17,
       "deps": [
         "READ_ANY_FRACTION_OVER_1",
-        "ADD_2_FRACTIONS_UNDER_1_SAME_DENOM"
+        "ADD_2_FRACTIONS_UNDER_1_SAME_DENOM",
+        "REMAINDERS"
       ]
     },
     {
@@ -730,7 +731,7 @@
     {
       "id": "MULT_UP_TO_10_X_10",
       "i": 20,
-      "j": 14,
+      "j": 15,
       "deps": [
         "MULT_UP_TO_5_X_10"
       ]
@@ -738,7 +739,7 @@
     {
       "id": "LONG_ADDITION_3_DIGITS",
       "i": 16,
-      "j": 12,
+      "j": 13,
       "deps": [
         "ADD_TWO_POS_2_DIGIT_NUMBERS"
       ]
@@ -746,7 +747,7 @@
     {
       "id": "LONG_ADDITION_ANY_DIGITS",
       "i": 16,
-      "j": 14,
+      "j": 15,
       "deps": [
         "LONG_ADDITION_3_DIGITS"
       ]
@@ -770,7 +771,7 @@
     {
       "id": "LONG_ADDITION_MULTIPLE_NUMBERS",
       "i": 16,
-      "j": 15,
+      "j": 16,
       "deps": [
         "LONG_ADDITION_ANY_DIGITS"
       ]
@@ -778,7 +779,7 @@
     {
       "id": "LONG_MULT_2_POS_NUMBERS",
       "i": 20,
-      "j": 16,
+      "j": 17,
       "deps": [
         "MULT_UP_TO_10_X_10",
         "LONG_SUBTRACT_POS_NUMBERS"
@@ -787,7 +788,7 @@
     {
       "id": "LONG_MULT_MULTIPLE_POS_NUMBERS",
       "i": 20,
-      "j": 17,
+      "j": 18,
       "deps": [
         "LONG_MULT_2_POS_NUMBERS",
         "LONG_ADDITION_MULTIPLE_NUMBERS"
@@ -796,7 +797,7 @@
     {
       "id": "ADD_SUBTRACT_2_FRACTIONS_DIFF_DENOM",
       "i": 15,
-      "j": 19,
+      "j": 20,
       "deps": [
         "ADD_2_FRACTIONS_OVER_1_SAME_DENOM",
         "LONG_MULT_2_NUMBERS",
@@ -814,7 +815,7 @@
     {
       "id": "DIV_UP_TO_5_X_10",
       "i": 21,
-      "j": 14,
+      "j": 15,
       "deps": [
         "MULT_UP_TO_5_X_10",
         "DIV_UP_TO_5_X_5"
@@ -840,7 +841,7 @@
     {
       "id": "LONG_DIV",
       "i": 21,
-      "j": 17,
+      "j": 18,
       "deps": [
         "DIV_UP_TO_10_X_10",
         "REMAINDERS",
@@ -858,7 +859,7 @@
     {
       "id": "SUBTRACT_2_DIGIT",
       "i": 17,
-      "j": 12,
+      "j": 13,
       "deps": [
         "SUBTRACT_1_DIGIT",
         "ADD_TWO_POS_2_DIGIT_NUMBERS",
@@ -868,7 +869,7 @@
     {
       "id": "LONG_SUBTRACT_3_DIGIT",
       "i": 17,
-      "j": 14,
+      "j": 15,
       "deps": [
         "LONG_ADDITION_3_DIGITS",
         "SUBTRACT_2_DIGIT"
@@ -877,7 +878,7 @@
     {
       "id": "LONG_SUBTRACT_POS_NUMBERS",
       "i": 17,
-      "j": 15,
+      "j": 16,
       "deps": [
         "LONG_SUBTRACT_3_DIGIT",
         "LONG_ADDITION_ANY_DIGITS"
@@ -886,7 +887,7 @@
     {
       "id": "NEGATIVE_COUNTING",
       "i": 18,
-      "j": 12,
+      "j": 13,
       "deps": [
         "SUBTRACT_1_DIGIT"
       ]
@@ -903,7 +904,7 @@
     {
       "id": "LONG_ADD_SUBTRACT_ANY_NUMBERS",
       "i": 18,
-      "j": 17,
+      "j": 18,
       "deps": [
         "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
         "LONG_SUBTRACT_POS_NUMBERS",
@@ -913,10 +914,11 @@
     {
       "id": "LONG_MULT_ANY_NUMBERS",
       "i": 20,
-      "j": 18,
+      "j": 19,
       "deps": [
         "LONG_MULT_MULTIPLE_POS_NUMBERS",
-        "LONG_MULT_2_NUMBERS"
+        "LONG_MULT_2_NUMBERS",
+        "LONG_ADD_SUBTRACT_ANY_NUMBERS"
       ]
     },
     {
@@ -931,7 +933,7 @@
     {
       "id": "LONG_MULT_2_NUMBERS",
       "i": 19,
-      "j": 17,
+      "j": 18,
       "deps": [
         "LONG_MULT_2_POS_NUMBERS",
         "MULT_NEGATIVE"
@@ -940,15 +942,16 @@
     {
       "id": "USE_MOUSE_CLICK",
       "i": 8,
-      "j": 7,
+      "j": 8,
       "deps": [
-        "USE_MOUSE_HOVER"
+        "USE_MOUSE_HOVER_FAST",
+        "USE_MOUSE_HOVER_SMALL"
       ]
     },
     {
       "id": "USE_MOUSE_DOUBLE_CLICK",
       "i": 8,
-      "j": 8,
+      "j": 9,
       "deps": [
         "USE_MOUSE_CLICK"
       ]
@@ -1008,45 +1011,43 @@
     {
       "id": "ADD_SUBTRACT_MULTIPLE_FRACTIONS",
       "i": 15,
-      "j": 20,
+      "j": 21,
       "deps": [
         "ADD_SUBTRACT_2_FRACTIONS_DIFF_DENOM"
       ]
     },
     {
       "id": "FILL_IN_BLANK_ADD_SMALL",
-      "i": 24,
-      "j": 11,
+      "i": 26,
+      "j": 12,
       "deps": [
-        "ADD_UP_TO_20"
+        "MULTI_OP_ADD_SMALL"
       ]
     },
     {
       "id": "FILL_IN_BLANK_SUBTRACT_SMALL",
-      "i": 24,
-      "j": 12,
+      "i": 26,
+      "j": 13,
       "deps": [
         "FILL_IN_BLANK_ADD_SMALL",
-        "SUBTRACT_1_DIGIT",
-        "ADD_TWO_POS_2_DIGIT_NUMBERS"
+        "MULTI_OP_SUB_SMALL"
       ]
     },
     {
       "id": "FILL_IN_BLANK_MULT_SMALL",
-      "i": 24,
-      "j": 13,
+      "i": 26,
+      "j": 14,
       "deps": [
         "FILL_IN_BLANK_SUBTRACT_SMALL",
-        "MULT_UP_TO_5_X_5"
+        "MULTI_OP_MULT_SMALL"
       ]
     },
     {
       "id": "OPERATOR_ORDER",
       "i": 25,
-      "j": 12,
+      "j": 13,
       "deps": [
-        "SUBTRACT_1_DIGIT",
-        "ADD_TWO_POS_2_DIGIT_NUMBERS"
+        "MULTI_OP_SUB_SMALL"
       ]
     },
     {
@@ -1055,16 +1056,16 @@
       "j": 15,
       "deps": [
         "OPERATOR_ORDER",
-        "FILL_IN_BLANK_DIV_SMALL"
+        "MULTI_OP_DIV_SMALL"
       ]
     },
     {
       "id": "FILL_IN_BLANK_4_OPS_NEG_PAREN",
-      "i": 24,
-      "j": 18,
+      "i": 26,
+      "j": 19,
       "deps": [
-        "PARENTHESES",
-        "FILL_IN_BLANK_4_OPS"
+        "FILL_IN_BLANK_4_OPS",
+        "MULTI_OP_4_OPS_NEG_PAREN"
       ]
     },
     {
@@ -1077,40 +1078,38 @@
     },
     {
       "id": "FILL_IN_BLANK_DIV_SMALL",
-      "i": 24,
-      "j": 14,
+      "i": 26,
+      "j": 15,
       "deps": [
-        "DIV_UP_TO_5_X_5",
-        "FILL_IN_BLANK_MULT_SMALL"
+        "FILL_IN_BLANK_MULT_SMALL",
+        "MULTI_OP_DIV_SMALL"
       ]
     },
     {
       "id": "FILL_IN_BLANK_ADD_SUBTRACT_NEG_SMALL",
-      "i": 24,
-      "j": 15,
+      "i": 26,
+      "j": 16,
       "deps": [
         "FILL_IN_BLANK_DIV_SMALL",
-        "SUBTRACT_2_DIGIT_WITH_NEGATIVE"
+        "MULTI_OP_ADD_SUB_NEG_SMALL"
       ]
     },
     {
       "id": "FILL_IN_BLANK_4_OPS_NEG_SMALL",
-      "i": 24,
-      "j": 16,
+      "i": 26,
+      "j": 17,
       "deps": [
-        "OPERATOR_PRECEDENCE",
         "FILL_IN_BLANK_ADD_SUBTRACT_NEG_SMALL",
-        "MULT_NEGATIVE",
-        "DIV_UP_TO_5_X_10"
+        "MULTI_OP_4_OPS_NEG_SMALL"
       ]
     },
     {
       "id": "FILL_IN_BLANK_4_OPS",
-      "i": 24,
-      "j": 17,
+      "i": 26,
+      "j": 18,
       "deps": [
         "FILL_IN_BLANK_4_OPS_NEG_SMALL",
-        "DIV_UP_TO_10_X_10"
+        "MULTI_OP_4_OPS"
       ]
     },
     {
@@ -1125,7 +1124,7 @@
     {
       "id": "EXP_NEGATIVE_BASE_SMALL",
       "i": 23,
-      "j": 17,
+      "j": 18,
       "deps": [
         "EXP_SMALL"
       ]
@@ -1133,24 +1132,24 @@
     {
       "id": "EXP_INTEGER",
       "i": 23,
-      "j": 18,
+      "j": 19,
       "deps": [
         "EXP_NEGATIVE_BASE_SMALL"
       ]
     },
     {
       "id": "FILL_IN_BLANK_5_OPS",
-      "i": 24,
-      "j": 19,
+      "i": 26,
+      "j": 21,
       "deps": [
         "FILL_IN_BLANK_4_OPS_NEG_PAREN",
-        "EXP_INTEGER"
+        "MULTI_OP_5_OPS"
       ]
     },
     {
       "id": "SQRT",
       "i": 23,
-      "j": 19,
+      "j": 20,
       "deps": [
         "EXP_INTEGER",
         "LONG_MULT_ANY_NUMBERS"
@@ -1159,7 +1158,7 @@
     {
       "id": "CUBE_ROOT",
       "i": 23,
-      "j": 20,
+      "j": 21,
       "deps": [
         "SQRT",
         "ADD_SUBTRACT_2_FRACTIONS_DIFF_DENOM"
@@ -1167,17 +1166,17 @@
     },
     {
       "id": "FILL_IN_BLANK_6_OPS",
-      "i": 24,
-      "j": 20,
+      "i": 26,
+      "j": 22,
       "deps": [
         "FILL_IN_BLANK_5_OPS",
-        "SQRT"
+        "MULTI_OP_6_OPS"
       ]
     },
     {
       "id": "EXP_NEG_POW",
       "i": 23,
-      "j": 21,
+      "j": 22,
       "deps": [
         "CUBE_ROOT"
       ]
@@ -1185,7 +1184,7 @@
     {
       "id": "EXP_FRAC_POW",
       "i": 22,
-      "j": 21,
+      "j": 22,
       "deps": [
         "CUBE_ROOT"
       ]
@@ -1193,10 +1192,354 @@
     {
       "id": "EXP_NEG_FRAC_POW",
       "i": 23,
-      "j": 22,
+      "j": 23,
       "deps": [
         "EXP_NEG_POW",
         "EXP_FRAC_POW"
+      ]
+    },
+    {
+      "id": "EQUATIONS_4_OPS_NEG_PAREN",
+      "i": 27,
+      "j": 20,
+      "deps": [
+        "FILL_IN_BLANK_4_OPS_NEG_PAREN",
+        "EQUATIONS_4_OPS"
+      ]
+    },
+    {
+      "id": "ARITHMETIC",
+      "i": 23,
+      "j": 24,
+      "deps": [
+        "EXP_NEG_FRAC_POW",
+        "ADD_SUBTRACT_MULTIPLE_FRACTIONS"
+      ]
+    },
+    {
+      "id": "EQUATIONS_5_OPS",
+      "i": 27,
+      "j": 22,
+      "deps": [
+        "FILL_IN_BLANK_5_OPS",
+        "EQUATIONS_4_OPS_NEG_PAREN"
+      ]
+    },
+    {
+      "id": "EQUATIONS_ADD_SMALL",
+      "i": 27,
+      "j": 13,
+      "deps": [
+        "FILL_IN_BLANK_ADD_SMALL"
+      ]
+    },
+    {
+      "id": "EQUATIONS_SUBTRACT_SMALL",
+      "i": 27,
+      "j": 14,
+      "deps": [
+        "FILL_IN_BLANK_SUBTRACT_SMALL",
+        "EQUATIONS_ADD_SMALL"
+      ]
+    },
+    {
+      "id": "EQUATIONS_MULT_SMALL",
+      "i": 27,
+      "j": 15,
+      "deps": [
+        "EQUATIONS_SUBTRACT_SMALL",
+        "FILL_IN_BLANK_MULT_SMALL"
+      ]
+    },
+    {
+      "id": "EQUATIONS_DIV_SMALL",
+      "i": 27,
+      "j": 16,
+      "deps": [
+        "EQUATIONS_MULT_SMALL",
+        "FILL_IN_BLANK_DIV_SMALL"
+      ]
+    },
+    {
+      "id": "EQUATIONS_ADD_SUB_NEG_SMALL",
+      "i": 27,
+      "j": 17,
+      "deps": [
+        "EQUATIONS_DIV_SMALL",
+        "FILL_IN_BLANK_ADD_SUBTRACT_NEG_SMALL"
+      ]
+    },
+    {
+      "id": "MULTI_OP_ADD_SMALL",
+      "i": 24,
+      "j": 11,
+      "deps": [
+        "ADD_UP_TO_20"
+      ]
+    },
+    {
+      "id": "MULTI_OP_SUB_SMALL",
+      "i": 24,
+      "j": 12,
+      "deps": [
+        "MULTI_OP_ADD_SMALL",
+        "SUBTRACT_1_DIGIT",
+        "ADD_TWO_POS_2_DIGIT_NUMBERS"
+      ]
+    },
+    {
+      "id": "MULTI_OP_MULT_SMALL",
+      "i": 24,
+      "j": 13,
+      "deps": [
+        "MULTI_OP_SUB_SMALL",
+        "MULT_UP_TO_5_X_5"
+      ]
+    },
+    {
+      "id": "MULTI_OP_DIV_SMALL",
+      "i": 24,
+      "j": 14,
+      "deps": [
+        "MULTI_OP_MULT_SMALL",
+        "DIV_UP_TO_5_X_5"
+      ]
+    },
+    {
+      "id": "MULTI_OP_ADD_SUB_NEG_SMALL",
+      "i": 24,
+      "j": 15,
+      "deps": [
+        "MULTI_OP_DIV_SMALL",
+        "SUBTRACT_2_DIGIT_WITH_NEGATIVE"
+      ]
+    },
+    {
+      "id": "MULTI_OP_4_OPS_NEG_SMALL",
+      "i": 24,
+      "j": 16,
+      "deps": [
+        "MULTI_OP_ADD_SUB_NEG_SMALL",
+        "DIV_UP_TO_5_X_10",
+        "MULT_NEGATIVE",
+        "OPERATOR_PRECEDENCE"
+      ]
+    },
+    {
+      "id": "MULTI_OP_4_OPS",
+      "i": 24,
+      "j": 17,
+      "deps": [
+        "MULTI_OP_4_OPS_NEG_SMALL",
+        "DIV_UP_TO_10_X_10"
+      ]
+    },
+    {
+      "id": "MULTI_OP_4_OPS_NEG_PAREN",
+      "i": 24,
+      "j": 18,
+      "deps": [
+        "MULTI_OP_4_OPS",
+        "PARENTHESES"
+      ]
+    },
+    {
+      "id": "MULTI_OP_5_OPS",
+      "i": 24,
+      "j": 20,
+      "deps": [
+        "MULTI_OP_4_OPS_NEG_PAREN",
+        "EXP_INTEGER"
+      ]
+    },
+    {
+      "id": "MULTI_OP_6_OPS",
+      "i": 24,
+      "j": 21,
+      "deps": [
+        "SQRT"
+      ]
+    },
+    {
+      "id": "EQUATIONS_4_OPS_NEG_SMALL",
+      "i": 27,
+      "j": 18,
+      "deps": [
+        "EQUATIONS_ADD_SUB_NEG_SMALL",
+        "FILL_IN_BLANK_4_OPS_NEG_SMALL"
+      ]
+    },
+    {
+      "id": "EQUATIONS_4_OPS",
+      "i": 27,
+      "j": 19,
+      "deps": [
+        "EQUATIONS_4_OPS_NEG_SMALL",
+        "FILL_IN_BLANK_4_OPS"
+      ]
+    },
+    {
+      "id": "EQUATIONS_6_OPS",
+      "i": 27,
+      "j": 23,
+      "deps": [
+        "FILL_IN_BLANK_6_OPS",
+        "EQUATIONS_5_OPS"
+      ]
+    },
+    {
+      "id": "EQUATIONS_2_UNKNOWNS_SMALL",
+      "i": 29,
+      "j": 20,
+      "deps": [
+        "EQUATIONS_4_OPS"
+      ]
+    },
+    {
+      "id": "EQUATIONS_2_UNKNOWNS",
+      "i": 29,
+      "j": 21,
+      "deps": [
+        "EQUATIONS_2_UNKNOWNS_SMALL",
+        "EQUATIONS_4_OPS_NEG_PAREN"
+      ]
+    },
+    {
+      "id": "EQUATIONS_3_UNKNOWNS_SMALL",
+      "i": 29,
+      "j": 22,
+      "deps": [
+        "EQUATIONS_2_UNKNOWNS"
+      ]
+    },
+    {
+      "id": "EQUATIONS_N_UNKNOWNS",
+      "i": 29,
+      "j": 24,
+      "deps": [
+        "EQUATIONS_3_UNKNOWNS",
+        "EQUATIONS_6_OPS"
+      ]
+    },
+    {
+      "id": "EQUATIONS_3_UNKNOWNS",
+      "i": 29,
+      "j": 23,
+      "deps": [
+        "EQUATIONS_3_UNKNOWNS_SMALL"
+      ]
+    },
+    {
+      "id": "ALGEBRA",
+      "i": 29,
+      "j": 25,
+      "deps": [
+        "EQUATIONS_N_UNKNOWNS",
+        "ARITHMETIC"
+      ]
+    },
+    {
+      "id": "ACCOUNT_AND_PASSWORD",
+      "i": 6,
+      "j": 10,
+      "deps": [
+        "PECK_WORDS_ON_KEYBOARD",
+        "PECK_NUMBERS_ON_KEYBOARD",
+        "READ_SHORT_SENTENCES"
+      ]
+    },
+    {
+      "id": "OPEN_APPLICATION",
+      "i": 5,
+      "j": 10,
+      "deps": [
+        "PECK_WORDS_ON_KEYBOARD",
+        "PECK_NUMBERS_ON_KEYBOARD"
+      ]
+    },
+    {
+      "id": "TERMINAL_COMMANDS_SIMPLE",
+      "i": 4,
+      "j": 10,
+      "deps": [
+        "PECK_WORDS_ON_KEYBOARD"
+      ]
+    },
+    {
+      "id": "TERMINAL_COMMANDS",
+      "i": 4,
+      "j": 11,
+      "deps": [
+        "TERMINAL_COMMANDS_SIMPLE",
+        "OPEN_APPLICATION",
+        "ACCOUNT_AND_PASSWORD",
+        "READ_LONG_SENTENCES"
+      ]
+    },
+    {
+      "id": "SKETCH_VARIABLE_SIMPLE",
+      "i": 5,
+      "j": 11,
+      "deps": [
+        "TERMINAL_COMMANDS_SIMPLE",
+        "OPEN_APPLICATION",
+        "ACCOUNT_AND_PASSWORD"
+      ]
+    },
+    {
+      "id": "SKETCH_IF_SIMPLE",
+      "i": 5,
+      "j": 12,
+      "deps": [
+        "SKETCH_VARIABLE_SIMPLE"
+      ]
+    },
+    {
+      "id": "SKETCH_LOOP_SIMPLE",
+      "i": 5,
+      "j": 13,
+      "deps": [
+        "SKETCH_IF_SIMPLE"
+      ]
+    },
+    {
+      "id": "VECTORS",
+      "i": 30,
+      "j": 26,
+      "deps": [
+        "ALGEBRA"
+      ]
+    },
+    {
+      "id": "LINEAR_ALGEBRA",
+      "i": 30,
+      "j": 27,
+      "deps": [
+        "VECTORS"
+      ]
+    },
+    {
+      "id": "TRIGONOMETRY",
+      "i": 21,
+      "j": 26,
+      "deps": [
+        "ALGEBRA"
+      ]
+    },
+    {
+      "id": "USE_MOUSE_HOVER_FAST",
+      "i": 8,
+      "j": 7,
+      "deps": [
+        "USE_MOUSE_HOVER"
+      ]
+    },
+    {
+      "id": "USE_MOUSE_HOVER_SMALL",
+      "i": 9,
+      "j": 7,
+      "deps": [
+        "USE_MOUSE_HOVER"
       ]
     }
   ]

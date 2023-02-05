@@ -1,10 +1,10 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 
-import {buildGraph} from './knowledge-map';
-import type {DepGraph} from './dependency-graph';
+import {buildGraph, GraphJson} from './dependency-graph';
 
-import {KNOWLEDGE_MAP} from './knowledge-map';
+import _KNOWLEDGE_MAP from './knowledge-map.json';
+const KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 
 interface Cell {
   i: number,
@@ -44,7 +44,10 @@ let cellFromAbsoluteCoords = (x: number, y: number): Cell | null => {
 interface ToolbarForOneProps {
   selectedCell: Cell,
   grid: string[][],
+  reached: Set<string>,
+  reachable: Set<string>,
   onChangeId: (oldId: string, newId: string) => void,
+  onChangeProgress: (id: string, isReached: boolean) => void,
 }
 
 let ToolbarForOne = (props: ToolbarForOneProps) => {
@@ -68,18 +71,32 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
     props.onChangeId(kmid, tempId);
   }, [kmid, tempId, props.onChangeId]);
 
+  let handleChangeProgress = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    props.onChangeProgress(kmid, e.target.checked);
+  }, [kmid, props.onChangeProgress]);
+
   return (
-    <form onSubmit={handleSubmit}>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <input type="text"
+              ref={ref}
+              value={tempId}
+              onChange={handleChangeInput}/>
+        </div>
+        <div>
+          <button type="submit">Apply</button>
+        </div>
+      </form>
       <div>
-        <input type="text"
-            ref={ref}
-            value={tempId}
-            onChange={handleChangeInput}/>
+        <label>
+          <input type="checkbox"
+              checked={props.reached.has(kmid)}
+              onChange={handleChangeProgress}/>
+          Reached
+        </label>
       </div>
-      <div>
-        <button type="submit">Apply</button>
-      </div>
-    </form>
+    </div>
   );
 };
 
@@ -87,7 +104,10 @@ interface ToolbarProps {
   knowledgeMap: typeof KNOWLEDGE_MAP,
   selectedCells: Cell[],
   grid: string[][],
+  reached: Set<string>,
+  reachable: Set<string>,
   onChangeId: (oldId: string, newId: string) => void,
+  onChangeProgress: (id: string, isReached: boolean) => void,
   onSelectIds: (ids: string[]) => void,
   onDeleteIds: (ids: string[]) => void,
 }
@@ -113,7 +133,10 @@ let Toolbar = (props: ToolbarProps) => {
       <ToolbarForOne
           selectedCell={props.selectedCells[0]}
           grid={props.grid}
-          onChangeId={props.onChangeId}/>
+          reached={props.reached}
+          reachable={props.reachable}
+          onChangeId={props.onChangeId}
+          onChangeProgress={props.onChangeProgress}/>
     );
   }
 
@@ -133,20 +156,30 @@ let Toolbar = (props: ToolbarProps) => {
     props.onSelectIds(props.knowledgeMap.nodes.map(x => x.id));
   }, [props.onSelectIds]);
 
-  let handleExport = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+  let downloadJson = React.useCallback((data: any, filename: string) => {
     let blob = new Blob(
-      [JSON.stringify(props.knowledgeMap, undefined, 2)],
+      [JSON.stringify(data, undefined, 2)],
       {type: 'text/json'}
     );
     let a = document.createElement('a');
     //a.style = 'display: none';
     document.body.appendChild(a);
     a.href = window.URL.createObjectURL(blob);
-    a.download = 'knowledge-map.json';
+    a.download = filename;
     a.click();
     window.URL.revokeObjectURL(a.href);
     a.remove();
-  }, [props.knowledgeMap]);
+  }, []);
+
+  let handleExportGraph = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    downloadJson(props.knowledgeMap, 'knowledge-map.json');
+  }, [props.knowledgeMap, downloadJson]);
+
+  let handleExportProgress = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    downloadJson({
+      reached: Array.from(props.reached),
+    }, 'progress.json');
+  }, []);
 
   let toolbarStyle = {
     position: 'fixed',
@@ -164,7 +197,10 @@ let Toolbar = (props: ToolbarProps) => {
         <button onClick={handleSelectAll}>Select All</button>
       </div>
       <div>
-        <button onClick={handleExport}>Export All</button>
+        <button onClick={handleExportGraph}>Export Graph</button>
+      </div>
+      <div>
+        <button onClick={handleExportProgress}>Export Progress</button>
       </div>
       <div>
         {props.knowledgeMap.nodes.length}
@@ -180,6 +216,7 @@ interface KnowledgeNodeProps {
   kmid: string,
   cell: Cell,
   dependants?: KnowledgeNodeProps[],
+  progress: 'reached' | 'reachable' | 'unreachable'
 };
 
 let KnowledgeNode = (props: KnowledgeNodeProps) => {
@@ -200,9 +237,17 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
       );
     }
   }
+  let fill: string;
+  if (props.progress === 'reached') {
+    fill = '#90EE90';
+  } else if (props.progress === 'reachable') {
+    fill = '#F1EB9C';
+  } else {
+    fill = 'grey';
+  }
   return (
     <g transform={`translate(${pos.x}, ${pos.y})`}>
-      <rect x="0" y="0" width={CELL_WIDTH} height={CELL_HEIGHT} fill="grey"/>
+      <rect x="0" y="0" width={CELL_WIDTH} height={CELL_HEIGHT} fill={fill}/>
       <text dominantBaseline="central" y={CELL_HEIGHT / 2}>{props.kmid}</text>
       {dependants}
     </g>
@@ -256,20 +301,29 @@ let KnowledgeMap = () => {
     let ret = knowledgeGraph.overallOrder();
     return ret;
   }, [knowledgeGraph]);
-  let cellMap = React.useMemo(() => {
+  let [reached, setReached] = React.useState(new Set<string>());
+  let reachable = React.useMemo(() => {
+    let ret = knowledgeGraph.getReachable(reached);
+    return ret;
+  }, [knowledgeGraph, reached]);
+  let nodeMap = React.useMemo(() => {
     let ret = new Map<string, KnowledgeNodeProps>();
     for (let i = 0; i <= rows; ++i) {
       for (let j = 0; j <= cols; ++j) {
-        if (grid[i][j]) {
-          ret.set(grid[i][j], {
-            kmid: grid[i][j],
+        let id = grid[i][j];
+        if (id) {
+          ret.set(id, {
+            kmid: id,
             cell: {i: i, j: j},
+            progress: reached.has(id) ? 'reached' :
+                reachable.has(id) ? 'reachable':
+              'unreachable',
           });
         }
       }
     }
     return ret;
-  }, [grid]);
+  }, [knowledgeGraph, grid, reached, reachable]);
 
 
   let [mode, setMode] = React.useState<'selecting' | null>(null);
@@ -469,9 +523,19 @@ let KnowledgeMap = () => {
     });
   }, [knowledgeMap]);
 
+  let handleChangeProgress = React.useCallback((id: string, isReached: boolean) => {
+    let ret = new Set(reached);
+    if (isReached) {
+      ret.add(id);
+    } else {
+      ret.delete(id);
+    }
+    setReached(ret);
+  }, [reached]);
+
   let handleSelectIds = React.useCallback((idsToSelect: string[]) => {
-    setSelectedCells(idsToSelect.map(x => cellMap.get(x)!.cell));
-  }, [cellMap]);
+    setSelectedCells(idsToSelect.map(x => nodeMap.get(x)!.cell));
+  }, [nodeMap]);
 
   let handleDeleteIds = React.useCallback((idsToDelete: string[]) => {
     setKnowledgeMap({
@@ -487,12 +551,13 @@ let KnowledgeMap = () => {
   for (let i = 0; i < topSorted.length; ++i) {
     let node = topSorted[i];
     let dependants = knowledgeGraph.directDependantsOf(node).map(
-      x => cellMap.get(x)!
+      x => nodeMap.get(x)!
     );
     nodes.push(
       <KnowledgeNode key={node}
           kmid={node}
-          cell={cellMap.get(node)!.cell}
+          cell={nodeMap.get(node)!.cell}
+          progress={nodeMap.get(node)!.progress}
           dependants={dependants}/>
     );
   }
@@ -553,8 +618,11 @@ let KnowledgeMap = () => {
       </div>
       <Toolbar selectedCells={selectedCells}
           grid={grid}
+          reached={reached}
+          reachable={reachable}
           knowledgeMap={knowledgeMap}
           onChangeId={handleChangeId}
+          onChangeProgress={handleChangeProgress}
           onSelectIds={handleSelectIds}
           onDeleteIds={handleDeleteIds}/>
     </div>
