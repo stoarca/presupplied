@@ -1,35 +1,35 @@
 {
   "nodes": [
     {
-      "id": "REPEAT_VOWEL_SOUNDS",
-      "i": 0,
+      "id": "REPEAT_OPEN_SOUNDS",
+      "i": 7,
       "j": 0,
       "deps": []
     },
     {
-      "id": "REPEAT_CONSONANT_SOUNDS",
-      "i": 1,
+      "id": "REPEAT_CLOSED_SOUNDS",
+      "i": 8,
       "j": 0,
       "deps": []
     },
     {
       "id": "RECOGNIZE_SIMPLE_OBJECTS",
-      "i": 3,
+      "i": 15,
       "j": 0,
       "deps": []
     },
     {
       "id": "REPEAT_SOUNDS",
-      "i": 0,
+      "i": 8,
       "j": 1,
       "deps": [
-        "REPEAT_VOWEL_SOUNDS",
-        "REPEAT_CONSONANT_SOUNDS"
+        "REPEAT_OPEN_SOUNDS",
+        "REPEAT_CLOSED_SOUNDS"
       ]
     },
     {
       "id": "SPEAK_SIMPLE_OBJECTS",
-      "i": 2,
+      "i": 15,
       "j": 2,
       "deps": [
         "REPEAT_SOUNDS",
@@ -38,16 +38,17 @@
     },
     {
       "id": "RECOGNIZE_SIMPLE_CONCEPTS",
-      "i": 3,
-      "j": 2,
+      "i": 17,
+      "j": 3,
       "deps": [
-        "RECOGNIZE_SIMPLE_OBJECTS"
+        "RECOGNIZE_YES_NO",
+        "RECOGNIZE_GOOD_BAD"
       ]
     },
     {
       "id": "SPEAK_SIMPLE_CONCEPTS",
-      "i": 2,
-      "j": 3,
+      "i": 15,
+      "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS",
         "SPEAK_SIMPLE_OBJECTS"
@@ -55,19 +56,1147 @@
     },
     {
       "id": "RECOGNIZE_OPPOSITES",
-      "i": 3,
-      "j": 3,
+      "i": 16,
+      "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
       ]
     },
     {
       "id": "SPEAK_OPPOSITES",
-      "i": 2,
-      "j": 4,
+      "i": 16,
+      "j": 5,
       "deps": [
         "RECOGNIZE_OPPOSITES",
         "SPEAK_SIMPLE_CONCEPTS"
+      ]
+    },
+    {
+      "id": "REPEAT_VOWELS",
+      "i": 1,
+      "j": 2,
+      "deps": [
+        "REPEAT_SOUNDS"
+      ]
+    },
+    {
+      "id": "REPEAT_CONSONANTS",
+      "i": 2,
+      "j": 2,
+      "deps": [
+        "REPEAT_SOUNDS"
+      ]
+    },
+    {
+      "id": "REPEAT_LETTERS",
+      "i": 4,
+      "j": 3,
+      "deps": [
+        "REPEAT_VOWELS",
+        "REPEAT_CONSONANTS"
+      ]
+    },
+    {
+      "id": "SING_ALPHABET",
+      "i": 4,
+      "j": 4,
+      "deps": [
+        "REPEAT_LETTERS"
+      ]
+    },
+    {
+      "id": "READ_LOWERCASE_VOWELS",
+      "i": 0,
+      "j": 3,
+      "deps": [
+        "REPEAT_VOWELS",
+        "RECOGNIZE_LOWERCASE_LETTERS"
+      ]
+    },
+    {
+      "id": "READ_LOWERCASE_CONSONANTS",
+      "i": 1,
+      "j": 3,
+      "deps": [
+        "REPEAT_CONSONANTS",
+        "RECOGNIZE_LOWERCASE_LETTERS"
+      ]
+    },
+    {
+      "id": "READ_UPPERCASE_CONSONANTS",
+      "i": 3,
+      "j": 3,
+      "deps": [
+        "REPEAT_CONSONANTS",
+        "RECOGNIZE_UPPERCASE_LETTERS"
+      ]
+    },
+    {
+      "id": "READ_LOWERCASE_LETTERS",
+      "i": 1,
+      "j": 4,
+      "deps": [
+        "READ_LOWERCASE_CONSONANTS",
+        "READ_LOWERCASE_VOWELS"
+      ]
+    },
+    {
+      "id": "READ_UPPERCASE_VOWELS",
+      "i": 2,
+      "j": 3,
+      "deps": [
+        "REPEAT_VOWELS",
+        "RECOGNIZE_UPPERCASE_LETTERS"
+      ]
+    },
+    {
+      "id": "READ_UPPERCASE_LETTERS",
+      "i": 2,
+      "j": 4,
+      "deps": [
+        "READ_UPPERCASE_VOWELS",
+        "READ_UPPERCASE_CONSONANTS"
+      ]
+    },
+    {
+      "id": "READ_LETTERS",
+      "i": 1,
+      "j": 5,
+      "deps": [
+        "READ_LOWERCASE_LETTERS",
+        "READ_UPPERCASE_LETTERS"
+      ]
+    },
+    {
+      "id": "FIND_KEYS_ON_KEYBOARD",
+      "i": 6,
+      "j": 6,
+      "deps": [
+        "READ_LETTERS",
+        "READ_DIGITS",
+        "SPEAK_SIMPLE_MAPPINGS",
+        "SING_ALPHABET"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_YES_NO",
+      "i": 16,
+      "j": 2,
+      "deps": []
+    },
+    {
+      "id": "RECOGNIZE_GOOD_BAD",
+      "i": 17,
+      "j": 2,
+      "deps": []
+    },
+    {
+      "id": "RECOGNIZE_COLORS",
+      "i": 17,
+      "j": 4,
+      "deps": [
+        "RECOGNIZE_SIMPLE_CONCEPTS"
+      ]
+    },
+    {
+      "id": "SPEAK_COLORS",
+      "i": 17,
+      "j": 5,
+      "deps": [
+        "RECOGNIZE_COLORS",
+        "SPEAK_SIMPLE_CONCEPTS"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_LOWERCASE_LETTERS",
+      "i": 0,
+      "j": 2,
+      "deps": []
+    },
+    {
+      "id": "RECOGNIZE_UPPERCASE_LETTERS",
+      "i": 3,
+      "j": 2,
+      "deps": []
+    },
+    {
+      "id": "RECOGNIZE_DIGITS",
+      "i": 11,
+      "j": 2,
+      "deps": []
+    },
+    {
+      "id": "SPEAK_SIMPLE_MAPPINGS",
+      "i": 15,
+      "j": 5,
+      "deps": [
+        "SPEAK_SIMPLE_CONCEPTS"
+      ]
+    },
+    {
+      "id": "REPEAT_DIGITS",
+      "i": 10,
+      "j": 3,
+      "deps": [
+        "REPEAT_SOUNDS",
+        "RECOGNIZE_DIGITS"
+      ]
+    },
+    {
+      "id": "COUNT_TO_5",
+      "i": 11,
+      "j": 4,
+      "deps": [
+        "REPEAT_DIGITS"
+      ]
+    },
+    {
+      "id": "COUNT_TO_10",
+      "i": 11,
+      "j": 5,
+      "deps": [
+        "COUNT_TO_5"
+      ]
+    },
+    {
+      "id": "COUNT_TO_20",
+      "i": 11,
+      "j": 6,
+      "deps": [
+        "COUNT_TO_10"
+      ]
+    },
+    {
+      "id": "READ_DIGITS",
+      "i": 10,
+      "j": 5,
+      "deps": [
+        "REPEAT_DIGITS"
+      ]
+    },
+    {
+      "id": "COUNT_TO_100",
+      "i": 11,
+      "j": 7,
+      "deps": [
+        "COUNT_TO_20"
+      ]
+    },
+    {
+      "id": "COUNT_TO_1000",
+      "i": 11,
+      "j": 8,
+      "deps": [
+        "COUNT_TO_100",
+        "COUNT_OBJECTS_TO_20"
+      ]
+    },
+    {
+      "id": "COUNT_OBJECTS_TO_10",
+      "i": 12,
+      "j": 6,
+      "deps": [
+        "COUNT_TO_10",
+        "SPEAK_SIMPLE_MAPPINGS"
+      ]
+    },
+    {
+      "id": "READ_NUMBERS_TO_20",
+      "i": 10,
+      "j": 7,
+      "deps": [
+        "COUNT_TO_20",
+        "READ_DIGITS"
+      ]
+    },
+    {
+      "id": "READ_NUMBERS_UP_TO_100",
+      "i": 10,
+      "j": 8,
+      "deps": [
+        "READ_NUMBERS_TO_20",
+        "COUNT_TO_100",
+        "COUNT_OBJECTS_TO_20"
+      ]
+    },
+    {
+      "id": "READ_NUMBERS_UP_TO_1000",
+      "i": 10,
+      "j": 10,
+      "deps": [
+        "READ_NUMBERS_UP_TO_100",
+        "COUNT_TO_1000"
+      ]
+    },
+    {
+      "id": "COUNT_OBJECTS_TO_20",
+      "i": 12,
+      "j": 7,
+      "deps": [
+        "COUNT_OBJECTS_TO_10",
+        "COUNT_TO_20"
+      ]
+    },
+    {
+      "id": "COUNT_OBJECTS_TO_100",
+      "i": 12,
+      "j": 8,
+      "deps": [
+        "COUNT_OBJECTS_TO_20",
+        "COUNT_TO_100"
+      ]
+    },
+    {
+      "id": "TYPE_KEYS_ON_KEYBOARD",
+      "i": 6,
+      "j": 7,
+      "deps": [
+        "FIND_KEYS_ON_KEYBOARD"
+      ]
+    },
+    {
+      "id": "READ_NUMBERS_UP_TO_MILLION",
+      "i": 10,
+      "j": 11,
+      "deps": [
+        "READ_NUMBERS_UP_TO_1000"
+      ]
+    },
+    {
+      "id": "LETTER_TO_SOUND",
+      "i": 0,
+      "j": 6,
+      "deps": [
+        "READ_LETTERS"
+      ]
+    },
+    {
+      "id": "SOUND_TO_LETTER",
+      "i": 1,
+      "j": 6,
+      "deps": [
+        "READ_LETTERS"
+      ]
+    },
+    {
+      "id": "BIGRAM_TO_SOUND",
+      "i": 0,
+      "j": 7,
+      "deps": [
+        "LETTER_TO_SOUND",
+        "SOUND_TO_LETTER"
+      ]
+    },
+    {
+      "id": "SOUND_TO_BIGRAM",
+      "i": 1,
+      "j": 7,
+      "deps": [
+        "LETTER_TO_SOUND",
+        "SOUND_TO_LETTER"
+      ]
+    },
+    {
+      "id": "READ_50_SIMPLE_WORDS",
+      "i": 2,
+      "j": 7,
+      "deps": [
+        "LETTER_TO_SOUND",
+        "SOUND_TO_LETTER"
+      ]
+    },
+    {
+      "id": "READ_200_SIMPLE_WORDS",
+      "i": 2,
+      "j": 8,
+      "deps": [
+        "BIGRAM_TO_SOUND",
+        "SOUND_TO_BIGRAM",
+        "READ_50_SIMPLE_WORDS"
+      ]
+    },
+    {
+      "id": "READ_PUNCTUATION",
+      "i": 3,
+      "j": 8,
+      "deps": [
+        "READ_50_SIMPLE_WORDS"
+      ]
+    },
+    {
+      "id": "READ_SHORT_SENTENCES",
+      "i": 2,
+      "j": 9,
+      "deps": [
+        "READ_200_SIMPLE_WORDS",
+        "READ_PUNCTUATION"
+      ]
+    },
+    {
+      "id": "READ_LONG_SENTENCES",
+      "i": 2,
+      "j": 10,
+      "deps": [
+        "READ_SHORT_SENTENCES"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_SIMPLE_MORE_LESS",
+      "i": 13,
+      "j": 6,
+      "deps": [
+        "SPEAK_SIMPLE_MAPPINGS",
+        "COUNT_TO_10",
+        "SPEAK_OPPOSITES"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_MORE_LESS",
+      "i": 13,
+      "j": 8,
+      "deps": [
+        "RECOGNIZE_SIMPLE_MORE_LESS",
+        "COUNT_OBJECTS_TO_20",
+        "COUNT_TO_100",
+        "READ_NUMBERS_TO_20",
+        "VISUAL_SIMPLE_FRACTIONS",
+        "COUNT_ADD_OBJECTS"
+      ]
+    },
+    {
+      "id": "READ_ANY_NUMBER",
+      "i": 10,
+      "j": 12,
+      "deps": [
+        "READ_NUMBERS_UP_TO_MILLION"
+      ]
+    },
+    {
+      "id": "VISUAL_SIMPLE_FRACTIONS",
+      "i": 14,
+      "j": 7,
+      "deps": [
+        "RECOGNIZE_SIMPLE_MORE_LESS",
+        "SPEAK_COLORS",
+        "SPEAK_SHAPES"
+      ]
+    },
+    {
+      "id": "READ_SIMPLE_FRACTIONS",
+      "i": 14,
+      "j": 11,
+      "deps": [
+        "READ_NUMBERS_UP_TO_1000",
+        "RECOGNIZE_MORE_LESS",
+        "VISUAL_SIMPLE_FRACTIONS"
+      ]
+    },
+    {
+      "id": "READ_ANY_FRACTION_UNDER_1",
+      "i": 13,
+      "j": 13,
+      "deps": [
+        "READ_ANY_NUMBER",
+        "WRITTEN_FRACTION_MORE_LESS"
+      ]
+    },
+    {
+      "id": "VERBAL_ADD_1",
+      "i": 15,
+      "j": 7,
+      "deps": [
+        "COUNT_OBJECTS_TO_10"
+      ]
+    },
+    {
+      "id": "VERBAL_ADD_5",
+      "i": 15,
+      "j": 8,
+      "deps": [
+        "VERBAL_ADD_1",
+        "COUNT_ADD_OPPONENT_FINGERS",
+        "COUNT_ADD_DICE",
+        "COUNT_ADD_OBJECTS"
+      ]
+    },
+    {
+      "id": "VERBAL_ADD_2",
+      "i": 16,
+      "j": 8,
+      "deps": [
+        "VERBAL_ADD_1",
+        "COUNT_ADD_OPPONENT_FINGERS",
+        "COUNT_ADD_DICE",
+        "COUNT_ADD_OBJECTS"
+      ]
+    },
+    {
+      "id": "VISUAL_FRACTION_MORE_LESS",
+      "i": 13,
+      "j": 11,
+      "deps": [
+        "RECOGNIZE_MORE_LESS",
+        "VISUAL_SIMPLE_FRACTIONS"
+      ]
+    },
+    {
+      "id": "WRITTEN_FRACTION_MORE_LESS",
+      "i": 13,
+      "j": 12,
+      "deps": [
+        "VISUAL_FRACTION_MORE_LESS",
+        "READ_SIMPLE_FRACTIONS"
+      ]
+    },
+    {
+      "id": "COUNT_ADD_OPPONENT_FINGERS",
+      "i": 16,
+      "j": 7,
+      "deps": [
+        "COUNT_OBJECTS_TO_10",
+        "RECOGNIZE_SIMPLE_MORE_LESS"
+      ]
+    },
+    {
+      "id": "COUNT_ADD_DICE",
+      "i": 17,
+      "j": 7,
+      "deps": [
+        "COUNT_OBJECTS_TO_10",
+        "RECOGNIZE_SIMPLE_MORE_LESS"
+      ]
+    },
+    {
+      "id": "VISUAL_FRACTION_OVER_1",
+      "i": 13,
+      "j": 14,
+      "deps": [
+        "READ_ANY_FRACTION_UNDER_1"
+      ]
+    },
+    {
+      "id": "READ_ANY_FRACTION_OVER_1",
+      "i": 13,
+      "j": 15,
+      "deps": [
+        "VISUAL_FRACTION_OVER_1"
+      ]
+    },
+    {
+      "id": "PECK_NUMBERS_ON_KEYBOARD",
+      "i": 7,
+      "j": 9,
+      "deps": [
+        "TYPE_KEYS_ON_KEYBOARD",
+        "READ_NUMBERS_UP_TO_100"
+      ]
+    },
+    {
+      "id": "PECK_WORDS_ON_KEYBOARD",
+      "i": 6,
+      "j": 9,
+      "deps": [
+        "TYPE_KEYS_ON_KEYBOARD",
+        "READ_200_SIMPLE_WORDS"
+      ]
+    },
+    {
+      "id": "COUNT_ADD_OBJECTS",
+      "i": 18,
+      "j": 7,
+      "deps": [
+        "COUNT_OBJECTS_TO_10",
+        "RECOGNIZE_SIMPLE_MORE_LESS"
+      ]
+    },
+    {
+      "id": "READ_PARAGRAPHS",
+      "i": 2,
+      "j": 11,
+      "deps": [
+        "READ_LONG_SENTENCES",
+        "READ_NUMBERS_UP_TO_1000"
+      ]
+    },
+    {
+      "id": "VERBAL_ADD_UP_TO_10",
+      "i": 15,
+      "j": 9,
+      "deps": [
+        "VERBAL_ADD_5",
+        "VERBAL_ADD_2",
+        "COUNT_OBJECTS_TO_100",
+        "COUNT_ADD_SELF_FINGERS"
+      ]
+    },
+    {
+      "id": "ADD_UP_TO_20",
+      "i": 15,
+      "j": 10,
+      "deps": [
+        "VERBAL_ADD_UP_TO_10",
+        "COUNT_OBJECTS_TO_100",
+        "READ_NUMBERS_UP_TO_100",
+        "PECK_NUMBERS_ON_KEYBOARD"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_SHAPES",
+      "i": 18,
+      "j": 4,
+      "deps": [
+        "RECOGNIZE_SIMPLE_CONCEPTS"
+      ]
+    },
+    {
+      "id": "SPEAK_SHAPES",
+      "i": 18,
+      "j": 5,
+      "deps": [
+        "RECOGNIZE_SHAPES",
+        "SPEAK_SIMPLE_CONCEPTS"
+      ]
+    },
+    {
+      "id": "ADD_TWO_POS_2_DIGIT_NUMBERS",
+      "i": 15,
+      "j": 11,
+      "deps": [
+        "ADD_UP_TO_20",
+        "READ_NUMBERS_UP_TO_1000"
+      ]
+    },
+    {
+      "id": "ADD_2_FRACTIONS_UNDER_1_SAME_DENOM",
+      "i": 15,
+      "j": 14,
+      "deps": [
+        "READ_ANY_FRACTION_UNDER_1",
+        "ADD_TWO_POS_2_DIGIT_NUMBERS"
+      ]
+    },
+    {
+      "id": "ADD_2_FRACTIONS_OVER_1_SAME_DENOM",
+      "i": 15,
+      "j": 16,
+      "deps": [
+        "READ_ANY_FRACTION_OVER_1",
+        "ADD_2_FRACTIONS_UNDER_1_SAME_DENOM"
+      ]
+    },
+    {
+      "id": "COUNT_ADD_SELF_FINGERS",
+      "i": 17,
+      "j": 8,
+      "deps": [
+        "COUNT_ADD_OPPONENT_FINGERS",
+        "COUNT_ADD_DICE",
+        "COUNT_ADD_OBJECTS"
+      ]
+    },
+    {
+      "id": "USE_MOUSE_HOVER",
+      "i": 8,
+      "j": 6,
+      "deps": [
+        "SPEAK_SIMPLE_MAPPINGS"
+      ]
+    },
+    {
+      "id": "SIMPLE_MULT_BY_COUNTING",
+      "i": 20,
+      "j": 11,
+      "deps": [
+        "ADD_UP_TO_20"
+      ]
+    },
+    {
+      "id": "MULT_UP_TO_5_X_5",
+      "i": 20,
+      "j": 12,
+      "deps": [
+        "SIMPLE_MULT_BY_COUNTING",
+        "ADD_TWO_POS_2_DIGIT_NUMBERS"
+      ]
+    },
+    {
+      "id": "MULT_UP_TO_5_X_10",
+      "i": 19,
+      "j": 13,
+      "deps": [
+        "MULT_UP_TO_5_X_5"
+      ]
+    },
+    {
+      "id": "MULT_UP_TO_10_X_10",
+      "i": 20,
+      "j": 14,
+      "deps": [
+        "MULT_UP_TO_5_X_10"
+      ]
+    },
+    {
+      "id": "LONG_ADDITION_3_DIGITS",
+      "i": 16,
+      "j": 12,
+      "deps": [
+        "ADD_TWO_POS_2_DIGIT_NUMBERS"
+      ]
+    },
+    {
+      "id": "LONG_ADDITION_ANY_DIGITS",
+      "i": 16,
+      "j": 14,
+      "deps": [
+        "LONG_ADDITION_3_DIGITS"
+      ]
+    },
+    {
+      "id": "READ_PICTURE_BOOKS",
+      "i": 2,
+      "j": 12,
+      "deps": [
+        "READ_PARAGRAPHS"
+      ]
+    },
+    {
+      "id": "TODO_BASIC_GRAMMAR",
+      "i": 3,
+      "j": 12,
+      "deps": [
+        "READ_PARAGRAPHS"
+      ]
+    },
+    {
+      "id": "LONG_ADDITION_MULTIPLE_NUMBERS",
+      "i": 16,
+      "j": 15,
+      "deps": [
+        "LONG_ADDITION_ANY_DIGITS"
+      ]
+    },
+    {
+      "id": "LONG_MULT_2_POS_NUMBERS",
+      "i": 20,
+      "j": 16,
+      "deps": [
+        "MULT_UP_TO_10_X_10",
+        "LONG_SUBTRACT_POS_NUMBERS"
+      ]
+    },
+    {
+      "id": "LONG_MULT_MULTIPLE_POS_NUMBERS",
+      "i": 20,
+      "j": 17,
+      "deps": [
+        "LONG_MULT_2_POS_NUMBERS",
+        "LONG_ADDITION_MULTIPLE_NUMBERS"
+      ]
+    },
+    {
+      "id": "ADD_SUBTRACT_2_FRACTIONS_DIFF_DENOM",
+      "i": 15,
+      "j": 19,
+      "deps": [
+        "ADD_2_FRACTIONS_OVER_1_SAME_DENOM",
+        "LONG_MULT_2_NUMBERS",
+        "LONG_ADD_SUBTRACT_ANY_NUMBERS"
+      ]
+    },
+    {
+      "id": "DIV_UP_TO_5_X_5",
+      "i": 21,
+      "j": 13,
+      "deps": [
+        "MULT_UP_TO_5_X_5"
+      ]
+    },
+    {
+      "id": "DIV_UP_TO_5_X_10",
+      "i": 21,
+      "j": 14,
+      "deps": [
+        "MULT_UP_TO_5_X_10",
+        "DIV_UP_TO_5_X_5"
+      ]
+    },
+    {
+      "id": "DIV_UP_TO_10_X_10",
+      "i": 21,
+      "j": 16,
+      "deps": [
+        "MULT_UP_TO_10_X_10",
+        "DIV_UP_TO_5_X_10"
+      ]
+    },
+    {
+      "id": "REMAINDERS",
+      "i": 22,
+      "j": 16,
+      "deps": [
+        "DIV_UP_TO_5_X_10"
+      ]
+    },
+    {
+      "id": "LONG_DIV",
+      "i": 21,
+      "j": 17,
+      "deps": [
+        "DIV_UP_TO_10_X_10",
+        "REMAINDERS",
+        "LONG_MULT_2_POS_NUMBERS"
+      ]
+    },
+    {
+      "id": "SUBTRACT_1_DIGIT",
+      "i": 17,
+      "j": 11,
+      "deps": [
+        "ADD_UP_TO_20"
+      ]
+    },
+    {
+      "id": "SUBTRACT_2_DIGIT",
+      "i": 17,
+      "j": 12,
+      "deps": [
+        "SUBTRACT_1_DIGIT",
+        "ADD_TWO_POS_2_DIGIT_NUMBERS",
+        "FILL_IN_BLANK_ADD_SMALL"
+      ]
+    },
+    {
+      "id": "LONG_SUBTRACT_3_DIGIT",
+      "i": 17,
+      "j": 14,
+      "deps": [
+        "LONG_ADDITION_3_DIGITS",
+        "SUBTRACT_2_DIGIT"
+      ]
+    },
+    {
+      "id": "LONG_SUBTRACT_POS_NUMBERS",
+      "i": 17,
+      "j": 15,
+      "deps": [
+        "LONG_SUBTRACT_3_DIGIT",
+        "LONG_ADDITION_ANY_DIGITS"
+      ]
+    },
+    {
+      "id": "NEGATIVE_COUNTING",
+      "i": 18,
+      "j": 12,
+      "deps": [
+        "SUBTRACT_1_DIGIT"
+      ]
+    },
+    {
+      "id": "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
+      "i": 18,
+      "j": 14,
+      "deps": [
+        "SUBTRACT_2_DIGIT",
+        "NEGATIVE_COUNTING"
+      ]
+    },
+    {
+      "id": "LONG_ADD_SUBTRACT_ANY_NUMBERS",
+      "i": 18,
+      "j": 17,
+      "deps": [
+        "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
+        "LONG_SUBTRACT_POS_NUMBERS",
+        "LONG_ADDITION_MULTIPLE_NUMBERS"
+      ]
+    },
+    {
+      "id": "LONG_MULT_ANY_NUMBERS",
+      "i": 20,
+      "j": 18,
+      "deps": [
+        "LONG_MULT_MULTIPLE_POS_NUMBERS",
+        "LONG_MULT_2_NUMBERS"
+      ]
+    },
+    {
+      "id": "MULT_NEGATIVE",
+      "i": 19,
+      "j": 15,
+      "deps": [
+        "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
+        "MULT_UP_TO_5_X_10"
+      ]
+    },
+    {
+      "id": "LONG_MULT_2_NUMBERS",
+      "i": 19,
+      "j": 17,
+      "deps": [
+        "LONG_MULT_2_POS_NUMBERS",
+        "MULT_NEGATIVE"
+      ]
+    },
+    {
+      "id": "USE_MOUSE_CLICK",
+      "i": 8,
+      "j": 7,
+      "deps": [
+        "USE_MOUSE_HOVER"
+      ]
+    },
+    {
+      "id": "USE_MOUSE_DOUBLE_CLICK",
+      "i": 8,
+      "j": 8,
+      "deps": [
+        "USE_MOUSE_CLICK"
+      ]
+    },
+    {
+      "id": "TYPING_HOME_ROW",
+      "i": 8,
+      "j": 11,
+      "deps": [
+        "PECK_WORDS_ON_KEYBOARD",
+        "PECK_NUMBERS_ON_KEYBOARD",
+        "USE_MOUSE_DOUBLE_CLICK",
+        "READ_LONG_SENTENCES"
+      ]
+    },
+    {
+      "id": "TYPING_INDEX_FINGER",
+      "i": 8,
+      "j": 12,
+      "deps": [
+        "TYPING_HOME_ROW",
+        "READ_PARAGRAPHS"
+      ]
+    },
+    {
+      "id": "TYPING_MIDDLE_FINGER",
+      "i": 8,
+      "j": 13,
+      "deps": [
+        "TYPING_INDEX_FINGER"
+      ]
+    },
+    {
+      "id": "TYPING_RING_FINGER",
+      "i": 8,
+      "j": 14,
+      "deps": [
+        "TYPING_MIDDLE_FINGER"
+      ]
+    },
+    {
+      "id": "TYPING_PINKY_FINGER",
+      "i": 8,
+      "j": 15,
+      "deps": [
+        "TYPING_RING_FINGER"
+      ]
+    },
+    {
+      "id": "TYPING_NUMBERS_AND_PUNCTUATION",
+      "i": 8,
+      "j": 16,
+      "deps": [
+        "TYPING_PINKY_FINGER"
+      ]
+    },
+    {
+      "id": "ADD_SUBTRACT_MULTIPLE_FRACTIONS",
+      "i": 15,
+      "j": 20,
+      "deps": [
+        "ADD_SUBTRACT_2_FRACTIONS_DIFF_DENOM"
+      ]
+    },
+    {
+      "id": "FILL_IN_BLANK_ADD_SMALL",
+      "i": 24,
+      "j": 11,
+      "deps": [
+        "ADD_UP_TO_20"
+      ]
+    },
+    {
+      "id": "FILL_IN_BLANK_SUBTRACT_SMALL",
+      "i": 24,
+      "j": 12,
+      "deps": [
+        "FILL_IN_BLANK_ADD_SMALL",
+        "SUBTRACT_1_DIGIT",
+        "ADD_TWO_POS_2_DIGIT_NUMBERS"
+      ]
+    },
+    {
+      "id": "FILL_IN_BLANK_MULT_SMALL",
+      "i": 24,
+      "j": 13,
+      "deps": [
+        "FILL_IN_BLANK_SUBTRACT_SMALL",
+        "MULT_UP_TO_5_X_5"
+      ]
+    },
+    {
+      "id": "OPERATOR_ORDER",
+      "i": 25,
+      "j": 12,
+      "deps": [
+        "SUBTRACT_1_DIGIT",
+        "ADD_TWO_POS_2_DIGIT_NUMBERS"
+      ]
+    },
+    {
+      "id": "OPERATOR_PRECEDENCE",
+      "i": 25,
+      "j": 15,
+      "deps": [
+        "OPERATOR_ORDER",
+        "FILL_IN_BLANK_DIV_SMALL"
+      ]
+    },
+    {
+      "id": "FILL_IN_BLANK_4_OPS_NEG_PAREN",
+      "i": 24,
+      "j": 18,
+      "deps": [
+        "PARENTHESES",
+        "FILL_IN_BLANK_4_OPS"
+      ]
+    },
+    {
+      "id": "PARENTHESES",
+      "i": 25,
+      "j": 17,
+      "deps": [
+        "OPERATOR_PRECEDENCE"
+      ]
+    },
+    {
+      "id": "FILL_IN_BLANK_DIV_SMALL",
+      "i": 24,
+      "j": 14,
+      "deps": [
+        "DIV_UP_TO_5_X_5",
+        "FILL_IN_BLANK_MULT_SMALL"
+      ]
+    },
+    {
+      "id": "FILL_IN_BLANK_ADD_SUBTRACT_NEG_SMALL",
+      "i": 24,
+      "j": 15,
+      "deps": [
+        "FILL_IN_BLANK_DIV_SMALL",
+        "SUBTRACT_2_DIGIT_WITH_NEGATIVE"
+      ]
+    },
+    {
+      "id": "FILL_IN_BLANK_4_OPS_NEG_SMALL",
+      "i": 24,
+      "j": 16,
+      "deps": [
+        "OPERATOR_PRECEDENCE",
+        "FILL_IN_BLANK_ADD_SUBTRACT_NEG_SMALL",
+        "MULT_NEGATIVE",
+        "DIV_UP_TO_5_X_10"
+      ]
+    },
+    {
+      "id": "FILL_IN_BLANK_4_OPS",
+      "i": 24,
+      "j": 17,
+      "deps": [
+        "FILL_IN_BLANK_4_OPS_NEG_SMALL",
+        "DIV_UP_TO_10_X_10"
+      ]
+    },
+    {
+      "id": "EXP_SMALL",
+      "i": 23,
+      "j": 16,
+      "deps": [
+        "MULT_NEGATIVE",
+        "MULT_UP_TO_10_X_10"
+      ]
+    },
+    {
+      "id": "EXP_NEGATIVE_BASE_SMALL",
+      "i": 23,
+      "j": 17,
+      "deps": [
+        "EXP_SMALL"
+      ]
+    },
+    {
+      "id": "EXP_INTEGER",
+      "i": 23,
+      "j": 18,
+      "deps": [
+        "EXP_NEGATIVE_BASE_SMALL"
+      ]
+    },
+    {
+      "id": "FILL_IN_BLANK_5_OPS",
+      "i": 24,
+      "j": 19,
+      "deps": [
+        "FILL_IN_BLANK_4_OPS_NEG_PAREN",
+        "EXP_INTEGER"
+      ]
+    },
+    {
+      "id": "SQRT",
+      "i": 23,
+      "j": 19,
+      "deps": [
+        "EXP_INTEGER",
+        "LONG_MULT_ANY_NUMBERS"
+      ]
+    },
+    {
+      "id": "CUBE_ROOT",
+      "i": 23,
+      "j": 20,
+      "deps": [
+        "SQRT",
+        "ADD_SUBTRACT_2_FRACTIONS_DIFF_DENOM"
+      ]
+    },
+    {
+      "id": "FILL_IN_BLANK_6_OPS",
+      "i": 24,
+      "j": 20,
+      "deps": [
+        "FILL_IN_BLANK_5_OPS",
+        "SQRT"
+      ]
+    },
+    {
+      "id": "EXP_NEG_POW",
+      "i": 23,
+      "j": 21,
+      "deps": [
+        "CUBE_ROOT"
+      ]
+    },
+    {
+      "id": "EXP_FRAC_POW",
+      "i": 22,
+      "j": 21,
+      "deps": [
+        "CUBE_ROOT"
+      ]
+    },
+    {
+      "id": "EXP_NEG_FRAC_POW",
+      "i": 23,
+      "j": 22,
+      "deps": [
+        "EXP_NEG_POW",
+        "EXP_FRAC_POW"
       ]
     }
   ]

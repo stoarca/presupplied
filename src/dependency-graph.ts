@@ -56,7 +56,7 @@ export class DepGraph<T> extends _DepGraph<T> {
   }
   clearMemo() {
     this._memoizedDepths = new Map();
-    this._memoizedGrid = new Array(25).fill(0).map(x => new Array(25));
+    this._memoizedGrid = new Array(50).fill(0).map(x => new Array(50));
     this._memoizedRows = 0;
     this._memoizedCols = 0;
   }

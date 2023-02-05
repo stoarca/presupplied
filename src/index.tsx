@@ -88,10 +88,25 @@ interface ToolbarProps {
   selectedCells: Cell[],
   grid: string[][],
   onChangeId: (oldId: string, newId: string) => void,
+  onSelectIds: (ids: string[]) => void,
   onDeleteIds: (ids: string[]) => void,
 }
 
 let Toolbar = (props: ToolbarProps) => {
+  let size = React.useMemo(() => {
+    let maxi = 0;
+    let maxj = 0;
+    for (let i = 0; i < props.grid.length; ++i) {
+      for (let j = 0; j < props.grid[i].length; ++j) {
+        if (props.grid[i][j]) {
+          maxi = Math.max(i, maxi);
+          maxj = Math.max(j, maxj);
+        }
+      }
+    }
+    return {rows: maxi + 1, cols: maxj + 1};
+  }, [props.grid]);
+
   let forOne = null;
   if (props.selectedCells.length === 1) {
     forOne = (
@@ -113,6 +128,10 @@ let Toolbar = (props: ToolbarProps) => {
       </div>
     );
   }
+
+  let handleSelectAll = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    props.onSelectIds(props.knowledgeMap.nodes.map(x => x.id));
+  }, [props.onSelectIds]);
 
   let handleExport = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     let blob = new Blob(
@@ -142,7 +161,16 @@ let Toolbar = (props: ToolbarProps) => {
       {forOne}
       {forSelected}
       <div>
+        <button onClick={handleSelectAll}>Select All</button>
+      </div>
+      <div>
         <button onClick={handleExport}>Export All</button>
+      </div>
+      <div>
+        {props.knowledgeMap.nodes.length}
+      </div>
+      <div>
+        {size.rows}X{size.cols}
       </div>
     </div>
   );
@@ -190,8 +218,8 @@ let KnowledgeMap = () => {
       // TODO: HACK we should not be using setInterval here, but good enough
       // for now
       let bbox = ref.current!.getBBox();
-      setWidth(bbox.width);
-      setHeight(bbox.height);
+      setWidth(bbox.width + 500);
+      setHeight(bbox.height + 500);
     }, 100);
     return () => clearInterval(interval);
   }, []);
@@ -228,6 +256,21 @@ let KnowledgeMap = () => {
     let ret = knowledgeGraph.overallOrder();
     return ret;
   }, [knowledgeGraph]);
+  let cellMap = React.useMemo(() => {
+    let ret = new Map<string, KnowledgeNodeProps>();
+    for (let i = 0; i <= rows; ++i) {
+      for (let j = 0; j <= cols; ++j) {
+        if (grid[i][j]) {
+          ret.set(grid[i][j], {
+            kmid: grid[i][j],
+            cell: {i: i, j: j},
+          });
+        }
+      }
+    }
+    return ret;
+  }, [grid]);
+
 
   let [mode, setMode] = React.useState<'selecting' | null>(null);
   let [hoverCell, setHoverCell] = React.useState<Cell | null>(null);
@@ -426,6 +469,10 @@ let KnowledgeMap = () => {
     });
   }, [knowledgeMap]);
 
+  let handleSelectIds = React.useCallback((idsToSelect: string[]) => {
+    setSelectedCells(idsToSelect.map(x => cellMap.get(x)!.cell));
+  }, [cellMap]);
+
   let handleDeleteIds = React.useCallback((idsToDelete: string[]) => {
     setKnowledgeMap({
       ...knowledgeMap,
@@ -436,28 +483,16 @@ let KnowledgeMap = () => {
     setSelectedCells([]);
   }, [knowledgeMap]);
 
-  let offsetMap = new Map<string, KnowledgeNodeProps>();
-  for (let i = 0; i <= rows; ++i) {
-    for (let j = 0; j <= cols; ++j) {
-      if (grid[i][j]) {
-        offsetMap.set(grid[i][j], {
-          kmid: grid[i][j],
-          cell: {i: i, j: j},
-        });
-      }
-    }
-  }
-
   let nodes = [];
   for (let i = 0; i < topSorted.length; ++i) {
     let node = topSorted[i];
     let dependants = knowledgeGraph.directDependantsOf(node).map(
-      x => offsetMap.get(x)!
+      x => cellMap.get(x)!
     );
     nodes.push(
       <KnowledgeNode key={node}
           kmid={node}
-          cell={offsetMap.get(node)!.cell}
+          cell={cellMap.get(node)!.cell}
           dependants={dependants}/>
     );
   }
@@ -520,6 +555,7 @@ let KnowledgeMap = () => {
           grid={grid}
           knowledgeMap={knowledgeMap}
           onChangeId={handleChangeId}
+          onSelectIds={handleSelectIds}
           onDeleteIds={handleDeleteIds}/>
     </div>
   );
