@@ -6,6 +6,10 @@ import {buildGraph, GraphJson} from './dependency-graph';
 import _KNOWLEDGE_MAP from './knowledge-map.json';
 const KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 
+interface Progress {
+  reached: string[],
+}
+
 interface Cell {
   i: number,
   j: number,
@@ -47,7 +51,7 @@ interface ToolbarForOneProps {
   reached: Set<string>,
   reachable: Set<string>,
   onChangeId: (oldId: string, newId: string) => void,
-  onChangeProgress: (id: string, isReached: boolean) => void,
+  onChangeReached: (newReached: Set<string>) => void,
 }
 
 let ToolbarForOne = (props: ToolbarForOneProps) => {
@@ -72,8 +76,14 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
   }, [kmid, tempId, props.onChangeId]);
 
   let handleChangeProgress = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    props.onChangeProgress(kmid, e.target.checked);
-  }, [kmid, props.onChangeProgress]);
+    let newReached = new Set(props.reached);
+    if (e.target.checked) {
+      newReached.add(kmid);
+    } else {
+      newReached.delete(kmid);
+    }
+    props.onChangeReached(newReached);
+  }, [kmid, props.reached, props.onChangeReached]);
 
   return (
     <div>
@@ -107,7 +117,7 @@ interface ToolbarProps {
   reached: Set<string>,
   reachable: Set<string>,
   onChangeId: (oldId: string, newId: string) => void,
-  onChangeProgress: (id: string, isReached: boolean) => void,
+  onChangeReached: (newReached: Set<string>) => void,
   onSelectIds: (ids: string[]) => void,
   onDeleteIds: (ids: string[]) => void,
 }
@@ -136,7 +146,7 @@ let Toolbar = (props: ToolbarProps) => {
           reached={props.reached}
           reachable={props.reachable}
           onChangeId={props.onChangeId}
-          onChangeProgress={props.onChangeProgress}/>
+          onChangeReached={props.onChangeReached}/>
     );
   }
 
@@ -171,6 +181,28 @@ let Toolbar = (props: ToolbarProps) => {
     a.remove();
   }, []);
 
+  let uploadJson = React.useCallback(() => {
+    return new Promise((resolve) => {
+      let input = document.createElement('input');
+      input.type='file';
+      document.body.appendChild(input);
+      input.addEventListener('change', (e) => {
+        if (!input.files) {
+          throw new Error('No files specified');
+        }
+        if (input.files.length !==  1) {
+          throw new Error('Wrong number of files uploaded');
+        }
+        let file = input.files[0];
+        let reader = new FileReader();
+        reader.onload = (e) => { resolve(JSON.parse(e.target!.result as string)); };
+        reader.readAsText(file);
+      });
+      input.click();
+      input.remove();
+    });
+  }, []);
+
   let handleExportGraph = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     downloadJson(props.knowledgeMap, 'knowledge-map.json');
   }, [props.knowledgeMap, downloadJson]);
@@ -179,7 +211,12 @@ let Toolbar = (props: ToolbarProps) => {
     downloadJson({
       reached: Array.from(props.reached),
     }, 'progress.json');
-  }, []);
+  }, [props.reached]);
+
+  let handleImportProgress = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
+    let newProgress = await uploadJson() as Progress;
+    props.onChangeReached(new Set(newProgress.reached));
+  }, [props.onChangeReached]);
 
   let toolbarStyle = {
     position: 'fixed',
@@ -201,6 +238,9 @@ let Toolbar = (props: ToolbarProps) => {
       </div>
       <div>
         <button onClick={handleExportProgress}>Export Progress</button>
+      </div>
+      <div>
+        <button onClick={handleImportProgress}>Import Progress</button>
       </div>
       <div>
         {props.knowledgeMap.nodes.length}
@@ -523,15 +563,9 @@ let KnowledgeMap = () => {
     });
   }, [knowledgeMap]);
 
-  let handleChangeProgress = React.useCallback((id: string, isReached: boolean) => {
-    let ret = new Set(reached);
-    if (isReached) {
-      ret.add(id);
-    } else {
-      ret.delete(id);
-    }
-    setReached(ret);
-  }, [reached]);
+  let handleChangeProgress = React.useCallback((newReached: Set<string>) => {
+    setReached(newReached);
+  }, []);
 
   let handleSelectIds = React.useCallback((idsToSelect: string[]) => {
     setSelectedCells(idsToSelect.map(x => nodeMap.get(x)!.cell));
@@ -622,7 +656,7 @@ let KnowledgeMap = () => {
           reachable={reachable}
           knowledgeMap={knowledgeMap}
           onChangeId={handleChangeId}
-          onChangeProgress={handleChangeProgress}
+          onChangeReached={handleChangeProgress}
           onSelectIds={handleSelectIds}
           onDeleteIds={handleDeleteIds}/>
     </div>
