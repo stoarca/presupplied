@@ -5,6 +5,7 @@
     "lib": ["dom"],
     "jsx": "react",
     "typeRoots": ["./node_modules/@types", "./@types"],
+    "module": "esnext",
     "resolveJsonModule": true
   },
   "include": ["src"],

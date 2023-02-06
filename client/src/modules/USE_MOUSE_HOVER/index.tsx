@@ -1,18 +1,19 @@
 import React from 'react';
 
-import {buildLesson} from '../LessonBuilder';
+console.log('asdf');
+console.log(__dirname);
 
 interface LessonProps {
 }
 
 let playInstructions = () => {
-  let audio = new Audio('./instructions.wav');
+  let audio = new Audio('/static/sounds/modules/USE_MOUSE_HOVER/instructions.wav');
   audio.play();
 };
 playInstructions();
 let interval = setInterval(playInstructions, 15000);
 
-export const Lesson = (props: LessonProps) => {
+export default (props: LessonProps) => {
   const TARGET_RADIUS = 75;
   const [numCorrect, setNumCorrect] = React.useState(0);
   const [targetCoords, setTargetCoords] = React.useState({
@@ -30,7 +31,7 @@ export const Lesson = (props: LessonProps) => {
       clearInterval(interval);
       interval = setInterval(playInstructions, 15000);
 
-      let audio = new Audio('./good_job.wav');
+      let audio = new Audio('/static/sounds/modules/good_job.wav');
       audio.play();
       setNumCorrect(numCorrect + 1);
       let newTargetCoords;
@@ -51,7 +52,7 @@ export const Lesson = (props: LessonProps) => {
   }, [numCorrect]);
 
   const handleMouseDown = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
-    let audio = new Audio('./oh_no_you_clicked.wav');
+    let audio = new Audio('/static/sounds/modules/USE_MOUSE_HOVER/oh_no_you_clicked.wav');
     audio.play();
     setNumCorrect(0);
   }, []);
@@ -82,6 +83,4 @@ export const Lesson = (props: LessonProps) => {
     </div>
   );
 };
-
-buildLesson(<Lesson/>);
 

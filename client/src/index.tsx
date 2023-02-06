@@ -1,9 +1,10 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
+import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 
 import {buildGraph, GraphJson} from './dependency-graph';
 
-import _KNOWLEDGE_MAP from './knowledge-map.json';
+import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
 const KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 
 interface Progress {
@@ -105,6 +106,11 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
               onChange={handleChangeProgress}/>
           Reached
         </label>
+      </div>
+      <div>
+        <Link to={`/modules/${kmid}`}>
+          Go to lesson
+        </Link>
       </div>
     </div>
   );
@@ -663,9 +669,21 @@ let KnowledgeMap = () => {
   );
 };
 
+const USE_MOUSE_HOVER = React.lazy(() => import('./modules/USE_MOUSE_HOVER'));
 let App = (props: any) => {
   return (
-    <KnowledgeMap/>
+    <Router>
+      <React.Suspense fallback={"loading..."}>
+        <Routes>
+          <Route path="/">
+            <Route index element={<KnowledgeMap/>}/>
+            <Route path="modules">
+              <Route path="USE_MOUSE_HOVER" element={<USE_MOUSE_HOVER/>}/>
+            </Route>
+          </Route>
+        </Routes>
+      </React.Suspense>
+    </Router>
   );
 };
 

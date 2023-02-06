@@ -5,8 +5,7 @@ const webpack = require('webpack');
 module.exports = {
   mode: 'development',
   entry: {
-    index: './src/index.tsx',
-    USE_MOUSE_HOVER: './src/modules/USE_MOUSE_HOVER/index.tsx',
+    client: './src/index.tsx',
   },
   module: {
     rules: [
@@ -33,6 +32,6 @@ module.exports = {
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '../static/dist'),
   },
 };
