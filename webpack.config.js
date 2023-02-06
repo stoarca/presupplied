@@ -6,6 +6,7 @@ module.exports = {
   mode: 'development',
   entry: {
     index: './src/index.tsx',
+    USE_MOUSE_HOVER: './src/modules/USE_MOUSE_HOVER/index.tsx',
   },
   module: {
     rules: [
