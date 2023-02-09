@@ -54,6 +54,8 @@ interface ToolbarForOneProps {
   reachable: Set<string>,
   onChangeId: (oldId: string, newId: string) => void,
   onChangeReached: (newReached: Set<string>) => void,
+  onMoveTreeRight: (id: string) => void,
+  onMoveTreeDown: (id: string) => void,
 }
 
 let ToolbarForOne = (props: ToolbarForOneProps) => {
@@ -87,6 +89,14 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
     props.onChangeReached(newReached);
   }, [kmid, props.reached, props.onChangeReached]);
 
+  let handleMoveTreeRight = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    props.onMoveTreeRight(kmid);
+  }, [kmid, props.onMoveTreeRight]);
+
+  let handleMoveTreeDown = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    props.onMoveTreeDown(kmid);
+  }, [kmid, props.onMoveTreeDown]);
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -113,6 +123,12 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
           Go to lesson
         </Link>
       </div>
+      <div>
+        <button onClick={handleMoveTreeRight}>Move Tree Right</button>
+      </div>
+      <div>
+        <button onClick={handleMoveTreeDown}>Move Tree Down</button>
+      </div>
     </div>
   );
 };
@@ -125,6 +141,8 @@ interface ToolbarProps {
   reachable: Set<string>,
   onChangeId: (oldId: string, newId: string) => void,
   onChangeReached: (newReached: Set<string>) => void,
+  onMoveTreeRight: (id: string) => void,
+  onMoveTreeDown: (id: string) => void,
   onSelectIds: (ids: string[]) => void,
   onDeleteIds: (ids: string[]) => void,
 }
@@ -153,7 +171,9 @@ let Toolbar = (props: ToolbarProps) => {
           reached={props.reached}
           reachable={props.reachable}
           onChangeId={props.onChangeId}
-          onChangeReached={props.onChangeReached}/>
+          onChangeReached={props.onChangeReached}
+          onMoveTreeRight={props.onMoveTreeRight}
+          onMoveTreeDown={props.onMoveTreeDown}/>
     );
   }
 
@@ -574,6 +594,48 @@ let KnowledgeMap = () => {
     setReached(newReached);
   }, []);
 
+  let handleMoveTreeRight = React.useCallback((id: string) => {
+    debugger;
+    const updatedCells: {[id: string]: Cell} = {};
+    const bfs = [id];
+    while (bfs.length > 0) {
+      const curId = bfs.shift()!;
+      if (updatedCells[curId]) {
+        continue;
+      }
+
+      const oldCell = nodeMap.get(curId)!.cell;
+      updatedCells[curId] = {
+        i: oldCell.i,
+        j: oldCell.j + 1,
+      };
+      if (grid[oldCell.i][oldCell.j + 1]) {
+        bfs.push(grid[oldCell.i][oldCell.j + 1]);
+      }
+      knowledgeGraph.directDependantsOf(curId).forEach(x => {
+        const depCell = nodeMap.get(x)!.cell;
+        if (depCell.j === oldCell.j + 1) {
+          bfs.push(x);
+        }
+      });
+    }
+
+    setKnowledgeMap({
+      ...knowledgeMap,
+      nodes: knowledgeMap.nodes.map(x => {
+        if (x.id in updatedCells) {
+          return {...x, ...updatedCells[x.id]};
+        } else {
+          return x;
+        }
+      }),
+    });
+    setSelectedCells([]);
+  }, [knowledgeMap, knowledgeGraph, nodeMap, grid]);
+
+  let handleMoveTreeDown = React.useCallback((id: string) => {
+  }, []);
+
   let handleSelectIds = React.useCallback((idsToSelect: string[]) => {
     setSelectedCells(idsToSelect.map(x => nodeMap.get(x)!.cell));
   }, [nodeMap]);
@@ -664,6 +726,8 @@ let KnowledgeMap = () => {
           knowledgeMap={knowledgeMap}
           onChangeId={handleChangeId}
           onChangeReached={handleChangeProgress}
+          onMoveTreeRight={handleMoveTreeRight}
+          onMoveTreeDown={handleMoveTreeDown}
           onSelectIds={handleSelectIds}
           onDeleteIds={handleDeleteIds}/>
     </div>

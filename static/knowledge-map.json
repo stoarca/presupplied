@@ -168,7 +168,7 @@
       ]
     },
     {
-      "id": "FIND_KEYS_ON_KEYBOARD",
+      "id": "PECK_KEYS_ON_KEYBOARD",
       "i": 6,
       "j": 6,
       "deps": [
@@ -349,11 +349,11 @@
       ]
     },
     {
-      "id": "TYPE_KEYS_ON_KEYBOARD",
+      "id": "PECK_KEYS_ON_KEYBOARD_FAST",
       "i": 6,
       "j": 7,
       "deps": [
-        "FIND_KEYS_ON_KEYBOARD"
+        "PECK_KEYS_ON_KEYBOARD"
       ]
     },
     {
@@ -395,7 +395,7 @@
       "deps": [
         "SOUND_TO_LETTER",
         "BIGRAM_TO_SOUND",
-        "TYPE_KEYS_ON_KEYBOARD"
+        "PECK_KEYS_ON_KEYBOARD_FAST"
       ]
     },
     {
@@ -587,7 +587,7 @@
       "i": 7,
       "j": 9,
       "deps": [
-        "TYPE_KEYS_ON_KEYBOARD",
+        "PECK_KEYS_ON_KEYBOARD_FAST",
         "READ_NUMBERS_UP_TO_100"
       ]
     },
@@ -596,7 +596,7 @@
       "i": 6,
       "j": 9,
       "deps": [
-        "TYPE_KEYS_ON_KEYBOARD",
+        "PECK_KEYS_ON_KEYBOARD_FAST",
         "READ_200_SIMPLE_WORDS",
         "SPELL_50_SIMPLE_WORDS"
       ]
@@ -1552,7 +1552,7 @@
       "deps": [
         "SOUND_TO_LETTER",
         "READ_50_SIMPLE_WORDS",
-        "TYPE_KEYS_ON_KEYBOARD"
+        "PECK_KEYS_ON_KEYBOARD_FAST"
       ]
     },
     {
