@@ -3,6 +3,7 @@ import {createRoot} from 'react-dom/client';
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 
 import {buildGraph, GraphJson} from './dependency-graph';
+import {buildModuleContext, ModuleContext} from './ModuleContext';
 
 import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
 const KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
@@ -669,8 +670,21 @@ let KnowledgeMap = () => {
   );
 };
 
-const USE_MOUSE_HOVER = React.lazy(() => import('./modules/USE_MOUSE_HOVER'));
+let moduleComponents: {[id: string]: React.ReactElement} = {};
+require.context('./modules', true, /^\.\/[^\/]+$/).keys().forEach(moduleName => {
+  moduleName = moduleName.substring(2); // strip ./ prefix
+  const Lesson = React.lazy(() => import('./modules/' + moduleName));
+  moduleComponents[moduleName] = (
+    <ModuleContext.Provider value={buildModuleContext(moduleName)}>
+      <Lesson/>
+    </ModuleContext.Provider>
+  );
+});
 let App = (props: any) => {
+  const moduleRoutes = Object.keys(moduleComponents).map(x => {
+    return <Route key={x} path={x} element={moduleComponents[x]}/>
+  });
+
   return (
     <Router>
       <React.Suspense fallback={"loading..."}>
@@ -678,7 +692,8 @@ let App = (props: any) => {
           <Route path="/">
             <Route index element={<KnowledgeMap/>}/>
             <Route path="modules">
-              <Route path="USE_MOUSE_HOVER" element={<USE_MOUSE_HOVER/>}/>
+              {moduleRoutes}
+              <Route path="*" element={<div>module not found</div>}/>
             </Route>
           </Route>
         </Routes>

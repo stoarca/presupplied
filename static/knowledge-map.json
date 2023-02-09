@@ -306,7 +306,8 @@
       "j": 7,
       "deps": [
         "COUNT_TO_20",
-        "READ_DIGITS"
+        "READ_DIGITS",
+        "RECOGNIZE_ORDER_4"
       ]
     },
     {
@@ -316,7 +317,8 @@
       "deps": [
         "READ_NUMBERS_TO_20",
         "COUNT_TO_100",
-        "COUNT_OBJECTS_TO_20"
+        "COUNT_OBJECTS_TO_20",
+        "RECOGNIZE_ORDER_MANY"
       ]
     },
     {
@@ -964,8 +966,8 @@
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
         "PECK_NUMBERS_ON_KEYBOARD",
-        "USE_MOUSE_DOUBLE_CLICK",
-        "READ_LONG_SENTENCES"
+        "READ_LONG_SENTENCES",
+        "USE_MOUSE"
       ]
     },
     {
@@ -1561,6 +1563,91 @@
         "SPELL_50_SIMPLE_WORDS",
         "SOUND_TO_BIGRAM",
         "READ_200_SIMPLE_WORDS"
+      ]
+    },
+    {
+      "id": "USE_MOUSE_SCROLL",
+      "i": 9,
+      "j": 8,
+      "deps": [
+        "USE_MOUSE_HOVER_FAST",
+        "USE_MOUSE_HOVER_SMALL"
+      ]
+    },
+    {
+      "id": "USE_MOUSE",
+      "i": 9,
+      "j": 10,
+      "deps": [
+        "USE_MOUSE_DOUBLE_CLICK",
+        "USE_MOUSE_SCROLL"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_ORDER_2",
+      "i": 19,
+      "j": 4,
+      "deps": [
+        "RECOGNIZE_SIMPLE_CONCEPTS"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_ORDER_3",
+      "i": 19,
+      "j": 5,
+      "deps": [
+        "RECOGNIZE_ORDER_2",
+        "RECOGNIZE_SHAPES",
+        "RECOGNIZE_COLORS",
+        "RECOGNIZE_OPPOSITES"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_ORDER_4",
+      "i": 19,
+      "j": 6,
+      "deps": [
+        "RECOGNIZE_ORDER_3"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_ORDER_MANY",
+      "i": 19,
+      "j": 7,
+      "deps": [
+        "RECOGNIZE_ORDER_4"
+      ]
+    },
+    {
+      "id": "GEOMETRY",
+      "i": 22,
+      "j": 26,
+      "deps": [
+        "ARITHMETIC"
+      ]
+    },
+    {
+      "id": "CALCULUS",
+      "i": 23,
+      "j": 26,
+      "deps": [
+        "ALGEBRA"
+      ]
+    },
+    {
+      "id": "NUMBER THEORY",
+      "i": 24,
+      "j": 26,
+      "deps": [
+        "ALGEBRA"
+      ]
+    },
+    {
+      "id": "PROBABILITY",
+      "i": 25,
+      "j": 26,
+      "deps": [
+        "ALGEBRA"
       ]
     }
   ]

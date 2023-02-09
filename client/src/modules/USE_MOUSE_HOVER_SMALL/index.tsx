@@ -3,9 +3,9 @@ import React from 'react';
 import {ModuleContext} from '../../ModuleContext';
 
 export default (props: void) => {
-  const moduleContext = React.useContext(ModuleContext);
+  let moduleContext = React.useContext(ModuleContext);
 
-  const TARGET_RADIUS = 75;
+  const TARGET_RADIUS = 30;
   const [numCorrect, setNumCorrect] = React.useState(0);
   const [targetCoords, setTargetCoords] = React.useState({
     x: TARGET_RADIUS + Math.random() * (window.innerWidth - 2 * TARGET_RADIUS),
@@ -69,7 +69,7 @@ export default (props: void) => {
         onMouseMove={handleMouseMove}
         onMouseDown={handleMouseDown}>
       <svg xmlns="<http://www.w3.org/2000/svg>" style={svgStyle}>
-        <circle cx={targetCoords.x} cy={targetCoords.y} r={TARGET_RADIUS} fill="red"/>
+        <circle cx={targetCoords.x} cy={targetCoords.y} r={TARGET_RADIUS} fill="blue"/>
       </svg>
       <div style={scoreStyle}>
         Score: {numCorrect}
