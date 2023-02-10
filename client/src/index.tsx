@@ -310,7 +310,10 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
   } else if (props.progress === 'reachable') {
     fill = '#F1EB9C';
   } else {
-    fill = 'grey';
+    fill = '#777777';
+  }
+  if (!moduleComponents[props.kmid]) {
+    fill += '99';
   }
   return (
     <g transform={`translate(${pos.x}, ${pos.y})`}>
@@ -595,7 +598,6 @@ let KnowledgeMap = () => {
   }, []);
 
   let handleMoveTreeRight = React.useCallback((id: string) => {
-    debugger;
     const updatedCells: {[id: string]: Cell} = {};
     const bfs = [id];
     while (bfs.length > 0) {
@@ -634,7 +636,64 @@ let KnowledgeMap = () => {
   }, [knowledgeMap, knowledgeGraph, nodeMap, grid]);
 
   let handleMoveTreeDown = React.useCallback((id: string) => {
-  }, []);
+    const updatedCells: {[id: string]: Cell} = {};
+    const bfs = [id];
+    while (bfs.length > 0) {
+      const curId = bfs.shift()!;
+      if (updatedCells[curId]) {
+        continue;
+      }
+
+      const oldCell = nodeMap.get(curId)!.cell;
+      updatedCells[curId] = {
+        i: oldCell.i + 1,
+        j: oldCell.j,
+      };
+      if (grid[oldCell.i + 1][oldCell.j]) {
+        bfs.push(grid[oldCell.i + 1][oldCell.j]);
+      }
+      const handleDeps = (deps: string[]) => {
+        const sameRowDep = deps.find(x => nodeMap.get(x)!.cell.i === oldCell.i);
+        if (sameRowDep) {
+          bfs.push(sameRowDep);
+          let i = oldCell.i;
+          while (true) {
+            const aboveIds = deps.filter(x => nodeMap.get(x)!.cell.i === i - 1);
+            if (aboveIds.length) {
+              Array.prototype.push.apply(bfs, aboveIds);
+              i -= 1;
+            } else {
+              break;
+            }
+          }
+          i = oldCell.i;
+          while (true) {
+            const belowIds = deps.filter(x => nodeMap.get(x)!.cell.i === i + 1);
+            if (belowIds.length) {
+              Array.prototype.push.apply(bfs, belowIds);
+              i += 1;
+            } else {
+              break;
+            }
+          }
+        }
+      };
+      handleDeps(knowledgeGraph.directDependantsOf(curId));
+      handleDeps(knowledgeGraph.directDependenciesOf(curId));
+    }
+
+    setKnowledgeMap({
+      ...knowledgeMap,
+      nodes: knowledgeMap.nodes.map(x => {
+        if (x.id in updatedCells) {
+          return {...x, ...updatedCells[x.id]};
+        } else {
+          return x;
+        }
+      }),
+    });
+    setSelectedCells([]);
+  }, [knowledgeMap, knowledgeGraph, nodeMap, grid]);
 
   let handleSelectIds = React.useCallback((idsToSelect: string[]) => {
     setSelectedCells(idsToSelect.map(x => nodeMap.get(x)!.cell));

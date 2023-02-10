@@ -1,16 +1,17 @@
 import React from 'react';
 
+import {Module} from '../../Module';
 import {ModuleContext} from '../../ModuleContext';
+import {genRandPoint, dist} from '../../util';
+
+type M = React.MouseEvent<HTMLElement>;
 
 export default (props: void) => {
   const moduleContext = React.useContext(ModuleContext);
 
   const TARGET_RADIUS = 75;
-  const [numCorrect, setNumCorrect] = React.useState(0);
-  const [targetCoords, setTargetCoords] = React.useState({
-    x: TARGET_RADIUS + Math.random() * (window.innerWidth - 2 * TARGET_RADIUS),
-    y: TARGET_RADIUS + Math.random() * (window.innerHeight - 2 * TARGET_RADIUS),
-  });
+  const [score, setScore] = React.useState(0);
+  const [target, setTarget] = React.useState(genRandPoint(TARGET_RADIUS));
 
   const playInstructions = React.useCallback(() => {
     moduleContext.playModuleAudio('instructions.wav');
@@ -21,60 +22,38 @@ export default (props: void) => {
   React.useEffect(() => {
     let interval = setInterval(playInstructions, 15000);
     return () => clearInterval(interval);
-  }, [playInstructions, targetCoords]);
+  }, [playInstructions, target]);
 
-  const handleMouseMove = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
-    const dx = e.clientX - targetCoords.x;
-    const dy = e.clientY - targetCoords.y;
-    if (dx*dx + dy*dy < TARGET_RADIUS * TARGET_RADIUS) {
+  const handleMouseMove = React.useCallback((e: M) => {
+    if (dist({x: e.clientX, y: e.clientY}, target) < TARGET_RADIUS) {
       moduleContext.playSharedModuleAudio('good_job.wav');
-      setNumCorrect(numCorrect + 1);
-      let newTargetCoords;
-      do {
-        newTargetCoords = {
-          x: TARGET_RADIUS + Math.random() * (window.innerWidth - 2 * TARGET_RADIUS),
-          y: TARGET_RADIUS + Math.random() * (window.innerHeight - 2 * TARGET_RADIUS),
-        };
-        let ndx = newTargetCoords.x - targetCoords.x;
-        let ndy = newTargetCoords.y - targetCoords.y;
-        if (ndx * ndx + ndy * ndy > TARGET_RADIUS * TARGET_RADIUS * 5 * 5) {
-          break;
-        }
-      } while (true);
-
-      setTargetCoords(newTargetCoords);
+      setScore(score + 1);
+      let newTarget = genRandPoint(TARGET_RADIUS);
+      while (dist(newTarget, target) < TARGET_RADIUS * 5) {
+        newTarget = genRandPoint(TARGET_RADIUS);
+      }
+      setTarget(newTarget);
     }
-  }, [numCorrect, moduleContext]);
+  }, [score, moduleContext]);
 
-  const handleMouseDown = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
+  const handleMouseDown = React.useCallback((e: M) => {
     moduleContext.playModuleAudio('oh_no_you_clicked.wav');
-    setNumCorrect(0);
+    setScore(0);
   }, [moduleContext]);
 
-  const containerStyle = {
-    width: '100%',
-    height: '100%',
-  };
   const svgStyle = {
     width: '100%',
     height: '100%',
   };
-  const scoreStyle = {
-    position: 'fixed',
-    top: 10,
-    right: 10,
-  } as React.CSSProperties;
   return (
-    <div style={containerStyle}
+    <Module score={score}
+        maxScore={20}
         onMouseMove={handleMouseMove}
         onMouseDown={handleMouseDown}>
       <svg xmlns="<http://www.w3.org/2000/svg>" style={svgStyle}>
-        <circle cx={targetCoords.x} cy={targetCoords.y} r={TARGET_RADIUS} fill="red"/>
+        <circle cx={target.x} cy={target.y} r={TARGET_RADIUS} fill="red"/>
       </svg>
-      <div style={scoreStyle}>
-        Score: {numCorrect}
-      </div>
-    </div>
+    </Module>
   );
 };
 
