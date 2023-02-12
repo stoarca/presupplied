@@ -54,7 +54,9 @@ interface ToolbarForOneProps {
   reachable: Set<string>,
   onChangeId: (oldId: string, newId: string) => void,
   onChangeReached: (newReached: Set<string>) => void,
+  onMoveTreeLeft: (id: string) => void,
   onMoveTreeRight: (id: string) => void,
+  onMoveTreeUp: (id: string) => void,
   onMoveTreeDown: (id: string) => void,
 }
 
@@ -89,9 +91,17 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
     props.onChangeReached(newReached);
   }, [kmid, props.reached, props.onChangeReached]);
 
+  let handleMoveTreeLeft = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    props.onMoveTreeLeft(kmid);
+  }, [kmid, props.onMoveTreeLeft]);
+
   let handleMoveTreeRight = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     props.onMoveTreeRight(kmid);
   }, [kmid, props.onMoveTreeRight]);
+
+  let handleMoveTreeUp = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    props.onMoveTreeUp(kmid);
+  }, [kmid, props.onMoveTreeUp]);
 
   let handleMoveTreeDown = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     props.onMoveTreeDown(kmid);
@@ -124,7 +134,13 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
         </Link>
       </div>
       <div>
+        <button onClick={handleMoveTreeLeft}>Move Tree Left</button>
+      </div>
+      <div>
         <button onClick={handleMoveTreeRight}>Move Tree Right</button>
+      </div>
+      <div>
+        <button onClick={handleMoveTreeUp}>Move Tree Up</button>
       </div>
       <div>
         <button onClick={handleMoveTreeDown}>Move Tree Down</button>
@@ -141,7 +157,9 @@ interface ToolbarProps {
   reachable: Set<string>,
   onChangeId: (oldId: string, newId: string) => void,
   onChangeReached: (newReached: Set<string>) => void,
+  onMoveTreeLeft: (id: string) => void,
   onMoveTreeRight: (id: string) => void,
+  onMoveTreeUp: (id: string) => void,
   onMoveTreeDown: (id: string) => void,
   onSelectIds: (ids: string[]) => void,
   onDeleteIds: (ids: string[]) => void,
@@ -172,7 +190,9 @@ let Toolbar = (props: ToolbarProps) => {
           reachable={props.reachable}
           onChangeId={props.onChangeId}
           onChangeReached={props.onChangeReached}
+          onMoveTreeLeft={props.onMoveTreeLeft}
           onMoveTreeRight={props.onMoveTreeRight}
+          onMoveTreeUp={props.onMoveTreeUp}
           onMoveTreeDown={props.onMoveTreeDown}/>
     );
   }
@@ -597,9 +617,10 @@ let KnowledgeMap = () => {
     setReached(newReached);
   }, []);
 
-  let handleMoveTreeRight = React.useCallback((id: string) => {
+  const handleMoveTreeHorz = React.useCallback((id: string, dir: 'left' | 'right') => {
     const updatedCells: {[id: string]: Cell} = {};
     const bfs = [id];
+    let needsNegativeOffset = false;
     while (bfs.length > 0) {
       const curId = bfs.shift()!;
       if (updatedCells[curId]) {
@@ -607,16 +628,26 @@ let KnowledgeMap = () => {
       }
 
       const oldCell = nodeMap.get(curId)!.cell;
+      let nextJ = dir === 'left' ? oldCell.j - 1 : oldCell.j + 1;
+      if (nextJ < 0) {
+        needsNegativeOffset = true;
+      }
       updatedCells[curId] = {
         i: oldCell.i,
-        j: oldCell.j + 1,
+        j: nextJ,
       };
-      if (grid[oldCell.i][oldCell.j + 1]) {
-        bfs.push(grid[oldCell.i][oldCell.j + 1]);
+      if (grid[oldCell.i][nextJ]) {
+        bfs.push(grid[oldCell.i][nextJ]);
       }
-      knowledgeGraph.directDependantsOf(curId).forEach(x => {
+      let deps: string[];
+      if (dir === 'left') {
+        deps = knowledgeGraph.directDependenciesOf(curId);
+      } else {
+        deps = knowledgeGraph.directDependantsOf(curId);
+      }
+      deps.forEach(x => {
         const depCell = nodeMap.get(x)!.cell;
-        if (depCell.j === oldCell.j + 1) {
+        if (depCell.j === nextJ) {
           bfs.push(x);
         }
       });
@@ -630,14 +661,28 @@ let KnowledgeMap = () => {
         } else {
           return x;
         }
+      }).map(x => {
+        if (needsNegativeOffset) {
+          return {...x, j: x.j + 1};
+        } else {
+          return x;
+        }
       }),
     });
     setSelectedCells([]);
   }, [knowledgeMap, knowledgeGraph, nodeMap, grid]);
+  let handleMoveTreeRight = React.useCallback((id: string) => {
+    return handleMoveTreeHorz(id, 'right');
+  }, [handleMoveTreeHorz]);
+  let handleMoveTreeLeft = React.useCallback((id: string) => {
+    return handleMoveTreeHorz(id, 'left');
+  }, [handleMoveTreeHorz]);
 
-  let handleMoveTreeDown = React.useCallback((id: string) => {
+  let handleMoveTreeVert = React.useCallback((id: string, dir: 'up' | 'down') => {
+    debugger;
     const updatedCells: {[id: string]: Cell} = {};
     const bfs = [id];
+    let needsNegativeOffset = false;
     while (bfs.length > 0) {
       const curId = bfs.shift()!;
       if (updatedCells[curId]) {
@@ -645,20 +690,27 @@ let KnowledgeMap = () => {
       }
 
       const oldCell = nodeMap.get(curId)!.cell;
+      let nextI = dir === 'up' ? oldCell.i - 1 : oldCell.i + 1;
+      if (nextI < 0) {
+        needsNegativeOffset = true;
+      }
       updatedCells[curId] = {
-        i: oldCell.i + 1,
+        i: nextI,
         j: oldCell.j,
       };
-      if (grid[oldCell.i + 1][oldCell.j]) {
-        bfs.push(grid[oldCell.i + 1][oldCell.j]);
+      if (grid[nextI][oldCell.j]) {
+        bfs.push(grid[nextI][oldCell.j]);
       }
       const handleDeps = (deps: string[]) => {
         const sameRowDep = deps.find(x => nodeMap.get(x)!.cell.i === oldCell.i);
-        if (sameRowDep) {
+        if (sameRowDep && sameRowDep !== id) {
           bfs.push(sameRowDep);
           let i = oldCell.i;
           while (true) {
             const aboveIds = deps.filter(x => nodeMap.get(x)!.cell.i === i - 1);
+            if (aboveIds.includes(id)) {
+              break;
+            }
             if (aboveIds.length) {
               Array.prototype.push.apply(bfs, aboveIds);
               i -= 1;
@@ -669,6 +721,9 @@ let KnowledgeMap = () => {
           i = oldCell.i;
           while (true) {
             const belowIds = deps.filter(x => nodeMap.get(x)!.cell.i === i + 1);
+            if (belowIds.includes(id)) {
+              break;
+            }
             if (belowIds.length) {
               Array.prototype.push.apply(bfs, belowIds);
               i += 1;
@@ -690,10 +745,23 @@ let KnowledgeMap = () => {
         } else {
           return x;
         }
+      }).map(x => {
+        if (needsNegativeOffset) {
+          return {...x, i: x.i + 1};
+        } else {
+          return x;
+        }
       }),
     });
     setSelectedCells([]);
   }, [knowledgeMap, knowledgeGraph, nodeMap, grid]);
+  let handleMoveTreeUp = React.useCallback((id: string) => {
+    return handleMoveTreeVert(id, 'up');
+  }, [handleMoveTreeVert]);
+  let handleMoveTreeDown = React.useCallback((id: string) => {
+    return handleMoveTreeVert(id, 'down');
+  }, [handleMoveTreeVert]);
+
 
   let handleSelectIds = React.useCallback((idsToSelect: string[]) => {
     setSelectedCells(idsToSelect.map(x => nodeMap.get(x)!.cell));
@@ -785,7 +853,9 @@ let KnowledgeMap = () => {
           knowledgeMap={knowledgeMap}
           onChangeId={handleChangeId}
           onChangeReached={handleChangeProgress}
+          onMoveTreeLeft={handleMoveTreeLeft}
           onMoveTreeRight={handleMoveTreeRight}
+          onMoveTreeUp={handleMoveTreeUp}
           onMoveTreeDown={handleMoveTreeDown}
           onSelectIds={handleSelectIds}
           onDeleteIds={handleDeleteIds}/>

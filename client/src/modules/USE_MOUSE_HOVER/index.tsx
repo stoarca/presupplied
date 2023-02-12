@@ -11,7 +11,9 @@ export default (props: void) => {
 
   const TARGET_RADIUS = 75;
   const [score, setScore] = React.useState(0);
-  const [target, setTarget] = React.useState(genRandPoint(TARGET_RADIUS));
+  const [target, setTarget] = React.useState(genRandPoint({
+    paddingFromEdge: TARGET_RADIUS
+  }));
 
   const playInstructions = React.useCallback(() => {
     moduleContext.playModuleAudio('instructions.wav');
@@ -28,11 +30,10 @@ export default (props: void) => {
     if (dist({x: e.clientX, y: e.clientY}, target) < TARGET_RADIUS) {
       moduleContext.playSharedModuleAudio('good_job.wav');
       setScore(score + 1);
-      let newTarget = genRandPoint(TARGET_RADIUS);
-      while (dist(newTarget, target) < TARGET_RADIUS * 5) {
-        newTarget = genRandPoint(TARGET_RADIUS);
-      }
-      setTarget(newTarget);
+      setTarget(genRandPoint({
+        paddingFromEdge: TARGET_RADIUS,
+        farAwayFrom: [{point: target, dist: TARGET_RADIUS * 5}],
+      }));
     }
   }, [score, moduleContext]);
 

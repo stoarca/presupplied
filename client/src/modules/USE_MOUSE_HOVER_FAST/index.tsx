@@ -12,15 +12,16 @@ export default (props: void) => {
   const TARGET_RADIUS = 75;
   const TIME_TO_HOVER = 3000;
   const [score, setScore] = React.useState(0);
-  const [target, setTarget] = React.useState(genRandPoint(TARGET_RADIUS));
+  const [target, setTarget] = React.useState(genRandPoint({
+    paddingFromEdge: TARGET_RADIUS
+  }));
   const [opacity, setOpacity] = React.useState(1);
 
   const createNewTarget = React.useCallback(() => {
-    let newTarget = genRandPoint(TARGET_RADIUS);
-    while (dist(newTarget, target) < TARGET_RADIUS * 5) {
-      newTarget = genRandPoint(TARGET_RADIUS);
-    }
-    return newTarget;
+    return genRandPoint({
+      paddingFromEdge: TARGET_RADIUS,
+      farAwayFrom: [{point: target, dist: TARGET_RADIUS * 5}],
+    });
   }, [target]);
   const playInstructions = React.useCallback(() => {
     moduleContext.playModuleAudio('instructions.wav');
