@@ -20,7 +20,10 @@ export const buildModuleContext = (moduleName: string): ModuleContextProps => {
         currentlyPlayingAudio.pause();
       }
       currentlyPlayingAudio = new Audio(path);
-      return currentlyPlayingAudio.play();
+      currentlyPlayingAudio.play();
+      return new Promise(
+        r => currentlyPlayingAudio!.addEventListener('ended', r, {once: true})
+      );
     },
     playSharedModuleAudio: (filename: string) => {
       return ret.playAudio(`/static/sounds/modules/${filename}`);

@@ -80,6 +80,37 @@ export const pickFromBag = <T>(bag: T[], n: number, {
   return selected;
 };
 
+export class VariantList<T> {
+  variants: T[];
+  variantsMap: Map<T, {howMany: number}>;
+  constructor(variants: T[], howMany: number) {
+    this.variants = variants;
+    this.variantsMap = new Map();
+    for (let i = 0; i < variants.length; ++i) {
+      this.variantsMap.set(variants[i], {
+        howMany: howMany,
+      });
+    }
+  }
+  pickVariant(): T {
+    let variants = this.variants;
+    let variantsMap = this.variantsMap;
+    let total = sum(Array.from(this.variantsMap.values()).map(x => x.howMany));
+    let randIndex = Math.floor(Math.random() * total);
+    let variantIndex = 0;
+    while (randIndex > variantsMap.get(variants[variantIndex])!.howMany) {
+      randIndex -= variantsMap.get(variants[variantIndex])!.howMany;
+      variantIndex += 1;
+    }
+    return variants[variantIndex];
+  }
+  markSuccess(variant: T) {
+    this.variantsMap.get(variant)!.howMany -= 1;
+  }
+  markFailure(variant: T, penalty: number) {
+    this.variantsMap.get(variant)!.howMany += penalty;
+  }
+}
 
 export const pointInRect = (p: Point, r: Rect) => {
   return p.x >= r.x && p.x < r.x + r.w && p.y >= r.y && p.y < r.y + r.h;
@@ -88,6 +119,10 @@ export const pointInRect = (p: Point, r: Rect) => {
 export const dist = (a: Point, b: Point) => {
   return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 };
+
+export const sum = (arr: number[]) => {
+  return arr.reduce((partialSum, b) => partialSum + b, 0);
+}
 
 // TODO: need to verify that each object has a picture and sound
 export const SIMPLE_OBJECT_NAMES = [
