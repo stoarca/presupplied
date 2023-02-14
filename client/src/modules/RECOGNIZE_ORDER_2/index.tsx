@@ -126,7 +126,7 @@ export default (props: void) => {
         setNeedToClick(needToClick + 1);
       }
     } else {
-      for (let i = 0; i < needToClick) {
+      for (let i = 0; i < needToClick; ++i) {
         let previousTarget = exercise.targets[i];
         let clickedAnExistingOne = pointInRect(p, {
           x: previousTarget.x - IMAGE_SIZE / 2,
