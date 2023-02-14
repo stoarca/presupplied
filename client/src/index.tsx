@@ -353,8 +353,8 @@ let KnowledgeMap = () => {
       // TODO: HACK we should not be using setInterval here, but good enough
       // for now
       let bbox = ref.current!.getBBox();
-      setWidth(bbox.width + 500);
-      setHeight(bbox.height + 500);
+      setWidth(bbox.width + 200);
+      setHeight(bbox.height + 200);
     }, 100);
     return () => clearInterval(interval);
   }, []);

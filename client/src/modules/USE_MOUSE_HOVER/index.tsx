@@ -42,18 +42,13 @@ export default (props: void) => {
     setScore(0);
   }, [moduleContext]);
 
-  const svgStyle = {
-    width: '100%',
-    height: '100%',
-  };
   return (
-    <Module score={score}
+    <Module type="svg"
+        score={score}
         maxScore={20}
         onMouseMove={handleMouseMove}
         onMouseDown={handleMouseDown}>
-      <svg xmlns="<http://www.w3.org/2000/svg>" style={svgStyle}>
-        <circle cx={target.x} cy={target.y} r={TARGET_RADIUS} fill="red"/>
-      </svg>
+      <circle cx={target.x} cy={target.y} r={TARGET_RADIUS} fill="red"/>
     </Module>
   );
 };

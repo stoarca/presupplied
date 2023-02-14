@@ -16,20 +16,25 @@ interface GenRandPointOptions {
   farAwayFrom?: {point: Point, dist: number}[],
 }
 
-export const genRandPoint = ({
+export let genRandPoint = ({
   width = window.innerWidth,
   height = window.innerHeight,
   paddingFromEdge = 0,
   farAwayFrom = [],
 }: GenRandPointOptions): Point => {
-  const p = paddingFromEdge;
+  let p = paddingFromEdge;
   let ret: Point;
+  let i = 0;
   do {
+    i += 1;
     // TODO: inefficient
     ret = {
       x: p + Math.random() * (width - 2 * p),
       y: p + Math.random() * (height - 2 * p),
     };
+    if (i === 1000) {
+      break;
+    }
   } while (!farAwayFrom.every(x => dist(x.point, ret) > x.dist))
   return ret;
 };
@@ -41,7 +46,7 @@ interface GenRandPointsOptions {
   paddingFromEachOther?: number,
 }
 
-export const genRandPoints = (n: number, {
+export let genRandPoints = (n: number, {
   width = window.innerWidth,
   height = window.innerHeight,
   paddingFromEdge = 0,
@@ -63,7 +68,7 @@ interface PickFromBagOptions {
   withReplacement: boolean,
 }
 
-export const pickFromBag = <T>(bag: T[], n: number, {
+export let pickFromBag = <T>(bag: T[], n: number, {
   withReplacement,
 }: PickFromBagOptions): T[] => {
   let selected: T[] = [];
@@ -112,20 +117,28 @@ export class VariantList<T> {
   }
 }
 
-export const pointInRect = (p: Point, r: Rect) => {
+let exerciseId = 0;
+export let buildExercise = <T>(exercise: T): T & {id: number} => {
+  return {
+    id: exerciseId++,
+    ...exercise,
+  };
+};
+
+export let pointInRect = (p: Point, r: Rect) => {
   return p.x >= r.x && p.x < r.x + r.w && p.y >= r.y && p.y < r.y + r.h;
 };
 
-export const dist = (a: Point, b: Point) => {
+export let dist = (a: Point, b: Point) => {
   return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 };
 
-export const sum = (arr: number[]) => {
+export let sum = (arr: number[]) => {
   return arr.reduce((partialSum, b) => partialSum + b, 0);
 }
 
 // TODO: need to verify that each object has a picture and sound
-export const SIMPLE_OBJECT_NAMES = [
+export let SIMPLE_OBJECT_NAMES = [
   'apple',
   'banana',
   'watermelon',
@@ -180,8 +193,7 @@ export const SIMPLE_OBJECT_NAMES = [
   'oval',
 ];
 
-export const SIMPLE_OBJECTS = SIMPLE_OBJECT_NAMES.map(x => ({
+export let SIMPLE_OBJECTS = SIMPLE_OBJECT_NAMES.map(x => ({
   name: x,
-  sound: `/static/sounds/objects/${x}.wav`,
   image: `/static/images/objects/svg/${x}.svg`,
 }));

@@ -279,7 +279,8 @@
       "i": 19,
       "j": 7,
       "deps": [
-        "COUNT_TO_20"
+        "COUNT_TO_20",
+        "BEFORE_AFTER_10"
       ]
     },
     {
@@ -446,7 +447,8 @@
       "i": 21,
       "j": 7,
       "deps": [
-        "COUNT_OBJECTS_TO_10"
+        "COUNT_OBJECTS_TO_10",
+        "BEFORE_AFTER_10"
       ]
     },
     {
@@ -454,8 +456,8 @@
       "i": 21,
       "j": 10,
       "deps": [
-        "COUNT_ADD_OBJECTS",
-        "RECOGNIZE_DIGITS_MORE_LESS"
+        "RECOGNIZE_DIGITS_MORE_LESS",
+        "READ_NUMBERS_UP_TO_100"
       ]
     },
     {
@@ -469,10 +471,10 @@
     {
       "id": "VISUAL_SIMPLE_FRACTIONS",
       "i": 22,
-      "j": 7,
+      "j": 8,
       "deps": [
-        "SPEAK_COLORS",
-        "SPEAK_SHAPES"
+        "RECOGNIZE_NTH_10",
+        "COUNT_OBJECTS_TO_20"
       ]
     },
     {
@@ -499,7 +501,9 @@
       "i": 23,
       "j": 7,
       "deps": [
-        "COUNT_OBJECTS_TO_10"
+        "COUNT_OBJECTS_TO_10",
+        "BEFORE_AFTER_10",
+        "RECOGNIZE_NTH_10"
       ]
     },
     {
@@ -1657,7 +1661,7 @@
     },
     {
       "id": "FINGER_TRACE_LINE",
-      "i": 29,
+      "i": 30,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -1665,7 +1669,7 @@
     },
     {
       "id": "FINGER_TRACE_SHAPES",
-      "i": 29,
+      "i": 30,
       "j": 5,
       "deps": [
         "FINGER_TRACE_LINE",
@@ -1674,7 +1678,7 @@
     },
     {
       "id": "PENCIL_TRACE_LINE",
-      "i": 31,
+      "i": 32,
       "j": 5,
       "deps": [
         "FINGER_TRACE_LINE",
@@ -1683,7 +1687,7 @@
     },
     {
       "id": "FINGER_TRACE_SQUIGGLE",
-      "i": 30,
+      "i": 31,
       "j": 5,
       "deps": [
         "FINGER_TRACE_LINE"
@@ -1691,7 +1695,7 @@
     },
     {
       "id": "PENCIL_TRACE_SHAPES",
-      "i": 31,
+      "i": 32,
       "j": 6,
       "deps": [
         "PENCIL_TRACE_LINE",
@@ -1700,7 +1704,7 @@
     },
     {
       "id": "PENCIL_TRACE_SQUIGGLE",
-      "i": 32,
+      "i": 33,
       "j": 6,
       "deps": [
         "PENCIL_TRACE_LINE",
@@ -1763,7 +1767,7 @@
     },
     {
       "id": "HOLD_PENCIL",
-      "i": 31,
+      "i": 32,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -1784,6 +1788,35 @@
       "deps": [
         "READ_PUNCTUATION",
         "PECK_KEYS_ON_KEYBOARD_FAST"
+      ]
+    },
+    {
+      "id": "BEFORE_AFTER_10",
+      "i": 21,
+      "j": 6,
+      "deps": [
+        "COUNT_TO_10",
+        "RECOGNIZE_ORDER_3",
+        "READ_DIGITS"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_NTH_10",
+      "i": 22,
+      "j": 6,
+      "deps": [
+        "RECOGNIZE_ORDER_3",
+        "COUNT_TO_10",
+        "READ_DIGITS"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_NTH_ANY",
+      "i": 19,
+      "j": 10,
+      "deps": [
+        "VERBAL_ADD_UP_TO_10",
+        "READ_NUMBERS_UP_TO_100"
       ]
     }
   ]

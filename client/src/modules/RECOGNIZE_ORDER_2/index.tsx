@@ -3,14 +3,15 @@ import React from 'react';
 import {Module} from '../../Module';
 import {ModuleContext} from '../../ModuleContext';
 import {
-  SIMPLE_OBJECTS, pickFromBag, genRandPoints, pointInRect, VariantList
+  SIMPLE_OBJECTS,
+  pickFromBag,
+  genRandPoints,
+  pointInRect,
+  VariantList,
+  buildExercise,
 } from '../../util';
 
 type M = React.MouseEvent<HTMLElement>;
-
-speechSynthesis.addEventListener('voiceschanged', () => {
-  console.log(speechSynthesis.getVoices());
-});
 
 let VARIANTS: { (n0: string, n1: string): string }[] = [
   (n0, n1) => `Tap the ${n0}. Then tap the ${n1}.`,
@@ -33,46 +34,67 @@ export default (props: void) => {
   let [score, setScore] = React.useState(0);
   let [maxScore, setMaxScore] = React.useState(VARIANTS.length * 3);
   let generateExercise = React.useCallback(() => {
-    console.log(vlist.variantsMap);
     let positions = genRandPoints(2, {
       paddingFromEdge: 200,
       paddingFromEachOther: 400,
     });
     let objects = pickFromBag(SIMPLE_OBJECTS, 2, {withReplacement: false});
-    return {
+    return buildExercise({
       variant: vlist.pickVariant(),
       targets: objects.map((x, i) => ({
         ...x,
         ...positions[i],
       })),
-    };
+    });
   }, []);
   let [exercise, setExercise] = React.useState(generateExercise);
 
+  let [playingInstructions, setPlayingInstructions] = React.useState(false);
   let playInstructions = React.useCallback(() => {
-    let msg = exercise.variant(
+    return moduleContext.playTTS(exercise.variant(
       exercise.targets[0].name, exercise.targets[1].name
-    );
-    moduleContext.playAudio(
-      '/api/tts?text=' + encodeURIComponent(msg)
-    );
-    console.log(msg);
+    ));
   }, [moduleContext, exercise]);
   React.useEffect(() => {
-    playInstructions();
+    (async () => {
+      console.log('we are playing instructions');
+      setPlayingInstructions(true);
+      await playInstructions(),
+      console.log('done playing instructinos');
+      setPlayingInstructions(false);
+    })();
   }, [playInstructions]);
   React.useEffect(() => {
     let interval = setInterval(playInstructions, 15000);
     return () => clearInterval(interval);
   }, [playInstructions, exercise]);
 
-
   let IMAGE_SIZE = 200;
   let [needToClick, setNeedToClick] = React.useState(0);
   let [alreadyFailed, setAlreadyFailed] = React.useState(false);
   let [alreadyCompleted, setAlreadyCompleted] = React.useState(false);
+  let handleContextMenu = React.useCallback((e: M) => {
+    e.preventDefault();
+    if (playingInstructions) {
+      moduleContext.playSharedModuleAudio('wait_please.wav', {channel: 1});
+      return;
+    }
+    moduleContext.playSharedModuleAudio('bad_buzzer.wav');
+    setScore(old => old - 1);
+    return;
+  }, [moduleContext, playingInstructions]);
   let handleClick = React.useCallback(async (e: M) => {
+    if (playingInstructions) {
+      moduleContext.playSharedModuleAudio('wait_please.wav', {channel: 1});
+      return;
+    }
     if (alreadyCompleted) {
+      return;
+    }
+    if (e.button !== 0) {
+      moduleContext.playSharedModuleAudio('bad_buzzer.wav');
+      setScore(old => old - 1);
+      e.preventDefault();
       return;
     }
     let target = exercise.targets[needToClick];
@@ -88,9 +110,14 @@ export default (props: void) => {
         setAlreadyCompleted(true);
         vlist.markSuccess(exercise.variant);
         setScore(old => old + 1);
+        console.log('about to congratulate on ' + exercise.targets.map(x => x.name));
         await moduleContext.playSharedModuleAudio('good_ding.wav');
+        console.log('done ding');
         await moduleContext.playSharedModuleAudio('good_job.wav');
-        setExercise(generateExercise());
+        console.log('done good job');
+        let ex = generateExercise();
+        console.log(ex);
+        setExercise(ex);
         setNeedToClick(0);
         setAlreadyFailed(false);
         setAlreadyCompleted(false);
@@ -99,6 +126,19 @@ export default (props: void) => {
         setNeedToClick(needToClick + 1);
       }
     } else {
+      for (let i = 0; i < needToClick) {
+        let previousTarget = exercise.targets[i];
+        let clickedAnExistingOne = pointInRect(p, {
+          x: previousTarget.x - IMAGE_SIZE / 2,
+          y: previousTarget.y - IMAGE_SIZE / 2,
+          w: IMAGE_SIZE,
+          h: IMAGE_SIZE,
+        });
+        if (clickedAnExistingOne) {
+          moduleContext.playSharedModuleAudio('you_already_did_that_one.wav');
+          return;
+        }
+      }
       moduleContext.playSharedModuleAudio('bad_buzzer.wav');
       if (!alreadyFailed) {
         setAlreadyFailed(true);
@@ -112,7 +152,8 @@ export default (props: void) => {
     needToClick,
     vlist,
     alreadyFailed,
-    alreadyCompleted
+    alreadyCompleted,
+    playingInstructions,
   ]);
 
   let targetImages = exercise.targets.map((x, i) => {
@@ -140,17 +181,13 @@ export default (props: void) => {
     );
   });
 
-  let svgStyle = {
-    width: '100%',
-    height: '100%',
-  };
   return (
-    <Module score={score}
+    <Module type="svg"
+        score={score}
         maxScore={maxScore}
-        onClick={handleClick}>
-      <svg xmlns="<http://www.w3.org/2000/svg>" style={svgStyle}>
-        {targetImages}
-      </svg>
+        onClick={handleClick}
+        onContextMenu={handleContextMenu}>
+      {targetImages}
     </Module>
   );
 };

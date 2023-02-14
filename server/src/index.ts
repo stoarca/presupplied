@@ -13,7 +13,6 @@ app.get('/', (req, resp) => {
 type R = express.Request<{}, {}, {}, {text: string}>;
 
 app.get('/api/tts', async (req: R, resp, next) => {
-  console.log(encodeURIComponent(req.query.text));
   return proxy(
     'http://localhost:5002/api/tts?text=' + encodeURIComponent(req.query.text)
   )(req, resp, next);

@@ -63,20 +63,15 @@ export default (props: void) => {
     setScore(0);
   }, [moduleContext]);
 
-  const svgStyle = {
-    width: '100%',
-    height: '100%',
-  };
   let fill = '#ff0000';
   fill += Math.round(255 * opacity).toString(16).padStart(2, '0');
   return (
-    <Module score={score}
+    <Module type="svg"
+        score={score}
         maxScore={20}
         onMouseMove={handleMouseMove}
         onMouseDown={handleMouseDown}>
-      <svg xmlns="<http://www.w3.org/2000/svg>" style={svgStyle}>
-        <circle cx={target.x} cy={target.y} r={TARGET_RADIUS} fill={fill}/>
-      </svg>
+      <circle cx={target.x} cy={target.y} r={TARGET_RADIUS} fill={fill}/>
     </Module>
   );
 };
