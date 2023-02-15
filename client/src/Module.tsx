@@ -11,6 +11,18 @@ interface ModuleProps {
 export const Module: React.FC<ModuleProps> = (props) => {
   let {children, score, maxScore, type, ...rest} = props;
 
+  let ref = React.useRef<HTMLDivElement | null>(null);
+
+  React.useEffect(() => {
+    console.log(ref.current);
+    let preventDefault = (e: TouchEvent) => {
+      e.preventDefault();
+    };
+    let el = ref.current!;
+    el.addEventListener('touchmove', preventDefault);
+    return () => el.removeEventListener('touchmove', preventDefault);
+  }, []);
+
   const scoreStyle = {
     position: 'fixed',
     top: 10,
@@ -35,7 +47,7 @@ export const Module: React.FC<ModuleProps> = (props) => {
       display: 'block',
     };
     return (
-      <div style={containerStyle} {...rest}>
+      <div style={containerStyle} ref={ref} {...rest}>
         <svg xmlns="<http://www.w3.org/2000/svg>" style={svgStyle}>
           {children}
         </svg>

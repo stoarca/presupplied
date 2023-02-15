@@ -129,6 +129,27 @@ export let pointInRect = (p: Point, r: Rect) => {
   return p.x >= r.x && p.x < r.x + r.w && p.y >= r.y && p.y < r.y + r.h;
 };
 
+export let colinear = (a: Point, b: Point, c: Point): boolean => {
+  let crossProduct = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+  return crossProduct === 0;
+};
+
+export let projectPointToLine = (p: Point, l: [Point, Point]): Point => {
+  if (colinear(p, l[0], l[1])) {
+    return p;
+  }
+  let v = {x: l[1].x - l[0].x, y: l[1].y - l[0].y};
+  let w = {x: p.x - l[0].x, y: p.y - l[0].y};
+  let dotProduct = v.x * w.x + v.y * w.y;
+  let vMagnitudeSquared = v.x * v.x + v.y * v.y;
+  let projScalar = dotProduct / vMagnitudeSquared;
+  let projVector = {x: v.x * projScalar, y: v.y * projScalar};
+  return {x: l[0].x + projVector.x, y: l[0].y + projVector.y};
+};
+
+export let clamp = (n: number, min: number, max: number): number => {
+  return Math.min(Math.max(n, min), max);
+};
 export let dist = (a: Point, b: Point) => {
   return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 };

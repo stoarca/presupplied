@@ -92,58 +92,52 @@ export default (props: void) => {
       return;
     }
     if (e.button !== 0) {
-      moduleContext.playSharedModuleAudio('bad_buzzer.wav');
-      setScore(old => old - 1);
-      e.preventDefault();
       return;
     }
-    let target = exercise.targets[needToClick];
     let p = {x: e.clientX, y: e.clientY};
-    let clickedCorrectImage = pointInRect(p, {
-      x: target.x - IMAGE_SIZE / 2,
-      y: target.y - IMAGE_SIZE / 2,
-      w: IMAGE_SIZE,
-      h: IMAGE_SIZE,
-    });
-    if (clickedCorrectImage) {
-      if (needToClick === exercise.targets.length - 1) {
-        setAlreadyCompleted(true);
-        vlist.markSuccess(exercise.variant);
-        setScore(old => old + 1);
-        console.log('about to congratulate on ' + exercise.targets.map(x => x.name));
-        await moduleContext.playSharedModuleAudio('good_ding.wav');
-        console.log('done ding');
-        await moduleContext.playSharedModuleAudio('good_job.wav');
-        console.log('done good job');
-        let ex = generateExercise();
-        console.log(ex);
-        setExercise(ex);
-        setNeedToClick(0);
-        setAlreadyFailed(false);
-        setAlreadyCompleted(false);
-      } else {
-        moduleContext.playSharedModuleAudio('good_ding.wav');
-        setNeedToClick(needToClick + 1);
+    for (let i = 0; i < exercise.targets.length; ++i) {
+      let target = exercise.targets[i];
+      let clickedIt = pointInRect(p, {
+        x: target.x - IMAGE_SIZE / 2,
+        y: target.y - IMAGE_SIZE / 2,
+        w: IMAGE_SIZE,
+        h: IMAGE_SIZE,
+      });
+      if (!clickedIt) {
+        continue;
       }
-    } else {
-      for (let i = 0; i < needToClick; ++i) {
-        let previousTarget = exercise.targets[i];
-        let clickedAnExistingOne = pointInRect(p, {
-          x: previousTarget.x - IMAGE_SIZE / 2,
-          y: previousTarget.y - IMAGE_SIZE / 2,
-          w: IMAGE_SIZE,
-          h: IMAGE_SIZE,
-        });
-        if (clickedAnExistingOne) {
-          moduleContext.playSharedModuleAudio('you_already_did_that_one.wav');
-          return;
+      if (i < needToClick) {
+        moduleContext.playSharedModuleAudio('you_already_did_that_one.wav');
+      } else if (i > needToClick) {
+        moduleContext.playSharedModuleAudio('bad_buzzer.wav');
+        if (!alreadyFailed) {
+          setAlreadyFailed(true);
+          vlist.markFailure(exercise.variant, 3);
+          setMaxScore(old => old + 3);
         }
-      }
-      moduleContext.playSharedModuleAudio('bad_buzzer.wav');
-      if (!alreadyFailed) {
-        setAlreadyFailed(true);
-        vlist.markFailure(exercise.variant, 3);
-        setMaxScore(old => old + 3);
+      } else {
+        if (needToClick === exercise.targets.length - 1) {
+          setAlreadyCompleted(true);
+          vlist.markSuccess(exercise.variant);
+          setScore(old => old + 1);
+          console.log(
+            'about to congratulate on ' +
+                exercise.targets.map(x => x.name)
+          );
+          await moduleContext.playSharedModuleAudio('good_ding.wav');
+          console.log('done ding');
+          await moduleContext.playSharedModuleAudio('good_job.wav');
+          console.log('done good job');
+          let ex = generateExercise();
+          console.log(ex);
+          setExercise(ex);
+          setNeedToClick(0);
+          setAlreadyFailed(false);
+          setAlreadyCompleted(false);
+        } else {
+          moduleContext.playSharedModuleAudio('good_ding.wav');
+          setNeedToClick(needToClick + 1);
+        }
       }
     }
   }, [

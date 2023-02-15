@@ -5,11 +5,11 @@ interface AudioOptions {
 }
 
 interface ModuleContextProps {
-  playAudio: (path: string, options?: AudioOptions) => Promise<unknown>;
+  playAudio: (path: string, options?: AudioOptions) => Promise<void>;
   playSharedModuleAudio:
-      (filename: string, options?: AudioOptions) => Promise<unknown>;
-  playModuleAudio: (filename: string, options?: AudioOptions) => Promise<unknown>;
-  playTTS: (msg: string, options?: AudioOptions) => Promise<unknown>;
+      (filename: string, options?: AudioOptions) => Promise<void>;
+  playModuleAudio: (filename: string, options?: AudioOptions) => Promise<void>;
+  playTTS: (msg: string, options?: AudioOptions) => Promise<void>;
 }
 
 export const ModuleContext = React.createContext<ModuleContextProps>({
@@ -30,18 +30,18 @@ export const buildModuleContext = (moduleName: string): ModuleContextProps => {
         console.log(path + ' is calling hacky pause');
         console.log(channels[channel]!.ended);
         console.log(channels[channel]!.paused);
-        channels[channel]!.hackyPause();
+        (channels[channel]! as any).hackyPause();
       }
       let audio = new Audio(path);
       let playingPromise = audio.play();
-      audio.hackyPause = async () => {
+      (audio as any).hackyPause = async () => {
         console.log('calling hacky pause on ' + path);
         await playingPromise;
         console.log('waited for play, now pausing on ' + path);
         audio.pause();
       };
       channels[channel] = audio;
-      return new Promise(resolve => {
+      return new Promise<void>(resolve => {
         let doResolve = () => {
           clearInterval(interval);
           resolve();
