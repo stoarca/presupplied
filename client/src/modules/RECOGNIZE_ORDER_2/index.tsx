@@ -75,14 +75,7 @@ export default (props: void) => {
   let [alreadyCompleted, setAlreadyCompleted] = React.useState(false);
   let handleContextMenu = React.useCallback((e: M) => {
     e.preventDefault();
-    if (playingInstructions) {
-      moduleContext.playSharedModuleAudio('wait_please.wav', {channel: 1});
-      return;
-    }
-    moduleContext.playSharedModuleAudio('bad_buzzer.wav');
-    setScore(old => old - 1);
-    return;
-  }, [moduleContext, playingInstructions]);
+  }, []);
   let handleClick = React.useCallback(async (e: M) => {
     if (playingInstructions) {
       moduleContext.playSharedModuleAudio('wait_please.wav', {channel: 1});

@@ -2,6 +2,7 @@ import React from 'react';
 
 import {Module} from '../../Module';
 import {ModuleContext} from '../../ModuleContext';
+import {SvgArrow} from '../../SvgArrow';
 import {
   genRandPoints, dist, clamp, projectPointToLine, Point
 } from '../../util';
@@ -43,13 +44,18 @@ export default (props: void) => {
       y: line[0].y * (1 - percentMoved) + line[1].y * percentMoved,
     };
   }, [line, percentMoved]);
-  let doFail = React.useCallback(() => {
-    moduleContext.playSharedModuleAudio('bad_buzzer.wav');
+  let [doingFail, setDoingFail] = React.useState(false);
+  let doFail = React.useCallback(async () => {
     setScore(0);
-  }, [moduleContext]);
+    if (doingFail) {
+      return;
+    }
+    setDoingFail(true);
+    await moduleContext.playSharedModuleAudio('bad_buzzer.wav');
+    setDoingFail(false);
+  }, [moduleContext, doingFail]);
   let [isDragging, setIsDragging] = React.useState(false);
   let handleTouchStart = React.useCallback((e: T) => {
-    e.preventDefault();
     let t = e.touches[0];
     if (dist({x: t.clientX, y: t.clientY}, target) > ERROR_RADIUS) {
       doFail();
@@ -62,14 +68,16 @@ export default (props: void) => {
     if (!isDragging) {
       return;
     }
-    e.preventDefault();
+    if (percentMoved >= 1) {
+      return;
+    }
     let t = e.touches[0];
+    let p = {x: t.clientX, y: t.clientY};
+    let projectedPoint = projectPointToLine(p, exercise.line);
     if (dist({x: t.clientX, y: t.clientY}, target) > ERROR_RADIUS) {
       doFail();
       return;
     }
-    let p = {x: t.clientX, y: t.clientY};
-    let projectedPoint = projectPointToLine(p, exercise.line);
     let newPercentMoved = clamp(
       (projectedPoint.x - exercise.line[0].x) /
           (exercise.line[1].x - exercise.line[0].x),
@@ -85,7 +93,7 @@ export default (props: void) => {
     if (percentMoved < 1) {
       doFail();
     } else {
-      moduleContext.playSharedModuleAudio('good_job.wav');
+      moduleContext.playSharedModuleAudio('good_job.wav', {channel: 1});
       setScore(old => old + 1);
       setPercentMoved(0);
       setExercise(generateExercise());
@@ -93,13 +101,24 @@ export default (props: void) => {
   }, [moduleContext, percentMoved, doFail]);
 
   let targetLine = (
-    <line stroke="black"
+    <SvgArrow stroke="black"
         strokeWidth="2"
         strokeDasharray="5,4"
+        chevronSize={10}
         x1={line[0].x}
         y1={line[0].y}
         x2={line[1].x}
         y2={line[1].y}/>
+  );
+
+  let targetFilled = (
+    <line stroke="#ff000033"
+        strokeWidth={ERROR_RADIUS * 2}
+        strokeLinecap="round"
+        x1={line[0].x}
+        y1={line[0].y}
+        x2={target.x}
+        y2={target.y}/>
   );
 
   let targetCircle = (
@@ -114,6 +133,7 @@ export default (props: void) => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}>
       {targetLine}
+      {targetFilled}
       {targetCircle}
     </Module>
   );
