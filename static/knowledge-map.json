@@ -14,7 +14,7 @@
     },
     {
       "id": "RECOGNIZE_SIMPLE_OBJECTS",
-      "i": 25,
+      "i": 26,
       "j": 0,
       "deps": []
     },
@@ -29,7 +29,7 @@
     },
     {
       "id": "SPEAK_SIMPLE_OBJECTS",
-      "i": 25,
+      "i": 26,
       "j": 2,
       "deps": [
         "REPEAT_SOUNDS",
@@ -38,7 +38,7 @@
     },
     {
       "id": "RECOGNIZE_SIMPLE_CONCEPTS",
-      "i": 28,
+      "i": 29,
       "j": 3,
       "deps": [
         "RECOGNIZE_YES_NO",
@@ -47,7 +47,7 @@
     },
     {
       "id": "SPEAK_SIMPLE_CONCEPTS",
-      "i": 25,
+      "i": 26,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS",
@@ -56,7 +56,7 @@
     },
     {
       "id": "RECOGNIZE_OPPOSITES",
-      "i": 26,
+      "i": 27,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -64,7 +64,7 @@
     },
     {
       "id": "SPEAK_OPPOSITES",
-      "i": 26,
+      "i": 27,
       "j": 5,
       "deps": [
         "RECOGNIZE_OPPOSITES",
@@ -168,31 +168,30 @@
       ]
     },
     {
-      "id": "PECK_KEYS_ON_KEYBOARD",
+      "id": "PECK_KEYS_ON_KEYBOARD_RIGHT",
       "i": 11,
       "j": 6,
       "deps": [
         "READ_LETTERS",
-        "READ_DIGITS",
         "SPEAK_SIMPLE_MAPPINGS",
         "SING_ALPHABET"
       ]
     },
     {
       "id": "RECOGNIZE_YES_NO",
-      "i": 27,
-      "j": 2,
-      "deps": []
-    },
-    {
-      "id": "RECOGNIZE_GOOD_BAD",
       "i": 28,
       "j": 2,
       "deps": []
     },
     {
+      "id": "RECOGNIZE_GOOD_BAD",
+      "i": 29,
+      "j": 2,
+      "deps": []
+    },
+    {
       "id": "RECOGNIZE_COLORS",
-      "i": 27,
+      "i": 28,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -200,7 +199,7 @@
     },
     {
       "id": "SPEAK_COLORS",
-      "i": 27,
+      "i": 28,
       "j": 5,
       "deps": [
         "RECOGNIZE_COLORS",
@@ -227,7 +226,7 @@
     },
     {
       "id": "SPEAK_SIMPLE_MAPPINGS",
-      "i": 25,
+      "i": 26,
       "j": 5,
       "deps": [
         "SPEAK_SIMPLE_CONCEPTS"
@@ -352,7 +351,9 @@
       "i": 11,
       "j": 7,
       "deps": [
-        "PECK_KEYS_ON_KEYBOARD"
+        "PECK_KEYS_ON_KEYBOARD_LEFT",
+        "PECK_KEYS_ON_KEYBOARD_RIGHT",
+        "PECK_DIGITS_ON_KEYBOARD"
       ]
     },
     {
@@ -550,7 +551,8 @@
       "j": 7,
       "deps": [
         "COUNT_OBJECTS_TO_10",
-        "COUNT_OPPONENT_FINGERS"
+        "COUNT_OPPONENT_FINGERS",
+        "PECK_DIGITS_ON_KEYBOARD"
       ]
     },
     {
@@ -558,7 +560,9 @@
       "i": 25,
       "j": 7,
       "deps": [
-        "COUNT_OBJECTS_TO_10"
+        "COUNT_OBJECTS_TO_10",
+        "COUNT_DICE",
+        "PECK_DIGITS_ON_KEYBOARD"
       ]
     },
     {
@@ -601,7 +605,8 @@
       "i": 26,
       "j": 7,
       "deps": [
-        "COUNT_OBJECTS_TO_10"
+        "COUNT_OBJECTS_TO_10",
+        "PECK_DIGITS_ON_KEYBOARD"
       ]
     },
     {
@@ -637,7 +642,7 @@
     },
     {
       "id": "RECOGNIZE_SHAPES",
-      "i": 28,
+      "i": 29,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -645,7 +650,7 @@
     },
     {
       "id": "SPEAK_SHAPES",
-      "i": 28,
+      "i": 29,
       "j": 5,
       "deps": [
         "RECOGNIZE_SHAPES",
@@ -954,7 +959,7 @@
       ]
     },
     {
-      "id": "TYPING_HOME_ROW",
+      "id": "TYPING_HOME_ROW_LEFT",
       "i": 12,
       "j": 11,
       "deps": [
@@ -966,44 +971,45 @@
       ]
     },
     {
-      "id": "TYPING_INDEX_FINGER",
+      "id": "TYPING_INDEX_FINGER_LEFT",
       "i": 12,
       "j": 12,
       "deps": [
-        "TYPING_HOME_ROW",
+        "TYPING_HOME_ROW_LEFT",
         "READ_PARAGRAPHS"
       ]
     },
     {
-      "id": "TYPING_MIDDLE_FINGER",
+      "id": "TYPING_MIDDLE_FINGER_LEFT",
       "i": 12,
       "j": 13,
       "deps": [
-        "TYPING_INDEX_FINGER"
+        "TYPING_INDEX_FINGER_LEFT"
       ]
     },
     {
-      "id": "TYPING_RING_FINGER",
+      "id": "TYPING_RING_FINGER_LEFT",
       "i": 12,
       "j": 14,
       "deps": [
-        "TYPING_MIDDLE_FINGER"
+        "TYPING_MIDDLE_FINGER_LEFT"
       ]
     },
     {
-      "id": "TYPING_PINKY_FINGER",
+      "id": "TYPING_PINKY_FINGER_LEFT",
       "i": 12,
       "j": 15,
       "deps": [
-        "TYPING_RING_FINGER"
+        "TYPING_RING_FINGER_LEFT"
       ]
     },
     {
-      "id": "TYPING_NUMBERS_AND_PUNCTUATION",
+      "id": "TYPING_NUMBERS_INDEX",
       "i": 12,
-      "j": 16,
+      "j": 17,
       "deps": [
-        "TYPING_PINKY_FINGER"
+        "TYPING_CAPITALS_LEFT_SHIFT",
+        "TYPING_CAPITALS_RIGHT_SHIFT"
       ]
     },
     {
@@ -1585,7 +1591,7 @@
     },
     {
       "id": "RECOGNIZE_ORDER_2",
-      "i": 29,
+      "i": 30,
       "j": 5,
       "deps": [
         "RECOGNIZE_SHAPES",
@@ -1595,7 +1601,7 @@
     },
     {
       "id": "RECOGNIZE_ORDER_3",
-      "i": 29,
+      "i": 30,
       "j": 7,
       "deps": [
         "RECOGNIZE_ORDER_2",
@@ -1605,7 +1611,7 @@
     },
     {
       "id": "RECOGNIZE_ORDER_4",
-      "i": 29,
+      "i": 30,
       "j": 8,
       "deps": [
         "RECOGNIZE_ORDER_3"
@@ -1613,7 +1619,7 @@
     },
     {
       "id": "RECOGNIZE_ORDER_MANY",
-      "i": 29,
+      "i": 30,
       "j": 9,
       "deps": [
         "RECOGNIZE_ORDER_4"
@@ -1824,6 +1830,153 @@
       "j": 5,
       "deps": [
         "COUNT_TO_5"
+      ]
+    },
+    {
+      "id": "COUNT_DICE",
+      "i": 25,
+      "j": 5,
+      "deps": [
+        "COUNT_TO_5"
+      ]
+    },
+    {
+      "id": "PECK_DIGITS_ON_KEYBOARD",
+      "i": 12,
+      "j": 6,
+      "deps": [
+        "READ_DIGITS",
+        "SPEAK_SIMPLE_MAPPINGS"
+      ]
+    },
+    {
+      "id": "PECK_KEYS_ON_KEYBOARD_LEFT",
+      "i": 10,
+      "j": 6,
+      "deps": [
+        "SING_ALPHABET",
+        "READ_LETTERS",
+        "SPEAK_SIMPLE_MAPPINGS"
+      ]
+    },
+    {
+      "id": "TYPING_HOME_ROW_RIGHT",
+      "i": 13,
+      "j": 11,
+      "deps": [
+        "USE_MOUSE",
+        "READ_LONG_SENTENCES",
+        "PECK_NUMBERS_ON_KEYBOARD",
+        "PECK_WORDS_ON_KEYBOARD",
+        "PECK_CAPITALS_AND_PUNCTUTATION"
+      ]
+    },
+    {
+      "id": "TYPING_INDEX_FINGER_RIGHT",
+      "i": 13,
+      "j": 12,
+      "deps": [
+        "TYPING_HOME_ROW_RIGHT",
+        "READ_PARAGRAPHS"
+      ]
+    },
+    {
+      "id": "TYPING_MIDDLE_FINGER_RIGHT",
+      "i": 13,
+      "j": 13,
+      "deps": [
+        "TYPING_INDEX_FINGER_RIGHT"
+      ]
+    },
+    {
+      "id": "TYPING_RING_FINGER_RIGHT",
+      "i": 13,
+      "j": 14,
+      "deps": [
+        "TYPING_MIDDLE_FINGER_RIGHT"
+      ]
+    },
+    {
+      "id": "TYPING_PINKY_FINGER_RIGHT",
+      "i": 13,
+      "j": 15,
+      "deps": [
+        "TYPING_RING_FINGER_RIGHT"
+      ]
+    },
+    {
+      "id": "TYPING_CAPITALS_LEFT_SHIFT",
+      "i": 12,
+      "j": 16,
+      "deps": [
+        "TYPING_PINKY_FINGER_LEFT"
+      ]
+    },
+    {
+      "id": "TYPING_CAPITALS_RIGHT_SHIFT",
+      "i": 13,
+      "j": 16,
+      "deps": [
+        "TYPING_PINKY_FINGER_RIGHT"
+      ]
+    },
+    {
+      "id": "TYPING_NUMBERS_MIDDLE",
+      "i": 12,
+      "j": 18,
+      "deps": [
+        "TYPING_NUMBERS_INDEX"
+      ]
+    },
+    {
+      "id": "TYPING_NUMBERS_RING",
+      "i": 12,
+      "j": 19,
+      "deps": [
+        "TYPING_NUMBERS_MIDDLE"
+      ]
+    },
+    {
+      "id": "TYING_NUMBERS_PINKY",
+      "i": 12,
+      "j": 20,
+      "deps": [
+        "TYPING_NUMBERS_RING"
+      ]
+    },
+    {
+      "id": "TYPING_PUNCTUATION_INDEX",
+      "i": 13,
+      "j": 18,
+      "deps": [
+        "TYPING_NUMBERS_INDEX"
+      ]
+    },
+    {
+      "id": "TYPING_PUNCTUATION_MIDDLE",
+      "i": 13,
+      "j": 19,
+      "deps": [
+        "TYPING_NUMBERS_MIDDLE",
+        "TYPING_PUNCTUATION_INDEX"
+      ]
+    },
+    {
+      "id": "TYPING_PUNCTUATION_RING",
+      "i": 13,
+      "j": 20,
+      "deps": [
+        "TYPING_PUNCTUATION_MIDDLE",
+        "TYPING_NUMBERS_RING"
+      ]
+    },
+    {
+      "id": "TYPING_PUNCTUATION_PINKY",
+      "i": 13,
+      "j": 21,
+      "deps": [
+        "TYING_NUMBERS_PINKY",
+        "TYPING_PUNCTUATION_RING"
       ]
     }
   ]

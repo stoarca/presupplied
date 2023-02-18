@@ -6,6 +6,11 @@
     "jsx": "react",
     "typeRoots": ["./node_modules/@types", "./@types"],
     "module": "esnext",
+    "baseUrl": "./",
+    "paths": {
+      "@src/*": ["src/*"],
+      "@modules/*": ["src/modules/*"]
+    },
     "resolveJsonModule": true
   },
   "include": ["src"],

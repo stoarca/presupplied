@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Module} from '../../Module';
+import {Module, useInstructions} from '../../Module';
 import {ModuleContext} from '../../ModuleContext';
 import {SvgArrow} from '../../SvgArrow';
 import {
@@ -24,19 +24,17 @@ export default (props: void) => {
   }, []);
   let [exercise, setExercise] = React.useState(generateExercise);
 
-  let playInstructions = React.useCallback(() => {
-    moduleContext.playTTS('Trace the line with your finger.');
-  }, [moduleContext]);
-  React.useEffect(() => {
-    playInstructions();
-  }, [playInstructions]);
-  React.useEffect(() => {
-    let interval = setInterval(playInstructions, 15000);
-    return () => clearInterval(interval);
-  }, [playInstructions, exercise]);
+  let playingInstructions = useInstructions(() => {
+    return moduleContext.playTTS('Trace the line with your finger.');
+  }, exercise, [moduleContext]);
 
-  let ERROR_RADIUS = 80;
+  let ERROR_RADIUS = 70;
   let [percentMoved, setPercentMoved] = React.useState(0);
+  React.useEffect(() => {
+    if (percentMoved === 1) {
+      moduleContext.playSharedModuleAudio('good_ding.wav');
+    }
+  }, [moduleContext, percentMoved]);
   let line = exercise.line;
   let target = React.useMemo(() => {
     return {
@@ -125,16 +123,24 @@ export default (props: void) => {
     <circle r={ERROR_RADIUS} cx={target.x} cy={target.y} fill="#ff000033"/>
   );
 
+  let targetComplete = null;
+  if (percentMoved === 1) {
+    targetComplete = (
+      <circle r={40} cx={target.x} cy={target.y} fill="#00ff0099"/>
+    );
+  }
+
   return (
     <Module type="svg"
         score={score}
-        maxScore={20}
+        maxScore={10}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}>
       {targetLine}
       {targetFilled}
       {targetCircle}
+      {targetComplete}
     </Module>
   );
 }

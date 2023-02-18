@@ -1,6 +1,6 @@
-
-const path = require('path');
-const webpack = require('webpack');
+let path = require('path');
+let webpack = require('webpack');
+let TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -25,10 +25,15 @@ module.exports = {
           'sass-loader',
         ],
       },
+      {
+        test: /\.wav$/,
+        type: 'asset/resource',
+      }
     ],
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    plugins: [new TsconfigPathsPlugin()],
   },
   output: {
     filename: '[name].js',

@@ -19,6 +19,9 @@ export const ModuleContext = React.createContext<ModuleContextProps>({
   playTTS: () => {throw new Error('not implemented')},
 });
 
+console.log('doing this thing');
+console.log(require.context('../../static/sounds', true, /.*/, 'weak').keys());
+
 let channels: Array<HTMLAudioElement|null> = [null, null];
 export const buildModuleContext = (moduleName: string): ModuleContextProps => {
   const ret = {

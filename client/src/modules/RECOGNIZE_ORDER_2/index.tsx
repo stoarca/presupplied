@@ -1,7 +1,7 @@
 import React from 'react';
 
-import {Module} from '../../Module';
-import {ModuleContext} from '../../ModuleContext';
+import {Module, useInstructions} from '@src/Module';
+import {ModuleContext} from '@src/ModuleContext';
 import {
   SIMPLE_OBJECTS,
   pickFromBag,
@@ -9,7 +9,10 @@ import {
   pointInRect,
   VariantList,
   buildExercise,
-} from '../../util';
+} from '@src/util';
+
+// LOH: move sounds to proper assets and make them more engaging for the
+// win condition
 
 type M = React.MouseEvent<HTMLElement>;
 
@@ -49,33 +52,16 @@ export default (props: void) => {
   }, []);
   let [exercise, setExercise] = React.useState(generateExercise);
 
-  let [playingInstructions, setPlayingInstructions] = React.useState(false);
-  let playInstructions = React.useCallback(() => {
+  let playingInstructions = useInstructions(() => {
     return moduleContext.playTTS(exercise.variant(
       exercise.targets[0].name, exercise.targets[1].name
     ));
-  }, [moduleContext, exercise]);
-  React.useEffect(() => {
-    (async () => {
-      console.log('we are playing instructions');
-      setPlayingInstructions(true);
-      await playInstructions(),
-      console.log('done playing instructinos');
-      setPlayingInstructions(false);
-    })();
-  }, [playInstructions]);
-  React.useEffect(() => {
-    let interval = setInterval(playInstructions, 15000);
-    return () => clearInterval(interval);
-  }, [playInstructions, exercise]);
+  }, exercise, [moduleContext, exercise]);
 
   let IMAGE_SIZE = 200;
   let [needToClick, setNeedToClick] = React.useState(0);
   let [alreadyFailed, setAlreadyFailed] = React.useState(false);
   let [alreadyCompleted, setAlreadyCompleted] = React.useState(false);
-  let handleContextMenu = React.useCallback((e: M) => {
-    e.preventDefault();
-  }, []);
   let handleClick = React.useCallback(async (e: M) => {
     if (playingInstructions) {
       moduleContext.playSharedModuleAudio('wait_please.wav', {channel: 1});
@@ -169,11 +155,7 @@ export default (props: void) => {
   });
 
   return (
-    <Module type="svg"
-        score={score}
-        maxScore={maxScore}
-        onClick={handleClick}
-        onContextMenu={handleContextMenu}>
+    <Module type="svg" score={score} maxScore={maxScore} onClick={handleClick}>
       {targetImages}
     </Module>
   );
