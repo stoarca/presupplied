@@ -4,6 +4,10 @@ import {Module, useInstructions} from '../../Module';
 import {ModuleContext} from '../../ModuleContext';
 import {genRandPoint, dist} from '../../util';
 
+import {tooSlow, goodJob} from '@modules/common/sounds';
+import instructions from './instructions.wav';
+import ohNoYouClicked from './oh_no_you_clicked.wav';
+
 type M = React.MouseEvent<HTMLElement>;
 
 export default (props: void) => {
@@ -27,7 +31,7 @@ export default (props: void) => {
   }, [target]);
 
   let playingInstructions = useInstructions(() => {
-    return moduleContext.playModuleAudio('instructions.wav');
+    return moduleContext.playAudio(instructions);
   }, target, [moduleContext]);
 
   React.useEffect(() => {
@@ -36,7 +40,7 @@ export default (props: void) => {
     let interval = setInterval(() => {
       let diff = Date.now() - startTime;
       if (diff >= TIME_TO_HOVER) {
-        moduleContext.playSharedModuleAudio('too_slow.wav');
+        moduleContext.playAudio(tooSlow);
         setTarget(createNewTarget());
         setScore(0);
       } else {
@@ -48,14 +52,14 @@ export default (props: void) => {
 
   let handleMouseMove = React.useCallback((e: M) => {
     if (dist({x: e.clientX, y: e.clientY}, target) < TARGET_RADIUS) {
-      moduleContext.playSharedModuleAudio('good_job.wav');
+      moduleContext.playAudio(goodJob);
       setScore(score + 1);
       setTarget(createNewTarget());
     }
   }, [score, moduleContext, target, createNewTarget]);
 
   let handleMouseDown = React.useCallback((e: M) => {
-    moduleContext.playModuleAudio('oh_no_you_clicked.wav');
+    moduleContext.playAudio(ohNoYouClicked);
     setScore(0);
   }, [moduleContext]);
 

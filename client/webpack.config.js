@@ -28,6 +28,9 @@ module.exports = {
       {
         test: /\.wav$/,
         type: 'asset/resource',
+        generator: {
+          filename: '[name]-[hash][ext][query]',
+        },
       }
     ],
   },
@@ -39,6 +42,7 @@ module.exports = {
     filename: '[name].js',
     path: path.resolve(__dirname, '../static/dist'),
   },
+  devtool: 'source-map',
   node: {
     __filename: true,
     __dirname: true,

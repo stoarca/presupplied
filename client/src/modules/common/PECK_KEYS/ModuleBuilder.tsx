@@ -8,6 +8,8 @@ import {
   buildExercise,
 } from '../../../util';
 
+import {goodDing, badBuzzer} from '@modules/common/sounds';
+
 export let ModuleBuilder = (VARIANTS: [string, string][]) => {
   return (props: void) => {
     let moduleContext = React.useContext(ModuleContext);
@@ -27,14 +29,14 @@ export let ModuleBuilder = (VARIANTS: [string, string][]) => {
     }, exercise, [moduleContext, exercise]);
 
     React.useEffect(() => {
-      let listener = (e: KeyboardEvent) => {
+      let listener = async (e: KeyboardEvent) => {
         if (e.key === exercise.variant[0]) {
-          moduleContext.playSharedModuleAudio('good_job.wav');
+          moduleContext.playAudio(goodDing, {channel: 1});
           vlist.markSuccess(exercise.variant);
           setScore(old => old + 1);
           setExercise(generateExercise());
         } else {
-          moduleContext.playSharedModuleAudio('bad_buzzer.wav');
+          moduleContext.playAudio(badBuzzer);
           vlist.markFailure(exercise.variant, 3);
           setMaxScore(old => old + 3);
         }

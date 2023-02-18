@@ -6,25 +6,17 @@ interface AudioOptions {
 
 interface ModuleContextProps {
   playAudio: (path: string, options?: AudioOptions) => Promise<void>;
-  playSharedModuleAudio:
-      (filename: string, options?: AudioOptions) => Promise<void>;
-  playModuleAudio: (filename: string, options?: AudioOptions) => Promise<void>;
   playTTS: (msg: string, options?: AudioOptions) => Promise<void>;
 }
 
-export const ModuleContext = React.createContext<ModuleContextProps>({
+export let ModuleContext = React.createContext<ModuleContextProps>({
   playAudio: () => {throw new Error('not implemented')},
-  playSharedModuleAudio: () => {throw new Error('not implemented')},
-  playModuleAudio: () => {throw new Error('not implemetned')},
   playTTS: () => {throw new Error('not implemented')},
 });
 
-console.log('doing this thing');
-console.log(require.context('../../static/sounds', true, /.*/, 'weak').keys());
-
 let channels: Array<HTMLAudioElement|null> = [null, null];
-export const buildModuleContext = (moduleName: string): ModuleContextProps => {
-  const ret = {
+export let buildModuleContext = (moduleName: string): ModuleContextProps => {
+  let ret = {
     playAudio: (path: string, {channel = 0}: AudioOptions = {}) => {
       if (channel >= channels.length) {
         throw new Error('invalid channel ' + channel);
@@ -67,15 +59,6 @@ export const buildModuleContext = (moduleName: string): ModuleContextProps => {
           doResolve();
         }, {once: true});
       });
-    },
-    playSharedModuleAudio: (filename: string, options?: AudioOptions) => {
-      return ret.playAudio(`/static/sounds/modules/${filename}`, options);
-    },
-    playModuleAudio: (filename: string, options?: AudioOptions) => {
-      return ret.playAudio(
-        `/static/sounds/modules/${moduleName}/${filename}`,
-        options,
-      );
     },
     playTTS: (msg: string, options?: AudioOptions) => {
       return ret.playAudio('/api/tts?text=' + encodeURIComponent(msg), options);

@@ -1,11 +1,15 @@
 import React from 'react';
 
-import {Module, useInstructions} from '../../Module';
-import {ModuleContext} from '../../ModuleContext';
-import {SvgArrow} from '../../SvgArrow';
+import {Module, useInstructions} from '@src/Module';
+import {ModuleContext} from '@src/ModuleContext';
+import {SvgArrow} from '@src/SvgArrow';
 import {
   genRandPoints, dist, clamp, projectPointToLine, Point
-} from '../../util';
+} from '@src/util';
+
+import {
+  goodDing, badBuzzer, goodJob,
+} from '@modules/common/sounds';
 
 type M = React.MouseEvent<HTMLElement>;
 type T = React.TouchEvent<HTMLElement>;
@@ -32,7 +36,7 @@ export default (props: void) => {
   let [percentMoved, setPercentMoved] = React.useState(0);
   React.useEffect(() => {
     if (percentMoved === 1) {
-      moduleContext.playSharedModuleAudio('good_ding.wav');
+      moduleContext.playAudio(goodDing);
     }
   }, [moduleContext, percentMoved]);
   let line = exercise.line;
@@ -49,7 +53,7 @@ export default (props: void) => {
       return;
     }
     setDoingFail(true);
-    await moduleContext.playSharedModuleAudio('bad_buzzer.wav');
+    await moduleContext.playAudio(badBuzzer);
     setDoingFail(false);
   }, [moduleContext, doingFail]);
   let [isDragging, setIsDragging] = React.useState(false);
@@ -59,7 +63,7 @@ export default (props: void) => {
       doFail();
       return;
     }
-    moduleContext.playSharedModuleAudio('good_ding.wav');
+    moduleContext.playAudio(goodDing);
     setIsDragging(true);
   }, [moduleContext, exercise, percentMoved, target, doFail]);
   let handleTouchMove = React.useCallback((e: T) => {
@@ -91,7 +95,7 @@ export default (props: void) => {
     if (percentMoved < 1) {
       doFail();
     } else {
-      moduleContext.playSharedModuleAudio('good_job.wav', {channel: 1});
+      moduleContext.playAudio(goodJob, {channel: 1});
       setScore(old => old + 1);
       setPercentMoved(0);
       setExercise(generateExercise());

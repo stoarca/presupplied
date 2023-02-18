@@ -11,8 +11,9 @@ import {
   buildExercise,
 } from '@src/util';
 
-// LOH: move sounds to proper assets and make them more engaging for the
-// win condition
+import {
+  waitPlease, youAlreadyDidThatOne, badBuzzer, goodDing, goodJob
+} from '@modules/common/sounds';
 
 type M = React.MouseEvent<HTMLElement>;
 
@@ -64,7 +65,7 @@ export default (props: void) => {
   let [alreadyCompleted, setAlreadyCompleted] = React.useState(false);
   let handleClick = React.useCallback(async (e: M) => {
     if (playingInstructions) {
-      moduleContext.playSharedModuleAudio('wait_please.wav', {channel: 1});
+      moduleContext.playAudio(waitPlease, {channel: 1});
       return;
     }
     if (alreadyCompleted) {
@@ -86,9 +87,9 @@ export default (props: void) => {
         continue;
       }
       if (i < needToClick) {
-        moduleContext.playSharedModuleAudio('you_already_did_that_one.wav');
+        moduleContext.playAudio(youAlreadyDidThatOne);
       } else if (i > needToClick) {
-        moduleContext.playSharedModuleAudio('bad_buzzer.wav');
+        moduleContext.playAudio(badBuzzer);
         if (!alreadyFailed) {
           setAlreadyFailed(true);
           vlist.markFailure(exercise.variant, 3);
@@ -103,9 +104,9 @@ export default (props: void) => {
             'about to congratulate on ' +
                 exercise.targets.map(x => x.name)
           );
-          await moduleContext.playSharedModuleAudio('good_ding.wav');
+          await moduleContext.playAudio(goodDing);
           console.log('done ding');
-          await moduleContext.playSharedModuleAudio('good_job.wav');
+          await moduleContext.playAudio(goodJob);
           console.log('done good job');
           let ex = generateExercise();
           console.log(ex);
@@ -114,7 +115,7 @@ export default (props: void) => {
           setAlreadyFailed(false);
           setAlreadyCompleted(false);
         } else {
-          moduleContext.playSharedModuleAudio('good_ding.wav');
+          moduleContext.playAudio(goodDing);
           setNeedToClick(needToClick + 1);
         }
       }

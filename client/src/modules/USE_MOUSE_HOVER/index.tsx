@@ -4,6 +4,11 @@ import {Module, useInstructions} from '../../Module';
 import {ModuleContext} from '../../ModuleContext';
 import {genRandPoint, dist} from '../../util';
 
+import {goodJob} from '@modules/common/sounds';
+
+import instructions from './instructions.wav';
+import ohNoYouClicked from './oh_no_you_clicked.wav';
+
 type M = React.MouseEvent<HTMLElement>;
 
 export default (props: void) => {
@@ -16,12 +21,12 @@ export default (props: void) => {
   }));
 
   let playingInstructions = useInstructions(() => {
-    return moduleContext.playModuleAudio('instructions.wav');
+    return moduleContext.playAudio(instructions);
   }, target, [moduleContext]);
 
   let handleMouseMove = React.useCallback((e: M) => {
     if (dist({x: e.clientX, y: e.clientY}, target) < TARGET_RADIUS) {
-      moduleContext.playSharedModuleAudio('good_job.wav');
+      moduleContext.playAudio(goodJob);
       setScore(score + 1);
       setTarget(genRandPoint({
         paddingFromEdge: TARGET_RADIUS,
@@ -31,7 +36,7 @@ export default (props: void) => {
   }, [score, moduleContext]);
 
   let handleMouseDown = React.useCallback((e: M) => {
-    moduleContext.playModuleAudio('oh_no_you_clicked.wav');
+    moduleContext.playAudio(ohNoYouClicked);
     setScore(0);
   }, [moduleContext]);
 
