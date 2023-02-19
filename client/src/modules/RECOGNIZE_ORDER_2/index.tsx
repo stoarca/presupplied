@@ -50,7 +50,7 @@ export default (props: void) => {
         ...positions[i],
       })),
     });
-  }, []);
+  }, [vlist]);
   let [exercise, setExercise] = React.useState(generateExercise);
 
   let playingInstructions = useInstructions(() => {
