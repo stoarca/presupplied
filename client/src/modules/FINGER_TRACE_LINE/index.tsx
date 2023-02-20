@@ -1,83 +1,90 @@
 import React from 'react';
 
-import {Module, useInstructions} from '@src/Module';
+import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
 import {SvgArrow} from '@src/SvgArrow';
 import {
-  genRandPoints, dist, clamp, projectPointToLine, Point
+  genRandPoints, dist, clamp, projectPointToLine, Point, VariantList
 } from '@src/util';
 
 import {
   goodDing, badBuzzer, goodJob,
 } from '@modules/common/sounds';
 
-type M = React.MouseEvent<HTMLElement>;
-type T = React.TouchEvent<HTMLElement>;
+type M = React.TouchEvent<HTMLElement>;
+
+interface MyEx extends Ex<number> {
+  line: [Point, Point];
+}
 
 export default (props: void) => {
   let moduleContext = React.useContext(ModuleContext);
 
-  let [score, setScore] = React.useState(0);
+  let vlist = React.useMemo(() => new VariantList([0], 10), []);
   let generateExercise = React.useCallback(() => {
     return {
+      variant: 0,
       line: genRandPoints(2, {
         paddingFromEdge: 200,
         paddingFromEachOther: 400,
       }) as [Point, Point],
     };
   }, []);
-  let [exercise, setExercise] = React.useState(generateExercise);
-
-  let playingInstructions = useInstructions(() => {
-    return moduleContext.playTTS('Trace the line with your finger.');
-  }, exercise, [moduleContext]);
+  let playInstructions = React.useCallback((exercise: MyEx) => {
+    moduleContext.playTTS('Trace the line with your finger.');
+  }, [moduleContext]);
+  let {
+    exercise,
+    partial,
+    score,
+    maxScore,
+    doSuccess,
+    doPartialSuccess,
+    doFailure,
+  } = useExercise({
+    onGenExercise: generateExercise,
+    initialPartial: (): number => 0,
+    onPlayInstructions: playInstructions,
+    playOnEveryExercise: false,
+    vlist: vlist,
+  });
 
   let ERROR_RADIUS = 70;
-  let [percentMoved, setPercentMoved] = React.useState(0);
   React.useEffect(() => {
-    if (percentMoved === 1) {
+    if (partial === 1) {
       moduleContext.playAudio(goodDing);
     }
-  }, [moduleContext, percentMoved]);
+  }, [moduleContext, partial]);
   let line = exercise.line;
   let target = React.useMemo(() => {
     return {
-      x: line[0].x * (1 - percentMoved) + line[1].x * percentMoved,
-      y: line[0].y * (1 - percentMoved) + line[1].y * percentMoved,
+      x: line[0].x * (1 - partial) + line[1].x * partial,
+      y: line[0].y * (1 - partial) + line[1].y * partial,
     };
-  }, [line, percentMoved]);
-  let [doingFail, setDoingFail] = React.useState(false);
-  let doFail = React.useCallback(async () => {
-    setScore(0);
-    if (doingFail) {
-      return;
-    }
-    setDoingFail(true);
-    await moduleContext.playAudio(badBuzzer);
-    setDoingFail(false);
-  }, [moduleContext, doingFail]);
+  }, [line, partial]);
+  // LOH: setScore(0) on failure
   let [isDragging, setIsDragging] = React.useState(false);
-  let handleTouchStart = React.useCallback((e: T) => {
+  let handleTouchStart = React.useCallback((e: M) => {
     let t = e.touches[0];
     if (dist({x: t.clientX, y: t.clientY}, target) > ERROR_RADIUS) {
-      doFail();
+      doFailure();
       return;
     }
-    moduleContext.playAudio(goodDing);
+    doPartialSuccess(0);
     setIsDragging(true);
-  }, [moduleContext, exercise, percentMoved, target, doFail]);
-  let handleTouchMove = React.useCallback((e: T) => {
+  }, [target, doPartialSuccess, doFailure]);
+  let handleTouchMove = React.useCallback((e: M) => {
     if (!isDragging) {
       return;
     }
-    if (percentMoved >= 1) {
+    if (partial >= 1) {
       return;
     }
     let t = e.touches[0];
     let p = {x: t.clientX, y: t.clientY};
     let projectedPoint = projectPointToLine(p, exercise.line);
     if (dist({x: t.clientX, y: t.clientY}, target) > ERROR_RADIUS) {
-      doFail();
+      doFailure();
       return;
     }
     let newPercentMoved = clamp(
@@ -86,21 +93,18 @@ export default (props: void) => {
       0,
       1
     );
-    if (newPercentMoved > percentMoved) {
-      setPercentMoved(newPercentMoved);
+    if (newPercentMoved > partial) {
+      doPartialSuccess(newPercentMoved, newPercentMoved === 1);
     }
-  }, [exercise, percentMoved, isDragging, doFail]);
-  let handleTouchEnd = React.useCallback((e: T) => {
+  }, [exercise, partial, isDragging, doFailure, doPartialSuccess]);
+  let handleTouchEnd = React.useCallback(async (e: M) => {
     setIsDragging(false);
-    if (percentMoved < 1) {
-      doFail();
+    if (partial < 1) {
+      doFailure();
     } else {
-      moduleContext.playAudio(goodJob, {channel: 1});
-      setScore(old => old + 1);
-      setPercentMoved(0);
-      setExercise(generateExercise());
+      await doSuccess();
     }
-  }, [moduleContext, percentMoved, doFail]);
+  }, [partial, doFailure, doSuccess]);
 
   let targetLine = (
     <SvgArrow stroke="black"
@@ -128,7 +132,7 @@ export default (props: void) => {
   );
 
   let targetComplete = null;
-  if (percentMoved === 1) {
+  if (partial === 1) {
     targetComplete = (
       <circle r={40} cx={target.x} cy={target.y} fill="#00ff0099"/>
     );

@@ -4,7 +4,7 @@ interface AudioOptions {
   channel?: number,
 }
 
-interface ModuleContextProps {
+export interface ModuleContextProps {
   playAudio: (path: string, options?: AudioOptions) => Promise<void>;
   playTTS: (msg: string, options?: AudioOptions) => Promise<void>;
 }

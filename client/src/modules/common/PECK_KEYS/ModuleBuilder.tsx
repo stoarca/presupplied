@@ -1,49 +1,56 @@
 import React from 'react';
 
-import {Module, useInstructions} from '../../../Module';
-import {ModuleContext} from '../../../ModuleContext';
-import {
-  pickFromBag,
-  VariantList,
-  buildExercise,
-} from '../../../util';
+import {Module, useExercise, Ex} from '@src/Module';
+import {ModuleContext} from '@src/ModuleContext';
+import {pickFromBag, VariantList} from '@src/util';
 
-import {goodDing, badBuzzer} from '@modules/common/sounds';
+import {goodDing} from '@modules/common/sounds';
 
-export let ModuleBuilder = (VARIANTS: [string, string][]) => {
+type Variant = [string, string];
+
+interface MyEx extends Ex<Variant> {
+};
+
+export let ModuleBuilder = (VARIANTS: Variant[]) => {
   return (props: void) => {
     let moduleContext = React.useContext(ModuleContext);
 
     let vlist = React.useMemo(() => new VariantList(VARIANTS, 3), []);
-    let [score, setScore] = React.useState(0);
-    let [maxScore, setMaxScore] = React.useState(VARIANTS.length * 3);
     let generateExercise = React.useCallback(() => {
-      return buildExercise({
+      return {
         variant: vlist.pickVariant(),
-      });
-    }, []);
-    let [exercise, setExercise] = React.useState(generateExercise);
-
-    let playingInstructions = useInstructions(() => {
-      return moduleContext.playTTS(`Press ${exercise.variant[1]}.`);
-    }, exercise, [moduleContext, exercise]);
+      };
+    }, [vlist]);
+    let playInstructions = React.useCallback((exercise: MyEx) => {
+      moduleContext.playTTS(`Press ${exercise.variant[1]}.`);
+    }, [moduleContext]);
+    let {
+      exercise,
+      partial,
+      score,
+      maxScore,
+      doSuccess,
+      doPartialSuccess,
+      doFailure,
+    } = useExercise({
+      onGenExercise: generateExercise,
+      initialPartial: (): number => 0,
+      onPlayInstructions: playInstructions,
+      playOnEveryExercise: true,
+      vlist: vlist,
+    });
 
     React.useEffect(() => {
       let listener = async (e: KeyboardEvent) => {
         if (e.key === exercise.variant[0]) {
-          moduleContext.playAudio(goodDing, {channel: 1});
-          vlist.markSuccess(exercise.variant);
-          setScore(old => old + 1);
-          setExercise(generateExercise());
+          doSuccess({sound: goodDing});
         } else {
-          moduleContext.playAudio(badBuzzer);
-          vlist.markFailure(exercise.variant, 3);
-          setMaxScore(old => old + 3);
+          doFailure();
         }
       }
       document.addEventListener('keypress', listener);
       return () => document.removeEventListener('keypress', listener);
-    }, [moduleContext, exercise, vlist]);
+    }, [moduleContext, exercise, doSuccess, doFailure]);
 
     let textStyle = {
       fontFamily: 'sans-serif',

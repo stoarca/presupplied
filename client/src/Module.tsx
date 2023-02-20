@@ -1,24 +1,154 @@
 import React from 'react';
 
-export let useInstructions = (
-  fn: () => Promise<void>,
-  exerciseDep: any,
-  deps: any[]
-) => {
+import {ModuleContext} from '@src/ModuleContext';
+import {VariantList} from '@src/util';
+
+import {
+  waitPlease, badBuzzer, goodDing, goodJob
+} from '@modules/common/sounds';
+
+export interface Ex<V> {
+  variant: V,
+};
+
+interface UseExerciseOptions<E extends Ex<V>, V, P> {
+  onGenExercise: (previous?: E) => E,
+  initialPartial: () => P,
+  onPlayInstructions: (exercise: E) => Promise<void> | void,
+  playOnEveryExercise: boolean,
+  vlist: VariantList<V>,
+}
+
+interface DoSuccessProps {
+  sound?: string,
+  waitForSound?: boolean,
+}
+
+interface DoFailureProps {
+  sound?: string,
+  goToNewExercise?: boolean,
+}
+
+export let useExercise = <E extends Ex<V>, V, P>({
+  onGenExercise,
+  initialPartial,
+  onPlayInstructions,
+  playOnEveryExercise,
+  vlist,
+}: UseExerciseOptions<E, V, P>) => {
+  let moduleContext = React.useContext(ModuleContext);
+  let [score, setScore] = React.useState(0);
+  let [maxScore, setMaxScore] = React.useState(vlist.maxScore());
+  let [exercise, setExercise] = React.useState(onGenExercise);
+  let [partial, setPartial] = React.useState<P>(initialPartial);
   let [playingInstructions, setPlayingInstructions] = React.useState(false);
-  let playInstructions = React.useCallback(fn, deps);
   React.useEffect(() => {
     (async () => {
       setPlayingInstructions(true);
-      await playInstructions();
+      await onPlayInstructions(exercise);
       setPlayingInstructions(false);
     })();
-  }, [playInstructions]);
+  }, [onPlayInstructions, moduleContext, playOnEveryExercise ? exercise : 0]);
   React.useEffect(() => {
-    let interval = setInterval(playInstructions, 15000);
+    let interval = setInterval(() => onPlayInstructions(exercise), 15000);
     return () => clearInterval(interval);
-  }, [playInstructions, exerciseDep]);
-  return playingInstructions;
+  }, [onPlayInstructions, exercise]);
+
+  let [alreadyFailed, setAlreadyFailed] = React.useState(false);
+  let [alreadyCompleted, setAlreadyCompleted] = React.useState(false);
+  let canTakeAction = React.useCallback(() => {
+    if (playingInstructions) {
+      moduleContext.playAudio(waitPlease, {channel: 1});
+      return false;
+    }
+    if (alreadyCompleted) {
+      return false;
+    }
+    return true;
+  }, [moduleContext, playingInstructions, alreadyCompleted]);
+  let doSuccess = React.useCallback(async ({
+    sound = goodJob,
+    waitForSound = true,
+  }: DoSuccessProps = {}) => {
+    if (!canTakeAction()) {
+      return;
+    }
+
+    // TODO: what if a failure happens between the last partialSuccess and this
+    // success
+    setAlreadyCompleted(true);
+    vlist.markSuccess(exercise.variant);
+    setScore(old => old + 1);
+    let p = moduleContext.playAudio(sound);
+    if (waitForSound) {
+      await p;
+    }
+    let ex = onGenExercise(exercise);
+    console.log('generated exercise');
+    console.log(ex);
+    if (!ex) {
+      debugger;
+    }
+    setExercise(ex);
+    setPartial(initialPartial);
+    setAlreadyFailed(false);
+    setAlreadyCompleted(false);
+  }, [canTakeAction, moduleContext, vlist, exercise, onGenExercise]);
+  let doPartialSuccess = React.useCallback(async (_partial: P, doDing=true) => {
+    if (!canTakeAction()) {
+      return;
+    }
+
+    setPartial(_partial);
+    if (doDing) {
+      await moduleContext.playAudio(goodDing);
+    }
+  }, [canTakeAction, moduleContext]);
+  let [doingFailure, setDoingFailure] = React.useState(false);
+  let doFailure = React.useCallback(async ({
+    sound = badBuzzer,
+    goToNewExercise = false,
+  }: DoFailureProps = {}) => {
+    if (!canTakeAction()) {
+      return;
+    }
+
+    if (!alreadyFailed) {
+      setAlreadyFailed(true);
+      vlist.markFailure(exercise.variant, 3);
+      setMaxScore(vlist.maxScore());
+      if (goToNewExercise) {
+        let ex = onGenExercise(exercise);
+        setExercise(ex);
+        setPartial(initialPartial);
+        setAlreadyFailed(false);
+        setAlreadyCompleted(false);
+      }
+    }
+
+    if (!doingFailure) {
+      setDoingFailure(true);
+      await moduleContext.playAudio(sound);
+      setDoingFailure(false);
+    }
+  }, [
+    canTakeAction,
+    moduleContext,
+    alreadyFailed,
+    vlist,
+    exercise,
+    doingFailure
+  ]);
+
+  return {
+    exercise,
+    partial,
+    score,
+    maxScore,
+    doSuccess,
+    doPartialSuccess,
+    doFailure
+  };
 };
 
 interface ModuleProps {

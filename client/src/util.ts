@@ -115,6 +115,10 @@ export class VariantList<T> {
   markFailure(variant: T, penalty: number) {
     this.variantsMap.get(variant)!.howMany += penalty;
   }
+  maxScore() {
+    //throw new Error('max score not implemented');
+    return 0;
+  }
 }
 
 let exerciseId = 0;

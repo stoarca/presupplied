@@ -1,189 +1,134 @@
 import React from 'react';
 
-import {Module, useInstructions} from '@src/Module';
+import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
 
-import {
-  VariantList,
-  buildExercise,
-} from '@src/util';
+import {VariantList} from '@src/util';
 
-import {
-  waitPlease, youAlreadyDidThatOne, badBuzzer, goodDing, goodJob
-} from '@modules/common/sounds';
+import {youAlreadyDidThatOne} from '@modules/common/sounds';
 
 type M = React.MouseEvent<SVGRectElement>;
 
-interface Ex {
-  variant: any,
+interface Variant {
+  id: string,
+  f: (ex: MyEx) => string,
+}
+
+interface MyEx extends Ex<Variant> {
   number: number,
 }
 
-let VARIANTS = [{
+let VARIANTS: Variant[] = [{
   id: 'allbefore',
-  f: (ex: Ex) => `Tap all the numbers that come before ${ex.number}`,
+  f: (ex) => `Tap all the numbers that come before ${ex.number}.`,
 }, {
   id: 'onebefore',
-  f: (ex: Ex) => `Tap the number that comes immediately before ${ex.number}`,
+  f: (ex) => `Tap the number that comes immediately before ${ex.number}.`,
 }, {
   id: 'previous',
-  f: (ex: Ex) => `Tap the previous number`,
+  f: (ex) => `We're at ${ex.number}. Tap the previous number.`,
 }, {
   id: 'allafter',
-  f: (ex: Ex) => `Tap all the numbers that come after ${ex.number}`,
+  f: (ex) => `Tap all the numbers that come after ${ex.number}.`,
 }, {
   id: 'oneafter',
-  f: (ex: Ex) => `Tab the number that comes immediately after ${ex.number}`,
+  f: (ex) => `Tap the number that comes immediately after ${ex.number}.`,
 }, {
   id: 'next',
-  f: (ex: Ex) => `Tap the next number`,
+  f: (ex) => `We're at ${ex.number}. Tap the next number.`,
 }];
 
 export default (props: void) => {
-  let NUMSQ = 11;
   let moduleContext = React.useContext(ModuleContext);
+
   let vlist = React.useMemo(() => new VariantList(VARIANTS, 5), []);
-  let [score, setScore] = React.useState(0);
-  let [maxScore, setMaxScore] = React.useState(VARIANTS.length * 5);
   let generateExercise = React.useCallback(() => {
     let variant = vlist.pickVariant();
     let number = Math.floor(Math.random() * 10);
     if (['allbefore', 'onebefore', 'previous'].includes(variant.id)) {
       number += 1;
     }
-    return buildExercise({
+    return {
       variant: variant,
       number: number,
-    });
+    };
   }, [vlist]);
-  let [exercise, setExercise] = React.useState(generateExercise);
-
-  let playingInstructions = useInstructions(() => {
+  let playInstructions = React.useCallback((exercise: MyEx) => {
     return moduleContext.playTTS(exercise.variant.f(exercise));
-  }, exercise, [moduleContext, exercise]);
+  }, [moduleContext]);
+  let {
+    exercise,
+    partial,
+    score,
+    maxScore,
+    doSuccess,
+    doPartialSuccess,
+    doFailure
+  } = useExercise({
+    onGenExercise: generateExercise,
+    initialPartial: (): number[] => [],
+    onPlayInstructions: playInstructions,
+    playOnEveryExercise: true,
+    vlist: vlist,
+  });
 
-  let [alreadyFailed, setAlreadyFailed] = React.useState(false);
-  let [alreadyCompleted, setAlreadyCompleted] = React.useState(false);
-  let [answers, setAnswers] = React.useState<number[]>([]);
+  let NUMSQ = 11;
   let handleClick = React.useCallback(async (e: M) => {
-    if (playingInstructions) {
-      moduleContext.playAudio(waitPlease, {channel: 1});
-      return;
-    }
-    if (alreadyCompleted) {
-      return;
-    }
     if (e.button !== 0) {
       return;
     }
     let number = parseInt(e.currentTarget.getAttribute('data-number')!);
-    if (answers.includes(number)) {
+    if (partial.includes(number)) {
       moduleContext.playAudio(youAlreadyDidThatOne);
       return;
     }
 
     if (['allbefore', 'onebefore', 'previous'].includes(exercise.variant.id)) {
       if (number >= exercise.number) {
-        moduleContext.playAudio(badBuzzer);
-        if (!alreadyFailed) {
-          setAlreadyFailed(true);
-          vlist.markFailure(exercise.variant, 3);
-          setMaxScore(old => old + 3);
-        }
+        doFailure();
       } else {
         if (exercise.variant.id === 'allbefore') {
-          let newAnswers = [...answers, number];
-          if (newAnswers.length === exercise.number) {
-            setAlreadyCompleted(true);
-            vlist.markSuccess(exercise.variant);
-            setScore(old => old + 1);
-            setAnswers(newAnswers);
-            await moduleContext.playAudio(goodDing);
-            await moduleContext.playAudio(goodJob);
-            let ex = generateExercise();
-            setExercise(ex);
-            setAnswers([]);
-            setAlreadyFailed(false);
-            setAlreadyCompleted(false);
+          let newPartial = [...partial, number];
+          if (newPartial.length === exercise.number) {
+            await doPartialSuccess(newPartial);
+            doSuccess();
           } else {
-            moduleContext.playAudio(goodDing);
-            setAnswers(newAnswers);
+            doPartialSuccess(newPartial);
           }
         } else {
           if (number === exercise.number - 1) {
-            vlist.markSuccess(exercise.variant);
-            setScore(old => old + 1);
-            setAnswers([number]);
-            await moduleContext.playAudio(goodDing);
-            await moduleContext.playAudio(goodJob);
-            let ex = generateExercise();
-            setExercise(ex);
-            setAnswers([]);
-            setAlreadyFailed(false);
-            setAlreadyCompleted(false);
+            await doPartialSuccess([number]);
+            doSuccess();
           } else {
-            moduleContext.playAudio(badBuzzer);
-            if (!alreadyFailed) {
-              setAlreadyFailed(true);
-              vlist.markFailure(exercise.variant, 3);
-              setMaxScore(old => old + 3);
-            }
+            doFailure();
           }
         }
       }
     } else if (['allafter', 'oneafter', 'next'].includes(exercise.variant.id)) {
       if (number <= exercise.number) {
-        moduleContext.playAudio(badBuzzer);
-        if (!alreadyFailed) {
-          setAlreadyFailed(true);
-          vlist.markFailure(exercise.variant, 3);
-          setMaxScore(old => old + 3);
-        }
+        doFailure();
       } else {
         if (exercise.variant.id === 'allafter') {
-          let newAnswers = [...answers, number];
-          if (newAnswers.length === NUMSQ - exercise.number - 1) {
-            setAlreadyCompleted(true);
-            vlist.markSuccess(exercise.variant);
-            setScore(old => old + 1);
-            setAnswers(newAnswers);
-            await moduleContext.playAudio(goodDing);
-            await moduleContext.playAudio(goodJob);
-            let ex = generateExercise();
-            setExercise(ex);
-            setAnswers([]);
-            setAlreadyFailed(false);
-            setAlreadyCompleted(false);
-          } else {
-            moduleContext.playAudio(goodDing);
-            setAnswers(newAnswers);
+          let newPartial = [...partial, number];
+          await doPartialSuccess(newPartial);
+          if (newPartial.length === NUMSQ - exercise.number - 1) {
+            doSuccess();
           }
         } else {
           if (number === exercise.number + 1) {
-            vlist.markSuccess(exercise.variant);
-            setScore(old => old + 1);
-            setAnswers([number]);
-            await moduleContext.playAudio(goodDing);
-            await moduleContext.playAudio(goodJob);
-            let ex = generateExercise();
-            setExercise(ex);
-            setAnswers([]);
-            setAlreadyFailed(false);
-            setAlreadyCompleted(false);
+            await doPartialSuccess([number]);
+            doSuccess();
           } else {
-            moduleContext.playAudio(badBuzzer);
-            if (!alreadyFailed) {
-              setAlreadyFailed(true);
-              vlist.markFailure(exercise.variant, 3);
-              setMaxScore(old => old + 3);
-            }
+            doFailure();
           }
         }
       }
     } else {
       throw new Error('Unknown variant id ' + exercise.variant.id);
     }
-  }, [moduleContext, exercise, playingInstructions, vlist, answers]);
+  }, [
+    moduleContext, exercise, partial, doSuccess, doPartialSuccess, doFailure
+  ]);
 
   let SQLEN = 100;
   let SQPAD = 10;
@@ -199,7 +144,7 @@ export default (props: void) => {
     let fill = "white";
     if (i === exercise.number) {
       fill = "#0000ff33";
-    } else if (answers.includes(i)) {
+    } else if (partial.includes(i)) {
       fill = "#00ff0033";
     }
     choices.push(
