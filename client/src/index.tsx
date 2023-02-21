@@ -6,7 +6,7 @@ import {buildGraph, GraphJson} from './dependency-graph';
 import {buildModuleContext, ModuleContext} from './ModuleContext';
 
 import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
-const KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
+let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 
 interface Progress {
   reached: string[],
@@ -345,7 +345,7 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
 };
 
 let KnowledgeMap = () => {
-  const ref = React.useRef<SVGSVGElement | null>(null);
+  let ref = React.useRef<SVGSVGElement | null>(null);
   let [width, setWidth] = React.useState(0);
   let [height, setHeight] = React.useState(0);
   React.useEffect(() => {
@@ -617,17 +617,17 @@ let KnowledgeMap = () => {
     setReached(newReached);
   }, []);
 
-  const handleMoveTreeHorz = React.useCallback((id: string, dir: 'left' | 'right') => {
-    const updatedCells: {[id: string]: Cell} = {};
-    const bfs = [id];
+  let handleMoveTreeHorz = React.useCallback((id: string, dir: 'left' | 'right') => {
+    let updatedCells: {[id: string]: Cell} = {};
+    let bfs = [id];
     let needsNegativeOffset = false;
     while (bfs.length > 0) {
-      const curId = bfs.shift()!;
+      let curId = bfs.shift()!;
       if (updatedCells[curId]) {
         continue;
       }
 
-      const oldCell = nodeMap.get(curId)!.cell;
+      let oldCell = nodeMap.get(curId)!.cell;
       let nextJ = dir === 'left' ? oldCell.j - 1 : oldCell.j + 1;
       if (nextJ < 0) {
         needsNegativeOffset = true;
@@ -646,7 +646,7 @@ let KnowledgeMap = () => {
         deps = knowledgeGraph.directDependantsOf(curId);
       }
       deps.forEach(x => {
-        const depCell = nodeMap.get(x)!.cell;
+        let depCell = nodeMap.get(x)!.cell;
         if (depCell.j === nextJ) {
           bfs.push(x);
         }
@@ -679,17 +679,45 @@ let KnowledgeMap = () => {
   }, [handleMoveTreeHorz]);
 
   let handleMoveTreeVert = React.useCallback((id: string, dir: 'up' | 'down') => {
-    debugger;
-    const updatedCells: {[id: string]: Cell} = {};
-    const bfs = [id];
+    let updatedCells: {[id: string]: Cell} = {};
+    let lockedCells: string[] = [];
+    let idCell = nodeMap.get(id)!.cell;
+    let lockedCellId = grid[idCell.i + (dir === 'up' ? 1 : -1)][idCell.j];
+    if (lockedCellId) {
+      let lockedCell = nodeMap.get(lockedCellId)!.cell;
+      lockedCells.push(lockedCellId);
+      let cur: string | undefined = lockedCellId;
+      while (cur) {
+        cur = knowledgeGraph.directDependantsOf(cur).find(
+          x => nodeMap.get(x)!.cell.i === lockedCell.i
+        );
+        if (cur) {
+          lockedCells.push(cur);
+        }
+      }
+      cur = lockedCellId;
+      while (cur) {
+        cur = knowledgeGraph.directDependenciesOf(cur).find(
+          x => nodeMap.get(x)!.cell.i === lockedCell.i
+        );
+        if (cur) {
+          lockedCells.push(cur);
+        }
+      }
+    }
+    let bfs = [id];
     let needsNegativeOffset = false;
     while (bfs.length > 0) {
-      const curId = bfs.shift()!;
+      let curId = bfs.shift()!;
+      if (lockedCells.includes(curId)) {
+        alert('Attempted to move locked cell. Should never happen!');
+        throw new Error('Attempted to move locked cell. Should never happen!');
+      }
       if (updatedCells[curId]) {
         continue;
       }
 
-      const oldCell = nodeMap.get(curId)!.cell;
+      let oldCell = nodeMap.get(curId)!.cell;
       let nextI = dir === 'up' ? oldCell.i - 1 : oldCell.i + 1;
       if (nextI < 0) {
         needsNegativeOffset = true;
@@ -701,16 +729,15 @@ let KnowledgeMap = () => {
       if (grid[nextI][oldCell.j]) {
         bfs.push(grid[nextI][oldCell.j]);
       }
-      const handleDeps = (deps: string[]) => {
-        const sameRowDep = deps.find(x => nodeMap.get(x)!.cell.i === oldCell.i);
-        if (sameRowDep && sameRowDep !== id) {
+      let handleDeps = (deps: string[]) => {
+        let sameRowDep = deps.find(x => nodeMap.get(x)!.cell.i === oldCell.i);
+        if (sameRowDep) {
           bfs.push(sameRowDep);
           let i = oldCell.i;
           while (true) {
-            const aboveIds = deps.filter(x => nodeMap.get(x)!.cell.i === i - 1);
-            if (aboveIds.includes(id)) {
-              break;
-            }
+            let aboveIds = deps.filter(
+              x => nodeMap.get(x)!.cell.i === i - 1 && !lockedCells.includes(x)
+            );
             if (aboveIds.length) {
               Array.prototype.push.apply(bfs, aboveIds);
               i -= 1;
@@ -720,10 +747,9 @@ let KnowledgeMap = () => {
           }
           i = oldCell.i;
           while (true) {
-            const belowIds = deps.filter(x => nodeMap.get(x)!.cell.i === i + 1);
-            if (belowIds.includes(id)) {
-              break;
-            }
+            let belowIds = deps.filter(
+              x => nodeMap.get(x)!.cell.i === i + 1 && !lockedCells.includes(x)
+            );
             if (belowIds.length) {
               Array.prototype.push.apply(bfs, belowIds);
               i += 1;
@@ -866,7 +892,7 @@ let KnowledgeMap = () => {
 let moduleComponents: {[id: string]: React.ReactElement} = {};
 require.context('./modules', true, /^\.\/[^\/]+$/).keys().forEach(moduleName => {
   moduleName = moduleName.substring(2); // strip ./ prefix
-  const Lesson = React.lazy(() => import('./modules/' + moduleName));
+  let Lesson = React.lazy(() => import('./modules/' + moduleName));
   moduleComponents[moduleName] = (
     <ModuleContext.Provider value={buildModuleContext(moduleName)}>
       <Lesson/>
@@ -874,7 +900,7 @@ require.context('./modules', true, /^\.\/[^\/]+$/).keys().forEach(moduleName => 
   );
 });
 let App = (props: any) => {
-  const moduleRoutes = Object.keys(moduleComponents).map(x => {
+  let moduleRoutes = Object.keys(moduleComponents).map(x => {
     return <Route key={x} path={x} element={moduleComponents[x]}/>
   });
 

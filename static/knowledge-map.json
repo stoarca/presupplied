@@ -14,7 +14,7 @@
     },
     {
       "id": "RECOGNIZE_SIMPLE_OBJECTS",
-      "i": 26,
+      "i": 29,
       "j": 0,
       "deps": []
     },
@@ -29,7 +29,7 @@
     },
     {
       "id": "SPEAK_SIMPLE_OBJECTS",
-      "i": 26,
+      "i": 29,
       "j": 2,
       "deps": [
         "REPEAT_SOUNDS",
@@ -38,7 +38,7 @@
     },
     {
       "id": "RECOGNIZE_SIMPLE_CONCEPTS",
-      "i": 29,
+      "i": 32,
       "j": 3,
       "deps": [
         "RECOGNIZE_YES_NO",
@@ -47,7 +47,7 @@
     },
     {
       "id": "SPEAK_SIMPLE_CONCEPTS",
-      "i": 26,
+      "i": 29,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS",
@@ -56,7 +56,7 @@
     },
     {
       "id": "RECOGNIZE_OPPOSITES",
-      "i": 27,
+      "i": 30,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -64,7 +64,7 @@
     },
     {
       "id": "SPEAK_OPPOSITES",
-      "i": 27,
+      "i": 30,
       "j": 5,
       "deps": [
         "RECOGNIZE_OPPOSITES",
@@ -179,19 +179,19 @@
     },
     {
       "id": "RECOGNIZE_YES_NO",
-      "i": 28,
+      "i": 31,
       "j": 2,
       "deps": []
     },
     {
       "id": "RECOGNIZE_GOOD_BAD",
-      "i": 29,
+      "i": 32,
       "j": 2,
       "deps": []
     },
     {
       "id": "RECOGNIZE_COLORS",
-      "i": 28,
+      "i": 31,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -199,7 +199,7 @@
     },
     {
       "id": "SPEAK_COLORS",
-      "i": 28,
+      "i": 31,
       "j": 5,
       "deps": [
         "RECOGNIZE_COLORS",
@@ -226,7 +226,7 @@
     },
     {
       "id": "SPEAK_SIMPLE_MAPPINGS",
-      "i": 26,
+      "i": 29,
       "j": 5,
       "deps": [
         "SPEAK_SIMPLE_CONCEPTS"
@@ -470,16 +470,17 @@
     },
     {
       "id": "VISUAL_SIMPLE_FRACTIONS",
-      "i": 22,
+      "i": 23,
       "j": 8,
       "deps": [
         "RECOGNIZE_NTH_10",
-        "COUNT_OBJECTS_TO_20"
+        "COUNT_OBJECTS_TO_20",
+        "RECOGNIZE_NTH_FRAC"
       ]
     },
     {
       "id": "READ_SIMPLE_FRACTIONS",
-      "i": 22,
+      "i": 23,
       "j": 11,
       "deps": [
         "READ_NUMBERS_UP_TO_1000",
@@ -497,8 +498,8 @@
       ]
     },
     {
-      "id": "VERBAL_ADD_1",
-      "i": 23,
+      "id": "ADD_1",
+      "i": 24,
       "j": 7,
       "deps": [
         "COUNT_OBJECTS_TO_10",
@@ -506,22 +507,22 @@
       ]
     },
     {
-      "id": "VERBAL_ADD_5",
-      "i": 23,
+      "id": "ADD_5",
+      "i": 24,
       "j": 8,
       "deps": [
-        "VERBAL_ADD_1",
+        "ADD_1",
         "COUNT_ADD_OPPONENT_FINGERS",
         "COUNT_ADD_DICE",
         "COUNT_ADD_OBJECTS"
       ]
     },
     {
-      "id": "VERBAL_ADD_2",
-      "i": 24,
+      "id": "ADD_2",
+      "i": 25,
       "j": 8,
       "deps": [
-        "VERBAL_ADD_1",
+        "ADD_1",
         "COUNT_ADD_OPPONENT_FINGERS",
         "COUNT_ADD_DICE",
         "COUNT_ADD_OBJECTS"
@@ -529,7 +530,7 @@
     },
     {
       "id": "VISUAL_FRACTION_MORE_LESS",
-      "i": 22,
+      "i": 23,
       "j": 10,
       "deps": [
         "VISUAL_SIMPLE_FRACTIONS",
@@ -546,7 +547,7 @@
     },
     {
       "id": "COUNT_ADD_OPPONENT_FINGERS",
-      "i": 24,
+      "i": 26,
       "j": 7,
       "deps": [
         "COUNT_OBJECTS_TO_10",
@@ -556,7 +557,7 @@
     },
     {
       "id": "COUNT_ADD_DICE",
-      "i": 25,
+      "i": 28,
       "j": 7,
       "deps": [
         "COUNT_OBJECTS_TO_10",
@@ -601,7 +602,7 @@
     },
     {
       "id": "COUNT_ADD_OBJECTS",
-      "i": 26,
+      "i": 29,
       "j": 7,
       "deps": [
         "COUNT_OBJECTS_TO_10",
@@ -618,22 +619,24 @@
       ]
     },
     {
-      "id": "VERBAL_ADD_UP_TO_10",
-      "i": 23,
+      "id": "ADD_UP_TO_10",
+      "i": 24,
       "j": 9,
       "deps": [
-        "VERBAL_ADD_5",
-        "VERBAL_ADD_2",
+        "ADD_5",
+        "ADD_2",
         "COUNT_OBJECTS_TO_100",
-        "COUNT_ADD_SELF_FINGERS"
+        "COUNT_ADD_SELF_FINGERS",
+        "COUNT_ADD_OPPONENT_FINGERS_FAST",
+        "COUNT_ADD_DICE_FAST"
       ]
     },
     {
       "id": "ADD_UP_TO_20",
-      "i": 23,
+      "i": 24,
       "j": 10,
       "deps": [
-        "VERBAL_ADD_UP_TO_10",
+        "ADD_UP_TO_10",
         "COUNT_OBJECTS_TO_100",
         "READ_NUMBERS_UP_TO_100",
         "PECK_NUMBERS_ON_KEYBOARD"
@@ -641,7 +644,7 @@
     },
     {
       "id": "RECOGNIZE_SHAPES",
-      "i": 29,
+      "i": 32,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -649,7 +652,7 @@
     },
     {
       "id": "SPEAK_SHAPES",
-      "i": 29,
+      "i": 32,
       "j": 5,
       "deps": [
         "RECOGNIZE_SHAPES",
@@ -658,7 +661,7 @@
     },
     {
       "id": "ADD_TWO_POS_2_DIGIT_NUMBERS",
-      "i": 23,
+      "i": 24,
       "j": 11,
       "deps": [
         "ADD_UP_TO_20",
@@ -667,7 +670,7 @@
     },
     {
       "id": "ADD_2_FRACTIONS_UNDER_1_SAME_DENOM",
-      "i": 23,
+      "i": 24,
       "j": 15,
       "deps": [
         "READ_ANY_FRACTION_UNDER_1",
@@ -676,7 +679,7 @@
     },
     {
       "id": "ADD_2_FRACTIONS_OVER_1_SAME_DENOM",
-      "i": 23,
+      "i": 24,
       "j": 17,
       "deps": [
         "READ_ANY_FRACTION_OVER_1",
@@ -686,7 +689,7 @@
     },
     {
       "id": "COUNT_ADD_SELF_FINGERS",
-      "i": 25,
+      "i": 26,
       "j": 8,
       "deps": [
         "COUNT_ADD_OPPONENT_FINGERS",
@@ -706,15 +709,16 @@
     },
     {
       "id": "SIMPLE_MULT_BY_COUNTING",
-      "i": 27,
+      "i": 28,
       "j": 11,
       "deps": [
-        "ADD_UP_TO_20"
+        "ADD_UP_TO_20",
+        "RECOGNIZE_NTH_ANY"
       ]
     },
     {
       "id": "MULT_UP_TO_5_X_5",
-      "i": 27,
+      "i": 28,
       "j": 12,
       "deps": [
         "SIMPLE_MULT_BY_COUNTING",
@@ -723,7 +727,7 @@
     },
     {
       "id": "MULT_UP_TO_5_X_10",
-      "i": 27,
+      "i": 28,
       "j": 13,
       "deps": [
         "MULT_UP_TO_5_X_5"
@@ -731,7 +735,7 @@
     },
     {
       "id": "MULT_UP_TO_10_X_10",
-      "i": 28,
+      "i": 29,
       "j": 15,
       "deps": [
         "MULT_UP_TO_5_X_10"
@@ -739,7 +743,7 @@
     },
     {
       "id": "LONG_ADDITION_3_DIGITS",
-      "i": 24,
+      "i": 25,
       "j": 13,
       "deps": [
         "ADD_TWO_POS_2_DIGIT_NUMBERS"
@@ -747,7 +751,7 @@
     },
     {
       "id": "LONG_ADDITION_ANY_DIGITS",
-      "i": 24,
+      "i": 25,
       "j": 15,
       "deps": [
         "LONG_ADDITION_3_DIGITS"
@@ -771,7 +775,7 @@
     },
     {
       "id": "LONG_ADDITION_MULTIPLE_INTS",
-      "i": 24,
+      "i": 25,
       "j": 16,
       "deps": [
         "LONG_ADDITION_ANY_DIGITS"
@@ -779,7 +783,7 @@
     },
     {
       "id": "LONG_MULT_2_POS_INTS",
-      "i": 28,
+      "i": 29,
       "j": 17,
       "deps": [
         "MULT_UP_TO_10_X_10",
@@ -788,7 +792,7 @@
     },
     {
       "id": "LONG_MULT_MULTIPLE_POS_INTS",
-      "i": 28,
+      "i": 29,
       "j": 18,
       "deps": [
         "LONG_MULT_2_POS_INTS",
@@ -797,7 +801,7 @@
     },
     {
       "id": "ADD_SUBTRACT_2_FRACTIONS_DIFF_DENOM",
-      "i": 23,
+      "i": 24,
       "j": 20,
       "deps": [
         "ADD_2_FRACTIONS_OVER_1_SAME_DENOM",
@@ -807,7 +811,7 @@
     },
     {
       "id": "DIV_UP_TO_5_X_5",
-      "i": 29,
+      "i": 30,
       "j": 13,
       "deps": [
         "MULT_UP_TO_5_X_5"
@@ -815,7 +819,7 @@
     },
     {
       "id": "DIV_UP_TO_5_X_10",
-      "i": 29,
+      "i": 30,
       "j": 15,
       "deps": [
         "MULT_UP_TO_5_X_10",
@@ -824,7 +828,7 @@
     },
     {
       "id": "DIV_UP_TO_10_X_10",
-      "i": 29,
+      "i": 30,
       "j": 16,
       "deps": [
         "MULT_UP_TO_10_X_10",
@@ -833,7 +837,7 @@
     },
     {
       "id": "REMAINDERS",
-      "i": 30,
+      "i": 31,
       "j": 16,
       "deps": [
         "DIV_UP_TO_5_X_10"
@@ -841,7 +845,7 @@
     },
     {
       "id": "LONG_DIV",
-      "i": 29,
+      "i": 30,
       "j": 18,
       "deps": [
         "DIV_UP_TO_10_X_10",
@@ -851,15 +855,16 @@
     },
     {
       "id": "SUBTRACT_1_DIGIT",
-      "i": 25,
+      "i": 26,
       "j": 11,
       "deps": [
-        "ADD_UP_TO_20"
+        "ADD_UP_TO_20",
+        "SUBTRACT_1"
       ]
     },
     {
       "id": "SUBTRACT_2_DIGIT",
-      "i": 25,
+      "i": 26,
       "j": 13,
       "deps": [
         "SUBTRACT_1_DIGIT",
@@ -869,7 +874,7 @@
     },
     {
       "id": "LONG_SUBTRACT_3_DIGIT",
-      "i": 25,
+      "i": 26,
       "j": 15,
       "deps": [
         "LONG_ADDITION_3_DIGITS",
@@ -878,7 +883,7 @@
     },
     {
       "id": "LONG_SUBTRACT_POS_INTS",
-      "i": 25,
+      "i": 26,
       "j": 16,
       "deps": [
         "LONG_SUBTRACT_3_DIGIT",
@@ -887,7 +892,7 @@
     },
     {
       "id": "NEGATIVE_COUNTING",
-      "i": 26,
+      "i": 27,
       "j": 13,
       "deps": [
         "SUBTRACT_1_DIGIT"
@@ -895,7 +900,7 @@
     },
     {
       "id": "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
-      "i": 26,
+      "i": 27,
       "j": 14,
       "deps": [
         "SUBTRACT_2_DIGIT",
@@ -904,7 +909,7 @@
     },
     {
       "id": "LONG_ADD_SUBTRACT_ANY_INTS",
-      "i": 26,
+      "i": 27,
       "j": 18,
       "deps": [
         "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
@@ -914,7 +919,7 @@
     },
     {
       "id": "LONG_MULT_ANY_INTS",
-      "i": 28,
+      "i": 29,
       "j": 19,
       "deps": [
         "LONG_MULT_MULTIPLE_POS_INTS",
@@ -924,7 +929,7 @@
     },
     {
       "id": "MULT_NEGATIVE",
-      "i": 27,
+      "i": 28,
       "j": 15,
       "deps": [
         "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
@@ -933,7 +938,7 @@
     },
     {
       "id": "LONG_MULT_2_INTS",
-      "i": 27,
+      "i": 28,
       "j": 18,
       "deps": [
         "LONG_MULT_2_POS_INTS",
@@ -1013,7 +1018,7 @@
     },
     {
       "id": "ADD_SUBTRACT_MULTIPLE_FRACTIONS",
-      "i": 23,
+      "i": 24,
       "j": 21,
       "deps": [
         "ADD_SUBTRACT_2_FRACTIONS_DIFF_DENOM"
@@ -1117,7 +1122,7 @@
     },
     {
       "id": "EXP_SMALL",
-      "i": 31,
+      "i": 32,
       "j": 16,
       "deps": [
         "MULT_NEGATIVE",
@@ -1126,7 +1131,7 @@
     },
     {
       "id": "EXP_NEGATIVE_BASE_SMALL",
-      "i": 31,
+      "i": 32,
       "j": 18,
       "deps": [
         "EXP_SMALL"
@@ -1134,7 +1139,7 @@
     },
     {
       "id": "EXP_INTEGER",
-      "i": 31,
+      "i": 32,
       "j": 19,
       "deps": [
         "EXP_NEGATIVE_BASE_SMALL"
@@ -1151,7 +1156,7 @@
     },
     {
       "id": "SQRT",
-      "i": 31,
+      "i": 32,
       "j": 20,
       "deps": [
         "EXP_INTEGER",
@@ -1160,7 +1165,7 @@
     },
     {
       "id": "CUBE_ROOT",
-      "i": 31,
+      "i": 32,
       "j": 21,
       "deps": [
         "SQRT",
@@ -1178,7 +1183,7 @@
     },
     {
       "id": "EXP_NEG_POW",
-      "i": 31,
+      "i": 32,
       "j": 22,
       "deps": [
         "CUBE_ROOT"
@@ -1186,7 +1191,7 @@
     },
     {
       "id": "EXP_FRAC_POW",
-      "i": 30,
+      "i": 31,
       "j": 22,
       "deps": [
         "CUBE_ROOT"
@@ -1194,7 +1199,7 @@
     },
     {
       "id": "EXP_NEG_FRAC_POW",
-      "i": 31,
+      "i": 32,
       "j": 23,
       "deps": [
         "EXP_NEG_POW",
@@ -1212,7 +1217,7 @@
     },
     {
       "id": "ARITHMETIC",
-      "i": 31,
+      "i": 32,
       "j": 24,
       "deps": [
         "EXP_NEG_FRAC_POW",
@@ -1590,7 +1595,7 @@
     },
     {
       "id": "RECOGNIZE_ORDER_2",
-      "i": 30,
+      "i": 33,
       "j": 5,
       "deps": [
         "RECOGNIZE_SHAPES",
@@ -1600,7 +1605,7 @@
     },
     {
       "id": "RECOGNIZE_ORDER_3",
-      "i": 30,
+      "i": 33,
       "j": 7,
       "deps": [
         "RECOGNIZE_ORDER_2",
@@ -1609,7 +1614,7 @@
     },
     {
       "id": "RECOGNIZE_ORDER_4",
-      "i": 30,
+      "i": 33,
       "j": 8,
       "deps": [
         "RECOGNIZE_ORDER_3"
@@ -1617,7 +1622,7 @@
     },
     {
       "id": "RECOGNIZE_ORDER_MANY",
-      "i": 30,
+      "i": 33,
       "j": 9,
       "deps": [
         "RECOGNIZE_ORDER_4"
@@ -1666,7 +1671,7 @@
     },
     {
       "id": "FINGER_TRACE_LINE",
-      "i": 31,
+      "i": 34,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -1674,7 +1679,7 @@
     },
     {
       "id": "FINGER_TRACE_SHAPES",
-      "i": 31,
+      "i": 34,
       "j": 5,
       "deps": [
         "FINGER_TRACE_LINE",
@@ -1683,7 +1688,7 @@
     },
     {
       "id": "PENCIL_TRACE_LINE",
-      "i": 33,
+      "i": 36,
       "j": 5,
       "deps": [
         "FINGER_TRACE_LINE",
@@ -1692,7 +1697,7 @@
     },
     {
       "id": "FINGER_TRACE_SQUIGGLE",
-      "i": 32,
+      "i": 35,
       "j": 5,
       "deps": [
         "FINGER_TRACE_LINE"
@@ -1700,7 +1705,7 @@
     },
     {
       "id": "PENCIL_TRACE_SHAPES",
-      "i": 33,
+      "i": 36,
       "j": 6,
       "deps": [
         "PENCIL_TRACE_LINE",
@@ -1709,7 +1714,7 @@
     },
     {
       "id": "PENCIL_TRACE_SQUIGGLE",
-      "i": 34,
+      "i": 37,
       "j": 6,
       "deps": [
         "PENCIL_TRACE_LINE",
@@ -1772,7 +1777,7 @@
     },
     {
       "id": "HOLD_PENCIL",
-      "i": 33,
+      "i": 36,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -1815,16 +1820,17 @@
     },
     {
       "id": "RECOGNIZE_NTH_ANY",
-      "i": 19,
+      "i": 22,
       "j": 10,
       "deps": [
-        "VERBAL_ADD_UP_TO_10",
-        "READ_NUMBERS_UP_TO_100"
+        "ADD_UP_TO_10",
+        "READ_NUMBERS_UP_TO_100",
+        "RECOGNIZE_NTH_10"
       ]
     },
     {
       "id": "COUNT_OPPONENT_FINGERS",
-      "i": 24,
+      "i": 26,
       "j": 5,
       "deps": [
         "COUNT_TO_5"
@@ -1832,7 +1838,7 @@
     },
     {
       "id": "COUNT_DICE",
-      "i": 25,
+      "i": 28,
       "j": 5,
       "deps": [
         "COUNT_TO_5"
@@ -1975,6 +1981,38 @@
       "deps": [
         "TYING_NUMBERS_PINKY",
         "TYPING_PUNCTUATION_RING"
+      ]
+    },
+    {
+      "id": "COUNT_ADD_OPPONENT_FINGERS_FAST",
+      "i": 27,
+      "j": 8,
+      "deps": [
+        "COUNT_ADD_OPPONENT_FINGERS"
+      ]
+    },
+    {
+      "id": "COUNT_ADD_DICE_FAST",
+      "i": 28,
+      "j": 8,
+      "deps": [
+        "COUNT_ADD_DICE"
+      ]
+    },
+    {
+      "id": "SUBTRACT_1",
+      "i": 26,
+      "j": 10,
+      "deps": [
+        "ADD_UP_TO_10"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_NTH_FRAC",
+      "i": 23,
+      "j": 7,
+      "deps": [
+        "COUNT_OBJECTS_TO_10"
       ]
     }
   ]

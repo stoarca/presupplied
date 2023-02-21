@@ -3,7 +3,6 @@ import React from 'react';
 import {ChoiceSelector} from '@src/ChoiceSelector';
 import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-
 import {VariantList} from '@src/util';
 
 import {youAlreadyDidThatOne} from '@modules/common/sounds';
