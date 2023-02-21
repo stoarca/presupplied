@@ -1,13 +1,12 @@
 import React from 'react';
 
+import {ChoiceSelector} from '@src/ChoiceSelector';
 import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
 
 import {VariantList} from '@src/util';
 
 import {youAlreadyDidThatOne} from '@modules/common/sounds';
-
-type M = React.MouseEvent<SVGRectElement>;
 
 interface Variant {
   id: string,
@@ -73,11 +72,8 @@ export default (props: void) => {
   });
 
   let NUMSQ = 11;
-  let handleClick = React.useCallback(async (e: M) => {
-    if (e.button !== 0) {
-      return;
-    }
-    let number = parseInt(e.currentTarget.getAttribute('data-number')!);
+  let handleSelected = React.useCallback(async (index: number) => {
+    let number = index;
     if (partial.includes(number)) {
       moduleContext.playAudio(youAlreadyDidThatOne);
       return;
@@ -130,45 +126,24 @@ export default (props: void) => {
     moduleContext, exercise, partial, doSuccess, doPartialSuccess, doFailure
   ]);
 
-  let SQLEN = 100;
-  let SQPAD = 10;
-  let startX = (window.innerWidth - (SQLEN + SQPAD) * NUMSQ) / 2;
-  let textStyle = {
-    fontFamily: 'sans-serif',
-    fontSize: '80px',
-    pointerEvents: 'none',
-  } as React.CSSProperties;
-  let choices = [];
-  for (let i = 0; i < NUMSQ; ++i) {
-    let x = startX + i * (SQLEN + SQPAD) + SQPAD / 2;
-    let fill = "white";
-    if (i === exercise.number) {
-      fill = "#0000ff33";
-    } else if (partial.includes(i)) {
-      fill = "#00ff0033";
+  let getFill = React.useCallback((choiceIndex: number) => {
+    let fill = 'white';
+    if (choiceIndex === exercise.number) {
+      fill = '#0000ff33';
+    } else if (partial.includes(choiceIndex)) {
+      fill = '#00ff0033';
     }
-    choices.push(
-      <g key={'answer_' + i} transform={`translate(${x}, ${-SQLEN / 2})`}>
-        <rect data-number={i}
-            x="0"
-            y="50%"
-            width={SQLEN}
-            height={SQLEN}
-            rx={10}
-            fill={fill}
-            stroke="black"
-            strokeWidth="5px"
-            onClick={handleClick}/>
-        <text style={textStyle}
-            dominantBaseline="central"
-            textAnchor="middle"
-            transform={`translate(${SQLEN / 2}, ${SQLEN / 2})`}
-            y="50%">
-          {i}
-        </text>
-      </g>
-    );
-  }
+    return fill;
+  }, [exercise, partial]);
+  let choicesArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  let choices = (
+    <ChoiceSelector
+        choices={choicesArr}
+        howManyPerRow={10}
+        getFill={getFill}
+        onSelected={handleSelected}/>
+  );
+
   return (
     <Module type="svg" score={score} maxScore={maxScore}>
       {choices}

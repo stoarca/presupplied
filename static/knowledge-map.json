@@ -502,8 +502,7 @@
       "j": 7,
       "deps": [
         "COUNT_OBJECTS_TO_10",
-        "BEFORE_AFTER_10",
-        "RECOGNIZE_NTH_10"
+        "BEFORE_AFTER_10"
       ]
     },
     {
@@ -1605,8 +1604,7 @@
       "j": 7,
       "deps": [
         "RECOGNIZE_ORDER_2",
-        "BEFORE_AFTER_10",
-        "RECOGNIZE_NTH_10"
+        "BEFORE_AFTER_10"
       ]
     },
     {
@@ -1809,10 +1807,10 @@
     {
       "id": "RECOGNIZE_NTH_10",
       "i": 22,
-      "j": 6,
+      "j": 7,
       "deps": [
-        "COUNT_TO_10",
-        "READ_DIGITS"
+        "COUNT_OBJECTS_TO_10",
+        "RECOGNIZE_ORDER_2"
       ]
     },
     {
