@@ -38,7 +38,7 @@
     },
     {
       "id": "RECOGNIZE_SIMPLE_CONCEPTS",
-      "i": 33,
+      "i": 34,
       "j": 3,
       "deps": [
         "RECOGNIZE_YES_NO",
@@ -47,7 +47,7 @@
     },
     {
       "id": "SPEAK_SIMPLE_CONCEPTS",
-      "i": 33,
+      "i": 34,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS",
@@ -56,7 +56,7 @@
     },
     {
       "id": "RECOGNIZE_OPPOSITES",
-      "i": 37,
+      "i": 38,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -64,7 +64,7 @@
     },
     {
       "id": "SPEAK_OPPOSITES",
-      "i": 32,
+      "i": 33,
       "j": 5,
       "deps": [
         "RECOGNIZE_OPPOSITES",
@@ -179,19 +179,19 @@
     },
     {
       "id": "RECOGNIZE_YES_NO",
-      "i": 32,
-      "j": 2,
-      "deps": []
-    },
-    {
-      "id": "RECOGNIZE_GOOD_BAD",
       "i": 33,
       "j": 2,
       "deps": []
     },
     {
+      "id": "RECOGNIZE_GOOD_BAD",
+      "i": 34,
+      "j": 2,
+      "deps": []
+    },
+    {
       "id": "RECOGNIZE_COLORS",
-      "i": 38,
+      "i": 39,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -199,7 +199,7 @@
     },
     {
       "id": "SPEAK_COLORS",
-      "i": 33,
+      "i": 34,
       "j": 5,
       "deps": [
         "RECOGNIZE_COLORS",
@@ -226,7 +226,7 @@
     },
     {
       "id": "SPEAK_SIMPLE_MAPPINGS",
-      "i": 31,
+      "i": 32,
       "j": 5,
       "deps": [
         "SPEAK_SIMPLE_CONCEPTS"
@@ -243,7 +243,7 @@
     },
     {
       "id": "COUNT_TO_5",
-      "i": 21,
+      "i": 22,
       "j": 4,
       "deps": [
         "REPEAT_DIGITS"
@@ -251,7 +251,7 @@
     },
     {
       "id": "COUNT_TO_10",
-      "i": 21,
+      "i": 22,
       "j": 5,
       "deps": [
         "COUNT_TO_5"
@@ -259,7 +259,7 @@
     },
     {
       "id": "COUNT_TO_20",
-      "i": 21,
+      "i": 22,
       "j": 6,
       "deps": [
         "COUNT_TO_10"
@@ -268,14 +268,14 @@
     {
       "id": "READ_DIGITS",
       "i": 20,
-      "j": 5,
+      "j": 4,
       "deps": [
         "REPEAT_DIGITS"
       ]
     },
     {
       "id": "COUNT_TO_100",
-      "i": 21,
+      "i": 22,
       "j": 7,
       "deps": [
         "COUNT_TO_20",
@@ -284,7 +284,7 @@
     },
     {
       "id": "COUNT_TO_1000",
-      "i": 21,
+      "i": 22,
       "j": 8,
       "deps": [
         "COUNT_TO_100",
@@ -293,7 +293,7 @@
     },
     {
       "id": "COUNT_OBJECTS_TO_10",
-      "i": 22,
+      "i": 21,
       "j": 6,
       "deps": [
         "COUNT_TO_10",
@@ -331,7 +331,7 @@
     },
     {
       "id": "COUNT_OBJECTS_TO_20",
-      "i": 22,
+      "i": 21,
       "j": 7,
       "deps": [
         "COUNT_OBJECTS_TO_10",
@@ -340,7 +340,7 @@
     },
     {
       "id": "COUNT_OBJECTS_TO_100",
-      "i": 22,
+      "i": 21,
       "j": 8,
       "deps": [
         "COUNT_OBJECTS_TO_20",
@@ -445,11 +445,10 @@
     },
     {
       "id": "RECOGNIZE_OBJECTS_MORE_LESS",
-      "i": 23,
-      "j": 7,
+      "i": 24,
+      "j": 8,
       "deps": [
-        "COUNT_OBJECTS_TO_10",
-        "BEFORE_AFTER_10"
+        "ALL_BEFORE_AFTER_10"
       ]
     },
     {
@@ -459,7 +458,8 @@
       "deps": [
         "RECOGNIZE_DIGITS_MORE_LESS",
         "READ_NUMBERS_UP_TO_100",
-        "RECOGNIZE_ORDER_MANY"
+        "RECOGNIZE_ORDER_MANY",
+        "RECOGNIZE_OBJECTS_MORE_LESS"
       ]
     },
     {
@@ -472,7 +472,7 @@
     },
     {
       "id": "VISUAL_SIMPLE_FRACTIONS",
-      "i": 25,
+      "i": 26,
       "j": 8,
       "deps": [
         "RECOGNIZE_NTH_ORDER_10",
@@ -501,7 +501,7 @@
     },
     {
       "id": "ADD_1",
-      "i": 26,
+      "i": 27,
       "j": 7,
       "deps": [
         "COUNT_OBJECTS_TO_10",
@@ -510,7 +510,7 @@
     },
     {
       "id": "ADD_5",
-      "i": 26,
+      "i": 27,
       "j": 8,
       "deps": [
         "ADD_1",
@@ -521,7 +521,7 @@
     },
     {
       "id": "ADD_2",
-      "i": 27,
+      "i": 28,
       "j": 8,
       "deps": [
         "ADD_1",
@@ -535,7 +535,7 @@
     },
     {
       "id": "VISUAL_FRACTION_MORE_LESS",
-      "i": 25,
+      "i": 26,
       "j": 10,
       "deps": [
         "VISUAL_SIMPLE_FRACTIONS",
@@ -552,7 +552,7 @@
     },
     {
       "id": "COUNT_ADD_OPPONENT_FINGERS",
-      "i": 28,
+      "i": 29,
       "j": 7,
       "deps": [
         "COUNT_OBJECTS_TO_10",
@@ -562,7 +562,7 @@
     },
     {
       "id": "COUNT_ADD_DICE",
-      "i": 30,
+      "i": 31,
       "j": 7,
       "deps": [
         "COUNT_OBJECTS_TO_10",
@@ -607,7 +607,7 @@
     },
     {
       "id": "COUNT_ADD_OBJECTS",
-      "i": 31,
+      "i": 32,
       "j": 7,
       "deps": [
         "COUNT_OBJECTS_TO_10",
@@ -624,7 +624,7 @@
     },
     {
       "id": "ADD_UP_TO_10",
-      "i": 26,
+      "i": 27,
       "j": 9,
       "deps": [
         "ADD_5",
@@ -637,18 +637,17 @@
     },
     {
       "id": "ADD_UP_TO_20",
-      "i": 26,
+      "i": 27,
       "j": 10,
       "deps": [
         "ADD_UP_TO_10",
-        "COUNT_OBJECTS_TO_100",
         "READ_NUMBERS_UP_TO_100",
         "PECK_NUMBERS_ON_KEYBOARD"
       ]
     },
     {
       "id": "RECOGNIZE_SHAPES",
-      "i": 39,
+      "i": 40,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -656,7 +655,7 @@
     },
     {
       "id": "SPEAK_SHAPES",
-      "i": 34,
+      "i": 35,
       "j": 5,
       "deps": [
         "RECOGNIZE_SHAPES",
@@ -665,7 +664,7 @@
     },
     {
       "id": "ADD_TWO_POS_2_DIGIT_NUMBERS",
-      "i": 26,
+      "i": 27,
       "j": 11,
       "deps": [
         "ADD_UP_TO_20",
@@ -674,7 +673,7 @@
     },
     {
       "id": "ADD_2_FRACTIONS_UNDER_1_SAME_DENOM",
-      "i": 26,
+      "i": 27,
       "j": 15,
       "deps": [
         "READ_ANY_FRACTION_UNDER_1",
@@ -683,7 +682,7 @@
     },
     {
       "id": "ADD_2_FRACTIONS_OVER_1_SAME_DENOM",
-      "i": 26,
+      "i": 27,
       "j": 17,
       "deps": [
         "READ_ANY_FRACTION_OVER_1",
@@ -693,7 +692,7 @@
     },
     {
       "id": "COUNT_ADD_SELF_FINGERS",
-      "i": 29,
+      "i": 30,
       "j": 8,
       "deps": [
         "COUNT_ADD_OPPONENT_FINGERS",
@@ -713,7 +712,7 @@
     },
     {
       "id": "SIMPLE_MULT_BY_COUNTING",
-      "i": 30,
+      "i": 31,
       "j": 11,
       "deps": [
         "ADD_UP_TO_20",
@@ -722,7 +721,7 @@
     },
     {
       "id": "MULT_UP_TO_5_X_5",
-      "i": 30,
+      "i": 31,
       "j": 12,
       "deps": [
         "SIMPLE_MULT_BY_COUNTING",
@@ -731,7 +730,7 @@
     },
     {
       "id": "MULT_UP_TO_5_X_10",
-      "i": 30,
+      "i": 31,
       "j": 13,
       "deps": [
         "MULT_UP_TO_5_X_5"
@@ -739,7 +738,7 @@
     },
     {
       "id": "MULT_UP_TO_10_X_10",
-      "i": 31,
+      "i": 32,
       "j": 15,
       "deps": [
         "MULT_UP_TO_5_X_10"
@@ -747,7 +746,7 @@
     },
     {
       "id": "LONG_ADDITION_3_DIGITS",
-      "i": 27,
+      "i": 28,
       "j": 13,
       "deps": [
         "ADD_TWO_POS_2_DIGIT_NUMBERS"
@@ -755,7 +754,7 @@
     },
     {
       "id": "LONG_ADDITION_ANY_DIGITS",
-      "i": 27,
+      "i": 28,
       "j": 15,
       "deps": [
         "LONG_ADDITION_3_DIGITS"
@@ -779,7 +778,7 @@
     },
     {
       "id": "LONG_ADDITION_MULTIPLE_INTS",
-      "i": 27,
+      "i": 28,
       "j": 16,
       "deps": [
         "LONG_ADDITION_ANY_DIGITS"
@@ -787,7 +786,7 @@
     },
     {
       "id": "LONG_MULT_2_POS_INTS",
-      "i": 31,
+      "i": 32,
       "j": 17,
       "deps": [
         "MULT_UP_TO_10_X_10",
@@ -796,7 +795,7 @@
     },
     {
       "id": "LONG_MULT_MULTIPLE_POS_INTS",
-      "i": 31,
+      "i": 32,
       "j": 18,
       "deps": [
         "LONG_MULT_2_POS_INTS",
@@ -805,7 +804,7 @@
     },
     {
       "id": "ADD_SUBTRACT_2_FRACTIONS_DIFF_DENOM",
-      "i": 26,
+      "i": 27,
       "j": 20,
       "deps": [
         "ADD_2_FRACTIONS_OVER_1_SAME_DENOM",
@@ -815,7 +814,7 @@
     },
     {
       "id": "DIV_UP_TO_5_X_5",
-      "i": 32,
+      "i": 33,
       "j": 13,
       "deps": [
         "MULT_UP_TO_5_X_5"
@@ -823,7 +822,7 @@
     },
     {
       "id": "DIV_UP_TO_5_X_10",
-      "i": 32,
+      "i": 33,
       "j": 15,
       "deps": [
         "MULT_UP_TO_5_X_10",
@@ -832,7 +831,7 @@
     },
     {
       "id": "DIV_UP_TO_10_X_10",
-      "i": 32,
+      "i": 33,
       "j": 16,
       "deps": [
         "MULT_UP_TO_10_X_10",
@@ -841,7 +840,7 @@
     },
     {
       "id": "REMAINDERS",
-      "i": 33,
+      "i": 34,
       "j": 16,
       "deps": [
         "DIV_UP_TO_5_X_10"
@@ -849,7 +848,7 @@
     },
     {
       "id": "LONG_DIV",
-      "i": 32,
+      "i": 33,
       "j": 18,
       "deps": [
         "DIV_UP_TO_10_X_10",
@@ -859,7 +858,7 @@
     },
     {
       "id": "SUBTRACT_1_DIGIT",
-      "i": 28,
+      "i": 29,
       "j": 11,
       "deps": [
         "ADD_UP_TO_20",
@@ -868,7 +867,7 @@
     },
     {
       "id": "SUBTRACT_2_DIGIT",
-      "i": 28,
+      "i": 29,
       "j": 13,
       "deps": [
         "SUBTRACT_1_DIGIT",
@@ -878,7 +877,7 @@
     },
     {
       "id": "LONG_SUBTRACT_3_DIGIT",
-      "i": 28,
+      "i": 29,
       "j": 15,
       "deps": [
         "LONG_ADDITION_3_DIGITS",
@@ -887,7 +886,7 @@
     },
     {
       "id": "LONG_SUBTRACT_POS_INTS",
-      "i": 28,
+      "i": 29,
       "j": 16,
       "deps": [
         "LONG_SUBTRACT_3_DIGIT",
@@ -896,7 +895,7 @@
     },
     {
       "id": "NEGATIVE_COUNTING",
-      "i": 29,
+      "i": 30,
       "j": 13,
       "deps": [
         "SUBTRACT_1_DIGIT"
@@ -904,7 +903,7 @@
     },
     {
       "id": "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
-      "i": 29,
+      "i": 30,
       "j": 14,
       "deps": [
         "SUBTRACT_2_DIGIT",
@@ -913,7 +912,7 @@
     },
     {
       "id": "LONG_ADD_SUBTRACT_ANY_INTS",
-      "i": 29,
+      "i": 30,
       "j": 18,
       "deps": [
         "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
@@ -923,7 +922,7 @@
     },
     {
       "id": "LONG_MULT_ANY_INTS",
-      "i": 31,
+      "i": 32,
       "j": 19,
       "deps": [
         "LONG_MULT_MULTIPLE_POS_INTS",
@@ -933,7 +932,7 @@
     },
     {
       "id": "MULT_NEGATIVE",
-      "i": 30,
+      "i": 31,
       "j": 15,
       "deps": [
         "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
@@ -942,7 +941,7 @@
     },
     {
       "id": "LONG_MULT_2_INTS",
-      "i": 30,
+      "i": 31,
       "j": 18,
       "deps": [
         "LONG_MULT_2_POS_INTS",
@@ -1022,7 +1021,7 @@
     },
     {
       "id": "ADD_SUBTRACT_MULTIPLE_FRACTIONS",
-      "i": 26,
+      "i": 27,
       "j": 21,
       "deps": [
         "ADD_SUBTRACT_2_FRACTIONS_DIFF_DENOM"
@@ -1030,7 +1029,7 @@
     },
     {
       "id": "FILL_IN_BLANK_ADD_SMALL",
-      "i": 37,
+      "i": 38,
       "j": 12,
       "deps": [
         "MULTI_OP_ADD_SMALL"
@@ -1038,7 +1037,7 @@
     },
     {
       "id": "FILL_IN_BLANK_SUBTRACT_SMALL",
-      "i": 37,
+      "i": 38,
       "j": 13,
       "deps": [
         "FILL_IN_BLANK_ADD_SMALL",
@@ -1047,7 +1046,7 @@
     },
     {
       "id": "FILL_IN_BLANK_MULT_SMALL",
-      "i": 37,
+      "i": 38,
       "j": 14,
       "deps": [
         "FILL_IN_BLANK_SUBTRACT_SMALL",
@@ -1056,7 +1055,7 @@
     },
     {
       "id": "OPERATOR_ORDER",
-      "i": 36,
+      "i": 37,
       "j": 13,
       "deps": [
         "MULTI_OP_SUB_SMALL"
@@ -1064,7 +1063,7 @@
     },
     {
       "id": "OPERATOR_PRECEDENCE",
-      "i": 36,
+      "i": 37,
       "j": 15,
       "deps": [
         "OPERATOR_ORDER",
@@ -1073,7 +1072,7 @@
     },
     {
       "id": "FILL_IN_BLANK_4_OPS_NEG_PAREN",
-      "i": 37,
+      "i": 38,
       "j": 19,
       "deps": [
         "FILL_IN_BLANK_4_OPS",
@@ -1082,7 +1081,7 @@
     },
     {
       "id": "PARENTHESES",
-      "i": 36,
+      "i": 37,
       "j": 17,
       "deps": [
         "OPERATOR_PRECEDENCE"
@@ -1090,7 +1089,7 @@
     },
     {
       "id": "FILL_IN_BLANK_DIV_SMALL",
-      "i": 37,
+      "i": 38,
       "j": 15,
       "deps": [
         "FILL_IN_BLANK_MULT_SMALL",
@@ -1099,7 +1098,7 @@
     },
     {
       "id": "FILL_IN_BLANK_ADD_SUBTRACT_NEG_SMALL",
-      "i": 37,
+      "i": 38,
       "j": 16,
       "deps": [
         "FILL_IN_BLANK_DIV_SMALL",
@@ -1108,7 +1107,7 @@
     },
     {
       "id": "FILL_IN_BLANK_4_OPS_NEG_SMALL",
-      "i": 37,
+      "i": 38,
       "j": 17,
       "deps": [
         "FILL_IN_BLANK_ADD_SUBTRACT_NEG_SMALL",
@@ -1117,7 +1116,7 @@
     },
     {
       "id": "FILL_IN_BLANK_4_OPS",
-      "i": 37,
+      "i": 38,
       "j": 18,
       "deps": [
         "FILL_IN_BLANK_4_OPS_NEG_SMALL",
@@ -1126,7 +1125,7 @@
     },
     {
       "id": "EXP_SMALL",
-      "i": 34,
+      "i": 35,
       "j": 16,
       "deps": [
         "MULT_NEGATIVE",
@@ -1135,7 +1134,7 @@
     },
     {
       "id": "EXP_NEGATIVE_BASE_SMALL",
-      "i": 34,
+      "i": 35,
       "j": 18,
       "deps": [
         "EXP_SMALL"
@@ -1143,7 +1142,7 @@
     },
     {
       "id": "EXP_INTEGER",
-      "i": 34,
+      "i": 35,
       "j": 19,
       "deps": [
         "EXP_NEGATIVE_BASE_SMALL"
@@ -1151,7 +1150,7 @@
     },
     {
       "id": "FILL_IN_BLANK_5_OPS",
-      "i": 37,
+      "i": 38,
       "j": 21,
       "deps": [
         "FILL_IN_BLANK_4_OPS_NEG_PAREN",
@@ -1160,7 +1159,7 @@
     },
     {
       "id": "SQRT",
-      "i": 34,
+      "i": 35,
       "j": 20,
       "deps": [
         "EXP_INTEGER",
@@ -1169,7 +1168,7 @@
     },
     {
       "id": "CUBE_ROOT",
-      "i": 34,
+      "i": 35,
       "j": 21,
       "deps": [
         "SQRT",
@@ -1178,7 +1177,7 @@
     },
     {
       "id": "FILL_IN_BLANK_6_OPS",
-      "i": 37,
+      "i": 38,
       "j": 22,
       "deps": [
         "FILL_IN_BLANK_5_OPS",
@@ -1187,7 +1186,7 @@
     },
     {
       "id": "EXP_NEG_POW",
-      "i": 34,
+      "i": 35,
       "j": 22,
       "deps": [
         "CUBE_ROOT"
@@ -1195,7 +1194,7 @@
     },
     {
       "id": "EXP_FRAC_POW",
-      "i": 33,
+      "i": 34,
       "j": 22,
       "deps": [
         "CUBE_ROOT"
@@ -1203,7 +1202,7 @@
     },
     {
       "id": "EXP_NEG_FRAC_POW",
-      "i": 34,
+      "i": 35,
       "j": 23,
       "deps": [
         "EXP_NEG_POW",
@@ -1212,7 +1211,7 @@
     },
     {
       "id": "EQUATIONS_4_OPS_NEG_PAREN",
-      "i": 38,
+      "i": 39,
       "j": 20,
       "deps": [
         "FILL_IN_BLANK_4_OPS_NEG_PAREN",
@@ -1221,7 +1220,7 @@
     },
     {
       "id": "ARITHMETIC",
-      "i": 34,
+      "i": 35,
       "j": 24,
       "deps": [
         "EXP_NEG_FRAC_POW",
@@ -1230,7 +1229,7 @@
     },
     {
       "id": "EQUATIONS_5_OPS",
-      "i": 38,
+      "i": 39,
       "j": 22,
       "deps": [
         "FILL_IN_BLANK_5_OPS",
@@ -1239,7 +1238,7 @@
     },
     {
       "id": "EQUATIONS_ADD_SMALL",
-      "i": 38,
+      "i": 39,
       "j": 13,
       "deps": [
         "FILL_IN_BLANK_ADD_SMALL"
@@ -1247,7 +1246,7 @@
     },
     {
       "id": "EQUATIONS_SUBTRACT_SMALL",
-      "i": 38,
+      "i": 39,
       "j": 14,
       "deps": [
         "FILL_IN_BLANK_SUBTRACT_SMALL",
@@ -1256,7 +1255,7 @@
     },
     {
       "id": "EQUATIONS_MULT_SMALL",
-      "i": 38,
+      "i": 39,
       "j": 15,
       "deps": [
         "EQUATIONS_SUBTRACT_SMALL",
@@ -1265,7 +1264,7 @@
     },
     {
       "id": "EQUATIONS_DIV_SMALL",
-      "i": 38,
+      "i": 39,
       "j": 16,
       "deps": [
         "EQUATIONS_MULT_SMALL",
@@ -1274,7 +1273,7 @@
     },
     {
       "id": "EQUATIONS_ADD_SUB_NEG_SMALL",
-      "i": 38,
+      "i": 39,
       "j": 17,
       "deps": [
         "EQUATIONS_DIV_SMALL",
@@ -1283,7 +1282,7 @@
     },
     {
       "id": "MULTI_OP_ADD_SMALL",
-      "i": 35,
+      "i": 36,
       "j": 11,
       "deps": [
         "ADD_UP_TO_20"
@@ -1291,7 +1290,7 @@
     },
     {
       "id": "MULTI_OP_SUB_SMALL",
-      "i": 35,
+      "i": 36,
       "j": 12,
       "deps": [
         "MULTI_OP_ADD_SMALL",
@@ -1301,7 +1300,7 @@
     },
     {
       "id": "MULTI_OP_MULT_SMALL",
-      "i": 35,
+      "i": 36,
       "j": 13,
       "deps": [
         "MULTI_OP_SUB_SMALL",
@@ -1310,7 +1309,7 @@
     },
     {
       "id": "MULTI_OP_DIV_SMALL",
-      "i": 35,
+      "i": 36,
       "j": 14,
       "deps": [
         "MULTI_OP_MULT_SMALL",
@@ -1319,7 +1318,7 @@
     },
     {
       "id": "MULTI_OP_ADD_SUB_NEG_SMALL",
-      "i": 35,
+      "i": 36,
       "j": 15,
       "deps": [
         "MULTI_OP_DIV_SMALL",
@@ -1328,7 +1327,7 @@
     },
     {
       "id": "MULTI_OP_4_OPS_NEG_SMALL",
-      "i": 35,
+      "i": 36,
       "j": 16,
       "deps": [
         "MULTI_OP_ADD_SUB_NEG_SMALL",
@@ -1339,7 +1338,7 @@
     },
     {
       "id": "MULTI_OP_4_OPS",
-      "i": 35,
+      "i": 36,
       "j": 17,
       "deps": [
         "MULTI_OP_4_OPS_NEG_SMALL",
@@ -1348,7 +1347,7 @@
     },
     {
       "id": "MULTI_OP_4_OPS_NEG_PAREN",
-      "i": 35,
+      "i": 36,
       "j": 18,
       "deps": [
         "MULTI_OP_4_OPS",
@@ -1357,7 +1356,7 @@
     },
     {
       "id": "MULTI_OP_5_OPS",
-      "i": 35,
+      "i": 36,
       "j": 20,
       "deps": [
         "MULTI_OP_4_OPS_NEG_PAREN",
@@ -1366,7 +1365,7 @@
     },
     {
       "id": "MULTI_OP_6_OPS",
-      "i": 35,
+      "i": 36,
       "j": 21,
       "deps": [
         "SQRT",
@@ -1375,7 +1374,7 @@
     },
     {
       "id": "EQUATIONS_4_OPS_NEG_SMALL",
-      "i": 38,
+      "i": 39,
       "j": 18,
       "deps": [
         "EQUATIONS_ADD_SUB_NEG_SMALL",
@@ -1384,7 +1383,7 @@
     },
     {
       "id": "EQUATIONS_4_OPS",
-      "i": 38,
+      "i": 39,
       "j": 19,
       "deps": [
         "EQUATIONS_4_OPS_NEG_SMALL",
@@ -1393,7 +1392,7 @@
     },
     {
       "id": "EQUATIONS_6_OPS",
-      "i": 38,
+      "i": 39,
       "j": 23,
       "deps": [
         "FILL_IN_BLANK_6_OPS",
@@ -1402,7 +1401,7 @@
     },
     {
       "id": "EQUATIONS_2_UNKNOWNS_SMALL",
-      "i": 39,
+      "i": 40,
       "j": 20,
       "deps": [
         "EQUATIONS_4_OPS"
@@ -1410,7 +1409,7 @@
     },
     {
       "id": "EQUATIONS_2_UNKNOWNS",
-      "i": 39,
+      "i": 40,
       "j": 21,
       "deps": [
         "EQUATIONS_2_UNKNOWNS_SMALL",
@@ -1419,7 +1418,7 @@
     },
     {
       "id": "EQUATIONS_3_UNKNOWNS_SMALL",
-      "i": 39,
+      "i": 40,
       "j": 22,
       "deps": [
         "EQUATIONS_2_UNKNOWNS"
@@ -1427,7 +1426,7 @@
     },
     {
       "id": "EQUATIONS_N_UNKNOWNS",
-      "i": 39,
+      "i": 40,
       "j": 24,
       "deps": [
         "EQUATIONS_3_UNKNOWNS",
@@ -1436,7 +1435,7 @@
     },
     {
       "id": "EQUATIONS_3_UNKNOWNS",
-      "i": 39,
+      "i": 40,
       "j": 23,
       "deps": [
         "EQUATIONS_3_UNKNOWNS_SMALL"
@@ -1444,7 +1443,7 @@
     },
     {
       "id": "ALGEBRA",
-      "i": 39,
+      "i": 40,
       "j": 25,
       "deps": [
         "EQUATIONS_N_UNKNOWNS",
@@ -1519,7 +1518,7 @@
     },
     {
       "id": "VECTORS",
-      "i": 39,
+      "i": 40,
       "j": 26,
       "deps": [
         "ALGEBRA"
@@ -1527,7 +1526,7 @@
     },
     {
       "id": "LINEAR_ALGEBRA",
-      "i": 39,
+      "i": 40,
       "j": 27,
       "deps": [
         "VECTORS"
@@ -1594,7 +1593,7 @@
     },
     {
       "id": "RECOGNIZE_ORDER_2",
-      "i": 38,
+      "i": 39,
       "j": 6,
       "deps": [
         "RECOGNIZE_BEFORE",
@@ -1608,7 +1607,7 @@
     },
     {
       "id": "RECOGNIZE_ORDER_3",
-      "i": 38,
+      "i": 39,
       "j": 7,
       "deps": [
         "RECOGNIZE_ORDER_2",
@@ -1617,7 +1616,7 @@
     },
     {
       "id": "RECOGNIZE_ORDER_4",
-      "i": 38,
+      "i": 39,
       "j": 8,
       "deps": [
         "RECOGNIZE_ORDER_3"
@@ -1625,7 +1624,7 @@
     },
     {
       "id": "RECOGNIZE_ORDER_MANY",
-      "i": 38,
+      "i": 39,
       "j": 9,
       "deps": [
         "RECOGNIZE_ORDER_4"
@@ -1674,7 +1673,7 @@
     },
     {
       "id": "FINGER_TRACE_LINE",
-      "i": 44,
+      "i": 45,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -1682,7 +1681,7 @@
     },
     {
       "id": "FINGER_TRACE_SHAPES",
-      "i": 44,
+      "i": 45,
       "j": 5,
       "deps": [
         "FINGER_TRACE_LINE",
@@ -1691,7 +1690,7 @@
     },
     {
       "id": "PENCIL_TRACE_LINE",
-      "i": 46,
+      "i": 47,
       "j": 5,
       "deps": [
         "FINGER_TRACE_LINE",
@@ -1700,7 +1699,7 @@
     },
     {
       "id": "FINGER_TRACE_SQUIGGLE",
-      "i": 45,
+      "i": 46,
       "j": 5,
       "deps": [
         "FINGER_TRACE_LINE"
@@ -1708,7 +1707,7 @@
     },
     {
       "id": "PENCIL_TRACE_SHAPES",
-      "i": 45,
+      "i": 46,
       "j": 6,
       "deps": [
         "PENCIL_TRACE_LINE",
@@ -1717,7 +1716,7 @@
     },
     {
       "id": "PENCIL_TRACE_SQUIGGLE",
-      "i": 46,
+      "i": 47,
       "j": 6,
       "deps": [
         "PENCIL_TRACE_LINE",
@@ -1766,7 +1765,7 @@
       "i": 23,
       "j": 8,
       "deps": [
-        "RECOGNIZE_OBJECTS_MORE_LESS"
+        "ALL_BEFORE_AFTER_10"
       ]
     },
     {
@@ -1780,7 +1779,7 @@
     },
     {
       "id": "HOLD_PENCIL",
-      "i": 46,
+      "i": 47,
       "j": 4,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
@@ -1810,12 +1809,13 @@
       "j": 6,
       "deps": [
         "COUNT_TO_10",
-        "READ_DIGITS"
+        "BEFORE_5",
+        "AFTER_5"
       ]
     },
     {
       "id": "RECOGNIZE_NTH_ORDER_10",
-      "i": 24,
+      "i": 25,
       "j": 7,
       "deps": [
         "COUNT_OBJECTS_TO_10",
@@ -1824,7 +1824,7 @@
     },
     {
       "id": "RECOGNIZE_NTH_ORDER_ANY",
-      "i": 24,
+      "i": 25,
       "j": 10,
       "deps": [
         "ADD_UP_TO_10",
@@ -1834,7 +1834,7 @@
     },
     {
       "id": "COUNT_OPPONENT_FINGERS",
-      "i": 28,
+      "i": 29,
       "j": 5,
       "deps": [
         "COUNT_TO_5"
@@ -1842,10 +1842,11 @@
     },
     {
       "id": "COUNT_DICE",
-      "i": 30,
+      "i": 31,
       "j": 5,
       "deps": [
-        "COUNT_TO_5"
+        "COUNT_TO_5",
+        "READ_DIGITS"
       ]
     },
     {
@@ -1989,7 +1990,7 @@
     },
     {
       "id": "COUNT_ADD_OPPONENT_FINGERS_FAST",
-      "i": 28,
+      "i": 29,
       "j": 8,
       "deps": [
         "COUNT_ADD_OPPONENT_FINGERS"
@@ -1997,7 +1998,7 @@
     },
     {
       "id": "COUNT_ADD_DICE_FAST",
-      "i": 30,
+      "i": 31,
       "j": 8,
       "deps": [
         "COUNT_ADD_DICE"
@@ -2005,7 +2006,7 @@
     },
     {
       "id": "SUBTRACT_1",
-      "i": 28,
+      "i": 29,
       "j": 10,
       "deps": [
         "ADD_UP_TO_10"
@@ -2013,7 +2014,7 @@
     },
     {
       "id": "RECOGNIZE_NTH_FRAC_10",
-      "i": 25,
+      "i": 26,
       "j": 7,
       "deps": [
         "COUNT_OBJECTS_TO_10",
@@ -2022,7 +2023,7 @@
     },
     {
       "id": "RECOGNIZE_PITCH_HIGH_LOW_2",
-      "i": 47,
+      "i": 48,
       "j": 7,
       "deps": [
         "RECOGNIZE_ORDER_2",
@@ -2032,7 +2033,7 @@
     },
     {
       "id": "RECOGNIZE_PITCH_HIGH_LOW_3",
-      "i": 47,
+      "i": 48,
       "j": 8,
       "deps": [
         "RECOGNIZE_PITCH_HIGH_LOW_2",
@@ -2042,7 +2043,7 @@
     },
     {
       "id": "RECOGNIZE_TIMBRE",
-      "i": 47,
+      "i": 48,
       "j": 5,
       "deps": [
         "SPEAK_SIMPLE_CONCEPTS"
@@ -2050,7 +2051,7 @@
     },
     {
       "id": "COUNT_ADD_NUMBER_LINE",
-      "i": 32,
+      "i": 33,
       "j": 7,
       "deps": [
         "COUNT_OBJECTS_TO_10",
@@ -2096,26 +2097,6 @@
     },
     {
       "id": "RECOGNIZE_BEFORE",
-      "i": 37,
-      "j": 5,
-      "deps": [
-        "RECOGNIZE_OPPOSITES",
-        "RECOGNIZE_COLORS",
-        "RECOGNIZE_SHAPES"
-      ]
-    },
-    {
-      "id": "RECOGNIZE_BEFORE_TEMPORAL",
-      "i": 35,
-      "j": 5,
-      "deps": [
-        "RECOGNIZE_OPPOSITES",
-        "RECOGNIZE_COLORS",
-        "RECOGNIZE_SHAPES"
-      ]
-    },
-    {
-      "id": "RECOGNIZE_BEFORE_THAT",
       "i": 38,
       "j": 5,
       "deps": [
@@ -2125,17 +2106,7 @@
       ]
     },
     {
-      "id": "RECOGNIZE_AFTER",
-      "i": 39,
-      "j": 5,
-      "deps": [
-        "RECOGNIZE_OPPOSITES",
-        "RECOGNIZE_COLORS",
-        "RECOGNIZE_SHAPES"
-      ]
-    },
-    {
-      "id": "RECOGNIZE_AFTER_TEMPORAL",
+      "id": "RECOGNIZE_BEFORE_TEMPORAL",
       "i": 36,
       "j": 5,
       "deps": [
@@ -2145,7 +2116,17 @@
       ]
     },
     {
-      "id": "RECOGNIZE_AFTER_THAT",
+      "id": "RECOGNIZE_BEFORE_THAT",
+      "i": 39,
+      "j": 5,
+      "deps": [
+        "RECOGNIZE_OPPOSITES",
+        "RECOGNIZE_COLORS",
+        "RECOGNIZE_SHAPES"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_AFTER",
       "i": 40,
       "j": 5,
       "deps": [
@@ -2155,7 +2136,17 @@
       ]
     },
     {
-      "id": "RECOGNIZE_FIRST",
+      "id": "RECOGNIZE_AFTER_TEMPORAL",
+      "i": 37,
+      "j": 5,
+      "deps": [
+        "RECOGNIZE_OPPOSITES",
+        "RECOGNIZE_COLORS",
+        "RECOGNIZE_SHAPES"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_AFTER_THAT",
       "i": 41,
       "j": 5,
       "deps": [
@@ -2165,7 +2156,7 @@
       ]
     },
     {
-      "id": "RECOGNIZE_SECOND",
+      "id": "RECOGNIZE_FIRST",
       "i": 42,
       "j": 5,
       "deps": [
@@ -2175,8 +2166,18 @@
       ]
     },
     {
+      "id": "RECOGNIZE_SECOND",
+      "i": 43,
+      "j": 5,
+      "deps": [
+        "RECOGNIZE_OPPOSITES",
+        "RECOGNIZE_COLORS",
+        "RECOGNIZE_SHAPES"
+      ]
+    },
+    {
       "id": "RECOGNIZE_NTH_FRAC_SIMPLE_5",
-      "i": 25,
+      "i": 26,
       "j": 6,
       "deps": [
         "COUNT_TO_10",
@@ -2186,7 +2187,7 @@
     },
     {
       "id": "RECOGNIZE_LAST",
-      "i": 43,
+      "i": 44,
       "j": 5,
       "deps": [
         "RECOGNIZE_SHAPES",
@@ -2221,7 +2222,7 @@
     },
     {
       "id": "RECOGNIZE_ORDER_TEMPORAL_2",
-      "i": 36,
+      "i": 37,
       "j": 6,
       "deps": [
         "RECOGNIZE_AFTER_TEMPORAL",
@@ -2230,7 +2231,7 @@
     },
     {
       "id": "RECOGNIZE_ORDER_TEMPORAL_3",
-      "i": 36,
+      "i": 37,
       "j": 7,
       "deps": [
         "RECOGNIZE_ORDER_TEMPORAL_2"
@@ -2258,6 +2259,33 @@
       "j": 7,
       "deps": [
         "PECK_DIGITS_ON_KEYBOARD"
+      ]
+    },
+    {
+      "id": "BEFORE_5",
+      "i": 23,
+      "j": 5,
+      "deps": [
+        "READ_DIGITS",
+        "COUNT_TO_5"
+      ]
+    },
+    {
+      "id": "AFTER_5",
+      "i": 24,
+      "j": 5,
+      "deps": [
+        "READ_DIGITS",
+        "COUNT_TO_5"
+      ]
+    },
+    {
+      "id": "ALL_BEFORE_AFTER_10",
+      "i": 23,
+      "j": 7,
+      "deps": [
+        "BEFORE_AFTER_10",
+        "COUNT_OBJECTS_TO_10"
       ]
     }
   ]
