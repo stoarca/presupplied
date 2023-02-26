@@ -87,37 +87,47 @@ export let pickFromBag = <T>(bag: T[], n: number, {
 
 export class VariantList<T> {
   variants: T[];
-  variantsMap: Map<T, {howMany: number}>;
-  constructor(variants: T[], howMany: number) {
+  variantsMap: Map<T, {maxScore: number, score: number}>;
+  constructor(variants: T[], maxScore: number) {
     this.variants = variants;
     this.variantsMap = new Map();
     for (let i = 0; i < variants.length; ++i) {
       this.variantsMap.set(variants[i], {
-        howMany: howMany,
+        maxScore: maxScore,
+        score: 0,
       });
     }
+  }
+  remaining(variant: T) {
+    let v = this.variantsMap.get(variant)!;
+    return Math.max(v.maxScore - v.score, 0);
   }
   pickVariant(): T {
     let variants = this.variants;
     let variantsMap = this.variantsMap;
-    let total = sum(Array.from(this.variantsMap.values()).map(x => x.howMany));
+    let total = sum(Array.from(this.variantsMap.keys()).map(
+      x => this.remaining(x)
+    ));
     let randIndex = Math.floor(Math.random() * total);
     let variantIndex = 0;
-    while (randIndex > variantsMap.get(variants[variantIndex])!.howMany) {
-      randIndex -= variantsMap.get(variants[variantIndex])!.howMany;
+    while (randIndex > this.remaining(variants[variantIndex])) {
+      randIndex -= this.remaining(variants[variantIndex]);
       variantIndex += 1;
     }
     return variants[variantIndex];
   }
   markSuccess(variant: T) {
-    this.variantsMap.get(variant)!.howMany -= 1;
+    this.variantsMap.get(variant)!.score += 1;
   }
-  markFailure(variant: T, penalty: number) {
-    this.variantsMap.get(variant)!.howMany += penalty;
+  markFailure(variant: T) {
+    let val = this.variantsMap.get(variant)!;
+    val.score = -1;
+  }
+  score() {
+    return sum(Array.from(this.variantsMap.values()).map(x => x.score));
   }
   maxScore() {
-    //throw new Error('max score not implemented');
-    return 0;
+    return sum(Array.from(this.variantsMap.values()).map(x => x.maxScore));
   }
 }
 
@@ -160,6 +170,27 @@ export let dist = (a: Point, b: Point) => {
 
 export let sum = (arr: number[]) => {
   return arr.reduce((partialSum, b) => partialSum + b, 0);
+};
+
+export let range = (n: number): number[] => {
+  return Array(n).fill(1).map((x, i) => i);
+};
+
+// Unit square has side length 2 (perfectly inscribes unit circle)
+export let getPointOnUnitSquare = (angle: number): Point => {
+  let x = Math.cos(angle);
+  let y = Math.sin(angle);
+  if (Math.abs(x) > Math.abs(y)) {
+    return {
+      x: x / Math.abs(x),
+      y: y / Math.abs(x),
+    };
+  } else {
+    return {
+      x: x / Math.abs(y),
+      y: y / Math.abs(y),
+    };
+  }
 }
 
 // TODO: need to verify that each object has a picture and sound

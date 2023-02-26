@@ -78,7 +78,8 @@ export let useExercise = <E extends Ex<V>, V, P>({
     // success
     setAlreadyCompleted(true);
     vlist.markSuccess(exercise.variant);
-    setScore(old => old + 1);
+    setScore(vlist.score());
+    setMaxScore(vlist.maxScore());
     let p = moduleContext.playAudio(sound);
     if (waitForSound) {
       await p;
@@ -115,7 +116,8 @@ export let useExercise = <E extends Ex<V>, V, P>({
 
     if (!alreadyFailed) {
       setAlreadyFailed(true);
-      vlist.markFailure(exercise.variant, 3);
+      vlist.markFailure(exercise.variant);
+      setScore(vlist.score());
       setMaxScore(vlist.maxScore());
       if (goToNewExercise) {
         let ex = onGenExercise(exercise);
