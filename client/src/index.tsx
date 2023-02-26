@@ -299,31 +299,59 @@ let Toolbar = (props: ToolbarProps) => {
   );
 };
 
-interface KnowledgeNodeProps {
+interface KnowledgeNodePropsLite {
   kmid: string,
   cell: Cell,
-  dependants?: KnowledgeNodeProps[],
   progress: 'reached' | 'reachable' | 'unreachable'
+}
+
+interface KnowledgeNodeProps extends KnowledgeNodePropsLite {
+  dependants: KnowledgeNodePropsLite[],
+  selectedCells: Cell[],
 };
 
 let KnowledgeNode = (props: KnowledgeNodeProps) => {
   let pos = nodePos(props.cell);
   let dependants = [];
-  if (props.dependants) {
-    for (let i = 0; i < props.dependants.length; ++i) {
-      let dependant = props.dependants[i];
-      let dependantPos = nodePos(dependant.cell);
-      dependants.push(
-        <line key={dependant.kmid}
-            x1={CELL_WIDTH}
-            y1={CELL_HEIGHT / 2}
-            x2={dependantPos.x - pos.x}
-            y2={dependantPos.y - pos.y + CELL_HEIGHT / 2}
-            strokeWidth="2"
-            stroke="black"/>
+  let selectedDependants = [];
+  let isSelectedMe = props.selectedCells.some(
+    x => x.i === props.cell.i && x.j === props.cell.j
+  );
+  for (let i = 0; i < props.dependants.length; ++i) {
+    let dependant = props.dependants[i];
+    let dependantPos = nodePos(dependant.cell);
+    let isSelectedDep = props.selectedCells.some(
+      x => x.i === dependant.cell.i && x.j === dependant.cell.j
+    );
+    dependants.push(
+      <line key={dependant.kmid}
+          x1={CELL_WIDTH}
+          y1={CELL_HEIGHT / 2}
+          x2={dependantPos.x - pos.x}
+          y2={dependantPos.y - pos.y + CELL_HEIGHT / 2}
+          strokeWidth={isSelectedDep || isSelectedMe ? 5 : 2}
+          stroke={isSelectedDep || isSelectedMe ? "blue" : "black"}/>
+    );
+    if (isSelectedDep) {
+      selectedDependants.push(
+        <circle key={dependant.kmid}
+          cx={CELL_WIDTH}
+          cy={CELL_HEIGHT / 2}
+          r={10}
+          fill="blue"/>
+      );
+    }
+    if (isSelectedMe) {
+      selectedDependants.push(
+        <circle key={dependant.kmid}
+          cx={dependantPos.x - pos.x}
+          cy={dependantPos.y - pos.y + CELL_HEIGHT / 2}
+          r={10}
+          fill="blue"/>
       );
     }
   }
+
   let fill: string;
   if (props.progress === 'reached') {
     fill = '#90EE90';
@@ -340,6 +368,7 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
       <rect x="0" y="0" width={CELL_WIDTH} height={CELL_HEIGHT} fill={fill}/>
       <text dominantBaseline="central" y={CELL_HEIGHT / 2}>{props.kmid}</text>
       {dependants}
+      {selectedDependants}
     </g>
   );
 };
@@ -397,7 +426,7 @@ let KnowledgeMap = () => {
     return ret;
   }, [knowledgeGraph, reached]);
   let nodeMap = React.useMemo(() => {
-    let ret = new Map<string, KnowledgeNodeProps>();
+    let ret = new Map<string, KnowledgeNodePropsLite>();
     for (let i = 0; i <= rows; ++i) {
       for (let j = 0; j <= cols; ++j) {
         let id = grid[i][j];
@@ -814,7 +843,8 @@ let KnowledgeMap = () => {
           kmid={node}
           cell={nodeMap.get(node)!.cell}
           progress={nodeMap.get(node)!.progress}
-          dependants={dependants}/>
+          dependants={dependants}
+          selectedCells={selectedCells}/>
     );
   }
 
