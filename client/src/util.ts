@@ -168,6 +168,16 @@ export let projectPointToLine = (p: Point, l: [Point, Point]): Point => {
   return {x: l[0].x + projVector.x, y: l[0].y + projVector.y};
 };
 
+export let rotate = (p: Point, origin: Point, angle: number): Point => {
+  let op = {x: p.x - origin.x, y: p.y - origin.y};
+  let s = Math.sin(angle);
+  let c = Math.cos(angle);
+  return {
+    x: op.x * c - op.y * s + origin.x,
+    y: op.x * s + op.y * c + origin.y,
+  };
+};
+
 export let clamp = (n: number, min: number, max: number): number => {
   return Math.min(Math.max(n, min), max);
 };

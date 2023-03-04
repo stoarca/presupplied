@@ -39,7 +39,18 @@ interface BezierTo {
   showArrowhead: boolean;
 }
 
-export type Shape = MoveTo | LineTo | BezierTo;
+// must be less than 100 degrees
+interface SmallArcTo {
+  type: 'arcto';
+  point: Point;
+  rx: number;
+  ry: number;
+  xrot: number;
+  largeArcFlag: 0;
+  sweepFlag: number;
+}
+
+export type Shape = MoveTo | LineTo | BezierTo | SmallArcTo;
 
 export type Variant = () => Shape[];
 
@@ -47,7 +58,7 @@ interface MyEx extends Ex<Variant> {
   shapes: Shape[];
 }
 
-let shapeToPathPart = (shape: Shape): string => {
+let shapeToPathPart = (shape: Shape, preShape: Shape | null): string => {
   if (shape.type === 'moveto') {
     return `M ${shape.point.x} ${shape.point.y}`;
   } else if (shape.type === 'lineto') {
@@ -57,6 +68,15 @@ let shapeToPathPart = (shape: Shape): string => {
       C
       ${shape.c1.x} ${shape.c1.y}
       ${shape.c2.x} ${shape.c2.y}
+      ${shape.point.x} ${shape.point.y}
+    `;
+  } else if (shape.type === 'arcto') {
+    return `
+      A
+      ${shape.rx} ${shape.ry}
+      ${shape.xrot}
+      ${shape.largeArcFlag}
+      ${shape.sweepFlag}
       ${shape.point.x} ${shape.point.y}
     `;
   } else {
@@ -73,12 +93,13 @@ interface ShapeArrowheadProps {
 
 let ShapeArrowhead: React.FC<ShapeArrowheadProps> = (props) => {
   let {preShape, shape, ...rest} = props;
+  let chevronSize = 10;
   if (shape.type === 'moveto') {
     return null;
   } else if (shape.type === 'lineto') {
     return (
       <SvgArrowhead {...rest}
-          chevronSize={10}
+          chevronSize={chevronSize}
           x1={preShape.point.x}
           y1={preShape.point.y}
           x2={shape.point.x}
@@ -96,11 +117,27 @@ let ShapeArrowhead: React.FC<ShapeArrowheadProps> = (props) => {
     let d = b.derivative(1);
     return (
       <SvgArrowhead {...rest}
-          chevronSize={10}
+          chevronSize={chevronSize}
           x1={p.x - d.x}
           y1={p.y - d.y}
           x2={p.x}
           y2={p.y}/>
+    );
+  } else if (shape.type === 'arcto') {
+    let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', `
+      M ${preShape.point.x} ${preShape.point.y}
+      ${shapeToPathPart(shape, preShape)}
+    `);
+    let len = path.getTotalLength();
+    let p = path.getPointAtLength(len - 0.1);
+    return (
+      <SvgArrowhead {...rest}
+          chevronSize={chevronSize}
+          x1={p.x}
+          y1={p.y}
+          x2={shape.point.x}
+          y2={shape.point.y}/>
     );
   } else {
     let exhaustiveCheck: never = shape;
@@ -145,7 +182,7 @@ export let ModuleBuilder = ({
       doFailure,
     } = useExercise({
       onGenExercise: generateExercise,
-      initialPartial: (): number => 1, // LOH: needs to depend on MoveTo shapes
+      initialPartial: (): number => 1, // TODO: needs to depend on MoveTo shapes
       onPlayInstructions: playInstructions,
       playOnEveryExercise: false,
       vlist: vlist,
@@ -180,6 +217,19 @@ export let ModuleBuilder = ({
           preShape.point, shape.c1, shape.c2, shape.point
         );
         return b.get(percent);
+      } else if (shape.type === 'arcto') {
+        let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `
+          M ${preShape.point.x} ${preShape.point.y}
+          ${shapeToPathPart(shape, preShape)}
+        `);
+        let len = path.getTotalLength();
+        let percentLen = len * percent;
+        let point = path.getPointAtLength(percentLen);
+        return {
+          x: point.x,
+          y: point.y,
+        };
       } else {
         let exhaustiveCheck: never = shape;
         throw new Error('unknown shape type');
@@ -204,27 +254,16 @@ export let ModuleBuilder = ({
       }
       let t = tool === 'touch' ? (e as T).touches[0] : (e as M);
       let p = {x: t.clientX, y: t.clientY};
-      let projectedPoint: Point;
-      if (shape.type === 'moveto') {
-        throw new Error('should never be here');
-      } else if (shape.type === 'lineto') {
-        projectedPoint = projectPointToLine(p, [preShape.point, shape.point]);
-      } else if (shape.type === 'bezierto') {
-        let b = new Bezier(
-          preShape.point, shape.c1, shape.c2, shape.point,
-        );
-        projectedPoint = b.project(p);
-      } else {
-        let exhaustiveCheck: never = shape;
-        throw new Error('unknown shape type while project');
-      }
       if (dist(p, target) > ERROR_RADIUS) {
         doFailure();
         return;
       }
 
       let newPercentMoved: number;
-      if (shape.type === 'lineto') {
+      if (shape.type === 'moveto') {
+        throw new Error('should never be here');
+      } else if (shape.type === 'lineto') {
+        let projectedPoint = projectPointToLine(p, [preShape.point, shape.point]);
         newPercentMoved = clamp(
           (projectedPoint.x - preShape.point.x) /
               (shape.point.x - preShape.point.x),
@@ -235,6 +274,7 @@ export let ModuleBuilder = ({
         let b = new Bezier(
           preShape.point, shape.c1, shape.c2, shape.point,
         );
+        let projectedPoint = b.project(p);
         let bp = b.get(percent);
         let d = b.derivative(percent);
         let angle = angleBetweenVectors(d, {
@@ -247,10 +287,49 @@ export let ModuleBuilder = ({
           0,
           1,
         );
+      } else if (shape.type === 'arcto') {
+        let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `
+          M ${preShape.point.x} ${preShape.point.y}
+          ${shapeToPathPart(shape, preShape)}
+        `);
+        let len = path.getTotalLength();
+        let bounds = [0, 1];
+        let bisect = () => {
+          if (bounds[1] - bounds[0] < 0.001) {
+            return;
+          }
+          let pStart = path.getPointAtLength(bounds[0] * len);
+          let pEnd = path.getPointAtLength(bounds[1] * len);
+          let mid = (bounds[0] + bounds[1]) / 2;
+          let pMid = path.getPointAtLength(mid * len);
+
+          let distStart = dist(p, pStart);
+          let distMid = dist(p, pMid);
+          let distEnd = dist(p, pEnd);
+
+          if (distStart < distEnd) {
+            bounds = [bounds[0], mid];
+          } else if (distStart > distEnd) {
+            bounds = [mid, bounds[1]];
+          } else {
+            let pStartMid = path.getPointAtLength((bounds[0] + mid) / 2 * len);
+            let pEndMid = path.getPointAtLength((mid + bounds[1]) / 2 * len);
+            if (dist(p, pStartMid) < dist(p, pEndMid)) {
+              bounds = [bounds[0], mid];
+            } else {
+              bounds = [mid, bounds[1]];
+            }
+          }
+          bisect();
+        };
+        bisect();
+        newPercentMoved = (bounds[0] + bounds[1]) / 2;
       } else {
         let exhaustiveCheck: never = shape;
-        throw new Error('unknown shape type while moving');
+        throw new Error('unknown shape type while project');
       }
+
       if (newPercentMoved >= 0.995) {
         newPercentMoved = 1;
       }
@@ -289,7 +368,10 @@ export let ModuleBuilder = ({
     };
     let emptyPath = (
       <path style={emptyStyle}
-          d={shapes.map(x => shapeToPathPart(x)).join(' ')}/>
+          d={shapes.map(
+              (x, i) => shapeToPathPart(x, shapes[i] || null)
+            ).join(' ')
+          }/>
     );
     let targetArrowheads = [];
     for (let i = 0; i < shapes.length; ++i) {
@@ -309,7 +391,7 @@ export let ModuleBuilder = ({
       <path style={nextStyle}
           d={`
             M ${preShape.point.x} ${preShape.point.y}
-            ${shapeToPathPart(shape)}
+            ${shapeToPathPart(shape, preShape)}
           `}/>
     );
     let nextArrowhead = (
@@ -363,6 +445,23 @@ export let ModuleBuilder = ({
               } else {
                 return `C ${x.c1.x} ${x.c1.y} ${x.c2.x} ${x.c2.y} ${x.point.x} ${x.point.y}`;
               }
+            } else if (x.type === 'arcto') {
+              if (i === shapeIndex) {
+                shape = shape as SmallArcTo;
+                let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', `
+                  M ${preShape.point.x} ${preShape.point.y}
+                  ${shapeToPathPart(shape, preShape)}
+                `);
+                let len = path.getTotalLength();
+                let percentPoint = path.getPointAtLength(len * percent);
+                return shapeToPathPart({
+                  ...shape,
+                  point: percentPoint,
+                }, preShape);
+              } else {
+                return shapeToPathPart(x, preShape);
+              }
             } else {
               let exhaustiveCheck: never = x;
             }
@@ -383,7 +482,7 @@ export let ModuleBuilder = ({
     return (
       <Module type="svg"
           score={score}
-          maxScore={10}
+          maxScore={maxScore}
           onMouseDown={tool === 'mouse' ? handleStart : undefined}
           onMouseMove={tool === 'mouse' ? handleMove : undefined}
           onMouseUp={tool === 'mouse' ? handleEnd : undefined}
