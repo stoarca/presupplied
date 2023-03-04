@@ -22,17 +22,12 @@ export let buildModuleContext = (moduleName: string): ModuleContextProps => {
         throw new Error('invalid channel ' + channel);
       }
       if (channels[channel]) {
-        console.log(path + ' is calling hacky pause');
-        console.log(channels[channel]!.ended);
-        console.log(channels[channel]!.paused);
         (channels[channel]! as any).hackyPause();
       }
       let audio = new Audio(path);
       let playingPromise = audio.play();
       (audio as any).hackyPause = async () => {
-        console.log('calling hacky pause on ' + path);
         await playingPromise;
-        console.log('waited for play, now pausing on ' + path);
         audio.pause();
       };
       channels[channel] = audio;
@@ -43,19 +38,13 @@ export let buildModuleContext = (moduleName: string): ModuleContextProps => {
         };
         let interval = setInterval(() => {
           if (audio.paused || audio.ended) {
-            resolve();
+            doResolve();
           }
         }, 100);
         audio.addEventListener('paused', () => {
-          console.log('received paused event on ' + path);
-          console.log(audio.paused);
-          console.log(audio.ended);
           doResolve();
         }, {once: true});
         audio.addEventListener('ended', () => {
-          console.log('received ended event on ' + path);
-          console.log(audio.paused);
-          console.log(audio.ended);
           doResolve();
         }, {once: true});
       });

@@ -52,7 +52,7 @@ export let ModuleBuilder = ({
     );
     let generateExercise = React.useCallback(() => {
       let variant = vlist.pickVariant();
-      let number = Math.floor(Math.random() * numNumbers - 1);
+      let number = Math.floor(Math.random() * (numNumbers - 1));
       if (['allbefore', 'onebefore', 'previous'].includes(variant)) {
         number += 1;
       }

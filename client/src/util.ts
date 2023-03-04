@@ -148,6 +148,13 @@ export let colinear = (a: Point, b: Point, c: Point): boolean => {
   return crossProduct === 0;
 };
 
+export let angleBetweenVectors = (u: Point, v: Point): number => {
+  let dotProduct = u.x * v.x + u.y * v.y;
+  let uMag = Math.sqrt(u.x * u.x + u.y * u.y);
+  let vMag = Math.sqrt(v.x * v.x + v.y * v.y);
+  return Math.acos(dotProduct / (uMag * vMag));
+};
+
 export let projectPointToLine = (p: Point, l: [Point, Point]): Point => {
   if (colinear(p, l[0], l[1])) {
     return p;

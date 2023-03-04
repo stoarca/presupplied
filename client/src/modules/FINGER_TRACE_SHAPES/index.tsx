@@ -7,13 +7,15 @@ import {
 
 let VARIANTS = [
   (): Shape[] => {
-    let points = genRandPoints(2, {
+    let points = genRandPoints(3, {
       paddingFromEdge: 200,
       paddingFromEachOther: 400,
     });
     return [
       {type: 'moveto', point: points[0]},
       {type: 'lineto', point: points[1]},
+      {type: 'lineto', point: points[2]},
+      {type: 'lineto', point: points[0]},
     ];
   },
 ];

@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface SvgArrowProps {
+interface SvgArrowheadProps {
   chevronSize: number,
   x1: number,
   y1: number,
@@ -9,7 +9,7 @@ interface SvgArrowProps {
   [id: string]: any,
 }
 
-export let SvgArrow: React.FC<SvgArrowProps> = (props) => {
+export let SvgArrowhead: React.FC<SvgArrowheadProps> = (props) => {
   let {chevronSize, x1, y1, x2, y2, ...rest} = props;
   let v = {
     x: x2 - x1,
@@ -35,7 +35,6 @@ export let SvgArrow: React.FC<SvgArrowProps> = (props) => {
 
   return (
     <g>
-      <line {...rest} x1={x1} y1={y1} x2={x2} y2={y2}/>
       <line {...rest} x1={cw45.x} y1={cw45.y} x2={x2} y2={y2}/>
       <line {...rest} x1={ccw45.x} y1={ccw45.y} x2={x2} y2={y2}/>
     </g>

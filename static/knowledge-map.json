@@ -405,7 +405,7 @@
       "j": 9,
       "deps": [
         "LETTER_TO_SOUND",
-        "RECOGNIZE_ORDER_LETTERS"
+        "RECOGNIZE_ORDER_TAP_LETTERS"
       ]
     },
     {
@@ -1453,7 +1453,7 @@
     {
       "id": "ACCOUNT_AND_PASSWORD",
       "i": 7,
-      "j": 12,
+      "j": 13,
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
         "READ_SHORT_SENTENCES",
@@ -1464,7 +1464,7 @@
     {
       "id": "OPEN_APPLICATION",
       "i": 9,
-      "j": 12,
+      "j": 13,
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
         "USE_MOUSE"
@@ -1473,7 +1473,7 @@
     {
       "id": "TERMINAL_COMMANDS_SIMPLE",
       "i": 8,
-      "j": 12,
+      "j": 13,
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
         "READ_SHORT_SENTENCES"
@@ -1482,18 +1482,18 @@
     {
       "id": "TERMINAL_COMMANDS",
       "i": 8,
-      "j": 13,
+      "j": 14,
       "deps": [
         "TERMINAL_COMMANDS_SIMPLE",
         "OPEN_APPLICATION",
         "ACCOUNT_AND_PASSWORD",
-        "READ_LONG_SENTENCES"
+        "READ_PARAGRAPHS"
       ]
     },
     {
       "id": "SKETCH_VARIABLE_SIMPLE",
       "i": 9,
-      "j": 13,
+      "j": 14,
       "deps": [
         "TERMINAL_COMMANDS_SIMPLE",
         "OPEN_APPLICATION",
@@ -1503,7 +1503,7 @@
     {
       "id": "SKETCH_IF_SIMPLE",
       "i": 9,
-      "j": 14,
+      "j": 15,
       "deps": [
         "SKETCH_VARIABLE_SIMPLE"
       ]
@@ -1511,7 +1511,7 @@
     {
       "id": "SKETCH_LOOP_SIMPLE",
       "i": 9,
-      "j": 15,
+      "j": 16,
       "deps": [
         "SKETCH_IF_SIMPLE"
       ]
@@ -1562,7 +1562,8 @@
       "j": 10,
       "deps": [
         "READ_50_SIMPLE_WORDS",
-        "SOUND_TO_BIGRAM"
+        "SOUND_TO_BIGRAM",
+        "RECOGNIZE_ORDER_TYPE_LETTERS"
       ]
     },
     {
@@ -1585,10 +1586,10 @@
     {
       "id": "USE_MOUSE",
       "i": 15,
-      "j": 11,
+      "j": 12,
       "deps": [
-        "USE_MOUSE_DOUBLE_CLICK",
-        "USE_MOUSE_SCROLL"
+        "USE_MOUSE_SCROLL",
+        "USE_MOUSE_DOUBLE_CLICK_FAST_SMALL"
       ]
     },
     {
@@ -1786,7 +1787,7 @@
       ]
     },
     {
-      "id": "RECOGNIZE_ORDER_LETTERS",
+      "id": "RECOGNIZE_ORDER_TAP_LETTERS",
       "i": 5,
       "j": 7,
       "deps": [
@@ -2286,6 +2287,22 @@
       "deps": [
         "BEFORE_AFTER_10",
         "COUNT_OBJECTS_TO_10"
+      ]
+    },
+    {
+      "id": "RECOGNIZE_ORDER_TYPE_LETTERS",
+      "i": 4,
+      "j": 9,
+      "deps": [
+        "RECOGNIZE_ORDER_TAP_LETTERS"
+      ]
+    },
+    {
+      "id": "USE_MOUSE_DOUBLE_CLICK_FAST_SMALL",
+      "i": 16,
+      "j": 11,
+      "deps": [
+        "USE_MOUSE_DOUBLE_CLICK"
       ]
     }
   ]
