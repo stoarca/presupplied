@@ -1,21 +1,10 @@
-import {ModuleBuilder} from '../common/PECK_KEYS/ModuleBuilder';
+import {ModuleBuilder, Variant} from '../common/PECK_KEYS/ModuleBuilder';
 
-let VARIANTS: [string, string][] = [
-  ['a', 'eh'],
-  ['b', 'bee'],
-  ['c', 'see'],
-  ['d', 'dee'],
-  ['e', 'ee'],
-  ['f', 'ef'],
-  ['g', 'gee'],
-  ['q', 'cue'],
-  ['r', 'arre'],
-  ['s', 'ess'],
-  ['t', 'tee'],
-  ['v', 'vee'],
-  ['w', 'double you'],
-  ['x', 'ex'],
-  ['z', 'zee'],
+let variants: Variant[] = [
+  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z'
 ];
 
-export default ModuleBuilder(VARIANTS);
+export default ModuleBuilder({
+  variants: variants,
+  timeLimitPerExercise: null,
+});

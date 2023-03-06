@@ -324,7 +324,7 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
       x => x.i === dependant.cell.i && x.j === dependant.cell.j
     );
     dependants.push(
-      <line key={dependant.kmid}
+      <line key={'dep-' + props.kmid + '-' + dependant.kmid}
           x1={CELL_WIDTH}
           y1={CELL_HEIGHT / 2}
           x2={dependantPos.x - pos.x}
@@ -334,7 +334,7 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
     );
     if (isSelectedDep) {
       selectedDependants.push(
-        <circle key={dependant.kmid}
+        <circle key={'sel-' + props.kmid + '-' + dependant.kmid}
           cx={CELL_WIDTH}
           cy={CELL_HEIGHT / 2}
           r={10}
@@ -343,7 +343,7 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
     }
     if (isSelectedMe) {
       selectedDependants.push(
-        <circle key={dependant.kmid}
+        <circle key={'selme-' + props.kmid + '-' + dependant.kmid}
           cx={dependantPos.x - pos.x}
           cy={dependantPos.y - pos.y + CELL_HEIGHT / 2}
           r={10}

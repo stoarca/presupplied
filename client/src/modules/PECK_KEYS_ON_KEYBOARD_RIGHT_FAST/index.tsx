@@ -6,5 +6,5 @@ let variants: Variant[] = [
 
 export default ModuleBuilder({
   variants: variants,
-  timeLimitPerExercise: null,
+  timeLimitPerExercise: 3000,
 });

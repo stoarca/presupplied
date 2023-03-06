@@ -1,10 +1,10 @@
 import {ModuleBuilder, Variant} from '../common/PECK_KEYS/ModuleBuilder';
 
 let variants: Variant[] = [
-  'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'u', 'y',
+  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z'
 ];
 
 export default ModuleBuilder({
   variants: variants,
-  timeLimitPerExercise: null,
+  timeLimitPerExercise: 3000,
 });

@@ -17,6 +17,7 @@
     "react-router-dom": "^6.8.0"
   },
   "devDependencies": {
+    "@svgr/webpack": "^6.5.1",
     "@tsconfig/node18": "^1.0.1",
     "@types/bezier-js": "^4.1.0",
     "@types/node": "^18.11.18",

@@ -2304,6 +2304,50 @@
       "deps": [
         "USE_MOUSE_DOUBLE_CLICK"
       ]
+    },
+    {
+      "id": "PENCIL_TRACE_SIMPLE_WORDS",
+      "i": 2,
+      "j": 8,
+      "deps": [
+        "PENCIL_TRACE_LETTERS"
+      ]
+    },
+    {
+      "id": "PENCIL_COPY_2_LETTER_WORDS",
+      "i": 2,
+      "j": 9,
+      "deps": [
+        "PENCIL_TRACE_SIMPLE_WORDS"
+      ]
+    },
+    {
+      "id": "PENCIL_COPY_3_LETTER_WORDS",
+      "i": 2,
+      "j": 10,
+      "deps": [
+        "PENCIL_COPY_2_LETTER_WORDS",
+        "READ_50_SIMPLE_WORDS"
+      ]
+    },
+    {
+      "id": "PENCIL_COPY_4_LETTER_WORDS",
+      "i": 2,
+      "j": 11,
+      "deps": [
+        "PENCIL_COPY_3_LETTER_WORDS",
+        "READ_200_SIMPLE_WORDS"
+      ]
+    },
+    {
+      "id": "PENCIL_WRITE_3_LETTER_WORDS",
+      "i": 1,
+      "j": 11,
+      "deps": [
+        "PENCIL_COPY_3_LETTER_WORDS",
+        "SPELL_50_SIMPLE_WORDS",
+        "PENCIL_WRITE_LETTERS"
+      ]
     }
   ]
 }

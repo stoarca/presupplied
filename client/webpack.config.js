@@ -31,7 +31,28 @@ module.exports = {
         generator: {
           filename: '[name]-[hash][ext][query]',
         },
-      }
+      },
+      {
+        test: /\.svg$/i,
+        use: [{
+          loader: '@svgr/webpack',
+          options: {
+            svgoConfig: {
+              plugins: [{
+                  name: 'preset-default',
+                  params: {
+                    overrides: {
+                      cleanupIDs: {
+                        remove: false,
+                      },
+                    },
+                  },
+                },
+              ],
+            }
+          }
+        }],
+      },
     ],
   },
   resolve: {

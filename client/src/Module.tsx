@@ -153,7 +153,8 @@ export let useExercise = <E extends Ex<V>, V, P>({
     maxScore,
     doSuccess,
     doPartialSuccess,
-    doFailure
+    doFailure,
+    alreadyFailed,
   };
 };
 
