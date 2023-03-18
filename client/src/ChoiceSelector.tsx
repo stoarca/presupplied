@@ -11,7 +11,9 @@ interface ChoiceSelectorProps<T extends ChoiceType> {
   onSelected: (index: number) => void,
 }
 
-export let ChoiceSelector = <T extends ChoiceType,>(props: React.PropsWithChildren<ChoiceSelectorProps<T>>) => {
+export let ChoiceSelector = <T extends ChoiceType,>(
+  props: React.PropsWithChildren<ChoiceSelectorProps<T>>
+) => {
   let handleClick = React.useCallback((e: M) => {
     if (e.button !== 0) {
       return;

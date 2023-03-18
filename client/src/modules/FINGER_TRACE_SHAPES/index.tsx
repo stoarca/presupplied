@@ -6,7 +6,7 @@ import {
 } from '@src/util';
 
 let VARIANTS = [
-  (): Shape[] => {
+  (): Shape[] => { // triangle
     let point = genRandPoints(1, {
       paddingFromEdge: 300,
     })[0];
@@ -26,7 +26,7 @@ let VARIANTS = [
       {type: 'lineto', point: points[0]},
     ];
   },
-  (): Shape[] => {
+  (): Shape[] => { // circle
     let point = genRandPoints(1, {
       paddingFromEdge: 300,
     })[0];
@@ -59,16 +59,16 @@ let VARIANTS = [
       },
     ];
   },
-  (): Shape[] => {
+  (): Shape[] => { // square
     let point = genRandPoints(1, {
       paddingFromEdge: 300,
     })[0];
     let angle = Math.random() * Math.PI * 2;
     let points = [
-      point,
-      {x: point.x + 250, y: point.y},
-      {x: point.x + 250, y: point.y + 250},
-      {x: point.x, y: point.y + 250},
+      {x: point.x - 125, y: point.y - 125},
+      {x: point.x + 125, y: point.y - 125},
+      {x: point.x + 125, y: point.y + 125},
+      {x: point.x - 125, y: point.y + 125},
     ].map(x => rotate(x, point, angle));
     if (Math.random() > 0.5) {
       points = [points[0], points[3], points[2], points[1]];
@@ -81,16 +81,16 @@ let VARIANTS = [
       {type: 'lineto', point: points[0]},
     ];
   },
-  (): Shape[] => {
+  (): Shape[] => { // trapezoid
     let point = genRandPoints(1, {
       paddingFromEdge: 300,
     })[0];
     let angle = Math.random() * Math.PI * 2;
     let points = [
-      point,
-      {x: point.x + 200, y: point.y},
-      {x: point.x + 300, y: point.y + 250},
-      {x: point.x - 100, y: point.y + 250},
+      {x: point.x - 100, y: point.y - 100},
+      {x: point.x + 100, y: point.y - 100},
+      {x: point.x + 200, y: point.y + 150},
+      {x: point.x - 200, y: point.y + 150},
     ].map(x => rotate(x, point, angle));
     if (Math.random() > 0.5) {
       points = [points[0], points[3], points[2], points[1]];

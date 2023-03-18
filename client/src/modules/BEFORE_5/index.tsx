@@ -3,13 +3,17 @@ import {
 } from '@src/modules/common/BEFORE_AFTER_NUMBERS/ModuleBuilder';
 
 let VARIANTS: Variant[] = [
-  'onebefore'
+  ['onebefore', () => 1],
+  ['onebefore', () => 2],
+  ['onebefore', () => 3],
+  ['onebefore', () => 4],
+  ['onebefore', () => 5],
 ];
 
 export default ModuleBuilder({
   variants: VARIANTS,
   numNumbers: 6,
-  maxScorePerVariant: 15,
+  maxScorePerVariant: 5,
 });
 
 

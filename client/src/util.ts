@@ -108,9 +108,12 @@ export class VariantList<T> {
     let total = sum(Array.from(this.variantsMap.keys()).map(
       x => this.remaining(x)
     ));
+    if (total === 0) {
+      return variants[0];
+    }
     let randIndex = Math.floor(Math.random() * total);
     let variantIndex = 0;
-    while (randIndex > this.remaining(variants[variantIndex])) {
+    while (randIndex >= this.remaining(variants[variantIndex])) {
       randIndex -= this.remaining(variants[variantIndex]);
       variantIndex += 1;
     }

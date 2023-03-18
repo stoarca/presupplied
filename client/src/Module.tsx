@@ -19,7 +19,7 @@ interface UseExerciseOptions<E extends Ex<V>, V, P> {
   vlist: VariantList<V>,
 }
 
-interface DoSuccessProps {
+export interface DoSuccessProps {
   sound?: string,
   waitForSound?: boolean,
 }

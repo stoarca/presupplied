@@ -7,28 +7,30 @@ import {VariantList} from '@src/util';
 
 import {youAlreadyDidThatOne} from '@modules/common/sounds';
 
-export type Variant =
+export type Type =
     'allbefore' | 'onebefore' | 'previous' | 'allafter' | 'oneafter' | 'next';
+
+export type Variant = [Type, () => number];
 
 interface MyEx extends Ex<Variant> {
   number: number,
 }
 
 let variantToSentence = (v: Variant, ex: MyEx) => {
-  if (v === 'allbefore') {
+  if (v[0] === 'allbefore') {
     return `Tap all the numbers that come before ${ex.number}.`;
-  } else if (v === 'onebefore') {
+  } else if (v[0] === 'onebefore') {
     return `Tap the number that comes before ${ex.number}.`;
-  } else if (v === 'previous') {
+  } else if (v[0] === 'previous') {
     return `We're at ${ex.number}. Tap the previous number.`;
-  } else if (v === 'allafter') {
+  } else if (v[0] === 'allafter') {
     return `Tap all the numbers that come after ${ex.number}.`;
-  } else if (v === 'oneafter') {
+  } else if (v[0] === 'oneafter') {
     return `Tap the number that comes after ${ex.number}.`;
-  } else if (v === 'next') {
+  } else if (v[0] === 'next') {
     return `We're at ${ex.number}. Tap the next number.`;
   } else {
-    let exhaustiveCheck: never = v;
+    let exhaustiveCheck: never = v[0];
     throw new Error('variantToSentence unknown variant ' + v);
   }
 }
@@ -52,13 +54,9 @@ export let ModuleBuilder = ({
     );
     let generateExercise = React.useCallback(() => {
       let variant = vlist.pickVariant();
-      let number = Math.floor(Math.random() * (numNumbers - 1));
-      if (['allbefore', 'onebefore', 'previous'].includes(variant)) {
-        number += 1;
-      }
       return {
         variant: variant,
-        number: number,
+        number: variant[1](),
       };
     }, [vlist]);
     let playInstructions = React.useCallback((exercise: MyEx) => {
@@ -89,11 +87,11 @@ export let ModuleBuilder = ({
         return;
       }
 
-      if (['allbefore', 'onebefore', 'previous'].includes(exercise.variant)) {
+      if (['allbefore', 'onebefore', 'previous'].includes(exercise.variant[0])) {
         if (number >= exercise.number) {
           doFailure();
         } else {
-          if (exercise.variant === 'allbefore') {
+          if (exercise.variant[0] === 'allbefore') {
             let newPartial = [...partial, number];
             if (newPartial.length === exercise.number) {
               await doPartialSuccess(newPartial);
@@ -110,11 +108,11 @@ export let ModuleBuilder = ({
             }
           }
         }
-      } else if (['allafter', 'oneafter', 'next'].includes(exercise.variant)) {
+      } else if (['allafter', 'oneafter', 'next'].includes(exercise.variant[0])) {
         if (number <= exercise.number) {
           doFailure();
         } else {
-          if (exercise.variant === 'allafter') {
+          if (exercise.variant[0] === 'allafter') {
             let newPartial = [...partial, number];
             await doPartialSuccess(newPartial);
             if (newPartial.length === numNumbers - exercise.number - 1) {

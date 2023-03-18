@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-import {pickFromBag, VariantList} from '@src/util';
+import {VariantList} from '@src/util';
 
 import {goodDing, tooSlow} from '@modules/common/sounds';
 
@@ -120,15 +120,15 @@ export let ModuleBuilder = ({
         } else {
           doFailure();
         }
-      }
+      };
       document.addEventListener('keypress', listener);
       return () => document.removeEventListener('keypress', listener);
     }, [moduleContext, exercise, doSuccess, doFailure]);
 
-    let textStyle = {
+    let textStyle: React.CSSProperties = {
       fontFamily: 'sans-serif',
       fontSize: '200px',
-    } as React.CSSProperties;
+    };
     let text = (
       <text style={textStyle}
           dominantBaseline="central"
