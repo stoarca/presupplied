@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {Module, useExercise, Ex, DoSuccessProps} from '@src/Module';
-import {VariantList} from '@src/util';
 
 import {goodDing} from '@modules/common/sounds';
 

@@ -7,7 +7,7 @@ import {genRandPoint, dist, Point, VariantList} from '@src/util';
 import {tooSlow} from '@modules/common/sounds';
 import instructions from './instructions.wav';
 
-type M = React.MouseEvent<HTMLElement>;
+type M = React.PointerEvent<HTMLElement>;
 
 interface MyEx extends Ex<number> {
   target: Point,
@@ -79,8 +79,21 @@ export let ModuleBuilder = ({
       return () => clearInterval(interval);
     }, [doFailure]);
 
-    let handleClick = React.useCallback((e: M) => {
-      if (dist({x: e.clientX, y: e.clientY}, exercise.target) < targetRadius) {
+    let handleDown = React.useCallback((e: M) => {
+      if (e.pointerType !== 'mouse') {
+        doFailure();
+        return;
+      }
+      if (dist({x: e.clientX, y: e.clientY}, exercise.target) > targetRadius) {
+        doFailure();
+      }
+    }, [exercise, doFailure]);
+    let handleUp = React.useCallback((e: M) => {
+      if (e.pointerType !== 'mouse') {
+        doFailure();
+        return;
+      }
+      if (dist({x: e.clientX, y: e.clientY}, exercise.target) <= targetRadius) {
         doSuccess({waitForSound: false});
       } else {
         doFailure();
@@ -93,7 +106,8 @@ export let ModuleBuilder = ({
       <Module type="svg"
           score={score}
           maxScore={vlist.maxScore()}
-          onClick={handleClick}>
+          onPointerDown={handleDown}
+          onPointerUp={handleUp}>
         <circle cx={exercise.target.x}
             cy={exercise.target.y}
             r={targetRadius}

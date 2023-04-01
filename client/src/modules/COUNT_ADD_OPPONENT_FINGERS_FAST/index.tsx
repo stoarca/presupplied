@@ -3,5 +3,5 @@ import {
 } from '@src/modules/common/OPPONENT_FINGERS/ModuleBuilder';
 
 export default ModuleBuilder({
-  timeLimitPerExercise: null,
+  timeLimitPerExercise: 4000,
 });

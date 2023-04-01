@@ -2,52 +2,13 @@ import React from 'react';
 
 import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-import {VariantList} from '@src/util';
+import {VariantList, PRONUNCIATIONS} from '@src/util';
 
 import {goodDing, tooSlow} from '@modules/common/sounds';
 
 import KeyboardSvg from '@src/modules/common/keyboard.svg';
 
-let pronounciations = {
-  '0': 'zero',
-  '1': 'one',
-  '2': 'two',
-  '3': 'three',
-  '4': 'four',
-  '5': 'five',
-  '6': 'six',
-  '7': 'seven',
-  '8': 'eight',
-  '9': 'nine',
-  'a': 'eh',
-  'b': 'bee',
-  'c': 'see',
-  'd': 'dee',
-  'e': 'ee',
-  'f': 'ef',
-  'g': 'gee',
-  'h': 'h',
-  'i': 'aye',
-  'j': 'jay',
-  'k': 'kay',
-  'l': 'el',
-  'm': 'em',
-  'n': 'en',
-  'o': 'oh',
-  'p': 'pee',
-  'q': 'cue',
-  'r': 'arre',
-  's': 'ess',
-  't': 'tee',
-  'u': 'you',
-  'v': 'vee',
-  'w': 'double you',
-  'x': 'ex',
-  'y': 'why',
-  'z': 'zee',
-};
-
-export type Variant = keyof typeof pronounciations;
+export type Variant = keyof typeof PRONUNCIATIONS;
 
 interface MyEx extends Ex<Variant> {
 };
@@ -71,7 +32,7 @@ export let ModuleBuilder = ({
       };
     }, [vlist]);
     let playInstructions = React.useCallback((exercise: MyEx) => {
-      moduleContext.playTTS(`Press ${pronounciations[exercise.variant]}.`);
+      moduleContext.playTTS(`Press ${PRONUNCIATIONS[exercise.variant]}.`);
     }, [moduleContext]);
     let {
       exercise,

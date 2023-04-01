@@ -100,10 +100,6 @@ export let useExercise = <E extends Ex<V>, V, P>({
       return;
     }
 
-    console.log('setting partial');
-    console.log(_partial);
-    console.log(doDing);
-
     setPartial(_partial);
     if (doDing) {
       await moduleContext.playAudio(goodDing);

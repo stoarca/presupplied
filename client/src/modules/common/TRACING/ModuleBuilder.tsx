@@ -29,6 +29,7 @@ interface MoveTo {
 interface LineTo {
   type: 'lineto';
   point: Point;
+  showArrowhead?: boolean;
 }
 
 interface BezierTo {
@@ -36,7 +37,7 @@ interface BezierTo {
   point: Point;
   c1: Point;
   c2: Point;
-  showArrowhead: boolean;
+  showArrowhead?: boolean;
 }
 
 // must be less than 100 degrees
@@ -48,6 +49,7 @@ interface SmallArcTo {
   xrot: number;
   largeArcFlag: 0;
   sweepFlag: number;
+  showArrowhead?: boolean;
 }
 
 export type Shape = MoveTo | LineTo | BezierTo | SmallArcTo;
@@ -94,9 +96,11 @@ interface ShapeArrowheadProps {
 let ShapeArrowhead: React.FC<ShapeArrowheadProps> = (props) => {
   let {preShape, shape, ...rest} = props;
   let chevronSize = 10;
-  if (shape.type === 'moveto') {
+  if (shape.type === 'moveto' || shape.showArrowhead === false) {
     return null;
-  } else if (shape.type === 'lineto') {
+  }
+
+  if (shape.type === 'lineto') {
     return (
       <SvgArrowhead {...rest}
           chevronSize={chevronSize}
@@ -107,9 +111,6 @@ let ShapeArrowhead: React.FC<ShapeArrowheadProps> = (props) => {
           />
     );
   } else if (shape.type === 'bezierto') {
-    if (!shape.showArrowhead) {
-      return null;
-    }
     let b = new Bezier(
       preShape.point, shape.c1, shape.c2, shape.point,
     );
@@ -145,16 +146,43 @@ let ShapeArrowhead: React.FC<ShapeArrowheadProps> = (props) => {
   }
 };
 
+let cleanShapes = (shapes: Shape[]): Shape[] => {
+  let ret: Shape[] = [];
+  for (let i = 0; i < shapes.length; ++i) {
+    const shape = shapes[i];
+    if (shape.type === 'bezierto') {
+      let bezier = new Bezier(
+        shapes[i - 1].point, shape.c1, shape.c2, shape.point
+      );
+      let simpleBeziers = bezier.reduce();
+      ret.push.apply(ret, simpleBeziers.map((x, i): BezierTo => ({
+        type: 'bezierto',
+        point: x.points[3],
+        c1: x.points[1],
+        c2: x.points[2],
+        showArrowhead: shape.showArrowhead && i === simpleBeziers.length - 1,
+      })));
+    } else {
+      ret.push(shapes[i]);
+    }
+  }
+  return ret;
+};
+
 interface ModuleBuilderProps {
   variants: Variant[];
   maxScorePerVariant: number;
   tool: 'mouse' | 'touch' | 'stylus';
+  errorRadius?: number;
+  drawRadius?: number;
 }
 
 export let ModuleBuilder = ({
   variants,
   maxScorePerVariant,
   tool,
+  errorRadius = 70,
+  drawRadius = 35,
 }: ModuleBuilderProps) => {
   return (props: void) => {
     let moduleContext = React.useContext(ModuleContext);
@@ -188,10 +216,9 @@ export let ModuleBuilder = ({
       vlist: vlist,
     });
 
-    let ERROR_RADIUS = 70;
     let shapes = exercise.shapes;
     let shapeIndex = Math.floor(partial);
-    if (shapeIndex >= shapes.length) {
+    if (shapeIndex >= shapes.length || shapes[shapeIndex].type === 'moveto') {
       shapeIndex -= 1;
     }
     let preShape = React.useMemo(
@@ -238,7 +265,8 @@ export let ModuleBuilder = ({
     let [isDragging, setIsDragging] = React.useState(false);
     let handleStart = React.useCallback((e: M | T) => {
       let t = tool === 'touch' ? (e as T).touches[0] : (e as M);
-      if (dist({x: t.clientX, y: t.clientY}, target) > ERROR_RADIUS) {
+      if (dist({x: t.clientX, y: t.clientY}, target) > errorRadius) {
+        console.log('do failure in start');
         doFailure();
         return;
       }
@@ -252,21 +280,23 @@ export let ModuleBuilder = ({
       if (percent >= 1) {
         return;
       }
+      if (shape.type === 'moveto') {
+        return;
+      }
       let t = tool === 'touch' ? (e as T).touches[0] : (e as M);
       let p = {x: t.clientX, y: t.clientY};
-      if (dist(p, target) > ERROR_RADIUS) {
+      if (dist(p, target) > errorRadius) {
+        console.log('do failure in move');
         doFailure();
         return;
       }
 
       let newPercentMoved: number;
-      if (shape.type === 'moveto') {
-        throw new Error('should never be here');
-      } else if (shape.type === 'lineto') {
+      if (shape.type === 'lineto') {
         let projectedPoint = projectPointToLine(p, [preShape.point, shape.point]);
         newPercentMoved = clamp(
-          (projectedPoint.x - preShape.point.x) /
-              (shape.point.x - preShape.point.x),
+          dist(projectedPoint, preShape.point) /
+              dist(shape.point, preShape.point),
           0,
           1
         );
@@ -337,8 +367,11 @@ export let ModuleBuilder = ({
         newPercentMoved = 1;
       }
       if (newPercentMoved > percent) {
+        let doDingEver = shape.showArrowhead === undefined ||
+            shape.showArrowhead === true;
         doPartialSuccess(
-          Math.floor(partial) + newPercentMoved, newPercentMoved === 1
+          Math.floor(partial) + newPercentMoved,
+          doDingEver && newPercentMoved === 1
         );
       }
     }, [
@@ -354,7 +387,16 @@ export let ModuleBuilder = ({
     let handleEnd = React.useCallback(async (e: M) => {
       setIsDragging(false);
       if (partial < shapes.length) {
-        doFailure();
+        console.log('do failure in end');
+        console.log(shape.type);
+        console.log(partial);
+        console.log(shapes);
+        console.log(shapeIndex);
+        if (shapes[Math.floor(partial)].type === 'moveto') {
+          doPartialSuccess(partial + 1, false);
+        } else {
+          doFailure();
+        }
       } else {
         await doSuccess();
       }
@@ -387,25 +429,63 @@ export let ModuleBuilder = ({
       ...emptyStyle,
       stroke: '#000000',
     };
+    let joinedArrowheadIndexes = React.useMemo(() => {
+      let ret = [];
+      let start;
+      for (start = shapeIndex - 1; start >= 0; --start) {
+        const shape = shapes[start];
+        if (
+          shape.type === 'moveto' ||
+          shape.showArrowhead === undefined ||
+          shape.showArrowhead === true
+        ) {
+          break;
+        }
+      }
+      for (let i = start + 1; i < shapes.length; ++i) {
+        const shape = shapes[i];
+        if (shape.type === 'moveto') {
+          break;
+        }
+        ret.push(i);
+        if (shape.showArrowhead === undefined || shape.showArrowhead === true) {
+          break;
+        }
+      }
+      if (ret.length === 0) {
+        ret.push(shapeIndex);
+      }
+      return ret;
+    }, [shapes, shapeIndex]);
+    console.log('calculating next arrowhead');
+    console.log(joinedArrowheadIndexes);
+    console.log(shapeIndex);
     let emptyNext = (
-      <path style={nextStyle}
+      <path className="emptynext" style={nextStyle}
           d={`
-            M ${preShape.point.x} ${preShape.point.y}
-            ${shapeToPathPart(shape, preShape)}
+            M ${shapes[joinedArrowheadIndexes[0] - 1].point.x}
+              ${shapes[joinedArrowheadIndexes[0] - 1].point.y}
+            ${joinedArrowheadIndexes.map(i => {
+              return shapeToPathPart(shapes[i], shapes[i - 1]);
+            })}
           `}/>
     );
     let nextArrowhead = (
       <ShapeArrowhead
           style={nextStyle}
-          preShape={preShape}
-          shape={shape}/>
+          preShape={
+            shapes[joinedArrowheadIndexes[joinedArrowheadIndexes.length - 1] - 1]
+          }
+          shape={
+            shapes[joinedArrowheadIndexes[joinedArrowheadIndexes.length - 1]]
+          }/>
     );
 
 
     let filledStyle: React.CSSProperties = {
       fill: 'transparent',
       stroke: '#ff000033',
-      strokeWidth: ERROR_RADIUS,
+      strokeWidth: drawRadius * 2,
       strokeLinecap: 'round',
       strokeLinejoin: 'round',
     };
@@ -469,13 +549,13 @@ export let ModuleBuilder = ({
     );
 
     let targetCircle = (
-      <circle r={ERROR_RADIUS / 2} cx={target.x} cy={target.y} fill="#ff000033"/>
+      <circle r={drawRadius} cx={target.x} cy={target.y} fill="#ff000033"/>
     );
 
     let targetComplete = null;
-    if (partial === shapes.length) {
+    if (partial === shapes.length || shapes[Math.floor(partial)].type === 'moveto') {
       targetComplete = (
-        <circle r={ERROR_RADIUS / 2} cx={target.x} cy={target.y} fill="#00ff0099"/>
+        <circle r={drawRadius} cx={target.x} cy={target.y} fill="#00ff0099"/>
       );
     }
 

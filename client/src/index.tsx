@@ -711,26 +711,28 @@ let KnowledgeMap = () => {
     let updatedCells: {[id: string]: Cell} = {};
     let lockedCells: string[] = [];
     let idCell = nodeMap.get(id)!.cell;
-    let lockedCellId = grid[idCell.i + (dir === 'up' ? 1 : -1)][idCell.j];
-    if (lockedCellId) {
-      let lockedCell = nodeMap.get(lockedCellId)!.cell;
-      lockedCells.push(lockedCellId);
-      let cur: string | undefined = lockedCellId;
-      while (cur) {
-        cur = knowledgeGraph.directDependantsOf(cur).find(
-          x => nodeMap.get(x)!.cell.i === lockedCell.i
-        );
-        if (cur) {
-          lockedCells.push(cur);
+    if (dir === 'up' && idCell.i < rows || dir === 'down' && idCell.i > 0) {
+      let lockedCellId = grid[idCell.i + (dir === 'up' ? 1 : -1)][idCell.j];
+      if (lockedCellId) {
+        let lockedCell = nodeMap.get(lockedCellId)!.cell;
+        lockedCells.push(lockedCellId);
+        let cur: string | undefined = lockedCellId;
+        while (cur) {
+          cur = knowledgeGraph.directDependantsOf(cur).find(
+            x => nodeMap.get(x)!.cell.i === lockedCell.i
+          );
+          if (cur) {
+            lockedCells.push(cur);
+          }
         }
-      }
-      cur = lockedCellId;
-      while (cur) {
-        cur = knowledgeGraph.directDependenciesOf(cur).find(
-          x => nodeMap.get(x)!.cell.i === lockedCell.i
-        );
-        if (cur) {
-          lockedCells.push(cur);
+        cur = lockedCellId;
+        while (cur) {
+          cur = knowledgeGraph.directDependenciesOf(cur).find(
+            x => nodeMap.get(x)!.cell.i === lockedCell.i
+          );
+          if (cur) {
+            lockedCells.push(cur);
+          }
         }
       }
     }
@@ -757,6 +759,16 @@ let KnowledgeMap = () => {
       };
       if (grid[nextI][oldCell.j]) {
         bfs.push(grid[nextI][oldCell.j]);
+      }
+      for (let j = oldCell.j; j < cols; ++j) {
+        // if we intersect a horizontal dependency, push both ends of those down
+        if (grid[nextI][j]) {
+          let deps = knowledgeGraph.directDependenciesOf(grid[nextI][j])
+          let sameRowDep = deps.find(x => nodeMap.get(x)!.cell.i === nextI);
+          if (sameRowDep) {
+            bfs.push(sameRowDep);
+          }
+        }
       }
       let handleDeps = (deps: string[]) => {
         let sameRowDep = deps.find(x => nodeMap.get(x)!.cell.i === oldCell.i);
@@ -809,7 +821,7 @@ let KnowledgeMap = () => {
       }),
     });
     setSelectedCells([]);
-  }, [knowledgeMap, knowledgeGraph, nodeMap, grid]);
+  }, [knowledgeMap, knowledgeGraph, nodeMap, grid, cols]);
   let handleMoveTreeUp = React.useCallback((id: string) => {
     return handleMoveTreeVert(id, 'up');
   }, [handleMoveTreeVert]);
