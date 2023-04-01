@@ -106,68 +106,26 @@ let VARIANTS = [
     point.x -= 150;
     point.y -= 150;
     return [
+      {type: 'moveto', point: {x: point.x + 200, y: point.y + 100}},
       {
-        type: 'moveto',
-        point: {
-          x: point.x + 100 + 100 * Math.cos(45 * Math.PI / 180),
-          y: point.y + 100 - 100 * Math.sin(45 * Math.PI / 180),
-        },
-      },
-      {
-        type: 'arcto',
-        point: {
-          x: point.x + 100,
-          y: point.y,
-        },
-        rx: 100,
-        ry: 100,
-        xrot: 0,
-        largeArcFlag: 0,
-        sweepFlag: 0,
+        type: 'bezierto',
+        c1: {x: point.x + 200, y: point.y},
+        c2: {x: point.x, y: point.y},
+        point: {x: point.x, y: point.y + 100},
         showArrowhead: false,
       },
       {
-        type: 'arcto',
-        point: {
-          x: point.x + 100 + 75 * Math.cos(235 * Math.PI / 180),
-          y: point.y + 75 - 75 * Math.sin(235 * Math.PI / 180),
-        },
-        rx: 75,
-        ry: 75,
-        xrot: 0,
-        largeArcFlag: 0,
-        sweepFlag: 0,
+        type: 'bezierto',
+        c1: {x: point.x, y: point.y + 150},
+        c2: {x: point.x + 200, y: point.y + 150},
+        point: {x: point.x + 200, y: point.y + 200},
         showArrowhead: false,
       },
       {
-        type: 'lineto',
-        point: {
-          x: point.x + 100 + 75 * Math.cos(55 * Math.PI / 180),
-          y: point.y + 225 - 75 * Math.sin(55 * Math.PI / 180),
-        },
-        showArrowhead: false
-      },
-      {
-        type: 'arcto',
-        point: {x: point.x + 100, y: point.y + 300},
-        rx: 75,
-        ry: 75,
-        xrot: 0,
-        largeArcFlag: 0,
-        sweepFlag: 1,
-        showArrowhead: false
-      },
-      {
-        type: 'arcto',
-        point: {
-          x: point.x + 100 + 100 * Math.cos(225 * Math.PI / 180),
-          y: point.y + 200 - 100 * Math.cos(225 * Math.PI / 180),
-        },
-        rx: 100,
-        ry: 100,
-        xrot: 0,
-        largeArcFlag: 0,
-        sweepFlag: 1,
+        type: 'bezierto',
+        c1: {x: point.x + 200, y: point.y + 300},
+        c2: {x: point.x, y: point.y + 300},
+        point: {x: point.x, y: point.y + 200},
       },
     ];
   },

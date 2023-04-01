@@ -2,30 +2,49 @@ import {ModuleBuilder, Shape} from '@src/modules/common/TRACING/ModuleBuilder';
 import {genRandPoints} from '@src/util';
 
 let VARIANTS = [
-  (): Shape[] => { // lowercase F
+  (): Shape[] => { // lowercase P
     let point = genRandPoints(1, {
       paddingFromEdge: 300,
     })[0];
     point.x -= 150;
     point.y -= 150;
     return [
-      {type: 'moveto', point: {x: point.x + 225, y: point.y + 75}},
+      {type: 'moveto', point: {x: point.x, y: point.y + 150}},
+      {type: 'lineto', point: {x: point.x, y: point.y + 450}},
+      {
+        type: 'moveto',
+        point: {
+          x: point.x + 75 + 75 * Math.cos(135 * Math.PI / 180),
+          y: point.y + 225 - 75 * Math.sin(135 * Math.PI / 180),
+        },
+      },
       {
         type: 'arcto',
-        point: {x: point.x + 75, y: point.y + 75},
+        point: {
+          x: point.x + 75 + 75 * Math.cos(315 * Math.PI / 180),
+          y: point.y + 225 - 75 * Math.sin(315 * Math.PI / 180),
+        },
         rx: 75,
         ry: 75,
         xrot: 0,
         largeArcFlag: 0,
-        sweepFlag: 0,
-        showArrowhead: false,
+        sweepFlag: 1,
       },
-      {type: 'lineto', point: {x: point.x + 75, y: point.y + 300}},
-      {type: 'moveto', point: {x: point.x, y: point.y + 150}},
-      {type: 'lineto', point: {x: point.x + 150, y: point.y + 150}},
+      {
+        type: 'arcto',
+        point: {
+          x: point.x + 75 + 75 * Math.cos(135 * Math.PI / 180),
+          y: point.y + 225 - 75 * Math.sin(135 * Math.PI / 180),
+        },
+        rx: 75,
+        ry: 75,
+        xrot: 0,
+        largeArcFlag: 0,
+        sweepFlag: 1,
+      },
     ];
   },
-  (): Shape[] => { // lowercase G
+  (): Shape[] => { // lowercase Q
     let point = genRandPoints(1, {
       paddingFromEdge: 300,
     })[0];
@@ -64,35 +83,17 @@ let VARIANTS = [
         sweepFlag: 0,
       },
       {type: 'moveto', point: {x: point.x + 150, y: point.y + 150}},
-      {
-        type: 'lineto',
-        point: {x: point.x + 150, y: point.y + 375},
-        showArrowhead: false
-      },
-      {
-        type: 'arcto',
-        point: {
-          x: point.x,
-          y: point.y + 375,
-        },
-        rx: 75,
-        ry: 75,
-        xrot: 0,
-        largeArcFlag: 0,
-        sweepFlag: 1,
-      }
+      {type: 'lineto', point: {x: point.x + 150, y: point.y + 450}},
     ];
   },
-  (): Shape[] => { // lowercase H
+  (): Shape[] => { // lowercase R
     let point = genRandPoints(1, {
       paddingFromEdge: 300,
     })[0];
     point.x -= 150;
     point.y -= 150;
-    let radius = 75;
-    let angle = 40 * Math.PI / 180;
     return [
-      {type: 'moveto', point: {x: point.x, y: point.y}},
+      {type: 'moveto', point: {x: point.x, y: point.y + 150}},
       {
         type: 'lineto',
         point: {x: point.x, y: point.y + 300},
@@ -101,61 +102,76 @@ let VARIANTS = [
       {
         type: 'lineto',
         point: {x: point.x, y: point.y + 225},
-        showArrowhead: false
+        showArrowhead: false,
       },
       {
         type: 'arcto',
         point: {
-          x: point.x + 150,
-          y: point.y + 225,
+          x: point.x + 75 + 75 * Math.cos(30 * Math.PI / 180),
+          y: point.y + 225 - 75 * Math.sin(30 * Math.PI / 180),
         },
         rx: 75,
         ry: 75,
         xrot: 0,
         largeArcFlag: 0,
         sweepFlag: 1,
-        showArrowhead: false
       },
-      {type: 'lineto', point: {x: point.x + 150, y: point.y + 300}},
     ];
   },
-  (): Shape[] => { // lowercase I
+  (): Shape[] => { // lowercase S
     let point = genRandPoints(1, {
       paddingFromEdge: 300,
     })[0];
     point.x -= 150;
     point.y -= 150;
     return [
-      {type: 'moveto', point: {x: point.x, y: point.y + 150}},
-      {type: 'lineto', point: {x: point.x, y: point.y + 300}},
-      {type: 'moveto', point: {x: point.x, y: point.y + 75}},
-      {type: 'lineto', point: {x: point.x, y: point.y + 76}},
+      {type: 'moveto', point: {x: point.x + 150, y: point.y + 200}},
+      {
+        type: 'bezierto',
+        c1: {x: point.x + 150, y: point.y + 150},
+        c2: {x: point.x, y: point.y + 150},
+        point: {x: point.x, y: point.y + 200},
+        showArrowhead: false,
+      },
+      {
+        type: 'bezierto',
+        c1: {x: point.x, y: point.y + 225},
+        c2: {x: point.x + 150, y: point.y + 225},
+        point: {x: point.x + 150, y: point.y + 250},
+        showArrowhead: false,
+      },
+      {
+        type: 'bezierto',
+        c1: {x: point.x + 150, y: point.y + 300},
+        c2: {x: point.x, y: point.y + 300},
+        point: {x: point.x, y: point.y + 250},
+      },
     ];
   },
-  (): Shape[] => { // lowercase J
+  (): Shape[] => { // lowercase T
     let point = genRandPoints(1, {
       paddingFromEdge: 300,
     })[0];
     point.x -= 150;
     point.y -= 150;
     return [
-      {type: 'moveto', point: {x: point.x + 150, y: point.y + 150}},
+      {type: 'moveto', point: {x: point.x + 75, y: point.y}},
       {
         type: 'lineto',
-        point: {x: point.x + 150, y: point.y + 375},
-        showArrowhead: false
+        point: {x: point.x + 75, y: point.y + 225},
+        showArrowhead: false,
       },
       {
         type: 'arcto',
-        point: {x: point.x, y: point.y + 375},
+        point: {x: point.x + 150, y: point.y + 300},
         rx: 75,
         ry: 75,
         xrot: 0,
         largeArcFlag: 0,
-        sweepFlag: 1,
+        sweepFlag: 0,
       },
-      {type: 'moveto', point: {x: point.x + 150, y: point.y + 75}},
-      {type: 'lineto', point: {x: point.x + 150, y: point.y + 76}},
+      {type: 'moveto', point: {x: point.x, y: point.y + 150}},
+      {type: 'lineto', point: {x: point.x + 150, y: point.y + 150}},
     ];
   },
 ];
