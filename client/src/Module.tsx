@@ -159,11 +159,12 @@ interface ModuleProps {
   score: number,
   maxScore: number,
   type: 'svg',
+  extraSvgStyles?: React.CSSProperties,
   [id: string]: any,
 };
 
 export let Module: React.FC<ModuleProps> = (props) => {
-  let {children, score, maxScore, type, ...rest} = props;
+  let {children, score, maxScore, type, extraSvgStyles, ...rest} = props;
 
   let ref = React.useRef<HTMLDivElement | null>(null);
 
@@ -203,6 +204,7 @@ export let Module: React.FC<ModuleProps> = (props) => {
 
   if (type === 'svg') {
     let svgStyle = {
+      ...extraSvgStyles,
       width: '100%',
       height: '100%',
       display: 'block',

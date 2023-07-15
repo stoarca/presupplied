@@ -1689,12 +1689,12 @@
       ]
     },
     {
-      "id": "PENCIL_TRACE_LINE",
+      "id": "PEN_TRACE_LINE",
       "i": 61,
       "j": 5,
       "deps": [
         "FINGER_TRACE_LINE",
-        "HOLD_PENCIL"
+        "HOLD_PEN"
       ]
     },
     {
@@ -1710,7 +1710,7 @@
       "i": 60,
       "j": 6,
       "deps": [
-        "PENCIL_TRACE_LINE",
+        "PEN_TRACE_LINE",
         "FINGER_TRACE_SHAPES"
       ]
     },
@@ -1719,7 +1719,7 @@
       "i": 61,
       "j": 6,
       "deps": [
-        "PENCIL_TRACE_LINE",
+        "PEN_TRACE_LINE",
         "FINGER_TRACE_SQUIGGLE"
       ]
     },
@@ -1770,7 +1770,7 @@
       ]
     },
     {
-      "id": "HOLD_PENCIL",
+      "id": "HOLD_PEN",
       "i": 61,
       "j": 4,
       "deps": [

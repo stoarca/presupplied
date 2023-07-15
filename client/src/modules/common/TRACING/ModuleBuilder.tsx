@@ -20,6 +20,7 @@ import {
 
 type T = React.TouchEvent<HTMLElement>;
 type M = React.MouseEvent<HTMLElement>;
+type P = React.PointerEvent<HTMLElement>;
 
 interface MoveTo {
   type: 'moveto';
@@ -172,17 +173,17 @@ let cleanShapes = (shapes: Shape[]): Shape[] => {
 interface ModuleBuilderProps {
   variants: Variant[];
   maxScorePerVariant: number;
-  tool: 'mouse' | 'touch' | 'stylus';
-  errorRadius?: number;
-  drawRadius?: number;
+  tool: 'mouse' | 'touch' | 'pen';
+  errorRadius: number;
+  drawRadius: number;
 }
 
 export let ModuleBuilder = ({
   variants,
   maxScorePerVariant,
   tool,
-  errorRadius = 70,
-  drawRadius = 35,
+  errorRadius,
+  drawRadius,
 }: ModuleBuilderProps) => {
   return (props: void) => {
     let moduleContext = React.useContext(ModuleContext);
@@ -263,21 +264,29 @@ export let ModuleBuilder = ({
       }
     }, [preShape, shape, percent]);
     let [isDragging, setIsDragging] = React.useState(false);
-    let handleStart = React.useCallback((e: M | T) => {
+    let [showCursor, setShowCursor] = React.useState(true);
+    let handleStart = React.useCallback((e: M | T | P) => {
+      setShowCursor((e as P).pointerType === 'mouse');
+      if (tool === 'pen' && (e as P).pointerType === 'touch') {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
       let t = tool === 'touch' ? (e as T).touches[0] : (e as M);
       if (dist({x: t.clientX, y: t.clientY}, target) > errorRadius) {
-        console.log('do failure in start');
         doFailure();
         return;
       }
       doPartialSuccess(partial);
       setIsDragging(true);
     }, [target, doPartialSuccess, doFailure, partial]);
-    let handleMove = React.useCallback((e: M | T) => {
-      if (!isDragging) {
+    let handleMove = React.useCallback((e: M | T | P) => {
+      if (tool === 'pen' && (e as P).pointerType === 'touch') {
+        e.preventDefault();
+        e.stopPropagation();
         return;
       }
-      if (percent >= 1) {
+      if (!isDragging) {
         return;
       }
       if (shape.type === 'moveto') {
@@ -286,8 +295,11 @@ export let ModuleBuilder = ({
       let t = tool === 'touch' ? (e as T).touches[0] : (e as M);
       let p = {x: t.clientX, y: t.clientY};
       if (dist(p, target) > errorRadius) {
-        console.log('do failure in move');
         doFailure();
+        return;
+      }
+
+      if (percent >= 1) {
         return;
       }
 
@@ -384,14 +396,14 @@ export let ModuleBuilder = ({
       doFailure,
       doPartialSuccess
     ]);
-    let handleEnd = React.useCallback(async (e: M) => {
+    let handleEnd = React.useCallback(async (e: M | T | P) => {
+      if (tool === 'pen' && (e as P).pointerType === 'touch') {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
       setIsDragging(false);
       if (partial < shapes.length) {
-        console.log('do failure in end');
-        console.log(shape.type);
-        console.log(partial);
-        console.log(shapes);
-        console.log(shapeIndex);
         if (shapes[Math.floor(partial)].type === 'moveto') {
           doPartialSuccess(partial + 1, false);
         } else {
@@ -457,9 +469,6 @@ export let ModuleBuilder = ({
       }
       return ret;
     }, [shapes, shapeIndex]);
-    console.log('calculating next arrowhead');
-    console.log(joinedArrowheadIndexes);
-    console.log(shapeIndex);
     let emptyNext = (
       <path className="emptynext" style={nextStyle}
           d={`
@@ -568,7 +577,11 @@ export let ModuleBuilder = ({
           onMouseUp={tool === 'mouse' ? handleEnd : undefined}
           onTouchStart={tool === 'touch' ? handleStart : undefined}
           onTouchMove={tool === 'touch' ? handleMove : undefined}
-          onTouchEnd={tool === 'touch'? handleEnd : undefined}>
+          onTouchEnd={tool === 'touch'? handleEnd : undefined}
+          onPointerDown={tool === 'pen' ? handleStart : undefined}
+          onPointerMove={tool === 'pen' ? handleMove : undefined}
+          onPointerUp={tool === 'pen'? handleEnd : undefined}
+          extraSvgStyles={{cursor: showCursor ? 'default' : 'none'}}>
         {emptyPath}
         {targetArrowheads}
         {emptyNext}

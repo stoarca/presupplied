@@ -5,9 +5,10 @@ import {ModuleContext} from '@src/ModuleContext';
 import {genRandPoint, dist, Point, VariantList} from '@src/util';
 
 import {tooSlow} from '@modules/common/sounds';
-import instructions from './instructions.wav';
+import instructionsMouse from './instructions_mouse.wav';
+import instructionsPen from './instructions_pen.wav';
 
-type M = React.PointerEvent<HTMLElement>;
+type P = React.PointerEvent<HTMLElement>;
 
 interface MyEx extends Ex<number> {
   target: Point,
@@ -16,11 +17,13 @@ interface MyEx extends Ex<number> {
 interface ModuleBuilderProps {
   targetRadius: number,
   timeToSolve: number | null,
+  tool: 'mouse' | 'pen',
 }
 
 export let ModuleBuilder = ({
   targetRadius,
   timeToSolve,
+  tool,
 }: ModuleBuilderProps) => {
   return (props: void) => {
     let moduleContext = React.useContext(ModuleContext);
@@ -40,6 +43,10 @@ export let ModuleBuilder = ({
       };
     }, []);
     let playInstructions = React.useCallback((exercise: MyEx) => {
+      let instructions = instructionsMouse;
+      if (tool === 'pen') {
+        instructions = instructionsPen;
+      }
       moduleContext.playAudio(instructions);
     }, [moduleContext]);
     let {
@@ -79,8 +86,15 @@ export let ModuleBuilder = ({
       return () => clearInterval(interval);
     }, [doFailure]);
 
-    let handleDown = React.useCallback((e: M) => {
-      if (e.pointerType !== 'mouse') {
+    let [showCursor, setShowCursor] = React.useState(true);
+    let handleDown = React.useCallback((e: P) => {
+      setShowCursor(e.pointerType === 'mouse');
+      if (tool === 'pen' && e.pointerType === 'touch') {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      if (e.pointerType !== tool) {
         doFailure();
         return;
       }
@@ -88,8 +102,13 @@ export let ModuleBuilder = ({
         doFailure();
       }
     }, [exercise, doFailure]);
-    let handleUp = React.useCallback((e: M) => {
-      if (e.pointerType !== 'mouse') {
+    let handleUp = React.useCallback((e: P) => {
+      if (tool === 'pen' && e.pointerType === 'touch') {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      if (e.pointerType !== tool) {
         doFailure();
         return;
       }
@@ -107,7 +126,8 @@ export let ModuleBuilder = ({
           score={score}
           maxScore={vlist.maxScore()}
           onPointerDown={handleDown}
-          onPointerUp={handleUp}>
+          onPointerUp={handleUp}
+          extraSvgStyles={{cursor: showCursor ? 'default' : 'none'}}>
         <circle cx={exercise.target.x}
             cy={exercise.target.y}
             r={targetRadius}
