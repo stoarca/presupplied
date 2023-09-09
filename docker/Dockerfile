@@ -1,10 +1,11 @@
 FROM phusion/baseimage:jammy-1.0.1
 
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-RUN apt-get install -yq nodejs
-RUN apt-get install -yq python3-venv
-RUN apt-get install -yq libsndfile1-dev
-RUN apt-get install -yq espeak espeak-ng
+RUN apt-get update && apt-get install -yq ca-certificates curl gnupg python3-venv libsndfile1-dev espeak espeak-ng
+RUN mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && \
+    apt-get install -yq nodejs
 
 RUN mkdir -p ~/.local/share && \
     ln -s /presupplied/tts_server/models ~/.local/share/tts

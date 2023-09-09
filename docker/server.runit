@@ -3,4 +3,7 @@
 set -eu -o pipefail
 
 cd /presupplied/server
+if [ ! -d node_modules ]; then
+  npm ci
+fi
 npm start
