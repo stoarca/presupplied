@@ -765,7 +765,7 @@ let KnowledgeMap = () => {
         if (grid[nextI][j]) {
           let deps = knowledgeGraph.directDependenciesOf(grid[nextI][j])
           let sameRowDep = deps.find(x => nodeMap.get(x)!.cell.i === nextI);
-          if (sameRowDep) {
+          if (sameRowDep && nodeMap.get(sameRowDep)!.cell.j < oldCell.j) {
             bfs.push(sameRowDep);
           }
         }

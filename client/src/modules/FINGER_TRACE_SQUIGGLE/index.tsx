@@ -27,6 +27,8 @@ export default ModuleBuilder({
   variants: VARIANTS,
   maxScorePerVariant: 10,
   tool: 'touch',
+  errorRadius: 70,
+  drawRadius: 35,
 });
 
 

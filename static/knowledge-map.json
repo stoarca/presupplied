@@ -2,13 +2,13 @@
   "nodes": [
     {
       "id": "REPEAT_OPEN_SOUNDS",
-      "i": 15,
+      "i": 17,
       "j": 0,
       "deps": []
     },
     {
       "id": "REPEAT_CLOSED_SOUNDS",
-      "i": 16,
+      "i": 18,
       "j": 0,
       "deps": []
     },
@@ -20,7 +20,7 @@
     },
     {
       "id": "REPEAT_SOUNDS",
-      "i": 16,
+      "i": 18,
       "j": 1,
       "deps": [
         "REPEAT_OPEN_SOUNDS",
@@ -73,7 +73,7 @@
     },
     {
       "id": "REPEAT_VOWELS",
-      "i": 15,
+      "i": 17,
       "j": 2,
       "deps": [
         "REPEAT_SOUNDS"
@@ -81,7 +81,7 @@
     },
     {
       "id": "REPEAT_CONSONANTS",
-      "i": 16,
+      "i": 18,
       "j": 2,
       "deps": [
         "REPEAT_SOUNDS"
@@ -98,7 +98,7 @@
     },
     {
       "id": "SING_ALPHABET",
-      "i": 17,
+      "i": 19,
       "j": 4,
       "deps": [
         "REPEAT_LETTERS"
@@ -106,7 +106,7 @@
     },
     {
       "id": "READ_LOWERCASE_VOWELS",
-      "i": 14,
+      "i": 16,
       "j": 3,
       "deps": [
         "REPEAT_VOWELS",
@@ -115,7 +115,7 @@
     },
     {
       "id": "READ_LOWERCASE_CONSONANTS",
-      "i": 15,
+      "i": 17,
       "j": 3,
       "deps": [
         "REPEAT_CONSONANTS",
@@ -124,7 +124,7 @@
     },
     {
       "id": "READ_UPPERCASE_CONSONANTS",
-      "i": 17,
+      "i": 19,
       "j": 3,
       "deps": [
         "REPEAT_CONSONANTS",
@@ -133,7 +133,7 @@
     },
     {
       "id": "READ_LOWERCASE_LETTERS",
-      "i": 15,
+      "i": 17,
       "j": 4,
       "deps": [
         "READ_LOWERCASE_CONSONANTS",
@@ -142,7 +142,7 @@
     },
     {
       "id": "READ_UPPERCASE_VOWELS",
-      "i": 16,
+      "i": 18,
       "j": 3,
       "deps": [
         "REPEAT_VOWELS",
@@ -151,7 +151,7 @@
     },
     {
       "id": "READ_UPPERCASE_LETTERS",
-      "i": 16,
+      "i": 18,
       "j": 4,
       "deps": [
         "READ_UPPERCASE_VOWELS",
@@ -160,7 +160,7 @@
     },
     {
       "id": "READ_LETTERS",
-      "i": 16,
+      "i": 18,
       "j": 5,
       "deps": [
         "READ_LOWERCASE_LETTERS",
@@ -169,7 +169,7 @@
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_RIGHT",
-      "i": 18,
+      "i": 20,
       "j": 6,
       "deps": [
         "READ_LETTERS",
@@ -208,13 +208,13 @@
     },
     {
       "id": "RECOGNIZE_LOWERCASE_LETTERS",
-      "i": 14,
+      "i": 16,
       "j": 2,
       "deps": []
     },
     {
       "id": "RECOGNIZE_UPPERCASE_LETTERS",
-      "i": 17,
+      "i": 19,
       "j": 2,
       "deps": []
     },
@@ -349,7 +349,7 @@
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_FAST",
-      "i": 18,
+      "i": 20,
       "j": 8,
       "deps": [
         "PECK_DIGITS_ON_KEYBOARD_FAST",
@@ -367,7 +367,7 @@
     },
     {
       "id": "LETTER_TO_SOUND",
-      "i": 16,
+      "i": 18,
       "j": 7,
       "deps": [
         "READ_LETTERS"
@@ -385,8 +385,8 @@
     },
     {
       "id": "BIGRAM_TO_SOUND",
-      "i": 16,
-      "j": 9,
+      "i": 18,
+      "j": 8,
       "deps": [
         "LETTER_TO_SOUND"
       ]
@@ -405,8 +405,7 @@
       "i": 15,
       "j": 9,
       "deps": [
-        "LETTER_TO_SOUND",
-        "RECOGNIZE_ORDER_TAP_LETTERS"
+        "READ_3_LTTER_WORDS"
       ]
     },
     {
@@ -414,8 +413,8 @@
       "i": 15,
       "j": 10,
       "deps": [
-        "BIGRAM_TO_SOUND",
-        "READ_50_SIMPLE_WORDS"
+        "READ_50_SIMPLE_WORDS",
+        "READ_4_LETTER_WORDS"
       ]
     },
     {
@@ -428,20 +427,21 @@
     },
     {
       "id": "READ_SHORT_SENTENCES",
-      "i": 15,
-      "j": 11,
+      "i": 18,
+      "j": 10,
       "deps": [
-        "READ_200_SIMPLE_WORDS",
-        "READ_PUNCTUATION",
-        "READ_NUMBERS_UP_TO_1000"
+        "READ_4_LETTER_WORDS",
+        "READ_50_SIMPLE_WORDS"
       ]
     },
     {
       "id": "READ_LONG_SENTENCES",
       "i": 15,
-      "j": 12,
+      "j": 11,
       "deps": [
-        "READ_SHORT_SENTENCES"
+        "READ_SHORT_SENTENCES",
+        "READ_NUMBERS_UP_TO_1000",
+        "READ_5_LETTER_WORDS"
       ]
     },
     {
@@ -589,7 +589,7 @@
     },
     {
       "id": "PECK_NUMBERS_ON_KEYBOARD",
-      "i": 19,
+      "i": 21,
       "j": 9,
       "deps": [
         "PECK_KEYS_ON_KEYBOARD_FAST",
@@ -598,7 +598,7 @@
     },
     {
       "id": "PECK_WORDS_ON_KEYBOARD",
-      "i": 18,
+      "i": 20,
       "j": 11,
       "deps": [
         "PECK_KEYS_ON_KEYBOARD_FAST",
@@ -620,7 +620,8 @@
       "i": 15,
       "j": 13,
       "deps": [
-        "READ_LONG_SENTENCES"
+        "READ_LONG_SENTENCES",
+        "READ_6_LETTER_WORDS"
       ]
     },
     {
@@ -966,7 +967,7 @@
     },
     {
       "id": "TYPING_HOME_ROW_LEFT",
-      "i": 19,
+      "i": 21,
       "j": 13,
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
@@ -978,7 +979,7 @@
     },
     {
       "id": "TYPING_INDEX_FINGER_LEFT",
-      "i": 19,
+      "i": 21,
       "j": 14,
       "deps": [
         "TYPING_HOME_ROW_LEFT",
@@ -987,7 +988,7 @@
     },
     {
       "id": "TYPING_MIDDLE_FINGER_LEFT",
-      "i": 19,
+      "i": 21,
       "j": 15,
       "deps": [
         "TYPING_INDEX_FINGER_LEFT"
@@ -995,7 +996,7 @@
     },
     {
       "id": "TYPING_RING_FINGER_LEFT",
-      "i": 19,
+      "i": 21,
       "j": 16,
       "deps": [
         "TYPING_MIDDLE_FINGER_LEFT"
@@ -1003,7 +1004,7 @@
     },
     {
       "id": "TYPING_PINKY_FINGER_LEFT",
-      "i": 19,
+      "i": 21,
       "j": 17,
       "deps": [
         "TYPING_RING_FINGER_LEFT"
@@ -1011,7 +1012,7 @@
     },
     {
       "id": "TYPING_NUMBERS_INDEX",
-      "i": 19,
+      "i": 21,
       "j": 19,
       "deps": [
         "TYPING_CAPITALS_LEFT_SHIFT",
@@ -1451,7 +1452,7 @@
     },
     {
       "id": "ACCOUNT_AND_PASSWORD",
-      "i": 16,
+      "i": 18,
       "j": 13,
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
@@ -1462,7 +1463,7 @@
     },
     {
       "id": "OPEN_APPLICATION",
-      "i": 18,
+      "i": 20,
       "j": 13,
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
@@ -1471,7 +1472,7 @@
     },
     {
       "id": "TERMINAL_COMMANDS_SIMPLE",
-      "i": 17,
+      "i": 19,
       "j": 13,
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
@@ -1480,7 +1481,7 @@
     },
     {
       "id": "TERMINAL_COMMANDS",
-      "i": 17,
+      "i": 19,
       "j": 14,
       "deps": [
         "TERMINAL_COMMANDS_SIMPLE",
@@ -1491,7 +1492,7 @@
     },
     {
       "id": "SKETCH_VARIABLE_SIMPLE",
-      "i": 18,
+      "i": 20,
       "j": 14,
       "deps": [
         "TERMINAL_COMMANDS_SIMPLE",
@@ -1501,7 +1502,7 @@
     },
     {
       "id": "SKETCH_IF_SIMPLE",
-      "i": 18,
+      "i": 20,
       "j": 15,
       "deps": [
         "SKETCH_VARIABLE_SIMPLE"
@@ -1509,7 +1510,7 @@
     },
     {
       "id": "SKETCH_LOOP_SIMPLE",
-      "i": 18,
+      "i": 20,
       "j": 16,
       "deps": [
         "SKETCH_IF_SIMPLE"
@@ -1790,7 +1791,7 @@
     },
     {
       "id": "PECK_CAPITALS_AND_PUNCTUTATION",
-      "i": 17,
+      "i": 19,
       "j": 11,
       "deps": [
         "READ_PUNCTUATION",
@@ -1845,7 +1846,7 @@
     },
     {
       "id": "PECK_DIGITS_ON_KEYBOARD",
-      "i": 19,
+      "i": 21,
       "j": 6,
       "deps": [
         "READ_DIGITS",
@@ -1854,7 +1855,7 @@
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_LEFT",
-      "i": 17,
+      "i": 19,
       "j": 6,
       "deps": [
         "SING_ALPHABET",
@@ -1864,7 +1865,7 @@
     },
     {
       "id": "TYPING_HOME_ROW_RIGHT",
-      "i": 20,
+      "i": 22,
       "j": 13,
       "deps": [
         "USE_MOUSE",
@@ -1876,7 +1877,7 @@
     },
     {
       "id": "TYPING_INDEX_FINGER_RIGHT",
-      "i": 20,
+      "i": 22,
       "j": 14,
       "deps": [
         "TYPING_HOME_ROW_RIGHT",
@@ -1885,7 +1886,7 @@
     },
     {
       "id": "TYPING_MIDDLE_FINGER_RIGHT",
-      "i": 20,
+      "i": 22,
       "j": 15,
       "deps": [
         "TYPING_INDEX_FINGER_RIGHT"
@@ -1893,7 +1894,7 @@
     },
     {
       "id": "TYPING_RING_FINGER_RIGHT",
-      "i": 20,
+      "i": 22,
       "j": 16,
       "deps": [
         "TYPING_MIDDLE_FINGER_RIGHT"
@@ -1901,7 +1902,7 @@
     },
     {
       "id": "TYPING_PINKY_FINGER_RIGHT",
-      "i": 20,
+      "i": 22,
       "j": 17,
       "deps": [
         "TYPING_RING_FINGER_RIGHT"
@@ -1909,7 +1910,7 @@
     },
     {
       "id": "TYPING_CAPITALS_LEFT_SHIFT",
-      "i": 19,
+      "i": 21,
       "j": 18,
       "deps": [
         "TYPING_PINKY_FINGER_LEFT"
@@ -1917,7 +1918,7 @@
     },
     {
       "id": "TYPING_CAPITALS_RIGHT_SHIFT",
-      "i": 20,
+      "i": 22,
       "j": 18,
       "deps": [
         "TYPING_PINKY_FINGER_RIGHT"
@@ -1925,7 +1926,7 @@
     },
     {
       "id": "TYPING_NUMBERS_MIDDLE",
-      "i": 19,
+      "i": 21,
       "j": 20,
       "deps": [
         "TYPING_NUMBERS_INDEX"
@@ -1933,7 +1934,7 @@
     },
     {
       "id": "TYPING_NUMBERS_RING",
-      "i": 19,
+      "i": 21,
       "j": 21,
       "deps": [
         "TYPING_NUMBERS_MIDDLE"
@@ -1941,7 +1942,7 @@
     },
     {
       "id": "TYING_NUMBERS_PINKY",
-      "i": 19,
+      "i": 21,
       "j": 22,
       "deps": [
         "TYPING_NUMBERS_RING"
@@ -1949,7 +1950,7 @@
     },
     {
       "id": "TYPING_PUNCTUATION_INDEX",
-      "i": 20,
+      "i": 22,
       "j": 20,
       "deps": [
         "TYPING_NUMBERS_INDEX"
@@ -1957,7 +1958,7 @@
     },
     {
       "id": "TYPING_PUNCTUATION_MIDDLE",
-      "i": 20,
+      "i": 22,
       "j": 21,
       "deps": [
         "TYPING_NUMBERS_MIDDLE",
@@ -1966,7 +1967,7 @@
     },
     {
       "id": "TYPING_PUNCTUATION_RING",
-      "i": 20,
+      "i": 22,
       "j": 22,
       "deps": [
         "TYPING_PUNCTUATION_MIDDLE",
@@ -1975,7 +1976,7 @@
     },
     {
       "id": "TYPING_PUNCTUATION_PINKY",
-      "i": 20,
+      "i": 22,
       "j": 23,
       "deps": [
         "TYING_NUMBERS_PINKY",
@@ -2224,7 +2225,7 @@
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_LEFT_FAST",
-      "i": 17,
+      "i": 19,
       "j": 7,
       "deps": [
         "PECK_KEYS_ON_KEYBOARD_LEFT"
@@ -2232,7 +2233,7 @@
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_RIGHT_FAST",
-      "i": 18,
+      "i": 20,
       "j": 7,
       "deps": [
         "PECK_KEYS_ON_KEYBOARD_RIGHT"
@@ -2240,7 +2241,7 @@
     },
     {
       "id": "PECK_DIGITS_ON_KEYBOARD_FAST",
-      "i": 19,
+      "i": 21,
       "j": 7,
       "deps": [
         "PECK_DIGITS_ON_KEYBOARD"
@@ -2874,6 +2875,66 @@
         "PENCIL_WRITE_CAPITAL_F_J",
         "PENCIL_WRITE_LOWER_A_E",
         "PENCIL_WRITE_CAPITAL_A_E"
+      ]
+    },
+    {
+      "id": "READ_3_LETTER_WORDS_PICTURES",
+      "i": 15,
+      "j": 7,
+      "deps": [
+        "RECOGNIZE_ORDER_TAP_LETTERS"
+      ]
+    },
+    {
+      "id": "READ_3_LTTER_WORDS",
+      "i": 15,
+      "j": 8,
+      "deps": [
+        "READ_3_LETTER_WORDS_PICTURES",
+        "LETTER_TO_SOUND"
+      ]
+    },
+    {
+      "id": "READ_4_LETTER_WORDS_PICTURES",
+      "i": 16,
+      "j": 8,
+      "deps": [
+        "READ_3_LETTER_WORDS_PICTURES"
+      ]
+    },
+    {
+      "id": "READ_4_LETTER_WORDS",
+      "i": 16,
+      "j": 9,
+      "deps": [
+        "BIGRAM_TO_SOUND",
+        "READ_4_LETTER_WORDS_PICTURES",
+        "READ_3_LTTER_WORDS"
+      ]
+    },
+    {
+      "id": "READ_5_LETTER_WORDS_PICTURES",
+      "i": 17,
+      "j": 9,
+      "deps": [
+        "READ_4_LETTER_WORDS_PICTURES"
+      ]
+    },
+    {
+      "id": "READ_5_LETTER_WORDS",
+      "i": 17,
+      "j": 10,
+      "deps": [
+        "READ_4_LETTER_WORDS",
+        "READ_5_LETTER_WORDS_PICTURES"
+      ]
+    },
+    {
+      "id": "READ_6_LETTER_WORDS",
+      "i": 17,
+      "j": 11,
+      "deps": [
+        "READ_5_LETTER_WORDS"
       ]
     }
   ]

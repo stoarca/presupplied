@@ -109,6 +109,8 @@ export default ModuleBuilder({
   variants: VARIANTS,
   maxScorePerVariant: 5,
   tool: 'touch',
+  errorRadius: 70,
+  drawRadius: 35,
 });
 
 
