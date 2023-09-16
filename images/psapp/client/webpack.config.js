@@ -13,8 +13,13 @@ module.exports = {
         test: /\.tsx?$/,
         use: 'ts-loader',
         exclude: /node_modules/,
-      },
-      {
+      }, {
+        test: /\.css$/i,
+        use: [
+          // Translates CSS into CommonJS
+          'css-loader',
+        ],
+      }, {
         test: /\.s[ac]ss$/i,
         use: [
           // Creates `style` nodes from JS strings
@@ -24,15 +29,13 @@ module.exports = {
           // Compiles Sass to CSS
           'sass-loader',
         ],
-      },
-      {
+      }, {
         test: /\.wav$/,
         type: 'asset/resource',
         generator: {
           filename: '[name]-[hash][ext][query]',
         },
-      },
-      {
+      }, {
         test: /\.svg$/i,
         use: [{
           loader: '@svgr/webpack',

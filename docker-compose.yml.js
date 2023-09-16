@@ -39,7 +39,7 @@ let config = {
   services: {
     psapp: {
       build: {
-        context: path.join(__dirname, 'images/app/'),
+        context: path.join(__dirname, 'images/psapp/'),
       },
       labels: [
         'traefik.enable=true',
@@ -58,7 +58,7 @@ let config = {
       restart: 'always',
       volumes: [
       ].concat(DEV ? [
-        `${path.join(__dirname, './images/app')}:/presupplied/images/app`,
+        `${path.join(__dirname, './images/psapp')}:/presupplied/images/psapp`,
       ] : []),
       environment: {
         NODE_ENV: DEV ? 'development' : 'production',
@@ -66,17 +66,34 @@ let config = {
     },
     pstts: {
       build: {
-        context: path.join(__dirname, 'images/tts/'),
+        context: path.join(__dirname, 'images/pstts/'),
       },
       restart: 'always',
       volumes: [
-        '/data/presupplied/tts/models:/tts_models',
+        '/data/presupplied/pstts/models:/tts_models',
       ].concat(DEV ? [
-        `${path.join(__dirname, './images/tts')}:/presupplied/images/tts`,
+        `${path.join(__dirname, './images/pstts')}:/presupplied/images/pstts`,
       ] : []),
       environment: {
         MODE: DEV ? 'development' : 'production',
       }
+    },
+    pspostgres: {
+      build: {
+        context: path.join(__dirname, 'images/pspostgres/'),
+      },
+      restart: 'always',
+      volumes: [
+        '/data/presupplied/pspostgres/data:/var/lib/postgresql/data',
+      ],
+      shm_size: '2gb',
+      environment: {
+        POSTGRES_USER: 'postgres',
+        POSTGRES_PASSWORD: secrets.POSTGRES_MASTER_PASSWORD,
+        POSTGRES_SUBDB: 'presupplied',
+        POSTGRES_SUBUSER: 'presupplied',
+        POSTGRES_SUBUSER_PASSWORD: secrets.POSTGRES_SUBUSER_PASSWORD,
+      },
     },
     psingress: {
       image: 'traefik:2.10',

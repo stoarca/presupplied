@@ -1,10 +1,8 @@
 import React from 'react';
-import {createRoot} from 'react-dom/client';
-import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
+import {moduleComponents} from './ModuleContext';
 import {buildGraph, GraphJson} from './dependency-graph';
-import {buildModuleContext, ModuleContext} from './ModuleContext';
-
 import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
 let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 
@@ -373,7 +371,7 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
   );
 };
 
-let KnowledgeMap = () => {
+export let KnowledgeMap = () => {
   let ref = React.useRef<SVGSVGElement | null>(null);
   let [width, setWidth] = React.useState(0);
   let [height, setHeight] = React.useState(0);
@@ -931,37 +929,3 @@ let KnowledgeMap = () => {
   );
 };
 
-let moduleComponents: {[id: string]: React.ReactElement} = {};
-require.context('./modules', true, /^\.\/[^\/]+$/).keys().forEach(moduleName => {
-  moduleName = moduleName.substring(2); // strip ./ prefix
-  let Lesson = React.lazy(() => import('./modules/' + moduleName));
-  moduleComponents[moduleName] = (
-    <ModuleContext.Provider value={buildModuleContext(moduleName)}>
-      <Lesson/>
-    </ModuleContext.Provider>
-  );
-});
-let App = (props: any) => {
-  let moduleRoutes = Object.keys(moduleComponents).map(x => {
-    return <Route key={x} path={x} element={moduleComponents[x]}/>
-  });
-
-  return (
-    <Router>
-      <React.Suspense fallback={"loading..."}>
-        <Routes>
-          <Route path="/">
-            <Route index element={<KnowledgeMap/>}/>
-            <Route path="modules">
-              {moduleRoutes}
-              <Route path="*" element={<div>module not found</div>}/>
-            </Route>
-          </Route>
-        </Routes>
-      </React.Suspense>
-    </Router>
-  );
-};
-
-let root = createRoot(document.getElementById('content')!);
-root.render(<App/>);

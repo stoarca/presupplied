@@ -15,7 +15,7 @@ export let ModuleContext = React.createContext<ModuleContextProps>({
 });
 
 let channels: Array<HTMLAudioElement|null> = [null, null];
-export let buildModuleContext = (moduleName: string): ModuleContextProps => {
+let buildModuleContext = (moduleName: string): ModuleContextProps => {
   let ret = {
     playAudio: (path: string, {channel = 0}: AudioOptions = {}) => {
       if (channel >= channels.length) {
@@ -55,3 +55,14 @@ export let buildModuleContext = (moduleName: string): ModuleContextProps => {
   };
   return ret;
 };
+
+export let moduleComponents: {[id: string]: React.ReactElement} = {};
+require.context('./modules', true, /^\.\/[^\/]+$/).keys().forEach(moduleName => {
+  moduleName = moduleName.substring(2); // strip ./ prefix
+  let Lesson = React.lazy(() => import('./modules/' + moduleName));
+  moduleComponents[moduleName] = (
+    <ModuleContext.Provider value={buildModuleContext(moduleName)}>
+      <Lesson/>
+    </ModuleContext.Provider>
+  );
+});

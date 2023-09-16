@@ -7,13 +7,14 @@ RUN mkdir -p /etc/apt/keyrings && \
     apt-get update && \
     apt-get install -yq nodejs
 
-COPY ./client/package.json ./client/package-lock.json /presupplied/images/app/client/
-RUN cd /presupplied/images/app/client && npm ci
+COPY ./client/package.json ./client/package-lock.json /presupplied/images/psapp/client/
+RUN cd /presupplied/images/psapp/client && npm ci
 
-COPY ./server/package.json ./server/package-lock.json /presupplied/images/app/server/
-RUN cd /presupplied/images/app/server && npm ci
+COPY ./server/package.json ./server/package-lock.json /presupplied/images/psapp/server/
+RUN cd /presupplied/images/psapp/server && npm ci
 
-COPY . /presupplied/images/app
+COPY . /presupplied/images/psapp
+RUN cd /presupplied/images/psapp/client/ && npm run build
 
 COPY ./client.runit /etc/service/client/run
 RUN chmod 755 /etc/service/client/run
