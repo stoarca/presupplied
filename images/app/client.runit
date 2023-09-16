@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+cd /presupplied/images/app/client
+if [ "$NODE_ENV" == "development" ]; then
+  npm ci
+  exec npm run dev
+fi

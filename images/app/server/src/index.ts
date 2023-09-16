@@ -2,6 +2,8 @@ import express from 'express';
 import proxy from 'express-http-proxy';
 import path from 'path';
 
+type R = express.Request<{}, {}, {}, {text: string}>;
+
 const app = express();
 
 app.use('/static', express.static(path.join(__dirname, '../../static')));
@@ -10,11 +12,9 @@ app.get('/', (req, resp) => {
   resp.sendFile(path.join(__dirname, '../../static/index.html'));
 });
 
-type R = express.Request<{}, {}, {}, {text: string}>;
-
 app.get('/api/tts', async (req: R, resp, next) => {
   return proxy(
-    'http://localhost:5002/api/tts?text=' + encodeURIComponent(req.query.text)
+    'http://pstts:5002/api/tts?text=' + encodeURIComponent(req.query.text)
   )(req, resp, next);
 });
 

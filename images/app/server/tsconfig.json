@@ -6,6 +6,7 @@
     "jsx": "react",
     "typeRoots": ["./node_modules/@types", "./@types"],
     "module": "nodenext",
+    "strict": true,
     "resolveJsonModule": true
   },
   "include": ["src"],

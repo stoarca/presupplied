@@ -1,9 +1,0 @@
-#!/bin/bash
-
-set -eu -o pipefail
-
-cd /presupplied/client
-if [ ! -d node_modules ]; then
-  npm ci
-fi
-npm start
