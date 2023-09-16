@@ -14,6 +14,7 @@ COPY ./server/package.json ./server/package-lock.json /presupplied/images/app/se
 RUN cd /presupplied/images/app/server && npm ci
 
 COPY . /presupplied/images/app
+RUN cd /presupplied/images/app/client/ && npm run build
 
 COPY ./client.runit /etc/service/client/run
 RUN chmod 755 /etc/service/client/run
