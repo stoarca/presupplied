@@ -39,24 +39,33 @@ let config = {
   services: {
     psapp: {
       build: {
-        dockerfile: path.join(__dirname, 'images/app/Dockerfile'),
         context: path.join(__dirname, 'images/app/'),
       },
+      labels: [
+        'traefik.enable=true',
+        `traefik.http.routers.psapprouter.rule=Host("${host}")`,
+        'traefik.http.routers.psapprouter.entrypoints=web',
+        'traefik.http.services.psappservice.loadbalancer.server.port=8080',
+      ].concat(DEV ? [
+      ] : [
+        `traefik.http.routers.psapprouter-secure.rule=Host("${host}")`,
+        'traefik.http.routers.psapprouter-secure.entrypoints=websecure',
+        'traefik.http.routers.psapprouter-secure.tls=true',
+        'traefik.http.routers.psapprouter-secure.tls.certresolver=myresolver',
+        'traefik.http.middlewares.psapp-redirect.redirectscheme.scheme=https',
+        'traefik.http.routers.psapprouter.middlewares=psapp-redirect',
+      ]),
       restart: 'always',
       volumes: [
       ].concat(DEV ? [
         `${path.join(__dirname, './images/app')}:/presupplied/images/app`,
       ] : []),
-      ports: [
-        '8080:8080',
-      ],
       environment: {
         NODE_ENV: DEV ? 'development' : 'production',
       }
     },
     pstts: {
       build: {
-        dockerfile: path.join(__dirname, 'images/tts/Dockerfile'),
         context: path.join(__dirname, 'images/tts/'),
       },
       restart: 'always',
@@ -69,7 +78,39 @@ let config = {
         MODE: DEV ? 'development' : 'production',
       }
     },
-  }
+    psingress: {
+      image: 'traefik:2.10',
+      restart: 'always',
+      ports: [
+        '80:80',
+        '443:443',
+        '8080:8080',
+      ],
+      volumes: [
+        '/var/run/docker.sock:/var/run/docker.sock:ro',
+        '/data/presupplied/ingress/letsencrypt:/letsencrypt',
+      ],
+      command: [
+        '--providers.docker=true',
+        '--providers.docker.exposedbydefault=false',
+        '--entrypoints.web.address=:80',
+      ].concat(DEV ? [
+        '--log.level=DEBUG',
+        '--api.insecure=true',
+      ] : [
+        '--entrypoints.websecure.address=:443',
+        '--certificatesresolvers.myresolver.acme.tlschallenge=true',
+        '--certificatesresolvers.myresolver.acme.email=t.sergiu@gmail.com',
+        '--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json',
+      ]),
+    },
+  },
+  networks: {
+    default: {
+      // HACK: to get the presupplied_website to work with traefik
+      name: 'presupplied',
+    },
+  },
 };
 
 console.log(JSON.stringify(config, undefined, 2));
