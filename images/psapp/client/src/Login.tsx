@@ -27,7 +27,7 @@ export let Login = (props: LoginProps) => {
 
     const data = new FormData(event.currentTarget);
     try {
-      let resp = await fetch('/api/login', {
+      let resp = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,6 +39,10 @@ export let Login = (props: LoginProps) => {
         }),
       });
       let json = await resp.json();
+      // LOH
+      console.log(await fetch('/api/user', {
+        credentials: 'include',
+      }));
       console.log(json);
     } catch (e) {
       throw e;

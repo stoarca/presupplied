@@ -62,6 +62,11 @@ let config = {
       ] : []),
       environment: {
         NODE_ENV: DEV ? 'development' : 'production',
+        POSTGRES_CONNECTION_HOST: 'pspostgres',
+        POSTGRES_CONNECTION_DB: 'presupplied',
+        POSTGRES_CONNECTION_USER: 'presupplied',
+        POSTGRES_CONNECTION_PASSWORD: secrets.POSTGRES_SUBUSER_PASSWORD,
+        JWT_SIGNING_KEY: secrets.JWT_SIGNING_KEY,
       }
     },
     pstts: {

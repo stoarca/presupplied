@@ -16,6 +16,9 @@ type E = React.FormEvent<HTMLFormElement>;
 
 export let Register = (props: RegisterProps) => {
   let [loading, setLoading] = React.useState(false);
+  let [fields, setFields] = React.useState({
+    email: {error: false, helperText: ''},
+  });
 
   const handleSubmit = React.useCallback(async (event: E) => {
     event.preventDefault();
@@ -24,10 +27,13 @@ export let Register = (props: RegisterProps) => {
     }
 
     setLoading(true);
+    setFields({
+      email: {error: false, helperText: ''},
+    });
 
     const data = new FormData(event.currentTarget);
     try {
-      let resp = await fetch('/api/register', {
+      let resp = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +46,18 @@ export let Register = (props: RegisterProps) => {
         }),
       });
       let json = await resp.json();
-      console.log(json);
+      if (resp.ok) {
+        // redirect to somewhere useful
+        return;
+      }
+      if (json.errorCode.startsWith('auth.register.email.')) {
+        setFields(fields => ({
+          ...fields,
+          email: {error: true, helperText: json.message}
+        }));
+      } else {
+        throw new Error(json);
+      }
     } catch (e) {
       throw e;
     } finally {
@@ -83,6 +100,8 @@ export let Register = (props: RegisterProps) => {
             label="Email"
             name="email"
             autoComplete="email"
+            error={fields.email.error}
+            helperText={fields.email.helperText}
           />
           <TextField
             margin="normal"

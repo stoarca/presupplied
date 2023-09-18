@@ -7,6 +7,8 @@
     "typeRoots": ["./node_modules/@types", "./@types"],
     "module": "nodenext",
     "strict": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "resolveJsonModule": true
   },
   "include": ["src"],
