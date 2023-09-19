@@ -5,9 +5,26 @@ import jwt from 'jsonwebtoken';
 import proxy from 'express-http-proxy';
 import path from 'path';
 
-import { AppDataSource } from './data-source'
-import { Student } from './entity/Student'
+import { AppDataSource } from './data-source';
+import { Student } from './entity/Student';
+import { Module } from './entity/Module';
 import { env } from './env';
+import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
+import { GraphNode, GraphJson } from '../../common/dependency-graph-types';
+
+let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
+
+interface JWTUser {
+  email: string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      user: JWTUser | null;
+    }
+  }
+}
 
 const isValidEmail = (email: string): boolean => {
   const regex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
@@ -15,9 +32,10 @@ const isValidEmail = (email: string): boolean => {
 };
 
 let setLoginCookie = (req: express.Request, resp: express.Response) => {
-  let token = jwt.sign({
+  let jwtUser: JWTUser = {
     email: req.body.email,
-  }, env['JWT_SIGNING_KEY']!);
+  };
+  let token = jwt.sign(jwtUser, env['JWT_SIGNING_KEY']!);
 
   let ONE_YEAR = 365 * 24 * 60 * 60 * 1000;
   resp.cookie('authToken', token, {
@@ -28,10 +46,67 @@ let setLoginCookie = (req: express.Request, resp: express.Response) => {
   });
 };
 
+let syncKnowledgeMapIdsToDb = async () => {
+  let moduleRepo = AppDataSource.getRepository(Module);
+  let knowledgeMapModuleIds = KNOWLEDGE_MAP.nodes.map(x => x.id).sort();
+  let dbModuleIds = (await AppDataSource.getRepository(Module)
+      .createQueryBuilder('module')
+      .select(['module.vanityId'])
+      .getMany()
+  ).map(x => x.vanityId).sort();
+  let i = 0;
+  let j = 0;
+  let idsToInsert = [];
+  let idsToRemove = [];
+  while (i < knowledgeMapModuleIds.length || j < dbModuleIds.length) {
+    let kmId = knowledgeMapModuleIds[i];
+    let dbId = dbModuleIds[j];
+    if (i === knowledgeMapModuleIds.length) {
+      idsToRemove.push(dbId);
+      j += 1;
+    } else if (j === dbModuleIds.length) {
+      idsToInsert.push(kmId);
+      i += 1;
+    } else if (kmId === dbId) {
+      i += 1;
+      j += 1;
+    } else if (kmId < dbId) {
+      idsToInsert.push(kmId);
+      i += 1;
+    } else { // dbId < kmId
+      idsToRemove.push(dbId);
+      j += 1;
+    }
+  }
+  await AppDataSource.getRepository(Module)
+      .createQueryBuilder('module')
+      .insert()
+      .into(Module)
+      .values(idsToInsert.map(x => ({vanityId: x})))
+      .execute();
+
+  if (idsToRemove.length) {
+    console.error('Old modules found in db!');
+    console.error(idsToRemove);
+    process.exit(1);
+  }
+};
+
 AppDataSource.initialize().then(async () => {
+  await syncKnowledgeMapIdsToDb();
   const app = express();
   app.use(express.json());
   app.use(cookieParser());
+  app.use((req, resp, next) => {
+    req.user = null;
+    if (req.cookies['authToken']) {
+      req.user = jwt.verify(
+        req.cookies['authToken'], env['JWT_SIGNING_KEY']!
+      ) as JWTUser;
+      console.log(req.user);
+    }
+    next();
+  });
 
   app.use('/static', express.static(path.join(__dirname, '../../static')));
 
@@ -107,11 +182,8 @@ AppDataSource.initialize().then(async () => {
   });
 
   app.get('/api/user', async (req, resp, next) => {
-    let loginInfo = jwt.verify(
-      req.cookies['authToken'], env['JWT_SIGNING_KEY']!
-    );
     console.log('getting the user');
-    console.log(loginInfo);
+    console.log(req.user);
     resp.json({success: true});
   });
 

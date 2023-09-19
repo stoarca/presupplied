@@ -2,7 +2,8 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 
 import {moduleComponents} from './ModuleContext';
-import {buildGraph, GraphJson} from './dependency-graph';
+import {buildGraph} from './dependency-graph';
+import {GraphJson} from '../../common/dependency-graph-types';
 import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
 let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 

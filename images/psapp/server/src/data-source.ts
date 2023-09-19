@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import path from 'path';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 import { env } from './env';
 
@@ -17,4 +18,5 @@ export const AppDataSource = new DataSource({
   migrations: [path.join(__dirname, './migration/**/*.ts')],
   subscribers: [],
   entitySkipConstructor: true,
+  namingStrategy: new SnakeNamingStrategy(),
 })

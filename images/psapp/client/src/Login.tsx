@@ -16,6 +16,11 @@ type E = React.FormEvent<HTMLFormElement>;
 
 export let Login = (props: LoginProps) => {
   let [loading, setLoading] = React.useState(false);
+  let [fields, setFields] = React.useState({
+    email: {error: false, helperText: ''},
+    password: {error: false, helperText: ''},
+  });
+
 
   const handleSubmit = React.useCallback(async (event: E) => {
     event.preventDefault();
@@ -24,6 +29,10 @@ export let Login = (props: LoginProps) => {
     }
 
     setLoading(true);
+    setFields({
+      email: {error: false, helperText: ''},
+      password: {error: false, helperText: ''},
+    });
 
     const data = new FormData(event.currentTarget);
     try {
@@ -39,11 +48,27 @@ export let Login = (props: LoginProps) => {
         }),
       });
       let json = await resp.json();
-      // LOH
-      console.log(await fetch('/api/user', {
-        credentials: 'include',
-      }));
-      console.log(json);
+      if (resp.ok) {
+        // do something useful
+        console.log(await fetch('/api/user', {
+          credentials: 'include',
+        }));
+        window.location.href = '/';
+        return;
+      }
+      if (json.errorCode.startsWith('auth.login.email.')) {
+        setFields(fields => ({
+          ...fields,
+          email: {error: true, helperText: json.message}
+        }));
+      } else if (json.errorCode.startsWith('auth.login.password.')) {
+        setFields(fields => ({
+          ...fields,
+          password: {error: true, helperText: json.message}
+        }));
+      } else {
+        throw new Error(json);
+      }
     } catch (e) {
       throw e;
     } finally {
@@ -77,6 +102,8 @@ export let Login = (props: LoginProps) => {
             name="email"
             autoComplete="email"
             autoFocus
+            error={fields.email.error}
+            helperText={fields.email.helperText}
           />
           <TextField
             margin="normal"
@@ -87,6 +114,8 @@ export let Login = (props: LoginProps) => {
             type="password"
             id="password"
             autoComplete="current-password"
+            error={fields.password.error}
+            helperText={fields.password.helperText}
           />
           <Button
             type="submit"
