@@ -1,4 +1,11 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
 import {moduleComponents} from './ModuleContext';
 import {StudentContext} from './StudentContext';
@@ -668,22 +675,57 @@ let AdminKnowledgeMap = ({
 
 interface StudentKnowledgeMapProps {
   knowledgeGraph: TechTree;
+  grid: string[][],
   nodeMap: NodeMap;
   selectedCells: Cell[];
+  setSelectedCells: (cells: Cell[]) => void;
 }
 
 let StudentKnowledgeMap = ({
   knowledgeGraph,
+  grid,
   nodeMap,
   selectedCells,
+  setSelectedCells,
 }: StudentKnowledgeMapProps) => {
+  let [hoverCell, setHoverCell] = React.useState<Cell | null>(null);
+  let handleClick = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (!hoverCell) {
+      return;
+    }
+    setSelectedCells([hoverCell]);
+  }, [hoverCell]);
+  let handleCloseDrawer = React.useCallback(() => {
+    setSelectedCells([]);
+  }, []);
+  let box = null;
+  if (selectedCells.length > 0) {
+    let kmid = grid[selectedCells[0].i][selectedCells[0].j];
+    box = (
+      <Box sx={{width: 350}}>
+        <Typography component="h2">
+          {kmid}
+        </Typography>
+        <List>
+          <ListItemButton component={Link} to={`/modules/${kmid}`}>
+            <ListItemText primary="Go to mastery"/>
+          </ListItemButton>
+        </List>
+      </Box>
+    );
+  }
   return (
-    <div>
+    <div onClick={handleClick}>
       <BaseKnowledgeMap
           knowledgeGraph={knowledgeGraph}
           nodeMap={nodeMap}
           selectedCells={selectedCells}
-      />
+          onHoverCellUpdated={setHoverCell}/>
+      <Drawer anchor="right"
+          open={selectedCells.length > 0}
+          onClose={handleCloseDrawer}>
+        {box}
+      </Drawer>
     </div>
   );
 };
@@ -766,8 +808,10 @@ export let KnowledgeMap = () => {
   return (
     <StudentKnowledgeMap
         knowledgeGraph={knowledgeGraph}
+        grid={grid}
         nodeMap={nodeMap}
-        selectedCells={selectedCells}/>
+        selectedCells={selectedCells}
+        setSelectedCells={setSelectedCells}/>
   );
 }
 
