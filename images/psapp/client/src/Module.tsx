@@ -178,9 +178,12 @@ export let Module: React.FC<ModuleProps> = (props) => {
     return () => el.removeEventListener('touchmove', preventDefault);
   }, []);
 
+  let [win, setWin] = React.useState(false);
   React.useEffect(() => {
     if (score === maxScore) {
+      setWin(true);
       (async () => {
+        await new Promise(r => setTimeout(r, 2000));
         let moduleVanityId = window.location.href.match(/modules\/(.*)/)![1];
         let resp = await fetch('/api/learning/event', {
           method: 'POST',
@@ -221,7 +224,24 @@ export let Module: React.FC<ModuleProps> = (props) => {
     userSelect: 'none',
   } as React.CSSProperties;
 
-  if (type === 'svg') {
+  if (win) {
+    let centerStyle = {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      width: '100%',
+      height: '100%',
+      textAlign: 'center',
+    } as React.CSSProperties;
+    return (
+      <div style={containerStyle}>
+        <div style={centerStyle}>
+          Win!
+        </div>
+        {scoreEl}
+      </div>
+    );
+  } else if (type === 'svg') {
     let svgStyle = {
       ...extraSvgStyles,
       width: '100%',
