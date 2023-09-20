@@ -824,6 +824,33 @@ export let KnowledgeMap = () => {
 
   let [selectedCells, setSelectedCells] = React.useState<Cell[]>([]);
 
+  React.useEffect(() => {
+    let url = new URL(window.location.href);
+    let scrollTo = url.searchParams.get('scroll');
+    let minCell;
+    if (scrollTo && nodeMap.get(scrollTo)) {
+      minCell = nodeMap.get(scrollTo).cell;
+    } else {
+      minCell = {
+        i: 1000,
+        j: 1000,
+      };
+      for (let kmid of reachable) {
+        let nodeProps = nodeMap.get(kmid)!;
+        if (
+          nodeProps.cell.j < minCell.j ||
+          nodeProps.cell.j === minCell.j && nodeProps.cell.i < minCell.i
+        ) {
+          minCell = nodeProps.cell;
+        }
+      }
+    }
+    let pos = nodePos(minCell);
+    setTimeout(() => {
+      window.scroll(pos.x - window.innerWidth / 2, pos.y - window.innerHeight / 2);
+    }, 200);
+  }, []); // intentionally empty deps, only run this on mount
+
   if (admin) {
     return (
       <AdminKnowledgeMap

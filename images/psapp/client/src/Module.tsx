@@ -178,6 +178,25 @@ export let Module: React.FC<ModuleProps> = (props) => {
     return () => el.removeEventListener('touchmove', preventDefault);
   }, []);
 
+  React.useEffect(() => {
+    if (score === maxScore) {
+      (async () => {
+        let moduleVanityId = window.location.href.match(/modules\/(.*)/)![1];
+        let resp = await fetch('/api/learning/event', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            moduleVanityId: moduleVanityId,
+            status: 'passed',
+          }),
+        });
+        window.location.href = '/?scroll=' + moduleVanityId;
+      })();
+    }
+  }, [score, maxScore]);
+
   let handleContextMenu = React.useCallback((e: React.MouseEvent) => {
     e.preventDefault();
   }, []);
