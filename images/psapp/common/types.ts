@@ -10,7 +10,7 @@ type KMType = typeof _KNOWLEDGE_MAP;
 type KMIds = KMType['nodes'][number]['id'];
 
 export interface StudentProgressDTO {
-  module: KMIds;
+  moduleVanityId: KMIds;
   status: ProgressStatus;
 }
 

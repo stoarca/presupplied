@@ -677,6 +677,8 @@ interface StudentKnowledgeMapProps {
   knowledgeGraph: TechTree;
   grid: string[][],
   nodeMap: NodeMap;
+  reached: Set<string>;
+  onChangeReached: (newReached: Set<string>) => void;
   selectedCells: Cell[];
   setSelectedCells: (cells: Cell[]) => void;
 }
@@ -685,16 +687,41 @@ let StudentKnowledgeMap = ({
   knowledgeGraph,
   grid,
   nodeMap,
+  reached,
+  onChangeReached,
   selectedCells,
   setSelectedCells,
 }: StudentKnowledgeMapProps) => {
   let [hoverCell, setHoverCell] = React.useState<Cell | null>(null);
-  let handleClick = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
+  let handleClick = React.useCallback(async (
+    e: React.MouseEvent<HTMLElement>
+  ) => {
     if (!hoverCell) {
       return;
     }
+    if (e.shiftKey) {
+      let kmid = grid[hoverCell.i][hoverCell.j];
+      let resp = await fetch('/api/learning/event', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          moduleVanityId: kmid,
+          status: reached.has(kmid) ? 'not_attempted' : 'passed',
+        }),
+      });
+      let newReached = new Set(reached);
+      if (reached.has(kmid)) {
+        newReached.delete(kmid);
+      } else {
+        newReached.add(kmid);
+      }
+      onChangeReached(newReached);
+      return;
+    }
     setSelectedCells([hoverCell]);
-  }, [hoverCell]);
+  }, [hoverCell, grid, reached]);
   let handleCloseDrawer = React.useCallback(() => {
     setSelectedCells([]);
   }, []);
@@ -734,6 +761,8 @@ export let KnowledgeMap = () => {
   let url = new URL(window.location.href);
   let admin = url.searchParams.get('admin') === '1';
 
+  let student = React.useContext(StudentContext);
+
   let [knowledgeMap, _setKnowledgeMap] = React.useState(KNOWLEDGE_MAP);
   let setKnowledgeMap = React.useCallback((m: typeof KNOWLEDGE_MAP) => {
     let acc: {[id: string]: number} = {};
@@ -760,7 +789,13 @@ export let KnowledgeMap = () => {
     knowledgeGraph.clearMemo();
     return knowledgeGraph.memoizedGrid();
   }, [knowledgeGraph]);
-  let [reached, setReached] = React.useState(new Set<string>());
+  let [reached, setReached] = React.useState(new Set<string>(
+    student ? student.progress.filter(
+      x => x.status === 'passed'
+    ).map(
+      x => x.moduleVanityId
+    ) : undefined
+  ));
   let handleChangeReached = React.useCallback((newReached: Set<string>) => {
     setReached(newReached);
   }, []);
@@ -810,6 +845,8 @@ export let KnowledgeMap = () => {
         knowledgeGraph={knowledgeGraph}
         grid={grid}
         nodeMap={nodeMap}
+        reached={reached}
+        onChangeReached={handleChangeReached}
         selectedCells={selectedCells}
         setSelectedCells={setSelectedCells}/>
   );

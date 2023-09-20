@@ -7,6 +7,7 @@ import path from 'path';
 
 import { AppDataSource } from './data-source';
 import { Student } from './entity/Student';
+import { StudentProgress } from './entity/StudentProgress';
 import { Module } from './entity/Module';
 import { env } from './env';
 import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
@@ -184,8 +185,6 @@ AppDataSource.initialize().then(async () => {
   app.get('/api/student', async (
     req, resp: express.Response<{student: StudentDTO | null}>, next
   ) => {
-    console.log('getting the student');
-    console.log(req.jwtStudent);
     if (!req.jwtStudent) {
       return resp.json({
         student: null,
@@ -207,19 +206,53 @@ AppDataSource.initialize().then(async () => {
         student: null,
       });
     }
-    console.log('got here');
-    console.log(student);
-    console.log(student.progress);
     return resp.json({
       student: {
         name: student.name,
         email: student.email,
         progress: student.progress.map(x => ({
-          module: x.module.vanityId,
+          moduleVanityId: x.module.vanityId,
           status: x.status,
         })),
       }
     });
+  });
+
+  app.post('/api/learning/event', async (req, resp, next) => {
+    if (!req.jwtStudent) {
+      return resp.status(401).json({
+        errorCode: 'learning.event.noLogin',
+        message: 'You need to be logged in to save progress',
+      });
+    }
+
+    let moduleRepo = AppDataSource.getRepository(Module);
+    let module = await moduleRepo.findOneBy({
+      vanityId: req.body.moduleVanityId,
+    });
+    if (!module) {
+      return resp.status(422).json({
+        errorCode: 'learning.event.invalidModule',
+        message: 'Could not find the requested learning module',
+      });
+    }
+
+    let studentRepo = AppDataSource.getRepository(Student);
+    let student = await studentRepo.findOneBy({ email: req.jwtStudent.email });
+    if (!student) {
+      return resp.status(401).json({
+        errorCode: 'learning.event.noStudent',
+        message: `Student with email ${req.jwtStudent.email} does not exist`,
+      });
+    }
+
+    await AppDataSource.getRepository(StudentProgress).upsert([{
+      student: student,
+      module: module,
+      status: req.body.status,
+    }], ['student', 'module'])
+
+    return resp.json({success: true});
   });
 
   const PORT = 8080;

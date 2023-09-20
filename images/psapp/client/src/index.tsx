@@ -54,6 +54,7 @@ let App = (props: AppProps) => {
 (async () => {
   let resp = await fetch('/api/student');
   let student = (await resp.json()).student;
+  console.log(student);
   let root = createRoot(document.getElementById('content')!);
   root.render(<App student={student}/>);
 })();
