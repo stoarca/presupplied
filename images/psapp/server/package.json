@@ -9,6 +9,7 @@
     "migration:generate": "cd src/migration && typeorm-ts-node-commonjs migration:generate -d ../data-source.ts",
     "migration:run": "typeorm-ts-node-commonjs migration:run -d src/data-source.ts --transaction each",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/data-source.ts --transaction each",
+    "migration:show": "typeorm-ts-node-commonjs migration:show -d src/data-source.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

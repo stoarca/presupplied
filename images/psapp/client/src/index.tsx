@@ -13,15 +13,21 @@ import {moduleComponents} from './ModuleContext';
 import {KnowledgeMap} from './KnowledgeMap';
 import {Login} from './Login';
 import {Register} from './Register';
+import {StudentContext} from './StudentContext';
 
+import {StudentDTO} from '../../common/types';
+
+interface AppProps {
+  student: StudentDTO;
+};
 const defaultTheme = createTheme();
-let App = (props: any) => {
+let App = (props: AppProps) => {
   let moduleRoutes = Object.keys(moduleComponents).map(x => {
     return <Route key={x} path={x} element={moduleComponents[x]}/>
   });
 
   return (
-    <React.Fragment>
+    <StudentContext.Provider value={props.student}>
       <CssBaseline/>
       <ThemeProvider theme={defaultTheme}>
         <Router>
@@ -41,9 +47,15 @@ let App = (props: any) => {
           </React.Suspense>
         </Router>
       </ThemeProvider>
-    </React.Fragment>
+    </StudentContext.Provider>
   );
 };
 
-let root = createRoot(document.getElementById('content')!);
-root.render(<App/>);
+(async () => {
+  let resp = await fetch('/api/student');
+  let student = (await resp.json()).student;
+  console.log('fetched!');
+  console.log(student);
+  let root = createRoot(document.getElementById('content')!);
+  root.render(<App student={student}/>);
+})();

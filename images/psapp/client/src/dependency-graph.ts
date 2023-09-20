@@ -1,6 +1,6 @@
 import {DepGraph} from 'dependency-graph';
 
-import { GraphNode, GraphJson } from '../../common/dependency-graph-types';
+import { GraphNode, GraphJson } from '../../common/types';
 
 export class TechTree extends DepGraph<GraphNode> {
   _memoizedDepths!: Map<string, number>;

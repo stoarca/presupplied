@@ -1,4 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index } from "typeorm"
+import {
+  Entity, PrimaryGeneratedColumn, Column, Index, OneToMany
+} from "typeorm"
+
+import { StudentProgress } from './StudentProgress';
 
 interface StudentParams {
   name: string;
@@ -20,6 +24,12 @@ export class Student {
 
   @Column()
   hashed: string
+
+  @OneToMany(
+    () => StudentProgress,
+    (studentProgress) => studentProgress.student
+  )
+  progress!: StudentProgress[];
 
   constructor(params: StudentParams) {
     this.name = params.name;

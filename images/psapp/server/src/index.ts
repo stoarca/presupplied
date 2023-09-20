@@ -10,18 +10,18 @@ import { Student } from './entity/Student';
 import { Module } from './entity/Module';
 import { env } from './env';
 import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
-import { GraphNode, GraphJson } from '../../common/dependency-graph-types';
+import { GraphNode, GraphJson, StudentDTO } from '../../common/types';
 
 let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 
-interface JWTUser {
+interface JWTStudent {
   email: string;
 }
 
 declare global {
   namespace Express {
     interface Request {
-      user: JWTUser | null;
+      jwtStudent: JWTStudent | null;
     }
   }
 }
@@ -32,7 +32,7 @@ const isValidEmail = (email: string): boolean => {
 };
 
 let setLoginCookie = (req: express.Request, resp: express.Response) => {
-  let jwtUser: JWTUser = {
+  let jwtUser: JWTStudent = {
     email: req.body.email,
   };
   let token = jwt.sign(jwtUser, env['JWT_SIGNING_KEY']!);
@@ -98,12 +98,12 @@ AppDataSource.initialize().then(async () => {
   app.use(express.json());
   app.use(cookieParser());
   app.use((req, resp, next) => {
-    req.user = null;
+    req.jwtStudent = null;
     if (req.cookies['authToken']) {
-      req.user = jwt.verify(
+      req.jwtStudent = jwt.verify(
         req.cookies['authToken'], env['JWT_SIGNING_KEY']!
-      ) as JWTUser;
-      console.log(req.user);
+      ) as JWTStudent;
+      console.log(req.jwtStudent);
     }
     next();
   });
@@ -181,10 +181,45 @@ AppDataSource.initialize().then(async () => {
     resp.json({success: true});
   });
 
-  app.get('/api/user', async (req, resp, next) => {
-    console.log('getting the user');
-    console.log(req.user);
-    resp.json({success: true});
+  app.get('/api/student', async (
+    req, resp: express.Response<{student: StudentDTO | null}>, next
+  ) => {
+    console.log('getting the student');
+    console.log(req.jwtStudent);
+    if (!req.jwtStudent) {
+      return resp.json({
+        student: null,
+      });
+    }
+    let studentRepo = AppDataSource.getRepository(Student);
+    let student = await studentRepo.findOne({
+      where: {
+        email: req.jwtStudent.email
+      },
+      relations: {
+        progress: {
+          module: true,
+        }
+      }
+    });
+    if (!student) {
+      return resp.json({
+        student: null,
+      });
+    }
+    console.log('got here');
+    console.log(student);
+    console.log(student.progress);
+    return resp.json({
+      student: {
+        name: student.name,
+        email: student.email,
+        progress: student.progress.map(x => ({
+          module: x.module.vanityId,
+          status: x.status,
+        })),
+      }
+    });
   });
 
   const PORT = 8080;
