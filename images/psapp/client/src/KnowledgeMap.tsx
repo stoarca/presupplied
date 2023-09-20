@@ -1,27 +1,19 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 
 import {moduleComponents} from './ModuleContext';
-import {buildGraph} from './dependency-graph';
+import {StudentContext} from './StudentContext';
+import {buildGraph, TechTree} from './dependency-graph';
+import {AdminToolbar, TOOLBAR_WIDTH} from './AdminToolbar';
+import {Cell} from './types';
 import {GraphJson} from '../../common/types';
 import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
 let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
-
-interface Progress {
-  reached: string[],
-}
-
-interface Cell {
-  i: number,
-  j: number,
-}
 
 let autoIncrementingId = 0;
 let genId = () => {
   return ++autoIncrementingId;
 };
 
-let TOOLBAR_WIDTH = '350px';
 let CELL_WIDTH = 300;
 let CELL_W_PADDING = 75;
 let CELL_HEIGHT = 75;
@@ -44,258 +36,6 @@ let cellFromAbsoluteCoords = (x: number, y: number): Cell | null => {
     i: Math.floor(y / (CELL_HEIGHT + CELL_H_PADDING)),
     j: Math.floor(x / (CELL_WIDTH + CELL_W_PADDING)),
   };
-};
-
-interface ToolbarForOneProps {
-  selectedCell: Cell,
-  grid: string[][],
-  reached: Set<string>,
-  reachable: Set<string>,
-  onChangeId: (oldId: string, newId: string) => void,
-  onChangeReached: (newReached: Set<string>) => void,
-  onMoveTreeLeft: (id: string) => void,
-  onMoveTreeRight: (id: string) => void,
-  onMoveTreeUp: (id: string) => void,
-  onMoveTreeDown: (id: string) => void,
-}
-
-let ToolbarForOne = (props: ToolbarForOneProps) => {
-  let ref = React.useRef<HTMLInputElement>(null);
-  let kmid = props.grid[props.selectedCell.i][props.selectedCell.j];
-
-  let [tempId, setTempId] = React.useState(kmid);
-  React.useEffect(() => {
-    setTempId(kmid);
-    setTimeout(() => {
-      ref.current!.focus();
-      ref.current!.select();
-    }, 0);
-  }, [kmid]);
-  let handleChangeInput = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setTempId(e.target.value);
-  }, []);
-
-  let handleSubmit = React.useCallback((e: React.MouseEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    props.onChangeId(kmid, tempId);
-  }, [kmid, tempId, props.onChangeId]);
-
-  let handleChangeProgress = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    let newReached = new Set(props.reached);
-    if (e.target.checked) {
-      newReached.add(kmid);
-    } else {
-      newReached.delete(kmid);
-    }
-    props.onChangeReached(newReached);
-  }, [kmid, props.reached, props.onChangeReached]);
-
-  let handleMoveTreeLeft = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    props.onMoveTreeLeft(kmid);
-  }, [kmid, props.onMoveTreeLeft]);
-
-  let handleMoveTreeRight = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    props.onMoveTreeRight(kmid);
-  }, [kmid, props.onMoveTreeRight]);
-
-  let handleMoveTreeUp = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    props.onMoveTreeUp(kmid);
-  }, [kmid, props.onMoveTreeUp]);
-
-  let handleMoveTreeDown = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    props.onMoveTreeDown(kmid);
-  }, [kmid, props.onMoveTreeDown]);
-
-  return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input type="text"
-              ref={ref}
-              value={tempId}
-              onChange={handleChangeInput}/>
-        </div>
-        <div>
-          <button type="submit">Apply</button>
-        </div>
-      </form>
-      <div>
-        <label>
-          <input type="checkbox"
-              checked={props.reached.has(kmid)}
-              onChange={handleChangeProgress}/>
-          Reached
-        </label>
-      </div>
-      <div>
-        <Link to={`/modules/${kmid}`}>
-          Go to lesson
-        </Link>
-      </div>
-      <div>
-        <button onClick={handleMoveTreeLeft}>Move Tree Left</button>
-      </div>
-      <div>
-        <button onClick={handleMoveTreeRight}>Move Tree Right</button>
-      </div>
-      <div>
-        <button onClick={handleMoveTreeUp}>Move Tree Up</button>
-      </div>
-      <div>
-        <button onClick={handleMoveTreeDown}>Move Tree Down</button>
-      </div>
-    </div>
-  );
-};
-
-interface ToolbarProps {
-  knowledgeMap: typeof KNOWLEDGE_MAP,
-  selectedCells: Cell[],
-  grid: string[][],
-  reached: Set<string>,
-  reachable: Set<string>,
-  onChangeId: (oldId: string, newId: string) => void,
-  onChangeReached: (newReached: Set<string>) => void,
-  onMoveTreeLeft: (id: string) => void,
-  onMoveTreeRight: (id: string) => void,
-  onMoveTreeUp: (id: string) => void,
-  onMoveTreeDown: (id: string) => void,
-  onSelectIds: (ids: string[]) => void,
-  onDeleteIds: (ids: string[]) => void,
-}
-
-let Toolbar = (props: ToolbarProps) => {
-  let size = React.useMemo(() => {
-    let maxi = 0;
-    let maxj = 0;
-    for (let i = 0; i < props.grid.length; ++i) {
-      for (let j = 0; j < props.grid[i].length; ++j) {
-        if (props.grid[i][j]) {
-          maxi = Math.max(i, maxi);
-          maxj = Math.max(j, maxj);
-        }
-      }
-    }
-    return {rows: maxi + 1, cols: maxj + 1};
-  }, [props.grid]);
-
-  let forOne = null;
-  if (props.selectedCells.length === 1) {
-    forOne = (
-      <ToolbarForOne
-          selectedCell={props.selectedCells[0]}
-          grid={props.grid}
-          reached={props.reached}
-          reachable={props.reachable}
-          onChangeId={props.onChangeId}
-          onChangeReached={props.onChangeReached}
-          onMoveTreeLeft={props.onMoveTreeLeft}
-          onMoveTreeRight={props.onMoveTreeRight}
-          onMoveTreeUp={props.onMoveTreeUp}
-          onMoveTreeDown={props.onMoveTreeDown}/>
-    );
-  }
-
-  let handleDelete = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    props.onDeleteIds(props.selectedCells.map(x => props.grid[x.i][x.j]));
-  }, [props.selectedCells, props.grid, props.onDeleteIds]);
-  let forSelected = null;
-  if (props.selectedCells.length > 0) {
-    forSelected = (
-      <div>
-        <button onClick={handleDelete}>Delete Selected</button>
-      </div>
-    );
-  }
-
-  let handleSelectAll = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    props.onSelectIds(props.knowledgeMap.nodes.map(x => x.id));
-  }, [props.onSelectIds]);
-
-  let downloadJson = React.useCallback((data: any, filename: string) => {
-    let blob = new Blob(
-      [JSON.stringify(data, undefined, 2)],
-      {type: 'text/json'}
-    );
-    let a = document.createElement('a');
-    //a.style = 'display: none';
-    document.body.appendChild(a);
-    a.href = window.URL.createObjectURL(blob);
-    a.download = filename;
-    a.click();
-    window.URL.revokeObjectURL(a.href);
-    a.remove();
-  }, []);
-
-  let uploadJson = React.useCallback(() => {
-    return new Promise((resolve) => {
-      let input = document.createElement('input');
-      input.type='file';
-      document.body.appendChild(input);
-      input.addEventListener('change', (e) => {
-        if (!input.files) {
-          throw new Error('No files specified');
-        }
-        if (input.files.length !==  1) {
-          throw new Error('Wrong number of files uploaded');
-        }
-        let file = input.files[0];
-        let reader = new FileReader();
-        reader.onload = (e) => { resolve(JSON.parse(e.target!.result as string)); };
-        reader.readAsText(file);
-      });
-      input.click();
-      input.remove();
-    });
-  }, []);
-
-  let handleExportGraph = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    downloadJson(props.knowledgeMap, 'knowledge-map.json');
-  }, [props.knowledgeMap, downloadJson]);
-
-  let handleExportProgress = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    downloadJson({
-      reached: Array.from(props.reached),
-    }, 'progress.json');
-  }, [props.reached]);
-
-  let handleImportProgress = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
-    let newProgress = await uploadJson() as Progress;
-    props.onChangeReached(new Set(newProgress.reached));
-  }, [props.onChangeReached]);
-
-  let toolbarStyle = {
-    position: 'fixed',
-    width: TOOLBAR_WIDTH,
-    height: '100%',
-    background: 'red',
-    top: 0,
-    right: 0,
-  } as React.CSSProperties;
-  return (
-    <div style={toolbarStyle}>
-      {forOne}
-      {forSelected}
-      <div>
-        <button onClick={handleSelectAll}>Select All</button>
-      </div>
-      <div>
-        <button onClick={handleExportGraph}>Export Graph</button>
-      </div>
-      <div>
-        <button onClick={handleExportProgress}>Export Progress</button>
-      </div>
-      <div>
-        <button onClick={handleImportProgress}>Import Progress</button>
-      </div>
-      <div>
-        {props.knowledgeMap.nodes.length}
-      </div>
-      <div>
-        {size.rows}X{size.cols}
-      </div>
-    </div>
-  );
 };
 
 interface KnowledgeNodePropsLite {
@@ -372,7 +112,19 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
   );
 };
 
-export let KnowledgeMap = () => {
+type NodeMap = Map<string, KnowledgeNodePropsLite>;
+interface BaseKnowledgeMapProps {
+  knowledgeGraph: TechTree;
+  nodeMap: NodeMap;
+  selectedCells: Cell[];
+  onHoverCellUpdated?: (cell: Cell | null) => void;
+}
+export let BaseKnowledgeMap = ({
+  knowledgeGraph,
+  nodeMap,
+  selectedCells,
+  onHoverCellUpdated,
+}: BaseKnowledgeMapProps) => {
   let ref = React.useRef<SVGSVGElement | null>(null);
   let [width, setWidth] = React.useState(0);
   let [height, setHeight] = React.useState(0);
@@ -387,66 +139,129 @@ export let KnowledgeMap = () => {
     return () => clearInterval(interval);
   }, []);
 
-  let [knowledgeMap, _setKnowledgeMap] = React.useState(KNOWLEDGE_MAP);
-  let setKnowledgeMap = React.useCallback((m: typeof KNOWLEDGE_MAP) => {
-    let acc: {[id: string]: number} = {};
-    m.nodes.forEach(x => {
-      acc[x.id] = (acc[x.id] || 0) + 1;
-      if (acc[x.id] !== 1) {
-        throw new Error('We tried to set an invalid map! Duplicate id ' + x.id);
-      }
-    });
-
-    m.nodes.forEach(x => {
-      x.deps.forEach(d => {
-        if (!acc[d]) {
-          throw new Error('Invalid dependency ' + d + ' on ' + x.id);
-        }
-      });
-    });
-
-    _setKnowledgeMap(m);
-  }, []);
-  let knowledgeGraph = React.useMemo(() => {
-    return buildGraph(knowledgeMap);
-  }, [knowledgeMap]);
-
-  let {grid, rows, cols} = React.useMemo(() => {
-    knowledgeGraph.clearMemo();
-    return knowledgeGraph.memoizedGrid();
-  }, [knowledgeGraph]);
   let topSorted = React.useMemo(() => {
     let ret = knowledgeGraph.overallOrder();
     return ret;
   }, [knowledgeGraph]);
-  let [reached, setReached] = React.useState(new Set<string>());
-  let reachable = React.useMemo(() => {
-    let ret = knowledgeGraph.getReachable(reached);
-    return ret;
-  }, [knowledgeGraph, reached]);
-  let nodeMap = React.useMemo(() => {
-    let ret = new Map<string, KnowledgeNodePropsLite>();
-    for (let i = 0; i <= rows; ++i) {
-      for (let j = 0; j <= cols; ++j) {
-        let id = grid[i][j];
-        if (id) {
-          ret.set(id, {
-            kmid: id,
-            cell: {i: i, j: j},
-            progress: reached.has(id) ? 'reached' :
-                reachable.has(id) ? 'reachable':
-              'unreachable',
-          });
-        }
-      }
+
+  let [hoverCell, _setHoverCell] = React.useState<Cell | null>(null);
+  let setHoverCell = React.useCallback((cell: Cell | null) => {
+    _setHoverCell(cell);
+    if (onHoverCellUpdated) {
+      onHoverCellUpdated(cell);
     }
-    return ret;
-  }, [knowledgeGraph, grid, reached, reachable]);
+  }, []);
+  let handleMouseMove = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
+    let rect = e.currentTarget.getBoundingClientRect();
+    let newHoverCell = cellFromAbsoluteCoords(
+      e.clientX - rect.left, e.clientY - rect.top
+    );
+    if (newHoverCell === null || hoverCell === null) {
+      setHoverCell(newHoverCell);
+      return;
+    }
+    if (newHoverCell.i !== hoverCell.i || newHoverCell.j !== hoverCell.j) {
+      setHoverCell(newHoverCell);
+      return;
+    }
+  }, [hoverCell]);
 
+  let nodes = [];
+  for (let i = 0; i < topSorted.length; ++i) {
+    let node = topSorted[i];
+    let dependants = knowledgeGraph.directDependantsOf(node).map(
+      x => nodeMap.get(x)!
+    );
+    nodes.push(
+      <KnowledgeNode key={node}
+          kmid={node}
+          cell={nodeMap.get(node)!.cell}
+          progress={nodeMap.get(node)!.progress}
+          dependants={dependants}
+          selectedCells={selectedCells}/>
+    );
+  }
 
+  let selectRects = selectedCells.map(x => {
+    let pos = nodePos(x);
+    return (
+      <rect key={x.i + '_' + x.j}
+          x={pos.x}
+          y={pos.y}
+          width={CELL_WIDTH}
+          height={CELL_HEIGHT}
+          fill="#00ccee66"/>
+    )
+  });
+
+  let hoverRect = null;
+  if (hoverCell) {
+    let pos = nodePos(hoverCell);
+    hoverRect = (
+      <rect
+          x={pos.x}
+          y={pos.y}
+          width={CELL_WIDTH}
+          height={CELL_HEIGHT}
+          fill="#00ccee33"/>
+    );
+  }
+
+  let containerStyle = {
+    minWidth: '100%',
+    minHeight: '100%',
+    width: width + 'px',
+    height: height + 'px',
+    userSelect: 'none',
+  } as React.CSSProperties;
+  let svgStyle = {
+    minWidth: '100%',
+    minHeight: '100%',
+    pointerEvents: 'none',
+  } as React.CSSProperties;
+  return (
+    <div style={containerStyle} onMouseMove={handleMouseMove}>
+      <svg xmlns="<http://www.w3.org/2000/svg>"
+          style={svgStyle}
+          width={width}
+          height={height}
+          ref={ref}>
+        {nodes}
+        {selectRects}
+        {hoverRect}
+      </svg>
+    </div>
+  );
+};
+
+interface AdminKnowledgeMapProps {
+  knowledgeMap: GraphJson;
+  setKnowledgeMap: (knowledgeMap: GraphJson) => void;
+  knowledgeGraph: TechTree;
+  grid: string[][];
+  rows: number;
+  cols: number;
+  nodeMap: NodeMap;
+  reached: Set<string>;
+  onChangeReached: (newReached: Set<string>) => void;
+  selectedCells: Cell[];
+  setSelectedCells: (cells: Cell[]) => void;
+}
+let AdminKnowledgeMap = ({
+  knowledgeMap,
+  setKnowledgeMap,
+  knowledgeGraph,
+  grid,
+  rows,
+  cols,
+  nodeMap,
+  reached,
+  onChangeReached,
+  selectedCells,
+  setSelectedCells,
+}: AdminKnowledgeMapProps) => {
   let [mode, setMode] = React.useState<'selecting' | null>(null);
   let [hoverCell, setHoverCell] = React.useState<Cell | null>(null);
-  let [selectedCells, setSelectedCells] = React.useState<Cell[]>([]);
   let [dragStart, setDragStart] = React.useState<Cell | null>(null);
   let handleMouseDown = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
     if (!hoverCell) {
@@ -467,20 +282,6 @@ export let KnowledgeMap = () => {
       setSelectedCells([hoverCell]);
     }
   }, [hoverCell, selectedCells, grid]);
-  let handleMouseMove = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
-    let rect = e.currentTarget.getBoundingClientRect();
-    let newHoverCell = cellFromAbsoluteCoords(
-      e.clientX - rect.left, e.clientY - rect.top
-    );
-    if (newHoverCell === null || hoverCell === null) {
-      setHoverCell(newHoverCell);
-      return;
-    }
-    if (newHoverCell.i !== hoverCell.i || newHoverCell.j !== hoverCell.j) {
-      setHoverCell(newHoverCell);
-      return;
-    }
-  }, [hoverCell]);
   let handleClick = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
     setDragStart(null);
     setMode(null);
@@ -640,10 +441,6 @@ export let KnowledgeMap = () => {
       }),
     });
   }, [knowledgeMap]);
-
-  let handleChangeProgress = React.useCallback((newReached: Set<string>) => {
-    setReached(newReached);
-  }, []);
 
   let handleMoveTreeHorz = React.useCallback((id: string, dir: 'left' | 'right') => {
     let updatedCells: {[id: string]: Cell} = {};
@@ -843,83 +640,22 @@ export let KnowledgeMap = () => {
     setSelectedCells([]);
   }, [knowledgeMap]);
 
-  let nodes = [];
-  for (let i = 0; i < topSorted.length; ++i) {
-    let node = topSorted[i];
-    let dependants = knowledgeGraph.directDependantsOf(node).map(
-      x => nodeMap.get(x)!
-    );
-    nodes.push(
-      <KnowledgeNode key={node}
-          kmid={node}
-          cell={nodeMap.get(node)!.cell}
-          progress={nodeMap.get(node)!.progress}
-          dependants={dependants}
-          selectedCells={selectedCells}/>
-    );
-  }
-
-  let selectRects = selectedCells.map(x => {
-    let pos = nodePos(x);
-    return (
-      <rect key={x.i + '_' + x.j}
-          x={pos.x}
-          y={pos.y}
-          width={CELL_WIDTH}
-          height={CELL_HEIGHT}
-          fill="#00ccee66"/>
-    )
-  });
-
-  let hoverRect = null;
-  if (hoverCell) {
-    let pos = nodePos(hoverCell);
-    hoverRect = (
-      <rect
-          x={pos.x}
-          y={pos.y}
-          width={CELL_WIDTH}
-          height={CELL_HEIGHT}
-          fill="#00ccee33"/>
-    );
-  }
-
-  let containerStyle = {
-    minWidth: '100%',
-    minHeight: '100%',
-    width: width + 'px',
-    height: height + 'px',
-    paddingRight: TOOLBAR_WIDTH,
-    userSelect: 'none',
-  } as React.CSSProperties;
-  let svgStyle = {
-    minWidth: '100%',
-    minHeight: '100%',
-    pointerEvents: 'none',
-  } as React.CSSProperties;
   return (
     <div>
-      <div style={containerStyle}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onClick={handleClick}>
-        <svg xmlns="<http://www.w3.org/2000/svg>"
-            style={svgStyle}
-            width={width}
-            height={height}
-            ref={ref}>
-          {nodes}
-          {selectRects}
-          {hoverRect}
-        </svg>
+      <div onMouseDown={handleMouseDown} onClick={handleClick}>
+        <BaseKnowledgeMap
+            knowledgeGraph={knowledgeGraph}
+            nodeMap={nodeMap}
+            selectedCells={selectedCells}
+            onHoverCellUpdated={setHoverCell}
+        />
       </div>
-      <Toolbar selectedCells={selectedCells}
+      <AdminToolbar selectedCells={selectedCells}
           grid={grid}
           reached={reached}
-          reachable={reachable}
           knowledgeMap={knowledgeMap}
           onChangeId={handleChangeId}
-          onChangeReached={handleChangeProgress}
+          onChangeReached={onChangeReached}
           onMoveTreeLeft={handleMoveTreeLeft}
           onMoveTreeRight={handleMoveTreeRight}
           onMoveTreeUp={handleMoveTreeUp}
@@ -929,4 +665,109 @@ export let KnowledgeMap = () => {
     </div>
   );
 };
+
+interface StudentKnowledgeMapProps {
+  knowledgeGraph: TechTree;
+  nodeMap: NodeMap;
+  selectedCells: Cell[];
+}
+
+let StudentKnowledgeMap = ({
+  knowledgeGraph,
+  nodeMap,
+  selectedCells,
+}: StudentKnowledgeMapProps) => {
+  return (
+    <div>
+      <BaseKnowledgeMap
+          knowledgeGraph={knowledgeGraph}
+          nodeMap={nodeMap}
+          selectedCells={selectedCells}
+      />
+    </div>
+  );
+};
+
+export let KnowledgeMap = () => {
+  let url = new URL(window.location.href);
+  let admin = url.searchParams.get('admin') === '1';
+
+  let [knowledgeMap, _setKnowledgeMap] = React.useState(KNOWLEDGE_MAP);
+  let setKnowledgeMap = React.useCallback((m: typeof KNOWLEDGE_MAP) => {
+    let acc: {[id: string]: number} = {};
+    m.nodes.forEach(x => {
+      acc[x.id] = (acc[x.id] || 0) + 1;
+      if (acc[x.id] !== 1) {
+        throw new Error('We tried to set an invalid map! Duplicate id ' + x.id);
+      }
+    });
+
+    m.nodes.forEach(x => {
+      x.deps.forEach(d => {
+        if (!acc[d]) {
+          throw new Error('Invalid dependency ' + d + ' on ' + x.id);
+        }
+      });
+    });
+    _setKnowledgeMap(m);
+  }, []);
+  let knowledgeGraph = React.useMemo(() => {
+    return buildGraph(knowledgeMap);
+  }, [knowledgeMap]);
+  let {grid, rows, cols} = React.useMemo(() => {
+    knowledgeGraph.clearMemo();
+    return knowledgeGraph.memoizedGrid();
+  }, [knowledgeGraph]);
+  let [reached, setReached] = React.useState(new Set<string>());
+  let handleChangeReached = React.useCallback((newReached: Set<string>) => {
+    setReached(newReached);
+  }, []);
+  let reachable = React.useMemo(() => {
+    let ret = knowledgeGraph.getReachable(reached);
+    return ret;
+  }, [knowledgeGraph, reached]);
+  let nodeMap = React.useMemo(() => {
+    let ret = new Map();
+    for (let i = 0; i <= rows; ++i) {
+      for (let j = 0; j <= cols; ++j) {
+        let id = grid[i][j];
+        if (id) {
+          ret.set(id, {
+            kmid: id,
+            cell: {i: i, j: j},
+            progress: reached.has(id) ? 'reached' :
+                reachable.has(id) ? 'reachable':
+              'unreachable',
+          });
+        }
+      }
+    }
+    return ret;
+  }, [knowledgeGraph, grid, reached, reachable]);
+
+  let [selectedCells, setSelectedCells] = React.useState<Cell[]>([]);
+
+  if (admin) {
+    return (
+      <AdminKnowledgeMap
+          knowledgeMap={knowledgeMap}
+          setKnowledgeMap={setKnowledgeMap}
+          knowledgeGraph={knowledgeGraph}
+          grid={grid}
+          rows={rows}
+          cols={cols}
+          nodeMap={nodeMap}
+          reached={reached}
+          onChangeReached={handleChangeReached}
+          selectedCells={selectedCells}
+          setSelectedCells={setSelectedCells}/>
+    );
+  }
+  return (
+    <StudentKnowledgeMap
+        knowledgeGraph={knowledgeGraph}
+        nodeMap={nodeMap}
+        selectedCells={selectedCells}/>
+  );
+}
 

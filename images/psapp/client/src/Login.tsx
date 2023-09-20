@@ -49,10 +49,6 @@ export let Login = (props: LoginProps) => {
       });
       let json = await resp.json();
       if (resp.ok) {
-        // do something useful
-        console.log(await fetch('/api/user', {
-          credentials: 'include',
-        }));
         window.location.href = '/';
         return;
       }

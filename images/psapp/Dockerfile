@@ -16,6 +16,12 @@ RUN cd /presupplied/images/psapp/server && npm ci
 COPY . /presupplied/images/psapp
 RUN cd /presupplied/images/psapp/client/ && npm run build
 
+COPY ./client_npm_ci.sh /etc/my_init.d/50_client_npm_ci.sh
+RUN chmod 755 /etc/my_init.d/50_client_npm_ci.sh
+
+COPY ./server_npm_ci.sh /etc/my_init.d/51_server_npm_ci.sh
+RUN chmod 755 /etc/my_init.d/51_server_npm_ci.sh
+
 COPY ./client.runit /etc/service/client/run
 RUN chmod 755 /etc/service/client/run
 

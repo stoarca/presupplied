@@ -47,7 +47,7 @@ export let Register = (props: RegisterProps) => {
       });
       let json = await resp.json();
       if (resp.ok) {
-        // redirect to somewhere useful
+        window.location.href = '/';
         return;
       }
       if (json.errorCode.startsWith('auth.register.email.')) {

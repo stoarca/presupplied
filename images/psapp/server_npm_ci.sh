@@ -2,7 +2,7 @@
 
 set -eu -o pipefail
 
-cd /presupplied/images/psapp/client
+cd /presupplied/images/psapp/server
 if [ "$NODE_ENV" == "development" ]; then
-  exec npm run dev
+  npm ci
 fi
