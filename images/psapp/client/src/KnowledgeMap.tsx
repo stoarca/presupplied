@@ -106,11 +106,12 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
   } else {
     fill = '#777777';
   }
+  let opacity = 1;
   if (!moduleComponents[props.kmid]) {
-    fill += '99';
+    opacity=0.2;
   }
   return (
-    <g transform={`translate(${pos.x}, ${pos.y})`}>
+    <g transform={`translate(${pos.x}, ${pos.y})`} opacity={opacity}>
       <rect x="0" y="0" width={CELL_WIDTH} height={CELL_HEIGHT} fill={fill}/>
       <text dominantBaseline="central" y={CELL_HEIGHT / 2}>{props.kmid}</text>
       {dependants}
@@ -118,7 +119,6 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
     </g>
   );
 };
-
 
 interface ViewBox {
   x: number;
@@ -260,9 +260,13 @@ interface BaseKnowledgeMapProps {
   rows: number;
   cols: number;
   nodeMap: NodeMap;
+  reachable: Set<string>;
   selectedCells: Cell[];
   allowHoverEmptyCell: boolean;
   onHoverCellUpdated?: (cell: Cell | null) => void;
+  onMouseDown?: React.SVGProps<SVGSVGElement>['onMouseDown'];
+  onMouseUp?: React.SVGProps<SVGSVGElement>['onMouseUp'];
+  onClick?: React.SVGProps<SVGSVGElement>['onClick'];
 }
 export let BaseKnowledgeMap = ({
   knowledgeGraph,
@@ -270,11 +274,54 @@ export let BaseKnowledgeMap = ({
   rows,
   cols,
   nodeMap,
+  reachable,
   selectedCells,
   allowHoverEmptyCell,
   onHoverCellUpdated,
+  onMouseDown,
+  onMouseUp,
+  onClick,
 }: BaseKnowledgeMapProps) => {
-  let [viewBox, setViewBox] = React.useState({x: 0, y: 0, w: 2000, h: 2000});
+  let [viewBox, setViewBox] = React.useState<ViewBox>(() => {
+    let url = new URL(window.location.href);
+    let scrollTo = url.searchParams.get('scroll');
+    let minCell;
+    if (scrollTo && nodeMap.get(scrollTo)) {
+      minCell = nodeMap.get(scrollTo)!.cell;
+    } else {
+      minCell = {i: 1000, j: 1000};
+      let enabledMinCell = {i: 1000, j: 1000};
+      for (let kmid of reachable) {
+        let nodeProps = nodeMap.get(kmid)!;
+        if (
+          nodeProps.cell.j < minCell.j ||
+          nodeProps.cell.j === minCell.j && nodeProps.cell.i < minCell.i
+        ) {
+          minCell = nodeProps.cell;
+        }
+        if (
+          !!moduleComponents[kmid] && (
+            nodeProps.cell.j < enabledMinCell.j ||
+            nodeProps.cell.j === enabledMinCell.j &&
+                nodeProps.cell.i < enabledMinCell.i
+          )
+        ) {
+          enabledMinCell = nodeProps.cell;
+        }
+      }
+      if (enabledMinCell.i < 1000) {
+        minCell = enabledMinCell;
+      }
+    }
+    let pos = nodePos(minCell);
+    return {
+      x: pos.x - window.innerWidth / 2,
+      y: pos.y - window.innerHeight / 2,
+      w: 2000,
+      h: 2000,
+    };
+  });
+
   let topSorted = React.useMemo(() => {
     let ret = knowledgeGraph.overallOrder();
     return ret;
@@ -287,6 +334,7 @@ export let BaseKnowledgeMap = ({
       onHoverCellUpdated(cell);
     }
   }, []);
+
   let handleMouseMove = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
     let m = getMouseXY(e, viewBox);
     let newHoverCell = cellFromAbsoluteCoords(m.x, m.y);
@@ -390,6 +438,9 @@ export let BaseKnowledgeMap = ({
           xmlns="<http://www.w3.org/2000/svg>"
           viewBox={viewBox}
           onUpdateViewBox={setViewBox}
+          onMouseDown={onMouseDown}
+          onMouseUp={onMouseUp}
+          onClick={onClick}
           style={svgStyle}>
         {nodes}
         {selectRects}
@@ -409,6 +460,7 @@ interface AdminKnowledgeMapProps {
   cols: number;
   nodeMap: NodeMap;
   reached: Set<string>;
+  reachable: Set<string>;
   onChangeReached: (newReached: Set<string>) => void;
   selectedCells: Cell[];
   setSelectedCells: (cells: Cell[]) => void;
@@ -422,6 +474,7 @@ let AdminKnowledgeMap = ({
   cols,
   nodeMap,
   reached,
+  reachable,
   onChangeReached,
   selectedCells,
   setSelectedCells,
@@ -429,7 +482,7 @@ let AdminKnowledgeMap = ({
   let [mode, setMode] = React.useState<'selecting' | null>(null);
   let [hoverCell, setHoverCell] = React.useState<Cell | null>(null);
   let [dragStart, setDragStart] = React.useState<Cell | null>(null);
-  let handleMouseDown = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
+  let handleMouseDown = React.useCallback((e: React.MouseEvent<SVGSVGElement>) => {
     if (!hoverCell) {
       return;
     }
@@ -448,7 +501,7 @@ let AdminKnowledgeMap = ({
       setSelectedCells([hoverCell]);
     }
   }, [hoverCell, selectedCells, grid]);
-  let handleClick = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
+  let handleMouseUp = React.useCallback((e: React.MouseEvent<SVGSVGElement>) => {
     setDragStart(null);
     setMode(null);
     if (!dragStart) {
@@ -808,18 +861,18 @@ let AdminKnowledgeMap = ({
 
   return (
     <div>
-      <div onMouseDown={handleMouseDown} onClick={handleClick}>
-        <BaseKnowledgeMap
-            knowledgeGraph={knowledgeGraph}
-            grid={grid}
-            rows={rows}
-            cols={cols}
-            nodeMap={nodeMap}
-            selectedCells={selectedCells}
-            allowHoverEmptyCell={true}
-            onHoverCellUpdated={setHoverCell}
-        />
-      </div>
+      <BaseKnowledgeMap
+          knowledgeGraph={knowledgeGraph}
+          grid={grid}
+          rows={rows}
+          cols={cols}
+          nodeMap={nodeMap}
+          reachable={reachable}
+          selectedCells={selectedCells}
+          allowHoverEmptyCell={true}
+          onHoverCellUpdated={setHoverCell}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}/>
       <AdminToolbar selectedCells={selectedCells}
           grid={grid}
           rows={rows}
@@ -845,6 +898,7 @@ interface StudentKnowledgeMapProps {
   cols: number,
   nodeMap: NodeMap;
   reached: Set<string>;
+  reachable: Set<string>;
   onChangeReached: (newReached: Set<string>) => void;
   selectedCells: Cell[];
   setSelectedCells: (cells: Cell[]) => void;
@@ -857,13 +911,14 @@ let StudentKnowledgeMap = ({
   cols,
   nodeMap,
   reached,
+  reachable,
   onChangeReached,
   selectedCells,
   setSelectedCells,
 }: StudentKnowledgeMapProps) => {
   let [hoverCell, setHoverCell] = React.useState<Cell | null>(null);
   let handleClick = React.useCallback(async (
-    e: React.MouseEvent<HTMLElement>
+    e: React.MouseEvent<SVGSVGElement>
   ) => {
     if (!hoverCell) {
       return;
@@ -892,35 +947,48 @@ let StudentKnowledgeMap = ({
     setSelectedCells([hoverCell]);
   }, [hoverCell, grid, reached]);
   let handleCloseDrawer = React.useCallback(() => {
+    console.log('closing drawer');
     setSelectedCells([]);
   }, []);
   let box = null;
   if (selectedCells.length > 0) {
     let kmid = grid[selectedCells[0].i][selectedCells[0].j];
-    box = (
-      <Box sx={{width: 350}}>
-        <Typography component="h2">
-          {kmid}
-        </Typography>
+    let contents;
+    if (!!moduleComponents[kmid]) {
+      contents = (
         <List>
           <ListItemButton component={Link} to={`/modules/${kmid}`}>
             <ListItemText primary="Go to mastery"/>
           </ListItemButton>
         </List>
+      );
+    } else {
+      contents = (
+        'Sorry, this module is not implemented yet. Check back soon!'
+      );
+    }
+    box = (
+      <Box sx={{width: 350}}>
+        <Typography component="h2">
+          {kmid}
+        </Typography>
+        {contents}
       </Box>
     );
   }
   return (
-    <div onClick={handleClick}>
+    <div>
       <BaseKnowledgeMap
           knowledgeGraph={knowledgeGraph}
           grid={grid}
           rows={rows}
           cols={cols}
           nodeMap={nodeMap}
+          reachable={reachable}
           selectedCells={selectedCells}
           allowHoverEmptyCell={false}
-          onHoverCellUpdated={setHoverCell}/>
+          onHoverCellUpdated={setHoverCell}
+          onClick={handleClick}/>
       <Drawer anchor="right"
           open={selectedCells.length > 0}
           onClose={handleCloseDrawer}>
@@ -997,33 +1065,6 @@ export let KnowledgeMap = () => {
 
   let [selectedCells, setSelectedCells] = React.useState<Cell[]>([]);
 
-  React.useEffect(() => {
-    let url = new URL(window.location.href);
-    let scrollTo = url.searchParams.get('scroll');
-    let minCell;
-    if (scrollTo && nodeMap.get(scrollTo)) {
-      minCell = nodeMap.get(scrollTo).cell;
-    } else {
-      minCell = {
-        i: 1000,
-        j: 1000,
-      };
-      for (let kmid of reachable) {
-        let nodeProps = nodeMap.get(kmid)!;
-        if (
-          nodeProps.cell.j < minCell.j ||
-          nodeProps.cell.j === minCell.j && nodeProps.cell.i < minCell.i
-        ) {
-          minCell = nodeProps.cell;
-        }
-      }
-    }
-    let pos = nodePos(minCell);
-    setTimeout(() => {
-      window.scroll(pos.x - window.innerWidth / 2, pos.y - window.innerHeight / 2);
-    }, 200);
-  }, []); // intentionally empty deps, only run this on mount
-
   let ret;
   if (admin) {
     ret = (
@@ -1036,6 +1077,7 @@ export let KnowledgeMap = () => {
           cols={cols}
           nodeMap={nodeMap}
           reached={reached}
+          reachable={reachable}
           onChangeReached={handleChangeReached}
           selectedCells={selectedCells}
           setSelectedCells={setSelectedCells}/>
@@ -1049,6 +1091,7 @@ export let KnowledgeMap = () => {
           cols={cols}
           nodeMap={nodeMap}
           reached={reached}
+          reachable={reachable}
           onChangeReached={handleChangeReached}
           selectedCells={selectedCells}
           setSelectedCells={setSelectedCells}/>
