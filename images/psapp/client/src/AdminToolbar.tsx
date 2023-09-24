@@ -117,6 +117,8 @@ interface ToolbarProps {
   knowledgeMap: typeof KNOWLEDGE_MAP,
   selectedCells: Cell[],
   grid: string[][],
+  rows: number,
+  cols: number,
   reached: Set<string>,
   onChangeId: (oldId: string, newId: string) => void,
   onChangeReached: (newReached: Set<string>) => void,
@@ -129,20 +131,6 @@ interface ToolbarProps {
 }
 
 export let AdminToolbar = (props: ToolbarProps) => {
-  let size = React.useMemo(() => {
-    let maxi = 0;
-    let maxj = 0;
-    for (let i = 0; i < props.grid.length; ++i) {
-      for (let j = 0; j < props.grid[i].length; ++j) {
-        if (props.grid[i][j]) {
-          maxi = Math.max(i, maxi);
-          maxj = Math.max(j, maxj);
-        }
-      }
-    }
-    return {rows: maxi + 1, cols: maxj + 1};
-  }, [props.grid]);
-
   let forOne = null;
   if (props.selectedCells.length === 1) {
     forOne = (
@@ -255,7 +243,7 @@ export let AdminToolbar = (props: ToolbarProps) => {
         {props.knowledgeMap.nodes.length}
       </div>
       <div>
-        {size.rows}X{size.cols}
+        {props.rows + 1}X{props.cols + 1}
       </div>
     </div>
   );

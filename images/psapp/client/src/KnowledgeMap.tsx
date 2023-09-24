@@ -119,93 +119,46 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
   );
 };
 
-type NodeMap = Map<string, KnowledgeNodePropsLite>;
-interface BaseKnowledgeMapProps {
-  knowledgeGraph: TechTree;
-  grid: string[][];
-  rows: number;
-  cols: number;
-  nodeMap: NodeMap;
-  selectedCells: Cell[];
-  allowHoverEmptyCell: boolean;
-  onHoverCellUpdated?: (cell: Cell | null) => void;
+
+interface ViewBox {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
 }
-export let BaseKnowledgeMap = ({
-  knowledgeGraph,
-  grid,
-  rows,
-  cols,
-  nodeMap,
-  selectedCells,
-  allowHoverEmptyCell,
-  onHoverCellUpdated,
-}: BaseKnowledgeMapProps) => {
-  let ref = React.useRef<HTMLDivElement | null>(null);
-  let [viewBox, setViewBox] = React.useState({x: 0, y: 0, w: 2000, h: 2000});
-  let topSorted = React.useMemo(() => {
-    let ret = knowledgeGraph.overallOrder();
-    return ret;
-  }, [knowledgeGraph]);
+let getMouseXY = (
+  e: MouseEvent | React.MouseEvent<HTMLElement>,
+  viewBox: ViewBox,
+) => {
+  let aspectRatio = window.innerWidth / window.innerHeight;
+  let w = viewBox.w;
+  let h = viewBox.h;
+  if (aspectRatio > 1) {
+    h = w / aspectRatio;
+  } else {
+    w = h * aspectRatio;
+  }
 
-  let [hoverCell, _setHoverCell] = React.useState<Cell | null>(null);
-  let setHoverCell = React.useCallback((cell: Cell | null) => {
-    _setHoverCell(cell);
-    if (onHoverCellUpdated) {
-      onHoverCellUpdated(cell);
-    }
-  }, []);
-  let getMouseXY = React.useCallback((
-    e: MouseEvent | React.MouseEvent<HTMLElement>
-  ) => {
-    let aspectRatio = window.innerWidth / window.innerHeight;
-    let w = viewBox.w;
-    let h = viewBox.h;
-    if (aspectRatio > 1) {
-      h = w / aspectRatio;
-    } else {
-      w = h * aspectRatio;
-    }
+  return {
+    x: e.clientX / window.innerWidth * w + viewBox.x,
+    y: e.clientY / window.innerHeight * h + viewBox.y,
+  };
+};
 
-    return {
-      x: e.clientX / window.innerWidth * w + viewBox.x,
-      y: e.clientY / window.innerHeight * h + viewBox.y,
-    };
-  }, [viewBox]);
-  let handleMouseMove = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
-    let m = getMouseXY(e);
-    let newHoverCell = cellFromAbsoluteCoords(m.x, m.y);
-    if (newHoverCell === null) {
-      setHoverCell(newHoverCell);
-      return;
-    }
+type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
-    if (newHoverCell.i >= rows || newHoverCell.j >= cols) {
-      setHoverCell(null);
-      return;
-    }
+interface PanZoomSvgProps {
+  viewBox: ViewBox;
+  onUpdateViewBox: (viewBox: ViewBox) => void;
+}
+export let PanZoomSvg: React.FC<
+  Omit<React.SVGProps<SVGSVGElement>, 'viewBox'> & PanZoomSvgProps
+> = ({viewBox, onUpdateViewBox, ...svgProps}: PanZoomSvgProps) => {
+  let ref = React.useRef<SVGSVGElement | null>(null);
 
-    if (!allowHoverEmptyCell) {
-      let hoverNodeId = grid[newHoverCell.i][newHoverCell.j];
-      if (!hoverNodeId) {
-        setHoverCell(null);
-        return;
-      }
-    }
-
-    if (hoverCell === null) {
-      setHoverCell(newHoverCell);
-      return;
-    }
-
-    if (newHoverCell.i !== hoverCell.i || newHoverCell.j !== hoverCell.j) {
-      setHoverCell(newHoverCell);
-      return;
-    }
-  }, [hoverCell, grid, rows, cols, allowHoverEmptyCell, getMouseXY]);
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     // HACK: Manually attach listener because react does passive: true
-    let f = (e: WheelEvent) => {
-      e.preventDefault();
+    let zoom = (e: WheelEvent) => {
       let dz = e.deltaY < 0 ? 1.05 : 1 / 1.05;
       let MAX_VIEWBOX_SIZE = 10000.0;
       let MIN_VIEWBOX_SIZE = 1000.0;
@@ -216,12 +169,12 @@ export let BaseKnowledgeMap = ({
         dz = viewBox.w / MIN_VIEWBOX_SIZE;
       }
 
-      let m = getMouseXY(e);
+      let m = getMouseXY(e, viewBox);
 
       let dx = m.x - viewBox.x;
       let dy = m.y - viewBox.y;
 
-      setViewBox({
+      onUpdateViewBox({
         // If we slightly zoom in, the old x has to be slightly outside of the
         // new viewBox. Looks something like this:
         //
@@ -271,17 +224,100 @@ export let BaseKnowledgeMap = ({
         w: viewBox.w / dz,
         h: viewBox.h / dz,
       });
-    }
+    };
+    let pan = (e: WheelEvent) => {
+      onUpdateViewBox({
+        x: viewBox.x + e.deltaX,
+        y: viewBox.y + e.deltaY,
+        w: viewBox.w,
+        h: viewBox.h,
+      });
+    };
+    let handler = (e: WheelEvent) => {
+      e.preventDefault();
+      if (e.ctrlKey || e.metaKey) {
+        zoom(e);
+      } else {
+        pan(e);
+      }
+    };
     let cur = ref.current!;
-    cur.addEventListener('wheel', f);
-    return () => cur.removeEventListener('wheel', f);
-  }, [viewBox, getMouseXY]);
-  let handleMouseDown = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
-    if (hoverCell) {
+    cur.addEventListener('wheel', handler);
+    return () => cur.removeEventListener('wheel', handler);
+  }, [viewBox, onUpdateViewBox]);
+
+  return (
+    <svg ref={ref}
+        viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
+        {...svgProps}/>
+  );
+};
+
+type NodeMap = Map<string, KnowledgeNodePropsLite>;
+interface BaseKnowledgeMapProps {
+  knowledgeGraph: TechTree;
+  grid: string[][];
+  rows: number;
+  cols: number;
+  nodeMap: NodeMap;
+  selectedCells: Cell[];
+  allowHoverEmptyCell: boolean;
+  onHoverCellUpdated?: (cell: Cell | null) => void;
+}
+export let BaseKnowledgeMap = ({
+  knowledgeGraph,
+  grid,
+  rows,
+  cols,
+  nodeMap,
+  selectedCells,
+  allowHoverEmptyCell,
+  onHoverCellUpdated,
+}: BaseKnowledgeMapProps) => {
+  let [viewBox, setViewBox] = React.useState({x: 0, y: 0, w: 2000, h: 2000});
+  let topSorted = React.useMemo(() => {
+    let ret = knowledgeGraph.overallOrder();
+    return ret;
+  }, [knowledgeGraph]);
+
+  let [hoverCell, _setHoverCell] = React.useState<Cell | null>(null);
+  let setHoverCell = React.useCallback((cell: Cell | null) => {
+    _setHoverCell(cell);
+    if (onHoverCellUpdated) {
+      onHoverCellUpdated(cell);
+    }
+  }, []);
+  let handleMouseMove = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
+    let m = getMouseXY(e, viewBox);
+    let newHoverCell = cellFromAbsoluteCoords(m.x, m.y);
+    if (newHoverCell === null) {
+      setHoverCell(newHoverCell);
       return;
     }
 
-  }, [hoverCell]);
+    if (newHoverCell.i >= rows || newHoverCell.j >= cols) {
+      setHoverCell(null);
+      return;
+    }
+
+    if (!allowHoverEmptyCell) {
+      let hoverNodeId = grid[newHoverCell.i][newHoverCell.j];
+      if (!hoverNodeId) {
+        setHoverCell(null);
+        return;
+      }
+    }
+
+    if (hoverCell === null) {
+      setHoverCell(newHoverCell);
+      return;
+    }
+
+    if (newHoverCell.i !== hoverCell.i || newHoverCell.j !== hoverCell.j) {
+      setHoverCell(newHoverCell);
+      return;
+    }
+  }, [hoverCell, grid, rows, cols, allowHoverEmptyCell, viewBox]);
 
   let nodes = [];
   for (let i = 0; i < topSorted.length; ++i) {
@@ -347,20 +383,19 @@ export let BaseKnowledgeMap = ({
   let svgStyle = {
     minWidth: '100%',
     minHeight: '100%',
-    pointerEvents: 'none',
   } as React.CSSProperties;
   return (
-    <div style={containerStyle}
-        onMouseMove={handleMouseMove}
-        ref={ref}>
-      <svg xmlns="<http://www.w3.org/2000/svg>"
-          viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
+    <div style={containerStyle} onMouseMove={handleMouseMove}>
+      <PanZoomSvg
+          xmlns="<http://www.w3.org/2000/svg>"
+          viewBox={viewBox}
+          onUpdateViewBox={setViewBox}
           style={svgStyle}>
         {nodes}
         {selectRects}
         {hoverRect}
         {originMarker}
-      </svg>
+      </PanZoomSvg>
     </div>
   );
 };
@@ -787,6 +822,8 @@ let AdminKnowledgeMap = ({
       </div>
       <AdminToolbar selectedCells={selectedCells}
           grid={grid}
+          rows={rows}
+          cols={cols}
           reached={reached}
           knowledgeMap={knowledgeMap}
           onChangeId={handleChangeId}
