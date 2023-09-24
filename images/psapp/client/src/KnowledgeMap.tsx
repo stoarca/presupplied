@@ -122,30 +122,26 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
 type NodeMap = Map<string, KnowledgeNodePropsLite>;
 interface BaseKnowledgeMapProps {
   knowledgeGraph: TechTree;
+  grid: string[][];
+  rows: number;
+  cols: number;
   nodeMap: NodeMap;
   selectedCells: Cell[];
+  allowHoverEmptyCell: boolean;
   onHoverCellUpdated?: (cell: Cell | null) => void;
 }
 export let BaseKnowledgeMap = ({
   knowledgeGraph,
+  grid,
+  rows,
+  cols,
   nodeMap,
   selectedCells,
+  allowHoverEmptyCell,
   onHoverCellUpdated,
 }: BaseKnowledgeMapProps) => {
-  let ref = React.useRef<SVGSVGElement | null>(null);
-  let [width, setWidth] = React.useState(0);
-  let [height, setHeight] = React.useState(0);
-  React.useEffect(() => {
-    let interval = setInterval(() => {
-      // TODO: HACK we should not be using setInterval here, but good enough
-      // for now
-      let bbox = ref.current!.getBBox();
-      setWidth(bbox.width + 200);
-      setHeight(bbox.height + 200);
-    }, 100);
-    return () => clearInterval(interval);
-  }, []);
-
+  let ref = React.useRef<HTMLDivElement | null>(null);
+  let [viewBox, setViewBox] = React.useState({x: 0, y: 0, w: 2000, h: 2000});
   let topSorted = React.useMemo(() => {
     let ret = knowledgeGraph.overallOrder();
     return ret;
@@ -158,19 +154,133 @@ export let BaseKnowledgeMap = ({
       onHoverCellUpdated(cell);
     }
   }, []);
+  let getMouseXY = React.useCallback((
+    e: MouseEvent | React.MouseEvent<HTMLElement>
+  ) => {
+    let aspectRatio = window.innerWidth / window.innerHeight;
+    let w = viewBox.w;
+    let h = viewBox.h;
+    if (aspectRatio > 1) {
+      h = w / aspectRatio;
+    } else {
+      w = h * aspectRatio;
+    }
+
+    return {
+      x: e.clientX / window.innerWidth * w + viewBox.x,
+      y: e.clientY / window.innerHeight * h + viewBox.y,
+    };
+  }, [viewBox]);
   let handleMouseMove = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
-    let rect = e.currentTarget.getBoundingClientRect();
-    let newHoverCell = cellFromAbsoluteCoords(
-      e.clientX - rect.left, e.clientY - rect.top
-    );
-    if (newHoverCell === null || hoverCell === null) {
+    let m = getMouseXY(e);
+    let newHoverCell = cellFromAbsoluteCoords(m.x, m.y);
+    if (newHoverCell === null) {
       setHoverCell(newHoverCell);
       return;
     }
+
+    if (newHoverCell.i >= rows || newHoverCell.j >= cols) {
+      setHoverCell(null);
+      return;
+    }
+
+    if (!allowHoverEmptyCell) {
+      let hoverNodeId = grid[newHoverCell.i][newHoverCell.j];
+      if (!hoverNodeId) {
+        setHoverCell(null);
+        return;
+      }
+    }
+
+    if (hoverCell === null) {
+      setHoverCell(newHoverCell);
+      return;
+    }
+
     if (newHoverCell.i !== hoverCell.i || newHoverCell.j !== hoverCell.j) {
       setHoverCell(newHoverCell);
       return;
     }
+  }, [hoverCell, grid, rows, cols, allowHoverEmptyCell, getMouseXY]);
+  React.useEffect(() => {
+    // HACK: Manually attach listener because react does passive: true
+    let f = (e: WheelEvent) => {
+      e.preventDefault();
+      let dz = e.deltaY < 0 ? 1.05 : 1 / 1.05;
+      let MAX_VIEWBOX_SIZE = 10000.0;
+      let MIN_VIEWBOX_SIZE = 1000.0;
+      if (viewBox.w / dz > MAX_VIEWBOX_SIZE) {
+        dz = viewBox.w / MAX_VIEWBOX_SIZE;
+      }
+      if (viewBox.w / dz < MIN_VIEWBOX_SIZE) {
+        dz = viewBox.w / MIN_VIEWBOX_SIZE;
+      }
+
+      let m = getMouseXY(e);
+
+      let dx = m.x - viewBox.x;
+      let dy = m.y - viewBox.y;
+
+      setViewBox({
+        // If we slightly zoom in, the old x has to be slightly outside of the
+        // new viewBox. Looks something like this:
+        //
+        //
+        //  |        |            |
+        //  ^        ^            |
+        // v.x      m.x           |
+        //  |                     |
+        //   <--------v.w-------->
+        //
+        //     ^ before zoom
+        //
+        //
+        //
+        //     |    |      |
+        //     ^    ^      |
+        //    v.x' m.x     |
+        //     |           |
+        //      <- -v.w'-->
+        //
+        //     ^ after zoom
+        //
+        // m.x is the mouse position
+        // v.x is the viewbox position before zoom
+        // v.x' is the viewbox position after zoom
+        // v.w is the width of the viewbox before zoom
+        // v.w' is the width of the viewbox after zoom
+        //
+        // Note that m.x has to be a fixed point so that if the user alternates
+        // between zooming out and in without moving their mouse, their
+        // position doesn't change.
+        // So then we get:
+        //
+        // v.w' = v.w / dz (if we zoom in, we are showing a smaller part)
+        // dz = v.w / v.w'
+        //
+        // and we need to solve for v.x':
+        //
+        // (m.x - v.x) / v.w = (m.x - v.x') / v.w'
+        // (m.x - v.x) * v.w' / v.w = m.x - v.x'
+        // v.x' = m.x - (m.x - v.x) * v.w' / v.w
+        // v.x' = m.x - (m.x - v.x) / dz
+        // v.x' = m.x - dx / dz
+
+        x: m.x - dx / dz,
+        y: m.y - dy / dz,
+        w: viewBox.w / dz,
+        h: viewBox.h / dz,
+      });
+    }
+    let cur = ref.current!;
+    cur.addEventListener('wheel', f);
+    return () => cur.removeEventListener('wheel', f);
+  }, [viewBox, getMouseXY]);
+  let handleMouseDown = React.useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (hoverCell) {
+      return;
+    }
+
   }, [hoverCell]);
 
   let nodes = [];
@@ -214,12 +324,25 @@ export let BaseKnowledgeMap = ({
     );
   }
 
+  let originMarker = null;
+  if (allowHoverEmptyCell) {
+    originMarker = (
+      <circle
+          cx={0}
+          cy={0}
+          r={CELL_HEIGHT / 3}
+          fill="red"/>
+    );
+  }
+
   let containerStyle = {
     minWidth: '100%',
     minHeight: '100%',
-    width: width + 'px',
-    height: height + 'px',
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
     userSelect: 'none',
+    overflow: 'hidden',
   } as React.CSSProperties;
   let svgStyle = {
     minWidth: '100%',
@@ -227,15 +350,16 @@ export let BaseKnowledgeMap = ({
     pointerEvents: 'none',
   } as React.CSSProperties;
   return (
-    <div style={containerStyle} onMouseMove={handleMouseMove}>
+    <div style={containerStyle}
+        onMouseMove={handleMouseMove}
+        ref={ref}>
       <svg xmlns="<http://www.w3.org/2000/svg>"
-          style={svgStyle}
-          width={width}
-          height={height}
-          ref={ref}>
+          viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
+          style={svgStyle}>
         {nodes}
         {selectRects}
         {hoverRect}
+        {originMarker}
       </svg>
     </div>
   );
@@ -652,8 +776,12 @@ let AdminKnowledgeMap = ({
       <div onMouseDown={handleMouseDown} onClick={handleClick}>
         <BaseKnowledgeMap
             knowledgeGraph={knowledgeGraph}
+            grid={grid}
+            rows={rows}
+            cols={cols}
             nodeMap={nodeMap}
             selectedCells={selectedCells}
+            allowHoverEmptyCell={true}
             onHoverCellUpdated={setHoverCell}
         />
       </div>
@@ -676,6 +804,8 @@ let AdminKnowledgeMap = ({
 interface StudentKnowledgeMapProps {
   knowledgeGraph: TechTree;
   grid: string[][],
+  rows: number,
+  cols: number,
   nodeMap: NodeMap;
   reached: Set<string>;
   onChangeReached: (newReached: Set<string>) => void;
@@ -686,6 +816,8 @@ interface StudentKnowledgeMapProps {
 let StudentKnowledgeMap = ({
   knowledgeGraph,
   grid,
+  rows,
+  cols,
   nodeMap,
   reached,
   onChangeReached,
@@ -745,8 +877,12 @@ let StudentKnowledgeMap = ({
     <div onClick={handleClick}>
       <BaseKnowledgeMap
           knowledgeGraph={knowledgeGraph}
+          grid={grid}
+          rows={rows}
+          cols={cols}
           nodeMap={nodeMap}
           selectedCells={selectedCells}
+          allowHoverEmptyCell={false}
           onHoverCellUpdated={setHoverCell}/>
       <Drawer anchor="right"
           open={selectedCells.length > 0}
@@ -851,8 +987,9 @@ export let KnowledgeMap = () => {
     }, 200);
   }, []); // intentionally empty deps, only run this on mount
 
+  let ret;
   if (admin) {
-    return (
+    ret = (
       <AdminKnowledgeMap
           knowledgeMap={knowledgeMap}
           setKnowledgeMap={setKnowledgeMap}
@@ -866,16 +1003,24 @@ export let KnowledgeMap = () => {
           selectedCells={selectedCells}
           setSelectedCells={setSelectedCells}/>
     );
+  } else {
+    ret = (
+      <StudentKnowledgeMap
+          knowledgeGraph={knowledgeGraph}
+          grid={grid}
+          rows={rows}
+          cols={cols}
+          nodeMap={nodeMap}
+          reached={reached}
+          onChangeReached={handleChangeReached}
+          selectedCells={selectedCells}
+          setSelectedCells={setSelectedCells}/>
+    );
   }
   return (
-    <StudentKnowledgeMap
-        knowledgeGraph={knowledgeGraph}
-        grid={grid}
-        nodeMap={nodeMap}
-        reached={reached}
-        onChangeReached={handleChangeReached}
-        selectedCells={selectedCells}
-        setSelectedCells={setSelectedCells}/>
+    <div style={{height: '100%', position: 'relative'}}>
+      {ret}
+    </div>
   );
 }
 
