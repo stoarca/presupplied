@@ -108,7 +108,7 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
   }
   let opacity = 1;
   if (!moduleComponents[props.kmid]) {
-    opacity=0.2;
+    opacity=0.3;
   }
   return (
     <g transform={`translate(${pos.x}, ${pos.y})`} opacity={opacity}>
