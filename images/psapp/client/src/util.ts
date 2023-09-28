@@ -8,6 +8,12 @@ export interface Rect {
   w: number,
   h: number,
 }
+export interface ViewBox {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
 
 interface GenRandPointOptions {
   width?: number,
@@ -184,8 +190,18 @@ export let rotate = (p: Point, origin: Point, angle: number): Point => {
 export let clamp = (n: number, min: number, max: number): number => {
   return Math.min(Math.max(n, min), max);
 };
-export let dist = (a: Point, b: Point) => {
+export let dist = (a: Point, b: Point): number => {
   return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+};
+export let diff = (a: Point, b: Point): Point => {
+  return {x: a.x - b.x, y: a.y - b.y};
+};
+
+export let midpoint = (a: Point, b: Point) => {
+  return {
+    x: (a.x + b.x) / 2,
+    y: (a.y + b.y) / 2,
+  };
 };
 
 export let sum = (arr: number[]) => {
@@ -212,6 +228,29 @@ export let getPointOnUnitSquare = (angle: number): Point => {
     };
   }
 }
+
+export let pixelToViewBoxDist = (pixelCoord: Point, viewBox: ViewBox): Point => {
+  let aspectRatio = window.innerWidth / window.innerHeight;
+  let w = viewBox.w;
+  let h = viewBox.h;
+  if (aspectRatio > 1) {
+    h = w / aspectRatio;
+  } else {
+    w = h * aspectRatio;
+  }
+  return {
+    x: pixelCoord.x / window.innerWidth * w,
+    y: pixelCoord.y / window.innerHeight * h,
+  };
+}
+
+export let pixelToViewBoxPos = (pixelCoord: Point, viewBox: ViewBox): Point => {
+  let ret = pixelToViewBoxDist(pixelCoord, viewBox);
+  return {
+    x: ret.x + viewBox.x,
+    y: ret.y + viewBox.y,
+  };
+};
 
 // TODO: need to verify that each object has a picture and sound
 export let SIMPLE_OBJECT_NAMES = [

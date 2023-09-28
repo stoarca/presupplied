@@ -19,9 +19,9 @@
     {
       "id": "RECOGNIZE_SIMPLE_OBJECTS",
       "i": 39,
-      "j": 2,
+      "j": 3,
       "deps": [
-        "TRACKING_FACE"
+        "TRACKING_OBJECTS"
       ]
     },
     {
@@ -221,27 +221,25 @@
     {
       "id": "RECOGNIZE_LOWERCASE_LETTERS",
       "i": 18,
-      "j": 2,
+      "j": 3,
       "deps": [
-        "RECOGNIZE_EYES_FACES",
-        "TRACKING_FACE"
+        "TRACKING_OBJECTS"
       ]
     },
     {
       "id": "RECOGNIZE_UPPERCASE_LETTERS",
       "i": 19,
-      "j": 2,
+      "j": 3,
       "deps": [
-        "RECOGNIZE_EYES_FACES",
-        "TRACKING_FACE"
+        "TRACKING_OBJECTS"
       ]
     },
     {
       "id": "RECOGNIZE_DIGITS",
       "i": 38,
-      "j": 2,
+      "j": 3,
       "deps": [
-        "TRACKING_FACE"
+        "TRACKING_OBJECTS"
       ]
     },
     {
