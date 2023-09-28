@@ -13,6 +13,7 @@ import {buildGraph, TechTree} from './dependency-graph';
 import {AdminToolbar, TOOLBAR_WIDTH} from './AdminToolbar';
 import {Cell} from './types';
 import {GraphJson} from '../../common/types';
+import {clamp} from './util';
 import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
 let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 
@@ -126,10 +127,11 @@ interface ViewBox {
   w: number;
   h: number;
 }
-let getMouseXY = (
-  e: MouseEvent | React.MouseEvent<HTMLElement>,
-  viewBox: ViewBox,
-) => {
+
+let pixelToViewBoxDist = (
+  pos: {x: number, y: number},
+  viewBox: ViewBox
+): {x: number, y: number} => {
   let aspectRatio = window.innerWidth / window.innerHeight;
   let w = viewBox.w;
   let h = viewBox.h;
@@ -138,43 +140,124 @@ let getMouseXY = (
   } else {
     w = h * aspectRatio;
   }
-
   return {
-    x: e.clientX / window.innerWidth * w + viewBox.x,
-    y: e.clientY / window.innerHeight * h + viewBox.y,
+    x: pos.x / window.innerWidth * w,
+    y: pos.y / window.innerHeight * h,
+  };
+}
+
+let getMouseXY = (
+  e: MouseEvent | React.MouseEvent<HTMLElement> | React.MouseEvent<SVGElement>,
+  viewBox: ViewBox,
+) => {
+  let ret = pixelToViewBoxDist({x: e.clientX, y: e.clientY}, viewBox);
+  return {
+    x: ret.x + viewBox.x,
+    y: ret.y + viewBox.y,
   };
 };
 
 type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+type RME = React.MouseEvent<SVGSVGElement>;
+type RTE = React.TouchEvent<SVGSVGElement>;
 
-interface PanZoomSvgProps {
+interface ZoomStart {
+  mouse: {x: number, y: number};
   viewBox: ViewBox;
+  totalZoom: number;
+}
+interface PanZoomSvgProps extends Omit<React.SVGProps<SVGSVGElement>, 'viewBox'> {
+  viewBox: ViewBox;
+  viewLimitBox?: ViewBox;
+  minZoomWidth: number;
+  maxZoomWidth: number;
   onUpdateViewBox: (viewBox: ViewBox) => void;
 }
-export let PanZoomSvg: React.FC<
-  Omit<React.SVGProps<SVGSVGElement>, 'viewBox'> & PanZoomSvgProps
-> = ({viewBox, onUpdateViewBox, ...svgProps}: PanZoomSvgProps) => {
+export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
+  viewBox,
+  viewLimitBox,
+  minZoomWidth,
+  maxZoomWidth,
+  onUpdateViewBox,
+  onMouseDown,
+  onMouseMove,
+  onMouseUp,
+  onTouchStart,
+  onTouchMove,
+  onTouchEnd,
+  ...svgProps
+}: PanZoomSvgProps) => {
   let ref = React.useRef<SVGSVGElement | null>(null);
 
+  let constrainedViewBox = React.useCallback((vb: ViewBox): ViewBox => {
+    if (!viewLimitBox) {
+      return vb;
+    }
+    let constrained = {
+      x: clamp(
+        viewLimitBox.x,
+        vb.x,
+        viewLimitBox.x + viewLimitBox.w - vb.w
+      ),
+      y: clamp(
+        viewLimitBox.y,
+        vb.y,
+        viewLimitBox.y + viewLimitBox.h - vb.h
+      ),
+      w: Math.min(vb.w, viewLimitBox.w),
+      h: Math.min(vb.h, viewLimitBox.h),
+    };
+    return constrained;
+  }, [viewLimitBox]);
+
+  console.log('actual viewbox ' + JSON.stringify(viewBox, undefined, 2));
+
+  React.useLayoutEffect(() => {
+    let constrained = constrainedViewBox(viewBox);
+    console.log('trying to constrain ' + JSON.stringify(viewBox, undefined, 2));
+    console.log('constraining to ' + JSON.stringify(constrained, undefined, 2));
+    if (
+      constrained.x !== viewBox.x ||
+      constrained.y !== viewBox.y ||
+      constrained.w !== viewBox.w ||
+      constrained.h !== viewBox.h
+    ) {
+      console.log('updating constrained viwebox');
+      onUpdateViewBox(constrained);
+    }
+  }, [viewBox, constrainedViewBox, onUpdateViewBox]);
+
+  let [zoomState, setZoomState] = React.useState<ZoomStart | null>(null);
   React.useLayoutEffect(() => {
     // HACK: Manually attach listener because react does passive: true
     let zoom = (e: WheelEvent) => {
       let dz = e.deltaY < 0 ? 1.05 : 1 / 1.05;
-      let MAX_VIEWBOX_SIZE = 10000.0;
-      let MIN_VIEWBOX_SIZE = 1000.0;
-      if (viewBox.w / dz > MAX_VIEWBOX_SIZE) {
-        dz = viewBox.w / MAX_VIEWBOX_SIZE;
+      if (viewBox.w / dz > maxZoomWidth) {
+        dz = viewBox.w / maxZoomWidth;
       }
-      if (viewBox.w / dz < MIN_VIEWBOX_SIZE) {
-        dz = viewBox.w / MIN_VIEWBOX_SIZE;
+      if (viewBox.w / dz < minZoomWidth) {
+        dz = viewBox.w / minZoomWidth;
       }
 
-      let m = getMouseXY(e, viewBox);
+      let zs;
+      if (!zoomState) {
+        zs = {
+          mouse: getMouseXY(e, viewBox),
+          viewBox: viewBox,
+          totalZoom: dz,
+        };
+      } else {
+        zs = {
+          ...zoomState,
+          totalZoom: dz * zoomState.totalZoom,
+        };
+      }
 
-      let dx = m.x - viewBox.x;
-      let dy = m.y - viewBox.y;
+      let dx = zs.mouse.x - zs.viewBox.x;
+      let dy = zs.mouse.y - zs.viewBox.y;
 
-      onUpdateViewBox({
+      setZoomState(zs);
+      onUpdateViewBox(constrainedViewBox({
         // If we slightly zoom in, the old x has to be slightly outside of the
         // new viewBox. Looks something like this:
         //
@@ -219,21 +302,23 @@ export let PanZoomSvg: React.FC<
         // v.x' = m.x - (m.x - v.x) / dz
         // v.x' = m.x - dx / dz
 
-        x: m.x - dx / dz,
-        y: m.y - dy / dz,
-        w: viewBox.w / dz,
-        h: viewBox.h / dz,
-      });
+        x: zs.mouse.x - dx / zs.totalZoom,
+        y: zs.mouse.y - dy / zs.totalZoom,
+        w: zs.viewBox.w / zs.totalZoom,
+        h: zs.viewBox.h / zs.totalZoom,
+      }));
     };
     let pan = (e: WheelEvent) => {
-      onUpdateViewBox({
-        x: viewBox.x + e.deltaX,
-        y: viewBox.y + e.deltaY,
+      setZoomState(null);
+      let {x, y} = pixelToViewBoxDist({x: e.deltaX, y: e.deltaY}, viewBox);
+      onUpdateViewBox(constrainedViewBox({
+        x: viewBox.x + x,
+        y: viewBox.y + y,
         w: viewBox.w,
         h: viewBox.h,
-      });
+      }));
     };
-    let handler = (e: WheelEvent) => {
+    let handleWheel = (e: WheelEvent) => {
       e.preventDefault();
       if (e.ctrlKey || e.metaKey) {
         zoom(e);
@@ -242,13 +327,74 @@ export let PanZoomSvg: React.FC<
       }
     };
     let cur = ref.current!;
-    cur.addEventListener('wheel', handler);
-    return () => cur.removeEventListener('wheel', handler);
-  }, [viewBox, onUpdateViewBox]);
+    cur.addEventListener('wheel', handleWheel);
+    return () => cur.removeEventListener('wheel', handleWheel);
+  }, [viewBox, onUpdateViewBox, zoomState, minZoomWidth, maxZoomWidth]);
+
+  let action = React.useRef<'zoom' | 'drag' | null>(null);
+  let startDrag = React.useRef({mouse: {x: 0, y: 0}, viewBox: viewBox});
+  let handleMouseDown = React.useCallback((e: RME) => {
+    onMouseDown && onMouseDown(e);
+    action.current = 'drag';
+    startDrag.current = {mouse: getMouseXY(e, viewBox), viewBox: viewBox};
+  }, [viewBox, onMouseDown]);
+
+  let handleMouseMove = React.useCallback((e: RME) => {
+    setZoomState(null);
+    onMouseMove && onMouseMove(e);
+    if (!(e.buttons & 1)) {
+      // If the mouse is dragged off the screen, we will not receive a mouseup
+      // event. So we check if the primary button is still pressed while
+      // moving and disable drag if not.
+      action.current = null;
+    }
+    if (action.current === 'drag') {
+      let vb = startDrag.current.viewBox;
+      let mouse = getMouseXY(e, vb);
+      console.log('dragging');
+      console.log(startDrag.current.mouse);
+      console.log(mouse);
+      vb = {
+        ...vb,
+        x: vb.x + startDrag.current.mouse.x - mouse.x,
+        y: vb.y + startDrag.current.mouse.y - mouse.y,
+      };
+      let constrained = constrainedViewBox(vb);
+      onUpdateViewBox(constrained);
+    }
+  }, [onMouseMove]);
+
+  let handleMouseUp = React.useCallback((e: RME) => {
+    setZoomState(null);
+    action.current = null;
+    onMouseUp && onMouseUp(e);
+  }, [onMouseUp]);
+
+  let handleTouchStart = React.useCallback((e: RTE) => {
+    console.log('got touch start');
+    onTouchStart && onTouchStart(e);
+    if (e.defaultPrevented) {
+
+    }
+  }, [onTouchStart]);
+
+  let handleTouchMove = React.useCallback((e: RTE) => {
+    onTouchMove && onTouchMove(e);
+  }, [onTouchMove]);
+
+  let handleTouchEnd = React.useCallback((e: RTE) => {
+    onTouchEnd && onTouchEnd(e);
+  }, [onTouchEnd]);
 
   return (
     <svg ref={ref}
         viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         {...svgProps}/>
   );
 };
@@ -343,7 +489,12 @@ export let BaseKnowledgeMap = ({
       return;
     }
 
-    if (newHoverCell.i >= rows || newHoverCell.j >= cols) {
+    if (
+      newHoverCell.i < 0 ||
+      newHoverCell.j < 0 ||
+      newHoverCell.i >= rows ||
+      newHoverCell.j >= cols
+    ) {
       setHoverCell(null);
       return;
     }
@@ -432,11 +583,17 @@ export let BaseKnowledgeMap = ({
     minWidth: '100%',
     minHeight: '100%',
   } as React.CSSProperties;
+  let viewLimitBox = React.useMemo(() => {
+    return {x: -100, y: -100, w: 15000, h: 15000};
+  }, []);
   return (
     <div style={containerStyle} onMouseMove={handleMouseMove}>
       <PanZoomSvg
           xmlns="<http://www.w3.org/2000/svg>"
           viewBox={viewBox}
+          viewLimitBox={viewLimitBox}
+          minZoomWidth={1000}
+          maxZoomWidth={100000}
           onUpdateViewBox={setViewBox}
           onMouseDown={onMouseDown}
           onMouseUp={onMouseUp}
@@ -496,8 +653,12 @@ let AdminKnowledgeMap = ({
     }
 
     let hoverNodeId = grid[hoverCell.i][hoverCell.j];
+    if (!hoverNodeId) {
+      return;
+    }
+
     let selectedNodeIds = selectedCells.map(x => grid[x.i][x.j]);
-    if (hoverNodeId && !selectedNodeIds.includes(hoverNodeId)) {
+    if (!selectedNodeIds.includes(hoverNodeId)) {
       setSelectedCells([hoverCell]);
     }
   }, [hoverCell, selectedCells, grid]);
@@ -920,6 +1081,7 @@ let StudentKnowledgeMap = ({
   let handleClick = React.useCallback(async (
     e: React.MouseEvent<SVGSVGElement>
   ) => {
+    console.log('click called');
     if (!hoverCell) {
       return;
     }

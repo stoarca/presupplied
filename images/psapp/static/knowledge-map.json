@@ -280,7 +280,7 @@
     {
       "id": "COUNT_TO_20",
       "i": 40,
-      "j": 7,
+      "j": 8,
       "deps": [
         "COUNT_TO_10"
       ]
@@ -296,7 +296,7 @@
     {
       "id": "COUNT_TO_100",
       "i": 40,
-      "j": 8,
+      "j": 9,
       "deps": [
         "COUNT_TO_20"
       ]
@@ -323,7 +323,7 @@
     {
       "id": "READ_NUMBERS_TO_20",
       "i": 38,
-      "j": 8,
+      "j": 9,
       "deps": [
         "COUNT_TO_20",
         "READ_DIGITS"
@@ -342,7 +342,7 @@
     {
       "id": "READ_NUMBERS_UP_TO_1000",
       "i": 38,
-      "j": 11,
+      "j": 12,
       "deps": [
         "READ_NUMBERS_UP_TO_100",
         "COUNT_TO_1000",
@@ -380,7 +380,7 @@
     {
       "id": "READ_NUMBERS_UP_TO_MILLION",
       "i": 38,
-      "j": 12,
+      "j": 13,
       "deps": [
         "READ_NUMBERS_UP_TO_1000"
       ]
@@ -486,7 +486,7 @@
     {
       "id": "READ_ANY_NUMBER",
       "i": 38,
-      "j": 13,
+      "j": 14,
       "deps": [
         "READ_NUMBERS_UP_TO_MILLION"
       ]
@@ -638,7 +638,7 @@
     {
       "id": "READ_PARAGRAPHS",
       "i": 19,
-      "j": 14,
+      "j": 15,
       "deps": [
         "READ_LONG_SENTENCES",
         "READ_6_LETTER_WORDS"
@@ -704,7 +704,7 @@
     {
       "id": "ADD_2_FRACTIONS_OVER_1_SAME_DENOM",
       "i": 45,
-      "j": 18,
+      "j": 19,
       "deps": [
         "READ_ANY_FRACTION_OVER_1",
         "ADD_2_FRACTIONS_UNDER_1_SAME_DENOM",
@@ -768,7 +768,7 @@
     {
       "id": "LONG_ADDITION_3_DIGITS",
       "i": 46,
-      "j": 14,
+      "j": 15,
       "deps": [
         "ADD_TWO_POS_2_DIGIT_NUMBERS"
       ]
@@ -776,7 +776,7 @@
     {
       "id": "LONG_ADDITION_ANY_DIGITS",
       "i": 46,
-      "j": 15,
+      "j": 16,
       "deps": [
         "LONG_ADDITION_3_DIGITS"
       ]
@@ -784,7 +784,7 @@
     {
       "id": "READ_PICTURE_BOOKS",
       "i": 19,
-      "j": 15,
+      "j": 16,
       "deps": [
         "READ_PARAGRAPHS"
       ]
@@ -792,7 +792,7 @@
     {
       "id": "TODO_BASIC_GRAMMAR",
       "i": 20,
-      "j": 15,
+      "j": 16,
       "deps": [
         "READ_PARAGRAPHS"
       ]
@@ -800,7 +800,7 @@
     {
       "id": "LONG_ADDITION_MULTIPLE_INTS",
       "i": 46,
-      "j": 16,
+      "j": 18,
       "deps": [
         "LONG_ADDITION_ANY_DIGITS"
       ]
@@ -853,7 +853,7 @@
     {
       "id": "DIV_UP_TO_10_X_10",
       "i": 51,
-      "j": 17,
+      "j": 18,
       "deps": [
         "MULT_UP_TO_10_X_10",
         "DIV_UP_TO_5_X_10"
@@ -862,7 +862,7 @@
     {
       "id": "REMAINDERS",
       "i": 52,
-      "j": 17,
+      "j": 18,
       "deps": [
         "DIV_UP_TO_5_X_10"
       ]
@@ -934,7 +934,7 @@
     {
       "id": "LONG_ADD_SUBTRACT_ANY_INTS",
       "i": 48,
-      "j": 18,
+      "j": 19,
       "deps": [
         "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
         "LONG_SUBTRACT_POS_INTS",
@@ -1102,7 +1102,7 @@
     {
       "id": "PARENTHESES",
       "i": 55,
-      "j": 18,
+      "j": 19,
       "deps": [
         "OPERATOR_PRECEDENCE"
       ]
@@ -1413,7 +1413,7 @@
     {
       "id": "EQUATIONS_6_OPS",
       "i": 57,
-      "j": 24,
+      "j": 25,
       "deps": [
         "FILL_IN_BLANK_6_OPS",
         "EQUATIONS_5_OPS"
@@ -1493,7 +1493,7 @@
     {
       "id": "TERMINAL_COMMANDS_SIMPLE",
       "i": 24,
-      "j": 14,
+      "j": 15,
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
         "READ_SHORT_SENTENCES"
@@ -2204,7 +2204,7 @@
     {
       "id": "READ_CLOCK_HOURS",
       "i": 36,
-      "j": 9,
+      "j": 10,
       "deps": [
         "READ_NUMBERS_TO_20"
       ]
