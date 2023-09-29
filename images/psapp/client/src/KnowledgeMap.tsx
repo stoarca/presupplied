@@ -126,8 +126,6 @@ type NodeMap = Map<string, KnowledgeNodePropsLite>;
 interface BaseKnowledgeMapProps {
   knowledgeGraph: TechTree;
   grid: string[][];
-  rows: number;
-  cols: number;
   nodeMap: NodeMap;
   reachable: Set<string>;
   selectedCells: Cell[];
@@ -140,8 +138,6 @@ interface BaseKnowledgeMapProps {
 export let BaseKnowledgeMap = ({
   knowledgeGraph,
   grid,
-  rows,
-  cols,
   nodeMap,
   reachable,
   selectedCells,
@@ -215,8 +211,8 @@ export let BaseKnowledgeMap = ({
     if (
       newHoverCell.i < 0 ||
       newHoverCell.j < 0 ||
-      newHoverCell.i >= rows ||
-      newHoverCell.j >= cols
+      newHoverCell.i >= grid.length ||
+      newHoverCell.j >= grid[0].length
     ) {
       setHoverCell(null);
       return;
@@ -239,7 +235,7 @@ export let BaseKnowledgeMap = ({
       setHoverCell(newHoverCell);
       return;
     }
-  }, [hoverCell, grid, rows, cols, allowHoverEmptyCell, viewBox]);
+  }, [hoverCell, grid, allowHoverEmptyCell, viewBox]);
 
   let nodes = [];
   for (let i = 0; i < topSorted.length; ++i) {
@@ -316,7 +312,7 @@ export let BaseKnowledgeMap = ({
           viewBox={viewBox}
           viewLimitBox={viewLimitBox}
           minZoomWidth={1000}
-          maxZoomWidth={10000}
+          maxZoomWidth={15000}
           onUpdateViewBox={setViewBox}
           onMouseDown={onMouseDown}
           onMouseMove={handleMouseMove}
@@ -360,7 +356,7 @@ let AdminKnowledgeMap = ({
   selectedCells,
   setSelectedCells,
 }: AdminKnowledgeMapProps) => {
-  let [mode, setMode] = React.useState<'selecting' | null>(null);
+  let [mode, setMode] = React.useState<'select' | 'move'>('move');
   let [hoverCell, setHoverCell] = React.useState<Cell | null>(null);
   let [dragStart, setDragStart] = React.useState<Cell | null>(null);
   let handleMouseDown = React.useCallback((
@@ -371,10 +367,10 @@ let AdminKnowledgeMap = ({
     }
     setDragStart(hoverCell);
     if (e.shiftKey) {
-      setMode('selecting');
+      setMode('select');
     }
 
-    if (e.shiftKey || e.ctrlKey) {
+    if (e.shiftKey || e.ctrlKey || e.altKey) {
       cancelPanZoom();
       return;
     }
@@ -384,6 +380,7 @@ let AdminKnowledgeMap = ({
       return;
     }
 
+    cancelPanZoom();
     let selectedNodeIds = selectedCells.map(x => grid[x.i][x.j]);
     if (!selectedNodeIds.includes(hoverNodeId)) {
       setSelectedCells([hoverCell]);
@@ -391,7 +388,7 @@ let AdminKnowledgeMap = ({
   }, [hoverCell, selectedCells, grid]);
   let handleMouseUp = React.useCallback((e: MouseEvent) => {
     setDragStart(null);
-    setMode(null);
+    setMode('move');
     if (!dragStart) {
       return;
     }
@@ -403,8 +400,11 @@ let AdminKnowledgeMap = ({
     let dj = hoverCell.j - dragStart.j;
     if (di !== 0 || dj !== 0) { // move selection
       let selectedNodeIds = selectedCells.map(x => grid[x.i][x.j]);
-      if (mode === 'selecting') {
-        let newlySelectedCells = [];
+      if (mode === 'select') {
+        let op = selectedCells.find(
+          x => x.i === dragStart!.i && x.j === dragStart!.j
+        ) ? 'remove' : 'add';
+        let newSelectedCells = [...selectedCells];
         let mini = Math.min(hoverCell.i, dragStart.i);
         let maxi = Math.max(hoverCell.i, dragStart.i);
         let minj = Math.min(hoverCell.j, dragStart.j);
@@ -412,11 +412,24 @@ let AdminKnowledgeMap = ({
         for (let i = mini; i <= maxi; ++i) {
           for (let j = minj; j <= maxj; ++j) {
             if (grid[i][j]) {
-              newlySelectedCells.push({i: i, j: j});
+              if (op === 'add') {
+                if (!selectedCells.find(x => x.i === i && x.j === j)) {
+                  // TODO: slow find ^
+                  newSelectedCells.push({i: i, j: j});
+                }
+              } else {
+                let index = newSelectedCells.findIndex(
+                  x => x.i === i && x.j === j
+                );
+                // TODO: slow find ^
+                if (index > -1) {
+                  newSelectedCells.splice(index, 1);
+                }
+              }
             }
           }
         }
-        setSelectedCells([...selectedCells, ...newlySelectedCells]);
+        setSelectedCells(newSelectedCells);
       } else {
         let isOverlapWithOthers = selectedCells.some(x => {
           let nodeId = grid[x.i + di][x.j + dj];
@@ -523,7 +536,7 @@ let AdminKnowledgeMap = ({
       });
       setSelectedCells([hoverCell]);
     }
-  }, [dragStart, hoverCell, grid, knowledgeMap, selectedCells]);
+  }, [mode, dragStart, hoverCell, grid, knowledgeMap, selectedCells]);
 
   let handleChangeId = React.useCallback((oldId: string, newId: string) => {
     let oldNodeIndex = knowledgeMap.nodes.findIndex(x => x.id === oldId);
@@ -752,8 +765,6 @@ let AdminKnowledgeMap = ({
       <BaseKnowledgeMap
           knowledgeGraph={knowledgeGraph}
           grid={grid}
-          rows={rows}
-          cols={cols}
           nodeMap={nodeMap}
           reachable={reachable}
           selectedCells={selectedCells}
@@ -806,7 +817,6 @@ let StudentKnowledgeMap = ({
 }: StudentKnowledgeMapProps) => {
   let [hoverCell, setHoverCell] = React.useState<Cell | null>(null);
   let handleClick = React.useCallback(async (e: MouseEvent) => {
-    console.log('click called');
     if (!hoverCell) {
       return;
     }
@@ -834,7 +844,6 @@ let StudentKnowledgeMap = ({
     setSelectedCells([hoverCell]);
   }, [hoverCell, grid, reached]);
   let handleCloseDrawer = React.useCallback(() => {
-    console.log('closing drawer');
     setSelectedCells([]);
   }, []);
   let box = null;
@@ -868,8 +877,6 @@ let StudentKnowledgeMap = ({
       <BaseKnowledgeMap
           knowledgeGraph={knowledgeGraph}
           grid={grid}
-          rows={rows}
-          cols={cols}
           nodeMap={nodeMap}
           reachable={reachable}
           selectedCells={selectedCells}

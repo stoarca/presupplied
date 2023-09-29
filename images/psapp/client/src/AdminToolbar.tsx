@@ -98,6 +98,9 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
         </Link>
       </div>
       <div>
+        {JSON.stringify(props.selectedCell)}
+      </div>
+      <div>
         <button onClick={handleMoveTreeLeft}>Move Tree Left</button>
       </div>
       <div>

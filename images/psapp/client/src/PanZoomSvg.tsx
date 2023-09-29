@@ -115,25 +115,9 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
   let startPan = React.useRef({mouse: {x: 0, y: 0}, viewBox: viewBox});
   let startZoom = React.useRef<StartZoom | null>(null);
   let allowNextClick = React.useRef(true);
+  let simulateTouchClick = React.useRef(false);
   React.useLayoutEffect(() => {
-    // HACK: Manually attach listener because react does passive: true
-    let zoom = (e: WheelEvent) => {
-      let dz = e.deltaY < 0 ? 1.05 : 1 / 1.05;
-
-      let sz;
-      if (!startZoom.current) {
-        sz = {
-          mouse: pixelToViewBoxPos({x: e.clientX, y: e.clientY}, viewBox),
-          viewBox: viewBox,
-          totalZoom: dz,
-        };
-      } else {
-        sz = {
-          ...startZoom.current,
-          totalZoom: dz * startZoom.current.totalZoom,
-        };
-      }
-
+    let zoom = (sz: StartZoom, offset?: Point) => {
       if (sz.viewBox.w / sz.totalZoom > maxZoomWidth) {
         sz.totalZoom = sz.viewBox.w / maxZoomWidth;
       }
@@ -196,6 +180,25 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
         h: sz.viewBox.h / sz.totalZoom,
       }));
     };
+    // HACK: Manually attach listener because react does passive: true
+    let wheelZoom = (e: WheelEvent) => {
+      let dz = e.deltaY < 0 ? 1.05 : 1 / 1.05;
+
+      let sz;
+      if (!startZoom.current) {
+        sz = {
+          mouse: pixelToViewBoxPos({x: e.clientX, y: e.clientY}, viewBox),
+          viewBox: viewBox,
+          totalZoom: dz,
+        };
+      } else {
+        sz = {
+          ...startZoom.current,
+          totalZoom: dz * startZoom.current.totalZoom,
+        };
+      }
+      zoom(sz);
+    };
     let pan = (e: WheelEvent) => {
       startZoom.current = null;
       let {x, y} = pixelToViewBoxDist({x: e.deltaX, y: e.deltaY}, viewBox);
@@ -212,14 +215,13 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
       }
       e.preventDefault();
       if (e.ctrlKey || e.metaKey) {
-        zoom(e);
+        wheelZoom(e);
       } else {
         pan(e);
       }
     };
     let handleMouseDown = (e: MouseEvent) => {
       if (runAndCheckIfShouldCancel(onMouseDown, e)) {
-        console.log('cancelled mouse down');
         return;
       }
       e.preventDefault();
@@ -302,18 +304,16 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
       if (runAndCheckIfShouldCancel(onTouchStart, e)) {
         return;
       }
+      simulateTouchClick.current = e.touches.length === 1;
       e.preventDefault();
       handleTouchChange(e);
-      allowNextClick.current = true;
     };
     let handleTouchMove = (e: TouchEvent) => {
+      simulateTouchClick.current = false;
       if (runAndCheckIfShouldCancel(onTouchMove, e)) {
         return;
       }
       e.preventDefault();
-      if (!!action.current) {
-        allowNextClick.current = false;
-      }
       if (action.current === 'pan') {
         let vb = startPan.current.viewBox;
         let mouse = pixelToViewBoxPos(
@@ -333,17 +333,32 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
         let sz = {...startZoom.current!};
         let origin = {x: 0, y: 0};
         let pinchDist = pixelToViewBoxDist(diff(p1, p2), sz.viewBox);
-        let totalZoom = dist(pinchDist, origin) / dist(sz.pinchDist!, origin);
-        let mid = pixelToViewBoxPos(midpoint(p1, p2), sz.viewBox);
-        let delta = diff(mid, startZoom.current!.mouse);
-        console.log('zooming');
-        console.log(delta);
-        console.log(totalZoom);
+        sz.totalZoom = dist(pinchDist, origin) / dist(sz.pinchDist!, origin);
+        zoom(sz);
       }
     };
     let handleTouchEnd = (e: TouchEvent) => {
       if (runAndCheckIfShouldCancel(onTouchEnd, e)) {
         return;
+      }
+      if (simulateTouchClick.current) {
+        // HACK: we need to preventDefault on all touches because otherwise
+        // the performance is really bad. But this means that the mouse events
+        // will not fire for touch actions (only touch events will fire).
+        // So we need to manually implement the click simulation
+        simulateTouchClick.current = false;
+        let touch = e.changedTouches[0];
+        let me = new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          clientX: touch.clientX,
+          clientY: touch.clientY,
+          screenX: touch.screenX,
+          screenY: touch.screenY,
+        });
+        if (runAndCheckIfShouldCancel(onClick, me)) {
+          return;
+        }
       }
       e.preventDefault();
       handleTouchChange(e);

@@ -65,7 +65,7 @@ export class TechTree extends DepGraph<GraphNode> {
   clearMemo() {
     // TODO: this can be automatically calculated so that users don't have to
     this._memoizedDepths = new Map();
-    this._memoizedGrid = new Array(75).fill(0).map(x => new Array(50));
+    this._memoizedGrid = new Array(80).fill(0).map(x => new Array(60));
     this._memoizedRows = 0;
     this._memoizedCols = 0;
   }
