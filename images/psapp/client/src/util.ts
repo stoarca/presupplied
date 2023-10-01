@@ -229,8 +229,17 @@ export let getPointOnUnitSquare = (angle: number): Point => {
   }
 }
 
-export let pixelToViewBoxDist = (pixelCoord: Point, viewBox: ViewBox): Point => {
-  let aspectRatio = window.innerWidth / window.innerHeight;
+interface MyDomRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export let pixelToViewBoxDist = (
+  pixelCoord: Point, viewBox: ViewBox, pixelBox: MyDomRect,
+): Point => {
+  let aspectRatio = pixelBox.width / pixelBox.height;
   let w = viewBox.w;
   let h = viewBox.h;
   if (aspectRatio > 1) {
@@ -239,13 +248,15 @@ export let pixelToViewBoxDist = (pixelCoord: Point, viewBox: ViewBox): Point => 
     w = h * aspectRatio;
   }
   return {
-    x: pixelCoord.x / window.innerWidth * w,
-    y: pixelCoord.y / window.innerHeight * h,
+    x: (pixelCoord.x - pixelBox.x) / pixelBox.width * w,
+    y: (pixelCoord.y - pixelBox.y) / pixelBox.height * h,
   };
 }
 
-export let pixelToViewBoxPos = (pixelCoord: Point, viewBox: ViewBox): Point => {
-  let ret = pixelToViewBoxDist(pixelCoord, viewBox);
+export let pixelToViewBoxPos = (
+  pixelCoord: Point, viewBox: ViewBox, pixelBox: DOMRect
+): Point => {
+  let ret = pixelToViewBoxDist(pixelCoord, viewBox, pixelBox);
   return {
     x: ret.x + viewBox.x,
     y: ret.y + viewBox.y,

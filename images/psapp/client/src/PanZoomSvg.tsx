@@ -187,7 +187,11 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
       let sz;
       if (!startZoom.current) {
         sz = {
-          mouse: pixelToViewBoxPos({x: e.clientX, y: e.clientY}, viewBox),
+          mouse: pixelToViewBoxPos(
+            {x: e.clientX, y: e.clientY},
+            viewBox,
+            ref.current!.getBoundingClientRect()
+          ),
           viewBox: viewBox,
           totalZoom: dz,
         };
@@ -201,7 +205,12 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
     };
     let pan = (e: WheelEvent) => {
       startZoom.current = null;
-      let {x, y} = pixelToViewBoxDist({x: e.deltaX, y: e.deltaY}, viewBox);
+      let domRect = ref.current!.getBoundingClientRect();
+      let {x, y} = pixelToViewBoxDist(
+        {x: e.deltaX, y: e.deltaY},
+        viewBox,
+        {x: 0, y: 0, width: domRect.width, height: domRect.height},
+      );
       onUpdateViewBox(constrainedViewBox({
         x: viewBox.x + x,
         y: viewBox.y + y,
@@ -227,7 +236,11 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
       e.preventDefault();
       action.current = 'pan';
       startPan.current = {
-        mouse: pixelToViewBoxPos({x: e.clientX, y: e.clientY}, viewBox),
+        mouse: pixelToViewBoxPos(
+          {x: e.clientX, y: e.clientY},
+          viewBox,
+          ref.current!.getBoundingClientRect(),
+        ),
         viewBox: viewBox
       };
       allowNextClick.current = true;
@@ -247,7 +260,9 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
       if (action.current === 'pan') {
         allowNextClick.current = false;
         let vb = startPan.current.viewBox;
-        let mouse = pixelToViewBoxPos({x: e.clientX, y: e.clientY}, vb);
+        let mouse = pixelToViewBoxPos(
+          {x: e.clientX, y: e.clientY}, vb, ref.current!.getBoundingClientRect()
+        );
         vb = {
           ...vb,
           x: vb.x + startPan.current.mouse.x - mouse.x,
@@ -278,11 +293,9 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
         action.current = 'pan';
         startPan.current = {
           mouse: pixelToViewBoxPos(
-            {
-              x: e.touches[0].clientX,
-              y: e.touches[0].clientY
-            },
-            viewBox
+            { x: e.touches[0].clientX, y: e.touches[0].clientY },
+            viewBox,
+            ref.current!.getBoundingClientRect(),
           ),
           viewBox: viewBox
         };
@@ -291,10 +304,14 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
         let p1 = {x: e.touches[0].clientX, y: e.touches[0].clientY};
         let p2 = {x: e.touches[1].clientX, y: e.touches[1].clientY};
         startZoom.current = {
-          mouse: pixelToViewBoxPos(midpoint(p1, p2), viewBox),
+          mouse: pixelToViewBoxPos(
+            midpoint(p1, p2), viewBox, ref.current!.getBoundingClientRect(),
+          ),
           viewBox: viewBox,
           totalZoom: 1,
-          pinchDist: pixelToViewBoxDist(diff(p1, p2), viewBox),
+          pinchDist: pixelToViewBoxDist(
+            diff(p1, p2), viewBox, ref.current!.getBoundingClientRect(),
+          ),
         };
       } else {
         action.current = null;
@@ -318,7 +335,8 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
         let vb = startPan.current.viewBox;
         let mouse = pixelToViewBoxPos(
           {x: e.touches[0].clientX, y: e.touches[0].clientY},
-          vb
+          vb,
+          ref.current!.getBoundingClientRect(),
         );
         vb = {
           ...vb,
@@ -332,7 +350,9 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
         let p2 = {x: e.touches[1].clientX, y: e.touches[1].clientY};
         let sz = {...startZoom.current!};
         let origin = {x: 0, y: 0};
-        let pinchDist = pixelToViewBoxDist(diff(p1, p2), sz.viewBox);
+        let pinchDist = pixelToViewBoxDist(
+          diff(p1, p2), sz.viewBox, ref.current!.getBoundingClientRect()
+        );
         sz.totalZoom = dist(pinchDist, origin) / dist(sz.pinchDist!, origin);
         zoom(sz);
       }

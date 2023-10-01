@@ -1,11 +1,13 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import Toolbar from '@mui/material/Toolbar';
 
 import {moduleComponents} from './ModuleContext';
 import {StudentContext} from './StudentContext';
@@ -180,8 +182,8 @@ export let BaseKnowledgeMap = ({
     }
     let pos = nodePos(minCell);
     return {
-      x: pos.x - window.innerWidth / 2,
-      y: pos.y - window.innerHeight / 2,
+      x: pos.x - 1000,
+      y: pos.y - 1000,
       w: 2000,
       h: 2000,
     };
@@ -201,7 +203,11 @@ export let BaseKnowledgeMap = ({
   }, []);
 
   let handleMouseMove = React.useCallback((e: MouseEvent) => {
-    let m = pixelToViewBoxPos({x: e.clientX, y: e.clientY}, viewBox);
+    let m = pixelToViewBoxPos(
+      {x: e.clientX, y: e.clientY},
+      viewBox,
+      (e.currentTarget as SVGSVGElement).getBoundingClientRect()
+    );
     let newHoverCell = cellFromAbsoluteCoords(m.x, m.y);
     if (newHoverCell === null) {
       setHoverCell(newHoverCell);
@@ -289,42 +295,31 @@ export let BaseKnowledgeMap = ({
     );
   }
 
-  let containerStyle = {
-    minWidth: '100%',
-    minHeight: '100%',
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    userSelect: 'none',
-    overflow: 'hidden',
-  } as React.CSSProperties;
   let svgStyle = {
-    minWidth: '100%',
-    minHeight: '100%',
+    userSelect: 'none',
+    overflow: 'visible',
   } as React.CSSProperties;
   let viewLimitBox = React.useMemo(() => {
     return {x: -100, y: -100, w: 15000, h: 12000};
   }, []);
   return (
-    <div style={containerStyle}>
-      <PanZoomSvg
-          xmlns="<http://www.w3.org/2000/svg>"
-          viewBox={viewBox}
-          viewLimitBox={viewLimitBox}
-          minZoomWidth={1000}
-          maxZoomWidth={15000}
-          onUpdateViewBox={setViewBox}
-          onMouseDown={onMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={onMouseUp}
-          onClick={onClick}
-          style={svgStyle}>
-        {nodes}
-        {selectRects}
-        {hoverRect}
-        {originMarker}
-      </PanZoomSvg>
-    </div>
+    <PanZoomSvg
+        xmlns="<http://www.w3.org/2000/svg>"
+        viewBox={viewBox}
+        viewLimitBox={viewLimitBox}
+        minZoomWidth={1000}
+        maxZoomWidth={15000}
+        onUpdateViewBox={setViewBox}
+        onMouseDown={onMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={onMouseUp}
+        onClick={onClick}
+        style={svgStyle}>
+      {nodes}
+      {selectRects}
+      {hoverRect}
+      {originMarker}
+    </PanZoomSvg>
   );
 };
 
@@ -873,7 +868,7 @@ let StudentKnowledgeMap = ({
     );
   }
   return (
-    <div>
+    <React.Fragment>
       <BaseKnowledgeMap
           knowledgeGraph={knowledgeGraph}
           grid={grid}
@@ -888,7 +883,7 @@ let StudentKnowledgeMap = ({
           onClose={handleCloseDrawer}>
         {box}
       </Drawer>
-    </div>
+    </React.Fragment>
   );
 };
 
@@ -991,9 +986,23 @@ export let KnowledgeMap = () => {
           setSelectedCells={setSelectedCells}/>
     );
   }
+  let containerStyle = {
+    flex: '1 1 0',
+    overflow: 'hidden',
+  };
   return (
-    <div style={{height: '100%', position: 'relative'}}>
-      {ret}
+    <div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
+      <AppBar position="static" color="default" style={{flex: '0 0 auto'}}>
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{flexGrow:1}}>
+            <img src="/static/images/logodark.svg" style={{height: '30px'}}/>
+          </Typography>
+          {student!.email}
+        </Toolbar>
+      </AppBar>
+      <div style={containerStyle}>
+        {ret}
+      </div>
     </div>
   );
 }
