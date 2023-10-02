@@ -236,9 +236,7 @@ interface MyDomRect {
   height: number;
 }
 
-export let pixelToViewBoxDist = (
-  pixelCoord: Point, viewBox: ViewBox, pixelBox: MyDomRect,
-): Point => {
+export let visibleViewBoxSize = (viewBox: ViewBox, pixelBox: MyDomRect) => {
   let aspectRatio = pixelBox.width / pixelBox.height;
   let w = viewBox.w;
   let h = viewBox.h;
@@ -247,6 +245,16 @@ export let pixelToViewBoxDist = (
   } else {
     w = h * aspectRatio;
   }
+  return {
+    w: w,
+    h: h,
+  };
+}
+
+export let pixelToViewBoxDist = (
+  pixelCoord: Point, viewBox: ViewBox, pixelBox: MyDomRect,
+): Point => {
+  let {w, h} = visibleViewBoxSize(viewBox, pixelBox);
   return {
     x: (pixelCoord.x - pixelBox.x) / pixelBox.width * w,
     y: (pixelCoord.y - pixelBox.y) / pixelBox.height * h,

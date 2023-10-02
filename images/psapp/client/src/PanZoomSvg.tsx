@@ -37,6 +37,7 @@ let runAndCheckIfShouldCancel = <T extends HandledEvent>(
 export interface PanZoomSvgProps extends Omit<
   React.SVGProps<SVGSVGElement>,
   'viewBox' |
+      'preserveAspectRatio' |
       'onWheel' |
       'onMouseDown' |
       'onMouseMove' |
@@ -60,7 +61,7 @@ export interface PanZoomSvgProps extends Omit<
   onTouchMove?: (e: TouchEvent, cancelPanZoom: CancelFunc) => void;
   onTouchEnd?: (e: TouchEvent, cancelPanZoom: CancelFunc) => void;
 }
-export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
+export let PanZoomSvg = React.forwardRef(({
   viewBox,
   viewLimitBox,
   minZoomWidth,
@@ -75,9 +76,9 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
   onTouchMove,
   onTouchEnd,
   ...svgProps
-}: PanZoomSvgProps) => {
-  let ref = React.useRef<SVGSVGElement | null>(null);
-
+}: PanZoomSvgProps, ref) => {
+  let innerRef = React.useRef<SVGSVGElement | null>(null);
+  React.useImperativeHandle(ref, () => innerRef.current);
   let constrainedViewBox = React.useCallback((vb: ViewBox): ViewBox => {
     if (!viewLimitBox) {
       return vb;
@@ -190,7 +191,7 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
           mouse: pixelToViewBoxPos(
             {x: e.clientX, y: e.clientY},
             viewBox,
-            ref.current!.getBoundingClientRect()
+            innerRef.current!.getBoundingClientRect()
           ),
           viewBox: viewBox,
           totalZoom: dz,
@@ -205,7 +206,7 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
     };
     let pan = (e: WheelEvent) => {
       startZoom.current = null;
-      let domRect = ref.current!.getBoundingClientRect();
+      let domRect = innerRef.current!.getBoundingClientRect();
       let {x, y} = pixelToViewBoxDist(
         {x: e.deltaX, y: e.deltaY},
         viewBox,
@@ -239,7 +240,7 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
         mouse: pixelToViewBoxPos(
           {x: e.clientX, y: e.clientY},
           viewBox,
-          ref.current!.getBoundingClientRect(),
+          innerRef.current!.getBoundingClientRect(),
         ),
         viewBox: viewBox
       };
@@ -261,7 +262,9 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
         allowNextClick.current = false;
         let vb = startPan.current.viewBox;
         let mouse = pixelToViewBoxPos(
-          {x: e.clientX, y: e.clientY}, vb, ref.current!.getBoundingClientRect()
+          {x: e.clientX, y: e.clientY},
+          vb,
+          innerRef.current!.getBoundingClientRect()
         );
         vb = {
           ...vb,
@@ -295,7 +298,7 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
           mouse: pixelToViewBoxPos(
             { x: e.touches[0].clientX, y: e.touches[0].clientY },
             viewBox,
-            ref.current!.getBoundingClientRect(),
+            innerRef.current!.getBoundingClientRect(),
           ),
           viewBox: viewBox
         };
@@ -305,12 +308,12 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
         let p2 = {x: e.touches[1].clientX, y: e.touches[1].clientY};
         startZoom.current = {
           mouse: pixelToViewBoxPos(
-            midpoint(p1, p2), viewBox, ref.current!.getBoundingClientRect(),
+            midpoint(p1, p2), viewBox, innerRef.current!.getBoundingClientRect(),
           ),
           viewBox: viewBox,
           totalZoom: 1,
           pinchDist: pixelToViewBoxDist(
-            diff(p1, p2), viewBox, ref.current!.getBoundingClientRect(),
+            diff(p1, p2), viewBox, innerRef.current!.getBoundingClientRect(),
           ),
         };
       } else {
@@ -336,7 +339,7 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
         let mouse = pixelToViewBoxPos(
           {x: e.touches[0].clientX, y: e.touches[0].clientY},
           vb,
-          ref.current!.getBoundingClientRect(),
+          innerRef.current!.getBoundingClientRect(),
         );
         vb = {
           ...vb,
@@ -351,7 +354,7 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
         let sz = {...startZoom.current!};
         let origin = {x: 0, y: 0};
         let pinchDist = pixelToViewBoxDist(
-          diff(p1, p2), sz.viewBox, ref.current!.getBoundingClientRect()
+          diff(p1, p2), sz.viewBox, innerRef.current!.getBoundingClientRect()
         );
         sz.totalZoom = dist(pinchDist, origin) / dist(sz.pinchDist!, origin);
         zoom(sz);
@@ -383,7 +386,7 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
       e.preventDefault();
       handleTouchChange(e);
     };
-    let cur = ref.current!;
+    let cur = innerRef.current!;
     cur.addEventListener('wheel', handleWheel);
     cur.addEventListener('mousedown', handleMouseDown);
     cur.addEventListener('mousemove', handleMouseMove);
@@ -418,9 +421,10 @@ export let PanZoomSvg: React.FC<PanZoomSvgProps> = ({
   ]);
 
   return (
-    <svg ref={ref}
+    <svg ref={innerRef}
         viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
+        preserveAspectRatio="xMinYMin slice"
         {...svgProps}/>
   );
-};
+});
 

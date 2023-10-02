@@ -8,6 +8,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Toolbar from '@mui/material/Toolbar';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 
 import {moduleComponents} from './ModuleContext';
 import {StudentContext} from './StudentContext';
@@ -16,7 +18,7 @@ import {buildGraph, TechTree} from './dependency-graph';
 import {AdminToolbar, TOOLBAR_WIDTH} from './AdminToolbar';
 import {Cell} from './types';
 import {GraphJson} from '../../common/types';
-import {ViewBox, pixelToViewBoxPos} from './util';
+import {ViewBox, pixelToViewBoxPos, visibleViewBoxSize} from './util';
 import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
 let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 
@@ -149,7 +151,11 @@ export let BaseKnowledgeMap = ({
   onMouseUp,
   onClick,
 }: BaseKnowledgeMapProps) => {
-  let [viewBox, setViewBox] = React.useState<ViewBox>(() => {
+  let svgRef = React.useRef<SVGSVGElement | null>(null);
+  let [viewBox, setViewBox] = React.useState<ViewBox>({
+    x: 0, y: 0, w: 2000, h: 2000
+  });
+  React.useEffect(() => {
     let url = new URL(window.location.href);
     let scrollTo = url.searchParams.get('scroll');
     let minCell;
@@ -181,13 +187,16 @@ export let BaseKnowledgeMap = ({
       }
     }
     let pos = nodePos(minCell);
-    return {
-      x: pos.x - 1000,
-      y: pos.y - 1000,
+    let {w, h} = visibleViewBoxSize(
+      {x: 0, y: 0, w: 2000, h: 2000}, svgRef.current!.getBoundingClientRect()
+    );
+    setViewBox({
+      x: pos.x - w / 2 + CELL_WIDTH / 2,
+      y: pos.y - h / 2 + CELL_HEIGHT / 2,
       w: 2000,
       h: 2000,
-    };
-  });
+    });
+  }, []);
 
   let topSorted = React.useMemo(() => {
     let ret = knowledgeGraph.overallOrder();
@@ -297,7 +306,7 @@ export let BaseKnowledgeMap = ({
 
   let svgStyle = {
     userSelect: 'none',
-    overflow: 'visible',
+    flex: '1 1 0',
   } as React.CSSProperties;
   let viewLimitBox = React.useMemo(() => {
     return {x: -100, y: -100, w: 15000, h: 12000};
@@ -305,6 +314,7 @@ export let BaseKnowledgeMap = ({
   return (
     <PanZoomSvg
         xmlns="<http://www.w3.org/2000/svg>"
+        ref={svgRef}
         viewBox={viewBox}
         viewLimitBox={viewLimitBox}
         minZoomWidth={1000}
@@ -988,8 +998,36 @@ export let KnowledgeMap = () => {
   }
   let containerStyle = {
     flex: '1 1 0',
-    overflow: 'hidden',
-  };
+    display: 'flex',
+    flexDirection: 'column',
+  } as React.CSSProperties;
+  let navLinks;
+  let saveWarning;
+  let [showSaveWarning, setShowSaveWarning] = React.useState(true);
+  let handleCloseWarning = React.useCallback((e: React.SyntheticEvent) => {
+    setShowSaveWarning(false);
+  }, []);
+  if (student) {
+    navLinks = student.email;
+    saveWarning = null;
+  } else {
+    navLinks = (
+      <React.Fragment>
+        <Button href="/login">Login</Button>
+        <Button href="/register">Register</Button>
+      </React.Fragment>
+    );
+    if (showSaveWarning) {
+      saveWarning = (
+        <AppBar position="static" color="default" style={{flex: '0 0 auto'}}>
+          <Alert severity="warning" onClose={handleCloseWarning}>
+            Your progress is saved locally in this browser.
+            {' '}<Link to="/login">Login</Link> to sync to other devices.
+          </Alert>
+        </AppBar>
+      );
+    }
+  }
   return (
     <div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
       <AppBar position="static" color="default" style={{flex: '0 0 auto'}}>
@@ -997,9 +1035,10 @@ export let KnowledgeMap = () => {
           <Typography variant="h6" component="div" sx={{flexGrow:1}}>
             <img src="/static/images/logodark.svg" style={{height: '30px'}}/>
           </Typography>
-          {student!.email}
+          {navLinks}
         </Toolbar>
       </AppBar>
+      {saveWarning}
       <div style={containerStyle}>
         {ret}
       </div>
