@@ -9,12 +9,17 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
+import {typedFetch} from './typedFetch';
+import { useStudentContext } from './StudentContext';
+
 interface LoginProps {
+  [K: string]: never
 };
 
 type E = React.FormEvent<HTMLFormElement>;
 
 export let Login = (props: LoginProps) => {
+  let student = useStudentContext();
   let [loading, setLoading] = React.useState(false);
   let [fields, setFields] = React.useState({
     email: {error: false, helperText: ''},
@@ -36,34 +41,33 @@ export let Login = (props: LoginProps) => {
 
     const data = new FormData(event.currentTarget);
     try {
-      let resp = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      let resp = await typedFetch({
+        endpoint: '/api/auth/login',
+        method: 'post',
+        body: {
+          email: data.get('email') as string,
+          password: data.get('password') as string,
         },
-        credentials: 'include',
-        body: JSON.stringify({
-          email: data.get('email'),
-          password: data.get('password'),
-        }),
       });
-      let json = await resp.json();
-      if (resp.ok) {
+      if ('success' in resp) {
+        await student.mergeToServer();
         window.location.href = '/';
         return;
       }
-      if (json.errorCode.startsWith('auth.login.email.')) {
+      if (resp.errorCode === 'auth.login.email.nonexistent') {
+        let narrow = resp;
         setFields(fields => ({
           ...fields,
-          email: {error: true, helperText: json.message}
+          email: {error: true, helperText: narrow.message}
         }));
-      } else if (json.errorCode.startsWith('auth.login.password.')) {
+      } else if (resp.errorCode === 'auth.login.password.invalid') {
+        let narrow = resp;
         setFields(fields => ({
           ...fields,
-          password: {error: true, helperText: json.message}
+          password: {error: true, helperText: narrow.message}
         }));
       } else {
-        throw new Error(json);
+        let check: never = resp;
       }
     } catch (e) {
       throw e;

@@ -4,6 +4,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import proxy from 'express-http-proxy';
 import path from 'path';
+import { In } from 'typeorm';
 
 import { AppDataSource } from './data-source';
 import { Student } from './entity/Student';
@@ -11,7 +12,14 @@ import { StudentProgress } from './entity/StudentProgress';
 import { Module } from './entity/Module';
 import { env } from './env';
 import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
-import { GraphNode, GraphJson, StudentDTO } from '../../common/types';
+import { GraphNode, GraphJson, StudentProgressDTO } from '../../common/types';
+import { EndpointKeys, endpoints, Endpoints } from '../../common/apitypes';
+
+if (endpoints) {
+  // HACK: if we only import types, ts-node doesn't typecheck the file
+  // so we have to use the varibale somehow. We use it in the condition and
+  // intentionally do nothing
+}
 
 let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 
@@ -45,6 +53,10 @@ let setLoginCookie = (req: express.Request, resp: express.Response) => {
     sameSite: 'strict',
     maxAge: ONE_YEAR,
   });
+};
+
+let clearLoginCookie = (resp: express.Response) => {
+  resp.clearCookie('authToken');
 };
 
 let syncKnowledgeMapIdsToDb = async () => {
@@ -109,6 +121,33 @@ AppDataSource.initialize().then(async () => {
     next();
   });
 
+  type RouteHandler<K extends EndpointKeys> = (
+    req: express.Request<
+      Endpoints[K]['Params'],
+      Endpoints[K]['Response'],
+      Endpoints[K]['Body'],
+      Endpoints[K]['Query']
+    >,
+    resp: express.Response<Endpoints[K]['Response']>,
+    next: express.NextFunction,
+  ) => void;
+
+  let typedGet = <K extends EndpointKeys>(
+    endpointKey: Endpoints[K]['method'] extends 'get' ?
+      K : [K, 'does not impelement get method', never],
+    handler: RouteHandler<K>
+  ) => {
+    app.get(endpointKey, handler);
+  };
+
+  let typedPost = <K extends EndpointKeys>(
+    endpointKey: Endpoints[K]['method'] extends 'post' ?
+      K : [K, 'does not implement post method', never],
+    handler: RouteHandler<K>
+  ) => {
+    app.post(endpointKey, handler);
+  };
+
   app.use('/static', express.static(path.join(__dirname, '../../static')));
 
   app.get('/', (req, resp) => {
@@ -127,19 +166,48 @@ AppDataSource.initialize().then(async () => {
     resp.sendFile(path.join(__dirname, '../../static/index.html'));
   });
 
-  type TTSRequest = express.Request<{}, {}, {}, {text: string}>;
-  app.get('/api/tts', async (req: TTSRequest, resp, next) => {
+  typedGet('/api/tts', async (req, resp, next) => {
     return proxy(
       'http://pstts:5002/api/tts?text=' + encodeURIComponent(req.query.text)
     )(req, resp, next);
   });
 
-  app.post('/api/auth/login', async (req, resp, next) => {
+  typedPost('/api/auth/register', async (req, resp, next) => {
+    if (!isValidEmail(req.body.email)) {
+      return resp.status(422).json({
+        errorCode: 'auth.register.email.invalid',
+        email: req.body.email,
+        message: 'Email is invalid',
+      });
+    }
+
+    let studentRepo = AppDataSource.getRepository(Student);
+    let student = await studentRepo.findOneBy({ email: req.body.email });
+    if (student) {
+      return resp.status(422).json({
+        errorCode: 'auth.register.email.alreadyRegistered',
+        email: req.body.email,
+        message: 'Email already registered',
+      });
+    }
+
+    await studentRepo.insert({
+      name: req.body.name,
+      email: req.body.email,
+      hashed: await bcrypt.hash(req.body.password, 12),
+    });
+
+    setLoginCookie(req, resp);
+    resp.json({success: true});
+  });
+
+  typedPost('/api/auth/login', async (req, resp, next) => {
     let studentRepo = AppDataSource.getRepository(Student);
     let student = await studentRepo.findOneBy({ email: req.body.email });
     if (!student) {
       return resp.status(422).json({
         errorCode: 'auth.login.email.nonexistent',
+        email: req.body.email,
         message: 'Email does not exist',
       });
     }
@@ -155,36 +223,13 @@ AppDataSource.initialize().then(async () => {
     resp.json({success: true});
   });
 
-  app.post('/api/auth/register', async (req, resp, next) => {
-    if (!isValidEmail(req.body.email)) {
-      return resp.status(422).json({
-        errorCode: 'auth.register.email.invalid',
-        message: 'Email is invalid',
-      });
-    }
-
-    let studentRepo = AppDataSource.getRepository(Student);
-    let student = await studentRepo.findOneBy({ email: req.body.email });
-    if (student) {
-      return resp.status(422).json({
-        errorCode: 'auth.register.email.invalid',
-        message: 'Email already registered',
-      });
-    }
-
-    await studentRepo.insert({
-      name: req.body.name,
-      email: req.body.email,
-      hashed: await bcrypt.hash(req.body.password, 12),
-    });
-
-    setLoginCookie(req, resp);
+  typedPost('/api/auth/logout', async (req, resp, next) => {
+    console.log('logging out');
+    clearLoginCookie(resp);
     resp.json({success: true});
   });
 
-  app.get('/api/student', async (
-    req, resp: express.Response<{student: StudentDTO | null}>, next
-  ) => {
+  typedGet('/api/student', async (req, resp) => {
     if (!req.jwtStudent) {
       return resp.json({
         student: null,
@@ -210,15 +255,18 @@ AppDataSource.initialize().then(async () => {
       student: {
         name: student.name,
         email: student.email,
-        progress: student.progress.map(x => ({
-          moduleVanityId: x.module.vanityId,
-          status: x.status,
-        })),
+        progress: student.progress.reduce((acc, x) => {
+          acc[x.module.vanityId] = {
+            status: x.status,
+            events: [],
+          };
+          return acc;
+        }, {} as StudentProgressDTO),
       }
     });
   });
 
-  app.post('/api/learning/event', async (req, resp, next) => {
+  typedPost('/api/learning/events', async (req, resp, next) => {
     if (!req.jwtStudent) {
       return resp.status(401).json({
         errorCode: 'learning.event.noLogin',
@@ -226,14 +274,21 @@ AppDataSource.initialize().then(async () => {
       });
     }
 
+    let moduleIds = Object.keys(req.body.modules);
     let moduleRepo = AppDataSource.getRepository(Module);
-    let module = await moduleRepo.findOneBy({
-      vanityId: req.body.moduleVanityId,
+    let modules = await moduleRepo.findBy({
+      vanityId: In(moduleIds),
     });
-    if (!module) {
+    if (moduleIds.length !== modules.length) {
+      let requestedModuleIdSet = new Set(moduleIds);
+      let retrievedModuleIdSet = new Set(modules.map(x => x.vanityId));
+      for (let id of retrievedModuleIdSet) {
+        requestedModuleIdSet.delete(id);
+      }
       return resp.status(422).json({
-        errorCode: 'learning.event.invalidModule',
-        message: 'Could not find the requested learning module',
+        errorCode: 'learning.event.invalidModules',
+        moduleVanityIds: Array.from(requestedModuleIdSet),
+        message: 'Could not find the requested learning modules',
       });
     }
 
@@ -242,15 +297,22 @@ AppDataSource.initialize().then(async () => {
     if (!student) {
       return resp.status(401).json({
         errorCode: 'learning.event.noStudent',
-        message: `Student with email ${req.jwtStudent.email} does not exist`,
+        email: req.jwtStudent.email,
+        message: 'Could not find a student with this email',
       });
     }
 
-    await AppDataSource.getRepository(StudentProgress).upsert([{
-      student: student,
-      module: module,
-      status: req.body.status,
-    }], ['student', 'module'])
+    let studentProgressRepo = AppDataSource.getRepository(StudentProgress);
+    let notNullStudent = student;
+    await studentProgressRepo.upsert(modules.map(x => {
+      let events = req.body.modules[x.vanityId].events;
+      let mostRecentEvent = events.sort((a, b) => b.time - a.time)[0];
+      return {
+        student: notNullStudent,
+        module: x,
+        status: mostRecentEvent.status,
+      };
+    }), ['student', 'module'])
 
     return resp.json({success: true});
   });

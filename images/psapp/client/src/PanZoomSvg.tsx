@@ -9,8 +9,8 @@ import {
   pixelToViewBoxPos,
   pixelToViewBoxDist,
 } from './util';
+import {Omit} from '../../common/types';
 
-type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 type CancelFunc = () => void;
 type HandledEvent = WheelEvent | MouseEvent | TouchEvent;
 type CancellableHandler<T extends HandledEvent> = (

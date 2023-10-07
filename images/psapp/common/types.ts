@@ -1,5 +1,7 @@
 import _KNOWLEDGE_MAP from '../static/knowledge-map.json';
 
+export type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+
 export enum ProgressStatus {
   NOT_ATTEMPTED = 'not_attempted',
   ATTEMPTED = 'attempted',
@@ -7,17 +9,23 @@ export enum ProgressStatus {
 }
 
 type KMType = typeof _KNOWLEDGE_MAP;
-type KMIds = KMType['nodes'][number]['id'];
+export type KMId = KMType['nodes'][number]['id'];
 
+export interface StudentProgressDTOEntry {
+  status: ProgressStatus,
+  events: {
+    time: number,
+    status: ProgressStatus,
+  }[],
+}
 export interface StudentProgressDTO {
-  moduleVanityId: KMIds;
-  status: ProgressStatus;
+  [K: KMId]: StudentProgressDTOEntry
 }
 
 export interface StudentDTO {
   name: string;
   email: string;
-  progress: StudentProgressDTO[];
+  progress: StudentProgressDTO;
 }
 
 export interface GraphNode {

@@ -2,15 +2,17 @@
   "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
+    "rootDir": "../",
     "lib": ["dom"],
     "jsx": "react",
     "typeRoots": ["./node_modules/@types", "./@types"],
     "module": "nodenext",
+    "moduleResolution": "nodenext",
     "strict": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true
   },
-  "include": ["src"],
+  "include": ["src/**/*", "../common/**/*"],
   "exclude": ["node_modules"]
 }

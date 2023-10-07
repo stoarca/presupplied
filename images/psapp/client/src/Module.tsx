@@ -1,7 +1,9 @@
 import React from 'react';
 
 import {ModuleContext} from '@src/ModuleContext';
+import {useStudentContext} from '@src/StudentContext';
 import {VariantList} from '@src/util';
+import {ProgressStatus} from '../../common/types';
 
 import {
   waitPlease, badBuzzer, goodDing, goodJob
@@ -164,6 +166,7 @@ interface ModuleProps {
 };
 
 export let Module: React.FC<ModuleProps> = (props) => {
+  let student = useStudentContext();
   let {children, score, maxScore, type, extraSvgStyles, ...rest} = props;
 
   let ref = React.useRef<HTMLDivElement | null>(null);
@@ -183,22 +186,13 @@ export let Module: React.FC<ModuleProps> = (props) => {
     if (score === maxScore) {
       setWin(true);
       (async () => {
+        let kmid = window.location.href.match(/modules\/(.*)/)![1];
+        await student.markReached(kmid, ProgressStatus.PASSED);
         await new Promise(r => setTimeout(r, 2000));
-        let moduleVanityId = window.location.href.match(/modules\/(.*)/)![1];
-        let resp = await fetch('/api/learning/event', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            moduleVanityId: moduleVanityId,
-            status: 'passed',
-          }),
-        });
-        window.location.href = '/?scroll=' + moduleVanityId;
+        window.location.href = '/?scroll=' + kmid;
       })();
     }
-  }, [score, maxScore]);
+  }, [score, maxScore, student]);
 
   let handleContextMenu = React.useCallback((e: React.MouseEvent) => {
     e.preventDefault();

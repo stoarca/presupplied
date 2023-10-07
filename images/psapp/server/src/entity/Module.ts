@@ -17,4 +17,3 @@ export class Module {
     this.vanityId = params.vanityId;
   }
 }
-

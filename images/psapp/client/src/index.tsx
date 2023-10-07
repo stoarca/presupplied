@@ -13,12 +13,11 @@ import {moduleComponents} from './ModuleContext';
 import {KnowledgeMap} from './KnowledgeMap';
 import {Login} from './Login';
 import {Register} from './Register';
-import {StudentContext} from './StudentContext';
-
-import {StudentDTO} from '../../common/types';
+import {Student, StudentContext} from './StudentContext';
+import {typedFetch} from './typedFetch';
 
 interface AppProps {
-  student: StudentDTO;
+  student: Student;
 };
 const defaultTheme = createTheme();
 let App = (props: AppProps) => {
@@ -52,8 +51,11 @@ let App = (props: AppProps) => {
 };
 
 (async () => {
-  let resp = await fetch('/api/student');
-  let student = (await resp.json()).student;
+  let resp = await typedFetch({
+    endpoint: '/api/student',
+    method: 'get',
+  });
+  let student = new Student(resp.student);
   let root = createRoot(document.getElementById('content')!);
   root.render(<App student={student}/>);
 })();

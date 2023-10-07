@@ -20,3 +20,4 @@ export const AppDataSource = new DataSource({
   entitySkipConstructor: true,
   namingStrategy: new SnakeNamingStrategy(),
 })
+

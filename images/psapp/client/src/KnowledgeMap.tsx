@@ -1,24 +1,30 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+
+import Alert from '@mui/material/Alert';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
-import Alert from '@mui/material/Alert';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 
 import {moduleComponents} from './ModuleContext';
-import {StudentContext} from './StudentContext';
+import {useStudentContext} from './StudentContext';
 import {PanZoomSvg, PanZoomSvgProps} from './PanZoomSvg';
 import {buildGraph, TechTree} from './dependency-graph';
 import {AdminToolbar, TOOLBAR_WIDTH} from './AdminToolbar';
 import {Cell} from './types';
-import {GraphJson} from '../../common/types';
+import {GraphJson, ProgressStatus} from '../../common/types';
 import {ViewBox, pixelToViewBoxPos, visibleViewBoxSize} from './util';
+import {typedFetch} from './typedFetch';
 import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
 let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 
@@ -820,6 +826,7 @@ let StudentKnowledgeMap = ({
   selectedCells,
   setSelectedCells,
 }: StudentKnowledgeMapProps) => {
+  let student = useStudentContext();
   let [hoverCell, setHoverCell] = React.useState<Cell | null>(null);
   let handleClick = React.useCallback(async (e: MouseEvent) => {
     if (!hoverCell) {
@@ -827,16 +834,10 @@ let StudentKnowledgeMap = ({
     }
     if (e.shiftKey) {
       let kmid = grid[hoverCell.i][hoverCell.j];
-      let resp = await fetch('/api/learning/event', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          moduleVanityId: kmid,
-          status: reached.has(kmid) ? 'not_attempted' : 'passed',
-        }),
-      });
+      await student.markReached(
+        kmid,
+        reached.has(kmid) ? ProgressStatus.NOT_ATTEMPTED : ProgressStatus.PASSED
+      );
       let newReached = new Set(reached);
       if (reached.has(kmid)) {
         newReached.delete(kmid);
@@ -898,10 +899,10 @@ let StudentKnowledgeMap = ({
 };
 
 export let KnowledgeMap = () => {
+  let student = useStudentContext();
+
   let url = new URL(window.location.href);
   let admin = url.searchParams.get('admin') === '1';
-
-  let student = React.useContext(StudentContext);
 
   let [knowledgeMap, _setKnowledgeMap] = React.useState(KNOWLEDGE_MAP);
   let setKnowledgeMap = React.useCallback((m: typeof KNOWLEDGE_MAP) => {
@@ -930,11 +931,9 @@ export let KnowledgeMap = () => {
     return knowledgeGraph.memoizedGrid();
   }, [knowledgeGraph]);
   let [reached, setReached] = React.useState(new Set<string>(
-    student ? student.progress.filter(
-      x => x.status === 'passed'
-    ).map(
-      x => x.moduleVanityId
-    ) : undefined
+    Object.entries(student.progress()).filter(
+      ([k, v]) => v.status === ProgressStatus.PASSED
+    ).map(([k, v]) => k)
   ));
   let handleChangeReached = React.useCallback((newReached: Set<string>) => {
     setReached(newReached);
@@ -1003,12 +1002,48 @@ export let KnowledgeMap = () => {
   } as React.CSSProperties;
   let navLinks;
   let saveWarning;
+  let [showUserMenu, setShowUserMenu] = React.useState(false);
+  let userMenuRef = React.useRef<HTMLButtonElement | null>(null);
+  let handleToggleUserMenu = React.useCallback(() => {
+    setShowUserMenu((old) => !old);
+  }, []);
+  let handleLogout = React.useCallback(async () => {
+    await typedFetch({
+      endpoint: '/api/auth/logout',
+      method: 'post',
+    });
+    window.location.href = '/';
+  }, []);
   let [showSaveWarning, setShowSaveWarning] = React.useState(true);
   let handleCloseWarning = React.useCallback((e: React.SyntheticEvent) => {
     setShowSaveWarning(false);
   }, []);
-  if (student) {
-    navLinks = student.email;
+  if (student.dto) {
+    navLinks = (
+      <Box sx={{ flexGrow: 0 }}>
+        <Tooltip title="Open settings">
+          <Button ref={userMenuRef}
+              onClick={handleToggleUserMenu}
+              sx={{ p: 0, color: '#111111' }}
+              endIcon={<ExpandMoreIcon/>}>
+            {student.dto.email}
+          </Button>
+        </Tooltip>
+        <Menu
+            sx={{ mt: '30px' }}
+            id="menu-appbar"
+            anchorEl={userMenuRef.current}
+            anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+            keepMounted
+            transformOrigin={{vertical: 'top', horizontal: 'right'}}
+            open={showUserMenu}
+            onClose={handleToggleUserMenu}>
+          <MenuItem onClick={handleLogout}>
+            <Typography textAlign="center">Logout</Typography>
+          </MenuItem>
+        </Menu>
+      </Box>
+    );
     saveWarning = null;
   } else {
     navLinks = (

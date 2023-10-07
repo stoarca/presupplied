@@ -9,7 +9,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import LoadingButton from '@mui/lab/LoadingButton';
 
+import {typedFetch} from './typedFetch';
+
 interface RegisterProps {
+  [K: string]: never
 };
 
 type E = React.FormEvent<HTMLFormElement>;
@@ -33,33 +36,31 @@ export let Register = (props: RegisterProps) => {
 
     const data = new FormData(event.currentTarget);
     try {
-      let resp = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      let resp = await typedFetch({
+        endpoint: '/api/auth/register',
+        method: 'post',
+        body: {
+          name: data.get('name') as string,
+          email: data.get('email') as string,
+          password: data.get('password') as string,
         },
-        credentials: 'include',
-        body: JSON.stringify({
-          name: data.get('name'),
-          email: data.get('email'),
-          password: data.get('password'),
-        }),
       });
-      let json = await resp.json();
-      if (resp.ok) {
+      if ('success' in resp) {
         window.location.href = '/';
         return;
       }
-      if (json.errorCode.startsWith('auth.register.email.')) {
+      if (
+        resp.errorCode === 'auth.register.email.invalid' ||
+        resp.errorCode === 'auth.register.email.alreadyRegistered'
+      ) {
+        let narrow = resp; // to narrow the type for the callback
         setFields(fields => ({
           ...fields,
-          email: {error: true, helperText: json.message}
+          email: {error: true, helperText: narrow.message}
         }));
       } else {
-        throw new Error(json);
+        let check: never = resp;
       }
-    } catch (e) {
-      throw e;
     } finally {
       setLoading(false);
     }
