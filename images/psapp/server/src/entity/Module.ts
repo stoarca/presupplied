@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index } from "typeorm"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Index,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm"
 
 interface ModuleParams {
   vanityId: string;
@@ -7,11 +14,17 @@ interface ModuleParams {
 @Entity()
 export class Module {
   @PrimaryGeneratedColumn()
-  id!: number
+  id!: number;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 
   @Index({unique: true})
   @Column()
-  vanityId: string
+  vanityId: string;
 
   constructor(params: ModuleParams) {
     this.vanityId = params.vanityId;

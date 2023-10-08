@@ -1,5 +1,11 @@
 import {
-  Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Index,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm"
 
 import { Student } from './Student';
@@ -16,7 +22,13 @@ interface StudentProgressParams {
 @Index(['student', 'module'], {unique: true})
 export class StudentProgress {
   @PrimaryGeneratedColumn()
-  id!: number
+  id!: number;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 
   @ManyToOne(() => Student, (student) => student.progress)
   student: Student;

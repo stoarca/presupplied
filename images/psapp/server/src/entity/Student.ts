@@ -1,5 +1,11 @@
 import {
-  Entity, PrimaryGeneratedColumn, Column, Index, OneToMany
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Index,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm"
 
 import { StudentProgress } from './StudentProgress';
@@ -13,17 +19,23 @@ interface StudentParams {
 @Entity()
 export class Student {
   @PrimaryGeneratedColumn()
-  id!: number
+  id!: number;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 
   @Column()
-  name: string
+  name: string;
 
   @Index({unique: true})
   @Column()
-  email: string
+  email: string;
 
   @Column()
-  hashed: string
+  hashed: string;
 
   @OneToMany(
     () => StudentProgress,
