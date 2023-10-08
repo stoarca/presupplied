@@ -1,19 +1,11 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import Alert from '@mui/material/Alert';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import {moduleComponents} from './ModuleContext';
@@ -24,7 +16,7 @@ import {AdminToolbar, TOOLBAR_WIDTH} from './AdminToolbar';
 import {Cell} from './types';
 import {GraphJson, ProgressStatus} from '../../common/types';
 import {ViewBox, pixelToViewBoxPos, visibleViewBoxSize} from './util';
-import {typedFetch} from './typedFetch';
+import {NavBar} from './NavBar';
 import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
 let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 
@@ -1000,80 +992,9 @@ export let KnowledgeMap = () => {
     display: 'flex',
     flexDirection: 'column',
   } as React.CSSProperties;
-  let navLinks;
-  let saveWarning;
-  let [showUserMenu, setShowUserMenu] = React.useState(false);
-  let userMenuRef = React.useRef<HTMLButtonElement | null>(null);
-  let handleToggleUserMenu = React.useCallback(() => {
-    setShowUserMenu((old) => !old);
-  }, []);
-  let handleLogout = React.useCallback(async () => {
-    await typedFetch({
-      endpoint: '/api/auth/logout',
-      method: 'post',
-    });
-    window.location.href = '/';
-  }, []);
-  let [showSaveWarning, setShowSaveWarning] = React.useState(true);
-  let handleCloseWarning = React.useCallback((e: React.SyntheticEvent) => {
-    setShowSaveWarning(false);
-  }, []);
-  if (student.dto) {
-    navLinks = (
-      <Box sx={{ flexGrow: 0 }}>
-        <Tooltip title="Open settings">
-          <Button ref={userMenuRef}
-              onClick={handleToggleUserMenu}
-              sx={{ p: 0, color: '#111111' }}
-              endIcon={<ExpandMoreIcon/>}>
-            {student.dto.email}
-          </Button>
-        </Tooltip>
-        <Menu
-            sx={{ mt: '30px' }}
-            id="menu-appbar"
-            anchorEl={userMenuRef.current}
-            anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-            keepMounted
-            transformOrigin={{vertical: 'top', horizontal: 'right'}}
-            open={showUserMenu}
-            onClose={handleToggleUserMenu}>
-          <MenuItem onClick={handleLogout}>
-            <Typography textAlign="center">Logout</Typography>
-          </MenuItem>
-        </Menu>
-      </Box>
-    );
-    saveWarning = null;
-  } else {
-    navLinks = (
-      <React.Fragment>
-        <Button href="/login">Login</Button>
-        <Button href="/register">Register</Button>
-      </React.Fragment>
-    );
-    if (showSaveWarning) {
-      saveWarning = (
-        <AppBar position="static" color="default" style={{flex: '0 0 auto'}}>
-          <Alert severity="warning" onClose={handleCloseWarning}>
-            Your progress is saved locally in this browser.
-            {' '}<Link to="/login">Login</Link> to sync to other devices.
-          </Alert>
-        </AppBar>
-      );
-    }
-  }
   return (
     <div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
-      <AppBar position="static" color="default" style={{flex: '0 0 auto'}}>
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{flexGrow:1}}>
-            <img src="/static/images/logodark.svg" style={{height: '30px'}}/>
-          </Typography>
-          {navLinks}
-        </Toolbar>
-      </AppBar>
-      {saveWarning}
+      <NavBar/>
       <div style={containerStyle}>
         {ret}
       </div>
