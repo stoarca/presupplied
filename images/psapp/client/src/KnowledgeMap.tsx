@@ -2,8 +2,11 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
+import MuiLink from '@mui/material/Link';
 import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
@@ -14,11 +17,11 @@ import {PanZoomSvg, PanZoomSvgProps} from './PanZoomSvg';
 import {buildGraph, TechTree} from './dependency-graph';
 import {AdminToolbar, TOOLBAR_WIDTH} from './AdminToolbar';
 import {Cell} from './types';
-import {GraphJson, ProgressStatus} from '../../common/types';
+import {
+  GraphJson, ProgressStatus, KNOWLEDGE_MAP, GraphNodeInfo, VideoInfo
+} from '../../common/types';
 import {ViewBox, pixelToViewBoxPos, visibleViewBoxSize} from './util';
 import {NavBar} from './NavBar';
-import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
-let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 
 let autoIncrementingId = 0;
 let genId = () => {
@@ -56,12 +59,19 @@ interface KnowledgeNodePropsLite {
 }
 
 interface KnowledgeNodeProps extends KnowledgeNodePropsLite {
+  knowledgeGraph: TechTree,
+  // TODO: dependants can be calculated from knowledgeGraph, but need to
+  // migrate knowledge-map.json to cell: {i, j} first to do this nicely
+  // NodeMap needs to go away entirely:
+  //   - progress can be replaced with StudentContext
+  //   - cell can be replaced with knowledgeGraph.getNodeData
   dependants: KnowledgeNodePropsLite[],
   selectedCells: Cell[],
 };
 
 let KnowledgeNode = (props: KnowledgeNodeProps) => {
   let pos = nodePos(props.cell);
+  let title = props.knowledgeGraph.getNodeData(props.kmid).title;
   let dependants = [];
   let selectedDependants = [];
   let isSelectedMe = props.selectedCells.some(
@@ -117,7 +127,9 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
   return (
     <g transform={`translate(${pos.x}, ${pos.y})`} opacity={opacity}>
       <rect x="0" y="0" width={CELL_WIDTH} height={CELL_HEIGHT} fill={fill}/>
-      <text dominantBaseline="central" y={CELL_HEIGHT / 2}>{props.kmid}</text>
+      <text dominantBaseline="central" y={CELL_HEIGHT / 2}>
+        {title || props.kmid}
+      </text>
       {dependants}
       {selectedDependants}
     </g>
@@ -261,6 +273,7 @@ export let BaseKnowledgeMap = ({
           kmid={node}
           cell={nodeMap.get(node)!.cell}
           progress={nodeMap.get(node)!.progress}
+          knowledgeGraph={knowledgeGraph}
           dependants={dependants}
           selectedCells={selectedCells}/>
     );
@@ -532,6 +545,10 @@ let AdminKnowledgeMap = ({
         ...knowledgeMap,
         nodes: [...knowledgeMap.nodes, {
           id: 'newnode' + genId(),
+          title: '',
+          description: '',
+          studentVideos: [],
+          teacherVideos: [],
           i: hoverCell.i,
           j: hoverCell.j,
           deps: [],
@@ -541,23 +558,25 @@ let AdminKnowledgeMap = ({
     }
   }, [mode, dragStart, hoverCell, grid, knowledgeMap, selectedCells]);
 
-  let handleChangeId = React.useCallback((oldId: string, newId: string) => {
+  let handleChangeNode = React.useCallback((
+    oldId: string, newVal: GraphNodeInfo
+  ): void => {
     let oldNodeIndex = knowledgeMap.nodes.findIndex(x => x.id === oldId);
     if (oldNodeIndex === -1) {
       throw new Error('Could not find id ' + oldId);
     }
-    let newNodeIndex = knowledgeMap.nodes.findIndex(x => x.id === newId);
-    if (newNodeIndex !== -1) {
-      throw new Error(newId + ' already exists');
+    let newNodeIndex = knowledgeMap.nodes.findIndex(x => x.id === newVal.id);
+    if (newNodeIndex !== -1 && newNodeIndex !== oldNodeIndex) {
+      throw new Error(newVal.id + ' already exists');
     }
 
     setKnowledgeMap({
       ...knowledgeMap,
       nodes: knowledgeMap.nodes.map(x => {
         if (x.id === oldId) {
-          return {...x, id: newId};
+          return {...x, ...newVal};
         } else if (x.deps.includes(oldId)) {
-          return {...x, deps: x.deps.map(y => y === oldId ? newId : y)};
+          return {...x, deps: x.deps.map(y => y === oldId ? newVal.id : y)};
         } else {
           return x;
         }
@@ -776,12 +795,13 @@ let AdminKnowledgeMap = ({
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}/>
       <AdminToolbar selectedCells={selectedCells}
+          knowledgeGraph={knowledgeGraph}
           grid={grid}
           rows={rows}
           cols={cols}
           reached={reached}
           knowledgeMap={knowledgeMap}
-          onChangeId={handleChangeId}
+          onChangeNode={handleChangeNode}
           onChangeReached={onChangeReached}
           onMoveTreeLeft={handleMoveTreeLeft}
           onMoveTreeRight={handleMoveTreeRight}
@@ -791,6 +811,34 @@ let AdminKnowledgeMap = ({
           onDeleteIds={handleDeleteIds}/>
     </div>
   );
+};
+
+interface VideoListProps {
+  title: string,
+  videoList: VideoInfo[],
+}
+
+let VideoList = (props: VideoListProps) => {
+  let videoList = props.videoList.map(x => {
+    return (
+      <ListItem key={x.title}>
+        <MuiLink href={x.url}>
+          {x.title}
+        </MuiLink>
+      </ListItem>
+    );
+  });
+  return (
+    <React.Fragment>
+      <Typography variant="h6" gutterBottom>
+        {props.title}
+      </Typography>
+      <List>
+        {videoList}
+      </List>
+    </React.Fragment>
+  );
+
 };
 
 interface StudentKnowledgeMapProps {
@@ -847,26 +895,47 @@ let StudentKnowledgeMap = ({
   let box = null;
   if (selectedCells.length > 0) {
     let kmid = grid[selectedCells[0].i][selectedCells[0].j];
-    let contents;
+    let node = knowledgeGraph.getNodeData(kmid);
+
+    let studentVideos;
+    if (node.studentVideos) {
+      studentVideos = (
+        <VideoList title="Videos for the student"
+            videoList={node.studentVideos}/>
+      );
+    }
+
+    let teacherVideos;
+    if (node.teacherVideos) {
+      teacherVideos = (
+        <VideoList title="Videos for the teacher"
+            videoList={node.teacherVideos}/>
+      );
+    }
+
+    let mastery;
     if (!!moduleComponents[kmid]) {
-      contents = (
-        <List>
-          <ListItemButton component={Link} to={`/modules/${kmid}`}>
-            <ListItemText primary="Go to mastery"/>
-          </ListItemButton>
-        </List>
+      mastery = (
+        <Button component={Link} to={`/modules/${kmid}`}>
+          Go to mastery
+        </Button>
       );
     } else {
-      contents = (
+      mastery = (
         'Sorry, this module is not implemented yet. Check back soon!'
       );
     }
     box = (
-      <Box sx={{width: 350}}>
-        <Typography component="h2">
-          {kmid}
+      <Box sx={{width: 550}}>
+        <Typography variant="h5" gutterBottom>
+          {node.title || kmid}
         </Typography>
-        {contents}
+        <Typography variant="subtitle1" paragraph>
+          {node.description}
+        </Typography>
+        {studentVideos}
+        {teacherVideos}
+        {mastery}
       </Box>
     );
   }

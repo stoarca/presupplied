@@ -11,8 +11,9 @@ import { Student } from './entity/Student';
 import { StudentProgress } from './entity/StudentProgress';
 import { Module } from './entity/Module';
 import { env } from './env';
-import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
-import { GraphNode, GraphJson, StudentProgressDTO } from '../../common/types';
+import {
+  GraphNode, GraphJson, StudentProgressDTO, KNOWLEDGE_MAP
+} from '../../common/types';
 import { EndpointKeys, endpoints, Endpoints } from '../../common/apitypes';
 
 if (endpoints) {
@@ -20,8 +21,6 @@ if (endpoints) {
   // so we have to use the varibale somehow. We use it in the condition and
   // intentionally do nothing
 }
-
-let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
 
 interface JWTStudent {
   email: string;

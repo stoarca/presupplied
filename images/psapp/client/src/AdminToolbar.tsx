@@ -2,11 +2,12 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 
 import {Cell} from './types';
-import {GraphJson} from '../../common/types';
-import _KNOWLEDGE_MAP from '../../static/knowledge-map.json';
-let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
+import {TechTree} from './dependency-graph';
+import {
+  GraphJson, KNOWLEDGE_MAP, VideoInfo, GraphNodeInfo
+} from '../../common/types';
 
-export let TOOLBAR_WIDTH = '350px';
+export let TOOLBAR_WIDTH = '550px';
 
 interface Progress {
   reached: string[],
@@ -15,8 +16,9 @@ interface Progress {
 interface ToolbarForOneProps {
   selectedCell: Cell,
   grid: string[][],
+  knowledgeGraph: TechTree,
   reached: Set<string>,
-  onChangeId: (oldId: string, newId: string) => void,
+  onChangeNode: (oldId: string, newVal: GraphNodeInfo) => void,
   onChangeReached: (newReached: Set<string>) => void,
   onMoveTreeLeft: (id: string) => void,
   onMoveTreeRight: (id: string) => void,
@@ -24,11 +26,43 @@ interface ToolbarForOneProps {
   onMoveTreeDown: (id: string) => void,
 }
 
+type C = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+
+let mapToMdLinks = (videoInfos: VideoInfo[]): string => {
+  return videoInfos.map(({title, url}) => {
+    return `[${title}](${url})`; // markdown format
+  }).join('\n');
+};
+
+let mapFromMdLinks = (str: string): VideoInfo[] => {
+  let ret: VideoInfo[] = [];
+  let lines = str.split('\n').map(x => x.trim()).filter(x => !!x);
+  for (let line of lines) {
+    let match = line.match(/^\[([^\[\]]+)\]\(([^\(\)]+)\)$/);
+    if (!match) {
+      throw new Error('md links not valid');
+    }
+    ret.push({
+      title: match[1],
+      url: match[2],
+    });
+  }
+  return ret;
+};
+
 let ToolbarForOne = (props: ToolbarForOneProps) => {
   let ref = React.useRef<HTMLInputElement>(null);
   let kmid = props.grid[props.selectedCell.i][props.selectedCell.j];
-
+  let node = props.knowledgeGraph.getNodeData(kmid);
   let [tempId, setTempId] = React.useState(kmid);
+  let [tempTitle, setTempTitle] = React.useState(node.title);
+  let [tempDesc, setTempDesc] = React.useState(node.description);
+  let [tempStudentVids, setTempStudentVids] = React.useState('');
+  let [tempTeacherVids, setTempTeacherVids] = React.useState('');
+  React.useEffect(() => {
+    setTempStudentVids(mapToMdLinks(node.studentVideos));
+    setTempTeacherVids(mapToMdLinks(node.teacherVideos));
+  }, [node]);
   React.useEffect(() => {
     setTempId(kmid);
     setTimeout(() => {
@@ -36,14 +70,63 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
       ref.current!.select();
     }, 0);
   }, [kmid]);
-  let handleChangeInput = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  let handleChangeId = React.useCallback((e: C) => {
     setTempId(e.target.value);
+  }, []);
+  let handleChangeTitle = React.useCallback((e: C) => {
+    setTempTitle(e.target.value);
+  }, []);
+  let handleChangeDesc = React.useCallback((e: C) => {
+    setTempDesc(e.target.value);
+  }, []);
+  let handleChangeStudentVids = React.useCallback((e: C) => {
+    setTempStudentVids(e.target.value);
+  }, []);
+  let handleChangeTeacherVids = React.useCallback((e: C) => {
+    setTempTeacherVids(e.target.value);
   }, []);
 
   let handleSubmit = React.useCallback((e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    props.onChangeId(kmid, tempId);
-  }, [kmid, tempId, props.onChangeId]);
+
+    let newStudentVids;
+    try {
+      newStudentVids = mapFromMdLinks(tempStudentVids);
+    } catch (e) {
+      if (!(e instanceof Error && e.message.includes('md links not valid'))) {
+        throw e;
+      }
+      alert('Student video links were not valid');
+      return;
+    }
+
+    let newTeacherVids;
+    try {
+      newTeacherVids = mapFromMdLinks(tempTeacherVids);
+    } catch (e) {
+      if (!(e instanceof Error && e.message.includes('md links not valid'))) {
+        throw e;
+      }
+      alert('Teacher video links were not valid');
+      return;
+    }
+
+    props.onChangeNode(kmid, {
+      id: tempId,
+      title: tempTitle,
+      description: tempDesc,
+      studentVideos: newStudentVids,
+      teacherVideos: newTeacherVids,
+    });
+  }, [
+    kmid,
+    tempId,
+    tempTitle,
+    tempDesc,
+    tempStudentVids,
+    tempTeacherVids,
+    props.onChangeNode,
+  ]);
 
   let handleChangeReached = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     let newReached = new Set(props.reached);
@@ -76,9 +159,41 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
       <form onSubmit={handleSubmit}>
         <div>
           <input type="text"
+              style={{width: '100%'}}
               ref={ref}
               value={tempId}
-              onChange={handleChangeInput}/>
+              placeholder="id"
+              onChange={handleChangeId}/>
+        </div>
+        <div>
+          <input type="text"
+              style={{width: '100%'}}
+              value={tempTitle}
+              placeholder="title"
+              onChange={handleChangeTitle}/>
+        </div>
+        <div>
+          <textarea
+              style={{width: '100%'}}
+              value={tempDesc}
+              placeholder="description"
+              onChange={handleChangeDesc}/>
+        </div>
+        Learning videos:
+        <div>
+          <textarea
+              style={{width: '100%'}}
+              value={tempStudentVids}
+              placeholder="videos for learning"
+              onChange={handleChangeStudentVids}/>
+        </div>
+        Teaching videos:
+        <div>
+          <textarea
+              style={{width: '100%'}}
+              value={tempTeacherVids}
+              placeholder="videos for teaching"
+              onChange={handleChangeTeacherVids}/>
         </div>
         <div>
           <button type="submit">Apply</button>
@@ -118,12 +233,13 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
 
 interface ToolbarProps {
   knowledgeMap: typeof KNOWLEDGE_MAP,
+  knowledgeGraph: TechTree,
   selectedCells: Cell[],
   grid: string[][],
   rows: number,
   cols: number,
   reached: Set<string>,
-  onChangeId: (oldId: string, newId: string) => void,
+  onChangeNode: (oldId: string, newVal: GraphNodeInfo) => void,
   onChangeReached: (newReached: Set<string>) => void,
   onMoveTreeLeft: (id: string) => void,
   onMoveTreeRight: (id: string) => void,
@@ -139,9 +255,10 @@ export let AdminToolbar = (props: ToolbarProps) => {
     forOne = (
       <ToolbarForOne
           selectedCell={props.selectedCells[0]}
+          knowledgeGraph={props.knowledgeGraph}
           grid={props.grid}
           reached={props.reached}
-          onChangeId={props.onChangeId}
+          onChangeNode={props.onChangeNode}
           onChangeReached={props.onChangeReached}
           onMoveTreeLeft={props.onMoveTreeLeft}
           onMoveTreeRight={props.onMoveTreeRight}
