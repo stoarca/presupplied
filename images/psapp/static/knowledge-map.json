@@ -759,41 +759,7 @@
       "i": 46,
       "j": 9,
       "deps": [
-        "COUNT_OBJECTS_TO_10",
-        "BEFORE_AFTER_10"
-      ],
-      "title": "",
-      "description": "",
-      "studentVideos": [],
-      "teacherVideos": []
-    },
-    {
-      "id": "ADD_5",
-      "i": 46,
-      "j": 10,
-      "deps": [
-        "ADD_1",
-        "COUNT_ADD_OPPONENT_FINGERS",
-        "COUNT_ADD_DICE",
-        "COUNT_ADD_OBJECTS"
-      ],
-      "title": "",
-      "description": "",
-      "studentVideos": [],
-      "teacherVideos": []
-    },
-    {
-      "id": "ADD_2",
-      "i": 47,
-      "j": 10,
-      "deps": [
-        "ADD_1",
-        "COUNT_ADD_OPPONENT_FINGERS",
-        "COUNT_ADD_DICE",
-        "COUNT_ADD_OBJECTS",
-        "COUNT_ADD_NUMBER_LINE",
-        "RECOGNIZE_ORDER_TEMPORAL_3",
-        "RECOGNIZE_ORDER_3"
+        "COUNT_OBJECTS_TO_10"
       ],
       "title": "",
       "description": "",
@@ -933,13 +899,14 @@
     {
       "id": "ADD_UP_TO_10",
       "i": 46,
-      "j": 11,
+      "j": 10,
       "deps": [
-        "ADD_5",
-        "ADD_2",
-        "COUNT_ADD_OPPONENT_FINGERS_FAST",
-        "COUNT_ADD_DICE_FAST",
-        "COUNT_ADD_SELF_FINGERS"
+        "ADD_1",
+        "COUNT_ADD_OPPONENT_FINGERS",
+        "COUNT_ADD_DICE",
+        "COUNT_ADD_OBJECTS",
+        "COUNT_ADD_NUMBER_LINE",
+        "READ_NUMBERS_TO_20"
       ],
       "title": "",
       "description": "",
@@ -951,9 +918,9 @@
       "i": 46,
       "j": 12,
       "deps": [
-        "ADD_UP_TO_10",
         "READ_NUMBERS_UP_TO_100",
-        "PECK_NUMBERS_ON_KEYBOARD"
+        "PECK_NUMBERS_ON_KEYBOARD",
+        "ADD_UP_TO_15"
       ],
       "title": "",
       "description": "",
@@ -1273,7 +1240,8 @@
       "j": 13,
       "deps": [
         "ADD_UP_TO_20",
-        "SUBTRACT_1"
+        "SUBTRACT_1",
+        "RECOGNIZE_MORE_LESS"
       ],
       "title": "",
       "description": "",
@@ -2667,9 +2635,9 @@
       "i": 44,
       "j": 12,
       "deps": [
-        "ADD_UP_TO_10",
         "READ_NUMBERS_UP_TO_100",
-        "RECOGNIZE_NTH_ORDER_10"
+        "RECOGNIZE_NTH_ORDER_10",
+        "ADD_UP_TO_15"
       ],
       "title": "",
       "description": "",
@@ -2931,7 +2899,7 @@
     {
       "id": "SUBTRACT_1",
       "i": 48,
-      "j": 12,
+      "j": 11,
       "deps": [
         "ADD_UP_TO_10"
       ],
@@ -4672,6 +4640,21 @@
       "description": "",
       "studentVideos": [],
       "teacherVideos": []
+    },
+    {
+      "id": "ADD_UP_TO_15",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "i": 46,
+      "j": 11,
+      "deps": [
+        "ADD_UP_TO_10",
+        "COUNT_ADD_OPPONENT_FINGERS_FAST",
+        "COUNT_ADD_SELF_FINGERS",
+        "COUNT_ADD_DICE_FAST"
+      ]
     }
   ]
 }
