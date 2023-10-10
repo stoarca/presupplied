@@ -45,9 +45,12 @@ export interface GraphNodeInfo {
   teacherVideos: VideoInfo[],
 }
 export interface GraphNode extends GraphNodeInfo {
+  cell: {
+    i: number,
+    j: number,
+  },
   deps: string[],
-  i: number,
-  j: number,
+  subNodes: GraphNodeInfo[],
 }
 
 export interface GraphJson {

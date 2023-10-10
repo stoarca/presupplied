@@ -52,39 +52,39 @@ let cellFromAbsoluteCoords = (x: number, y: number): Cell | null => {
   };
 };
 
-interface KnowledgeNodePropsLite {
+interface KnowledgeNodeProps {
   kmid: string,
-  cell: Cell,
-  progress: 'reached' | 'reachable' | 'unreachable'
-}
-
-interface KnowledgeNodeProps extends KnowledgeNodePropsLite {
   knowledgeGraph: TechTree,
-  // TODO: dependants can be calculated from knowledgeGraph, but need to
-  // migrate knowledge-map.json to cell: {i, j} first to do this nicely
-  // NodeMap needs to go away entirely:
-  //   - progress can be replaced with StudentContext
-  //   - cell can be replaced with knowledgeGraph.getNodeData
-  dependants: KnowledgeNodePropsLite[],
+  reached: Set<string>,
+  reachable: Set<string>,
+  dependants: string[],
   selectedCells: Cell[],
 };
 
-let KnowledgeNode = (props: KnowledgeNodeProps) => {
-  let pos = nodePos(props.cell);
-  let title = props.knowledgeGraph.getNodeData(props.kmid).title;
-  let dependants = [];
+let KnowledgeNode = ({
+  kmid,
+  knowledgeGraph,
+  reached,
+  reachable,
+  dependants,
+  selectedCells,
+}: KnowledgeNodeProps) => {
+  let node = knowledgeGraph.getNodeData(kmid);
+  let pos = nodePos(node.cell);
+  let title = node.title;
+  let dependantLines = [];
   let selectedDependants = [];
-  let isSelectedMe = props.selectedCells.some(
-    x => x.i === props.cell.i && x.j === props.cell.j
+  let isSelectedMe = selectedCells.some(
+    x => x.i === node.cell.i && x.j === node.cell.j
   );
-  for (let i = 0; i < props.dependants.length; ++i) {
-    let dependant = props.dependants[i];
+  for (let i = 0; i < dependants.length; ++i) {
+    let dependant = knowledgeGraph.getNodeData(dependants[i]);
     let dependantPos = nodePos(dependant.cell);
-    let isSelectedDep = props.selectedCells.some(
+    let isSelectedDep = selectedCells.some(
       x => x.i === dependant.cell.i && x.j === dependant.cell.j
     );
-    dependants.push(
-      <line key={'dep-' + props.kmid + '-' + dependant.kmid}
+    dependantLines.push(
+      <line key={'dep-' + kmid + '-' + dependant.id}
           x1={CELL_WIDTH}
           y1={CELL_HEIGHT / 2}
           x2={dependantPos.x - pos.x}
@@ -94,7 +94,7 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
     );
     if (isSelectedDep) {
       selectedDependants.push(
-        <circle key={'sel-' + props.kmid + '-' + dependant.kmid}
+        <circle key={'sel-' + kmid + '-' + dependant.id}
           cx={CELL_WIDTH}
           cy={CELL_HEIGHT / 2}
           r={10}
@@ -103,7 +103,7 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
     }
     if (isSelectedMe) {
       selectedDependants.push(
-        <circle key={'selme-' + props.kmid + '-' + dependant.kmid}
+        <circle key={'selme-' + kmid + '-' + dependant.id}
           cx={dependantPos.x - pos.x}
           cy={dependantPos.y - pos.y + CELL_HEIGHT / 2}
           r={10}
@@ -113,34 +113,33 @@ let KnowledgeNode = (props: KnowledgeNodeProps) => {
   }
 
   let fill: string;
-  if (props.progress === 'reached') {
+  if (reached.has(kmid)) {
     fill = '#90EE90';
-  } else if (props.progress === 'reachable') {
+  } else if (reachable.has(kmid)) {
     fill = '#F1EB9C';
   } else {
     fill = '#777777';
   }
   let opacity = 1;
-  if (!moduleComponents[props.kmid]) {
+  if (!moduleComponents[kmid]) {
     opacity=0.3;
   }
   return (
     <g transform={`translate(${pos.x}, ${pos.y})`} opacity={opacity}>
       <rect x="0" y="0" width={CELL_WIDTH} height={CELL_HEIGHT} fill={fill}/>
       <text dominantBaseline="central" y={CELL_HEIGHT / 2}>
-        {title || props.kmid}
+        {title || kmid}
       </text>
-      {dependants}
+      {dependantLines}
       {selectedDependants}
     </g>
   );
 };
 
-type NodeMap = Map<string, KnowledgeNodePropsLite>;
 interface BaseKnowledgeMapProps {
   knowledgeGraph: TechTree;
   grid: string[][];
-  nodeMap: NodeMap;
+  reached: Set<string>;
   reachable: Set<string>;
   selectedCells: Cell[];
   allowHoverEmptyCell: boolean;
@@ -152,7 +151,7 @@ interface BaseKnowledgeMapProps {
 export let BaseKnowledgeMap = ({
   knowledgeGraph,
   grid,
-  nodeMap,
+  reached,
   reachable,
   selectedCells,
   allowHoverEmptyCell,
@@ -169,27 +168,26 @@ export let BaseKnowledgeMap = ({
     let url = new URL(window.location.href);
     let scrollTo = url.searchParams.get('scroll');
     let minCell;
-    if (scrollTo && nodeMap.get(scrollTo)) {
-      minCell = nodeMap.get(scrollTo)!.cell;
+    if (scrollTo && knowledgeGraph.hasNode(scrollTo)) {
+      minCell = knowledgeGraph.getNodeData(scrollTo).cell;
     } else {
       minCell = {i: 1000, j: 1000};
       let enabledMinCell = {i: 1000, j: 1000};
       for (let kmid of reachable) {
-        let nodeProps = nodeMap.get(kmid)!;
+        let nodeCell = knowledgeGraph.getNodeData(kmid).cell;
         if (
-          nodeProps.cell.j < minCell.j ||
-          nodeProps.cell.j === minCell.j && nodeProps.cell.i < minCell.i
+          nodeCell.j < minCell.j ||
+          nodeCell.j === minCell.j && nodeCell.i < minCell.i
         ) {
-          minCell = nodeProps.cell;
+          minCell = nodeCell;
         }
         if (
           !!moduleComponents[kmid] && (
-            nodeProps.cell.j < enabledMinCell.j ||
-            nodeProps.cell.j === enabledMinCell.j &&
-                nodeProps.cell.i < enabledMinCell.i
+            nodeCell.j < enabledMinCell.j ||
+            nodeCell.j === enabledMinCell.j && nodeCell.i < enabledMinCell.i
           )
         ) {
-          enabledMinCell = nodeProps.cell;
+          enabledMinCell = nodeCell;
         }
       }
       if (enabledMinCell.i < 1000) {
@@ -206,6 +204,7 @@ export let BaseKnowledgeMap = ({
       w: 2000,
       h: 2000,
     });
+    // intentionally no args, only want this scroll to happen on page load
   }, []);
 
   let topSorted = React.useMemo(() => {
@@ -265,15 +264,13 @@ export let BaseKnowledgeMap = ({
   let nodes = [];
   for (let i = 0; i < topSorted.length; ++i) {
     let node = topSorted[i];
-    let dependants = knowledgeGraph.directDependantsOf(node).map(
-      x => nodeMap.get(x)!
-    );
+    let dependants = knowledgeGraph.directDependantsOf(node);
     nodes.push(
       <KnowledgeNode key={node}
           kmid={node}
-          cell={nodeMap.get(node)!.cell}
-          progress={nodeMap.get(node)!.progress}
           knowledgeGraph={knowledgeGraph}
+          reached={reached}
+          reachable={reachable}
           dependants={dependants}
           selectedCells={selectedCells}/>
     );
@@ -351,7 +348,6 @@ interface AdminKnowledgeMapProps {
   grid: string[][];
   rows: number;
   cols: number;
-  nodeMap: NodeMap;
   reached: Set<string>;
   reachable: Set<string>;
   onChangeReached: (newReached: Set<string>) => void;
@@ -365,7 +361,6 @@ let AdminKnowledgeMap = ({
   grid,
   rows,
   cols,
-  nodeMap,
   reached,
   reachable,
   onChangeReached,
@@ -462,8 +457,10 @@ let AdminKnowledgeMap = ({
           }
           return {
             ...x,
-            i: x.i + di,
-            j: x.j + dj,
+            cell: {
+              i: x.cell.i + di,
+              j: x.cell.j + dj,
+            },
           };
         });
         let newKnowledgeMap = {
@@ -549,9 +546,9 @@ let AdminKnowledgeMap = ({
           description: '',
           studentVideos: [],
           teacherVideos: [],
-          i: hoverCell.i,
-          j: hoverCell.j,
+          cell: hoverCell,
           deps: [],
+          subNodes: [],
         }],
       });
       setSelectedCells([hoverCell]);
@@ -594,7 +591,7 @@ let AdminKnowledgeMap = ({
         continue;
       }
 
-      let oldCell = nodeMap.get(curId)!.cell;
+      let oldCell = knowledgeGraph.getNodeData(curId).cell;
       let nextJ = dir === 'left' ? oldCell.j - 1 : oldCell.j + 1;
       if (nextJ < 0) {
         needsNegativeOffset = true;
@@ -613,7 +610,7 @@ let AdminKnowledgeMap = ({
         deps = knowledgeGraph.directDependantsOf(curId);
       }
       deps.forEach(x => {
-        let depCell = nodeMap.get(x)!.cell;
+        let depCell = knowledgeGraph.getNodeData(x).cell;
         if (depCell.j === nextJ) {
           bfs.push(x);
         }
@@ -630,14 +627,14 @@ let AdminKnowledgeMap = ({
         }
       }).map(x => {
         if (needsNegativeOffset) {
-          return {...x, j: x.j + 1};
+          return {...x, cell: {...x.cell, j: x.cell.j + 1}};
         } else {
           return x;
         }
       }),
     });
     setSelectedCells([]);
-  }, [knowledgeMap, knowledgeGraph, nodeMap, grid]);
+  }, [knowledgeMap, knowledgeGraph, grid]);
   let handleMoveTreeRight = React.useCallback((id: string) => {
     return handleMoveTreeHorz(id, 'right');
   }, [handleMoveTreeHorz]);
@@ -648,16 +645,16 @@ let AdminKnowledgeMap = ({
   let handleMoveTreeVert = React.useCallback((id: string, dir: 'up' | 'down') => {
     let updatedCells: {[id: string]: Cell} = {};
     let lockedCells: string[] = [];
-    let idCell = nodeMap.get(id)!.cell;
+    let idCell = knowledgeGraph.getNodeData(id).cell;
     if (dir === 'up' && idCell.i < rows || dir === 'down' && idCell.i > 0) {
       let lockedCellId = grid[idCell.i + (dir === 'up' ? 1 : -1)][idCell.j];
       if (lockedCellId) {
-        let lockedCell = nodeMap.get(lockedCellId)!.cell;
+        let lockedCell = knowledgeGraph.getNodeData(lockedCellId).cell;
         lockedCells.push(lockedCellId);
         let cur: string | undefined = lockedCellId;
         while (cur) {
           cur = knowledgeGraph.directDependantsOf(cur).find(
-            x => nodeMap.get(x)!.cell.i === lockedCell.i
+            x => knowledgeGraph.getNodeData(x).cell.i === lockedCell.i
           );
           if (cur) {
             lockedCells.push(cur);
@@ -666,7 +663,7 @@ let AdminKnowledgeMap = ({
         cur = lockedCellId;
         while (cur) {
           cur = knowledgeGraph.directDependenciesOf(cur).find(
-            x => nodeMap.get(x)!.cell.i === lockedCell.i
+            x => knowledgeGraph.getNodeData(x).cell.i === lockedCell.i
           );
           if (cur) {
             lockedCells.push(cur);
@@ -686,7 +683,7 @@ let AdminKnowledgeMap = ({
         continue;
       }
 
-      let oldCell = nodeMap.get(curId)!.cell;
+      let oldCell = knowledgeGraph.getNodeData(curId).cell;
       let nextI = dir === 'up' ? oldCell.i - 1 : oldCell.i + 1;
       if (nextI < 0) {
         needsNegativeOffset = true;
@@ -702,20 +699,28 @@ let AdminKnowledgeMap = ({
         // if we intersect a horizontal dependency, push both ends of those down
         if (grid[nextI][j]) {
           let deps = knowledgeGraph.directDependenciesOf(grid[nextI][j])
-          let sameRowDep = deps.find(x => nodeMap.get(x)!.cell.i === nextI);
-          if (sameRowDep && nodeMap.get(sameRowDep)!.cell.j < oldCell.j) {
+          let sameRowDep = deps.find(
+            x => knowledgeGraph.getNodeData(x).cell.i === nextI
+          );
+          if (
+            sameRowDep &&
+            knowledgeGraph.getNodeData(sameRowDep).cell.j < oldCell.j
+          ) {
             bfs.push(sameRowDep);
           }
         }
       }
       let handleDeps = (deps: string[]) => {
-        let sameRowDep = deps.find(x => nodeMap.get(x)!.cell.i === oldCell.i);
+        let sameRowDep = deps.find(
+          x => knowledgeGraph.getNodeData(x).cell.i === oldCell.i
+        );
         if (sameRowDep) {
           bfs.push(sameRowDep);
           let i = oldCell.i;
           while (true) {
             let aboveIds = deps.filter(
-              x => nodeMap.get(x)!.cell.i === i - 1 && !lockedCells.includes(x)
+              x => knowledgeGraph.getNodeData(x).cell.i === i - 1 &&
+                  !lockedCells.includes(x)
             );
             if (aboveIds.length) {
               Array.prototype.push.apply(bfs, aboveIds);
@@ -727,7 +732,8 @@ let AdminKnowledgeMap = ({
           i = oldCell.i;
           while (true) {
             let belowIds = deps.filter(
-              x => nodeMap.get(x)!.cell.i === i + 1 && !lockedCells.includes(x)
+              x => knowledgeGraph.getNodeData(x).cell.i === i + 1 &&
+                  !lockedCells.includes(x)
             );
             if (belowIds.length) {
               Array.prototype.push.apply(bfs, belowIds);
@@ -752,14 +758,14 @@ let AdminKnowledgeMap = ({
         }
       }).map(x => {
         if (needsNegativeOffset) {
-          return {...x, i: x.i + 1};
+          return {...x, cell: {...x.cell, i: x.cell.i + 1}};
         } else {
           return x;
         }
       }),
     });
     setSelectedCells([]);
-  }, [knowledgeMap, knowledgeGraph, nodeMap, grid, cols]);
+  }, [knowledgeMap, knowledgeGraph, grid, cols]);
   let handleMoveTreeUp = React.useCallback((id: string) => {
     return handleMoveTreeVert(id, 'up');
   }, [handleMoveTreeVert]);
@@ -767,10 +773,14 @@ let AdminKnowledgeMap = ({
     return handleMoveTreeVert(id, 'down');
   }, [handleMoveTreeVert]);
 
+  let handleAddSubNode = React.useCallback((id: string) => {
+
+  }, [knowledgeMap, knowledgeGraph]);
+
 
   let handleSelectIds = React.useCallback((idsToSelect: string[]) => {
-    setSelectedCells(idsToSelect.map(x => nodeMap.get(x)!.cell));
-  }, [nodeMap]);
+    setSelectedCells(idsToSelect.map(x => knowledgeGraph.getNodeData(x).cell));
+  }, [knowledgeGraph]);
 
   let handleDeleteIds = React.useCallback((idsToDelete: string[]) => {
     setKnowledgeMap({
@@ -787,7 +797,7 @@ let AdminKnowledgeMap = ({
       <BaseKnowledgeMap
           knowledgeGraph={knowledgeGraph}
           grid={grid}
-          nodeMap={nodeMap}
+          reached={reached}
           reachable={reachable}
           selectedCells={selectedCells}
           allowHoverEmptyCell={true}
@@ -799,14 +809,13 @@ let AdminKnowledgeMap = ({
           grid={grid}
           rows={rows}
           cols={cols}
-          reached={reached}
           knowledgeMap={knowledgeMap}
           onChangeNode={handleChangeNode}
-          onChangeReached={onChangeReached}
           onMoveTreeLeft={handleMoveTreeLeft}
           onMoveTreeRight={handleMoveTreeRight}
           onMoveTreeUp={handleMoveTreeUp}
           onMoveTreeDown={handleMoveTreeDown}
+          onAddSubNode={handleAddSubNode}
           onSelectIds={handleSelectIds}
           onDeleteIds={handleDeleteIds}/>
     </div>
@@ -846,7 +855,6 @@ interface StudentKnowledgeMapProps {
   grid: string[][],
   rows: number,
   cols: number,
-  nodeMap: NodeMap;
   reached: Set<string>;
   reachable: Set<string>;
   onChangeReached: (newReached: Set<string>) => void;
@@ -859,7 +867,6 @@ let StudentKnowledgeMap = ({
   grid,
   rows,
   cols,
-  nodeMap,
   reached,
   reachable,
   onChangeReached,
@@ -944,7 +951,7 @@ let StudentKnowledgeMap = ({
       <BaseKnowledgeMap
           knowledgeGraph={knowledgeGraph}
           grid={grid}
-          nodeMap={nodeMap}
+          reached={reached}
           reachable={reachable}
           selectedCells={selectedCells}
           allowHoverEmptyCell={false}
@@ -1003,24 +1010,6 @@ export let KnowledgeMap = () => {
     let ret = knowledgeGraph.getReachable(reached);
     return ret;
   }, [knowledgeGraph, reached]);
-  let nodeMap = React.useMemo(() => {
-    let ret = new Map();
-    for (let i = 0; i <= rows; ++i) {
-      for (let j = 0; j <= cols; ++j) {
-        let id = grid[i][j];
-        if (id) {
-          ret.set(id, {
-            kmid: id,
-            cell: {i: i, j: j},
-            progress: reached.has(id) ? 'reached' :
-                reachable.has(id) ? 'reachable':
-              'unreachable',
-          });
-        }
-      }
-    }
-    return ret;
-  }, [knowledgeGraph, grid, reached, reachable]);
 
   let [selectedCells, setSelectedCells] = React.useState<Cell[]>([]);
 
@@ -1034,7 +1023,6 @@ export let KnowledgeMap = () => {
           grid={grid}
           rows={rows}
           cols={cols}
-          nodeMap={nodeMap}
           reached={reached}
           reachable={reachable}
           onChangeReached={handleChangeReached}
@@ -1048,7 +1036,6 @@ export let KnowledgeMap = () => {
           grid={grid}
           rows={rows}
           cols={cols}
-          nodeMap={nodeMap}
           reached={reached}
           reachable={reachable}
           onChangeReached={handleChangeReached}

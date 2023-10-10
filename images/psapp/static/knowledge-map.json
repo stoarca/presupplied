@@ -2,44 +2,51 @@
   "nodes": [
     {
       "id": "REPEAT_OPEN_SOUNDS",
-      "i": 23,
-      "j": 2,
       "deps": [
         "TRACKING_SOUND"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 23,
+        "j": 2
+      },
+      "subNodes": []
     },
     {
       "id": "REPEAT_CLOSED_SOUNDS",
-      "i": 24,
-      "j": 2,
       "deps": [
         "TRACKING_SOUND"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 24,
+        "j": 2
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_SIMPLE_OBJECTS",
-      "i": 40,
-      "j": 3,
       "deps": [
         "TRACKING_OBJECTS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 40,
+        "j": 3
+      },
+      "subNodes": []
     },
     {
       "id": "REPEAT_SOUNDS",
-      "i": 25,
-      "j": 3,
       "deps": [
         "REPEAT_OPEN_SOUNDS",
         "REPEAT_CLOSED_SOUNDS",
@@ -49,12 +56,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 25,
+        "j": 3
+      },
+      "subNodes": []
     },
     {
       "id": "SPEAK_SIMPLE_OBJECTS",
-      "i": 40,
-      "j": 4,
       "deps": [
         "REPEAT_SOUNDS",
         "RECOGNIZE_SIMPLE_OBJECTS"
@@ -62,12 +72,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 40,
+        "j": 4
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_SIMPLE_CONCEPTS",
-      "i": 53,
-      "j": 5,
       "deps": [
         "RECOGNIZE_YES_NO",
         "RECOGNIZE_GOOD_BAD"
@@ -75,12 +88,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 53,
+        "j": 5
+      },
+      "subNodes": []
     },
     {
       "id": "SPEAK_SIMPLE_CONCEPTS",
-      "i": 53,
-      "j": 6,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS",
         "SPEAK_SIMPLE_OBJECTS"
@@ -88,24 +104,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 53,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_OPPOSITES",
-      "i": 57,
-      "j": 6,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 57,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "SPEAK_OPPOSITES",
-      "i": 52,
-      "j": 7,
       "deps": [
         "RECOGNIZE_OPPOSITES",
         "SPEAK_SIMPLE_CONCEPTS"
@@ -113,36 +135,45 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 52,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "REPEAT_VOWELS",
-      "i": 24,
-      "j": 4,
       "deps": [
         "REPEAT_SOUNDS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 24,
+        "j": 4
+      },
+      "subNodes": []
     },
     {
       "id": "REPEAT_CONSONANTS",
-      "i": 25,
-      "j": 4,
       "deps": [
         "REPEAT_SOUNDS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 25,
+        "j": 4
+      },
+      "subNodes": []
     },
     {
       "id": "REPEAT_LETTERS",
-      "i": 25,
-      "j": 5,
       "deps": [
         "REPEAT_VOWELS",
         "REPEAT_CONSONANTS"
@@ -150,24 +181,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 25,
+        "j": 5
+      },
+      "subNodes": []
     },
     {
       "id": "SING_ALPHABET",
-      "i": 25,
-      "j": 6,
       "deps": [
         "REPEAT_LETTERS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 25,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "READ_LOWERCASE_VOWELS",
-      "i": 19,
-      "j": 5,
       "deps": [
         "REPEAT_VOWELS",
         "RECOGNIZE_LOWERCASE_LETTERS"
@@ -175,12 +212,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 19,
+        "j": 5
+      },
+      "subNodes": []
     },
     {
       "id": "READ_LOWERCASE_CONSONANTS",
-      "i": 20,
-      "j": 5,
       "deps": [
         "REPEAT_CONSONANTS",
         "RECOGNIZE_LOWERCASE_LETTERS"
@@ -188,12 +228,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 20,
+        "j": 5
+      },
+      "subNodes": []
     },
     {
       "id": "READ_UPPERCASE_CONSONANTS",
-      "i": 22,
-      "j": 5,
       "deps": [
         "REPEAT_CONSONANTS",
         "RECOGNIZE_UPPERCASE_LETTERS"
@@ -201,12 +244,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 22,
+        "j": 5
+      },
+      "subNodes": []
     },
     {
       "id": "READ_LOWERCASE_LETTERS",
-      "i": 20,
-      "j": 6,
       "deps": [
         "READ_LOWERCASE_CONSONANTS",
         "READ_LOWERCASE_VOWELS"
@@ -214,12 +260,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 20,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "READ_UPPERCASE_VOWELS",
-      "i": 21,
-      "j": 5,
       "deps": [
         "REPEAT_VOWELS",
         "RECOGNIZE_UPPERCASE_LETTERS"
@@ -227,12 +276,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 21,
+        "j": 5
+      },
+      "subNodes": []
     },
     {
       "id": "READ_UPPERCASE_LETTERS",
-      "i": 21,
-      "j": 6,
       "deps": [
         "READ_UPPERCASE_VOWELS",
         "READ_UPPERCASE_CONSONANTS"
@@ -240,12 +292,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 21,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "READ_LETTERS",
-      "i": 21,
-      "j": 7,
       "deps": [
         "READ_LOWERCASE_LETTERS",
         "READ_UPPERCASE_LETTERS"
@@ -253,12 +308,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 21,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_RIGHT",
-      "i": 26,
-      "j": 8,
       "deps": [
         "READ_LETTERS",
         "SPEAK_SIMPLE_MAPPINGS",
@@ -267,48 +325,60 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 26,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_YES_NO",
-      "i": 52,
-      "j": 1,
       "deps": [
         "RECOGNIZE_EYES_FACES"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 52,
+        "j": 1
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_GOOD_BAD",
-      "i": 53,
-      "j": 1,
       "deps": [
         "RECOGNIZE_EYES_FACES"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 53,
+        "j": 1
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_COLORS",
-      "i": 58,
-      "j": 6,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "SPEAK_COLORS",
-      "i": 53,
-      "j": 7,
       "deps": [
         "RECOGNIZE_COLORS",
         "SPEAK_SIMPLE_CONCEPTS"
@@ -316,60 +386,75 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 53,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_LOWERCASE_LETTERS",
-      "i": 19,
-      "j": 3,
       "deps": [
         "TRACKING_OBJECTS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 19,
+        "j": 3
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_UPPERCASE_LETTERS",
-      "i": 20,
-      "j": 3,
       "deps": [
         "TRACKING_OBJECTS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 20,
+        "j": 3
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_DIGITS",
-      "i": 39,
-      "j": 3,
       "deps": [
         "TRACKING_OBJECTS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 39,
+        "j": 3
+      },
+      "subNodes": []
     },
     {
       "id": "SPEAK_SIMPLE_MAPPINGS",
-      "i": 51,
-      "j": 7,
       "deps": [
         "SPEAK_SIMPLE_CONCEPTS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 51,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "REPEAT_DIGITS",
-      "i": 39,
-      "j": 4,
       "deps": [
         "REPEAT_SOUNDS",
         "RECOGNIZE_DIGITS"
@@ -377,72 +462,90 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 39,
+        "j": 4
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_TO_5",
-      "i": 41,
-      "j": 5,
       "deps": [
         "REPEAT_DIGITS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 41,
+        "j": 5
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_TO_10",
-      "i": 41,
-      "j": 6,
       "deps": [
         "COUNT_TO_5"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 41,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_TO_20",
-      "i": 41,
-      "j": 8,
       "deps": [
         "COUNT_TO_10"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 41,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "READ_DIGITS",
-      "i": 39,
-      "j": 5,
       "deps": [
         "REPEAT_DIGITS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 39,
+        "j": 5
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_TO_100",
-      "i": 41,
-      "j": 9,
       "deps": [
         "COUNT_TO_20"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 41,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_TO_1000",
-      "i": 41,
-      "j": 10,
       "deps": [
         "COUNT_TO_100",
         "COUNT_OBJECTS_TO_20"
@@ -450,12 +553,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 41,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_OBJECTS_TO_10",
-      "i": 40,
-      "j": 8,
       "deps": [
         "COUNT_TO_10",
         "SPEAK_SIMPLE_MAPPINGS",
@@ -464,12 +570,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 40,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "READ_NUMBERS_TO_20",
-      "i": 39,
-      "j": 9,
       "deps": [
         "COUNT_TO_20",
         "READ_DIGITS"
@@ -477,12 +586,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 39,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "READ_NUMBERS_UP_TO_100",
-      "i": 39,
-      "j": 10,
       "deps": [
         "READ_NUMBERS_TO_20",
         "COUNT_TO_100",
@@ -491,12 +603,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 39,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "READ_NUMBERS_UP_TO_1000",
-      "i": 39,
-      "j": 12,
       "deps": [
         "READ_NUMBERS_UP_TO_100",
         "COUNT_TO_1000",
@@ -505,12 +620,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 39,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_OBJECTS_TO_20",
-      "i": 40,
-      "j": 9,
       "deps": [
         "COUNT_OBJECTS_TO_10",
         "COUNT_TO_20"
@@ -518,12 +636,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 40,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_OBJECTS_TO_100",
-      "i": 40,
-      "j": 10,
       "deps": [
         "COUNT_OBJECTS_TO_20",
         "COUNT_TO_100"
@@ -531,12 +652,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 40,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_FAST",
-      "i": 26,
-      "j": 10,
       "deps": [
         "PECK_DIGITS_ON_KEYBOARD_FAST",
         "PECK_KEYS_ON_KEYBOARD_RIGHT_FAST",
@@ -545,36 +669,45 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 26,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "READ_NUMBERS_UP_TO_MILLION",
-      "i": 39,
-      "j": 13,
       "deps": [
         "READ_NUMBERS_UP_TO_1000"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 39,
+        "j": 13
+      },
+      "subNodes": []
     },
     {
       "id": "LETTER_TO_SOUND",
-      "i": 24,
-      "j": 8,
       "deps": [
         "READ_LETTERS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 24,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "SOUND_TO_LETTER",
-      "i": 18,
-      "j": 10,
       "deps": [
         "SOUND_TO_LETTER_A_I",
         "SOUND_TO_LETTER_J_Q",
@@ -583,24 +716,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 18,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "BIGRAM_TO_SOUND",
-      "i": 24,
-      "j": 9,
       "deps": [
         "LETTER_TO_SOUND"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 24,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "SOUND_TO_BIGRAM",
-      "i": 18,
-      "j": 11,
       "deps": [
         "SOUND_TO_LETTER",
         "PECK_KEYS_ON_KEYBOARD_FAST"
@@ -608,24 +747,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 18,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "READ_50_SIMPLE_WORDS",
-      "i": 20,
-      "j": 11,
       "deps": [
         "READ_3_LTTER_WORDS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 20,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "READ_200_SIMPLE_WORDS",
-      "i": 20,
-      "j": 12,
       "deps": [
         "READ_50_SIMPLE_WORDS",
         "READ_4_LETTER_WORDS"
@@ -633,24 +778,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 20,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "READ_PUNCTUATION",
-      "i": 21,
-      "j": 12,
       "deps": [
         "READ_50_SIMPLE_WORDS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 21,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "READ_SHORT_SENTENCES",
-      "i": 24,
-      "j": 12,
       "deps": [
         "READ_4_LETTER_WORDS",
         "READ_50_SIMPLE_WORDS"
@@ -658,12 +809,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 24,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "READ_LONG_SENTENCES",
-      "i": 20,
-      "j": 13,
       "deps": [
         "READ_SHORT_SENTENCES",
         "READ_NUMBERS_UP_TO_1000",
@@ -672,24 +826,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 20,
+        "j": 13
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_OBJECTS_MORE_LESS",
-      "i": 43,
-      "j": 10,
       "deps": [
         "ALL_BEFORE_AFTER_10"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 43,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_MORE_LESS",
-      "i": 42,
-      "j": 12,
       "deps": [
         "RECOGNIZE_DIGITS_MORE_LESS",
         "READ_NUMBERS_UP_TO_100",
@@ -699,24 +859,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 42,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "READ_ANY_NUMBER",
-      "i": 39,
-      "j": 14,
       "deps": [
         "READ_NUMBERS_UP_TO_MILLION"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 39,
+        "j": 14
+      },
+      "subNodes": []
     },
     {
       "id": "VISUAL_SIMPLE_FRACTIONS",
-      "i": 38,
-      "j": 10,
       "deps": [
         "RECOGNIZE_NTH_ORDER_10",
         "COUNT_OBJECTS_TO_20",
@@ -725,12 +891,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 38,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "READ_SIMPLE_FRACTIONS",
-      "i": 38,
-      "j": 13,
       "deps": [
         "READ_NUMBERS_UP_TO_1000",
         "RECOGNIZE_MORE_LESS",
@@ -739,12 +908,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 38,
+        "j": 13
+      },
+      "subNodes": []
     },
     {
       "id": "READ_ANY_FRACTION_UNDER_1",
-      "i": 38,
-      "j": 15,
       "deps": [
         "READ_ANY_NUMBER",
         "WRITTEN_FRACTION_MORE_LESS"
@@ -752,24 +924,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 38,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "ADD_1",
-      "i": 46,
-      "j": 9,
       "deps": [
         "COUNT_OBJECTS_TO_10"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 46,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "VISUAL_FRACTION_MORE_LESS",
-      "i": 38,
-      "j": 11,
       "deps": [
         "VISUAL_SIMPLE_FRACTIONS",
         "RECOGNIZE_DIGITS_MORE_LESS"
@@ -777,24 +955,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 38,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "WRITTEN_FRACTION_MORE_LESS",
-      "i": 38,
-      "j": 14,
       "deps": [
         "READ_SIMPLE_FRACTIONS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 38,
+        "j": 14
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_ADD_OPPONENT_FINGERS",
-      "i": 48,
-      "j": 9,
       "deps": [
         "COUNT_OBJECTS_TO_10",
         "COUNT_OPPONENT_FINGERS",
@@ -803,12 +987,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 48,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_ADD_DICE",
-      "i": 50,
-      "j": 9,
       "deps": [
         "COUNT_OBJECTS_TO_10",
         "COUNT_DICE",
@@ -817,36 +1004,45 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 50,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "VISUAL_FRACTION_OVER_1",
-      "i": 38,
-      "j": 16,
       "deps": [
         "READ_ANY_FRACTION_UNDER_1"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 38,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "READ_ANY_FRACTION_OVER_1",
-      "i": 38,
-      "j": 17,
       "deps": [
         "VISUAL_FRACTION_OVER_1"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 38,
+        "j": 17
+      },
+      "subNodes": []
     },
     {
       "id": "PECK_NUMBERS_ON_KEYBOARD",
-      "i": 27,
-      "j": 11,
       "deps": [
         "PECK_KEYS_ON_KEYBOARD_FAST",
         "READ_NUMBERS_UP_TO_100"
@@ -854,12 +1050,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 27,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "PECK_WORDS_ON_KEYBOARD",
-      "i": 26,
-      "j": 13,
       "deps": [
         "PECK_KEYS_ON_KEYBOARD_FAST",
         "SPELL_50_SIMPLE_WORDS",
@@ -868,12 +1067,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 26,
+        "j": 13
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_ADD_OBJECTS",
-      "i": 51,
-      "j": 9,
       "deps": [
         "COUNT_OBJECTS_TO_10",
         "PECK_DIGITS_ON_KEYBOARD"
@@ -881,12 +1083,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 51,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "READ_PARAGRAPHS",
-      "i": 20,
-      "j": 15,
       "deps": [
         "READ_LONG_SENTENCES",
         "READ_6_LETTER_WORDS"
@@ -894,12 +1099,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 20,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "ADD_UP_TO_10",
-      "i": 46,
-      "j": 10,
       "deps": [
         "ADD_1",
         "COUNT_ADD_OPPONENT_FINGERS",
@@ -911,12 +1119,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 46,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "ADD_UP_TO_20",
-      "i": 46,
-      "j": 12,
       "deps": [
         "READ_NUMBERS_UP_TO_100",
         "PECK_NUMBERS_ON_KEYBOARD",
@@ -925,24 +1136,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 46,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_SHAPES",
-      "i": 59,
-      "j": 6,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 59,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "SPEAK_SHAPES",
-      "i": 54,
-      "j": 7,
       "deps": [
         "RECOGNIZE_SHAPES",
         "SPEAK_SIMPLE_CONCEPTS"
@@ -950,12 +1167,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 54,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "ADD_TWO_POS_2_DIGIT_NUMBERS",
-      "i": 46,
-      "j": 13,
       "deps": [
         "ADD_UP_TO_20",
         "READ_NUMBERS_UP_TO_1000"
@@ -963,12 +1183,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 46,
+        "j": 13
+      },
+      "subNodes": []
     },
     {
       "id": "ADD_2_FRACTIONS_UNDER_1_SAME_DENOM",
-      "i": 46,
-      "j": 16,
       "deps": [
         "READ_ANY_FRACTION_UNDER_1",
         "ADD_TWO_POS_2_DIGIT_NUMBERS"
@@ -976,12 +1199,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 46,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "ADD_2_FRACTIONS_OVER_1_SAME_DENOM",
-      "i": 46,
-      "j": 19,
       "deps": [
         "READ_ANY_FRACTION_OVER_1",
         "ADD_2_FRACTIONS_UNDER_1_SAME_DENOM",
@@ -990,12 +1216,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 46,
+        "j": 19
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_ADD_SELF_FINGERS",
-      "i": 49,
-      "j": 10,
       "deps": [
         "COUNT_ADD_OPPONENT_FINGERS",
         "COUNT_ADD_OBJECTS",
@@ -1004,12 +1233,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 49,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_HOVER",
-      "i": 31,
-      "j": 8,
       "deps": [
         "SPEAK_SIMPLE_MAPPINGS",
         "SPEAK_COLORS",
@@ -1018,12 +1250,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 31,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "SIMPLE_MULT_BY_COUNTING",
-      "i": 50,
-      "j": 13,
       "deps": [
         "ADD_UP_TO_20",
         "RECOGNIZE_NTH_ORDER_ANY"
@@ -1031,12 +1266,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 50,
+        "j": 13
+      },
+      "subNodes": []
     },
     {
       "id": "MULT_UP_TO_5_X_5",
-      "i": 50,
-      "j": 14,
       "deps": [
         "SIMPLE_MULT_BY_COUNTING",
         "ADD_TWO_POS_2_DIGIT_NUMBERS"
@@ -1044,96 +1282,120 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 50,
+        "j": 14
+      },
+      "subNodes": []
     },
     {
       "id": "MULT_UP_TO_5_X_10",
-      "i": 50,
-      "j": 15,
       "deps": [
         "MULT_UP_TO_5_X_5"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 50,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "MULT_UP_TO_10_X_10",
-      "i": 51,
-      "j": 16,
       "deps": [
         "MULT_UP_TO_5_X_10"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 51,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "LONG_ADDITION_3_DIGITS",
-      "i": 47,
-      "j": 15,
       "deps": [
         "ADD_TWO_POS_2_DIGIT_NUMBERS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 47,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "LONG_ADDITION_ANY_DIGITS",
-      "i": 47,
-      "j": 16,
       "deps": [
         "LONG_ADDITION_3_DIGITS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 47,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "READ_PICTURE_BOOKS",
-      "i": 20,
-      "j": 16,
       "deps": [
         "READ_PARAGRAPHS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 20,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "TODO_BASIC_GRAMMAR",
-      "i": 21,
-      "j": 16,
       "deps": [
         "READ_PARAGRAPHS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 21,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "LONG_ADDITION_MULTIPLE_INTS",
-      "i": 47,
-      "j": 18,
       "deps": [
         "LONG_ADDITION_ANY_DIGITS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 47,
+        "j": 18
+      },
+      "subNodes": []
     },
     {
       "id": "LONG_MULT_2_POS_INTS",
-      "i": 51,
-      "j": 18,
       "deps": [
         "MULT_UP_TO_10_X_10",
         "LONG_SUBTRACT_POS_INTS"
@@ -1141,12 +1403,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 51,
+        "j": 18
+      },
+      "subNodes": []
     },
     {
       "id": "LONG_MULT_MULTIPLE_POS_INTS",
-      "i": 51,
-      "j": 19,
       "deps": [
         "LONG_MULT_2_POS_INTS",
         "LONG_ADDITION_MULTIPLE_INTS"
@@ -1154,12 +1419,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 51,
+        "j": 19
+      },
+      "subNodes": []
     },
     {
       "id": "ADD_SUBTRACT_2_FRACTIONS_DIFF_DENOM",
-      "i": 46,
-      "j": 20,
       "deps": [
         "ADD_2_FRACTIONS_OVER_1_SAME_DENOM",
         "LONG_MULT_2_INTS",
@@ -1168,24 +1436,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 46,
+        "j": 20
+      },
+      "subNodes": []
     },
     {
       "id": "DIV_UP_TO_5_X_5",
-      "i": 52,
-      "j": 15,
       "deps": [
         "MULT_UP_TO_5_X_5"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 52,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "DIV_UP_TO_5_X_10",
-      "i": 52,
-      "j": 16,
       "deps": [
         "MULT_UP_TO_5_X_10",
         "DIV_UP_TO_5_X_5"
@@ -1193,12 +1467,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 52,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "DIV_UP_TO_10_X_10",
-      "i": 52,
-      "j": 18,
       "deps": [
         "MULT_UP_TO_10_X_10",
         "DIV_UP_TO_5_X_10"
@@ -1206,24 +1483,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 52,
+        "j": 18
+      },
+      "subNodes": []
     },
     {
       "id": "REMAINDERS",
-      "i": 53,
-      "j": 18,
       "deps": [
         "DIV_UP_TO_5_X_10"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 53,
+        "j": 18
+      },
+      "subNodes": []
     },
     {
       "id": "LONG_DIV",
-      "i": 52,
-      "j": 19,
       "deps": [
         "DIV_UP_TO_10_X_10",
         "REMAINDERS",
@@ -1232,12 +1515,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 52,
+        "j": 19
+      },
+      "subNodes": []
     },
     {
       "id": "SUBTRACT_1_DIGIT",
-      "i": 48,
-      "j": 13,
       "deps": [
         "ADD_UP_TO_20",
         "SUBTRACT_1",
@@ -1246,12 +1532,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 48,
+        "j": 13
+      },
+      "subNodes": []
     },
     {
       "id": "SUBTRACT_2_DIGIT",
-      "i": 48,
-      "j": 15,
       "deps": [
         "SUBTRACT_1_DIGIT",
         "ADD_TWO_POS_2_DIGIT_NUMBERS",
@@ -1260,12 +1549,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 48,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "LONG_SUBTRACT_3_DIGIT",
-      "i": 48,
-      "j": 16,
       "deps": [
         "LONG_ADDITION_3_DIGITS",
         "SUBTRACT_2_DIGIT"
@@ -1273,12 +1565,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 48,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "LONG_SUBTRACT_POS_INTS",
-      "i": 48,
-      "j": 17,
       "deps": [
         "LONG_SUBTRACT_3_DIGIT",
         "LONG_ADDITION_ANY_DIGITS"
@@ -1286,24 +1581,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 48,
+        "j": 17
+      },
+      "subNodes": []
     },
     {
       "id": "NEGATIVE_COUNTING",
-      "i": 49,
-      "j": 14,
       "deps": [
         "SUBTRACT_1_DIGIT"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 49,
+        "j": 14
+      },
+      "subNodes": []
     },
     {
       "id": "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
-      "i": 49,
-      "j": 16,
       "deps": [
         "SUBTRACT_2_DIGIT",
         "NEGATIVE_COUNTING"
@@ -1311,12 +1612,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 49,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "LONG_ADD_SUBTRACT_ANY_INTS",
-      "i": 49,
-      "j": 19,
       "deps": [
         "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
         "LONG_SUBTRACT_POS_INTS",
@@ -1325,12 +1629,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 49,
+        "j": 19
+      },
+      "subNodes": []
     },
     {
       "id": "LONG_MULT_ANY_INTS",
-      "i": 51,
-      "j": 20,
       "deps": [
         "LONG_MULT_MULTIPLE_POS_INTS",
         "LONG_MULT_2_INTS",
@@ -1339,12 +1646,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 51,
+        "j": 20
+      },
+      "subNodes": []
     },
     {
       "id": "MULT_NEGATIVE",
-      "i": 50,
-      "j": 17,
       "deps": [
         "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
         "MULT_UP_TO_5_X_10"
@@ -1352,12 +1662,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 50,
+        "j": 17
+      },
+      "subNodes": []
     },
     {
       "id": "LONG_MULT_2_INTS",
-      "i": 50,
-      "j": 19,
       "deps": [
         "LONG_MULT_2_POS_INTS",
         "MULT_NEGATIVE"
@@ -1365,36 +1678,45 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 50,
+        "j": 19
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_CLICK",
-      "i": 33,
-      "j": 9,
       "deps": [
         "USE_MOUSE_HOVER"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 33,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_DBLCLICK",
-      "i": 32,
-      "j": 10,
       "deps": [
         "USE_MOUSE_CLICK"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 32,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_HOME_ROW_LEFT",
-      "i": 27,
-      "j": 15,
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
         "PECK_NUMBERS_ON_KEYBOARD",
@@ -1405,12 +1727,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 27,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_INDEX_FINGER_LEFT",
-      "i": 27,
-      "j": 16,
       "deps": [
         "TYPING_HOME_ROW_LEFT",
         "READ_PARAGRAPHS"
@@ -1418,48 +1743,60 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 27,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_MIDDLE_FINGER_LEFT",
-      "i": 27,
-      "j": 17,
       "deps": [
         "TYPING_INDEX_FINGER_LEFT"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 27,
+        "j": 17
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_RING_FINGER_LEFT",
-      "i": 27,
-      "j": 18,
       "deps": [
         "TYPING_MIDDLE_FINGER_LEFT"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 27,
+        "j": 18
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_PINKY_FINGER_LEFT",
-      "i": 27,
-      "j": 19,
       "deps": [
         "TYPING_RING_FINGER_LEFT"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 27,
+        "j": 19
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_NUMBERS_INDEX",
-      "i": 27,
-      "j": 21,
       "deps": [
         "TYPING_CAPITALS_LEFT_SHIFT",
         "TYPING_CAPITALS_RIGHT_SHIFT"
@@ -1467,36 +1804,45 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 27,
+        "j": 21
+      },
+      "subNodes": []
     },
     {
       "id": "ADD_SUBTRACT_MULTIPLE_FRACTIONS",
-      "i": 46,
-      "j": 21,
       "deps": [
         "ADD_SUBTRACT_2_FRACTIONS_DIFF_DENOM"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 46,
+        "j": 21
+      },
+      "subNodes": []
     },
     {
       "id": "FILL_IN_BLANK_ADD_SMALL",
-      "i": 57,
-      "j": 14,
       "deps": [
         "MULTI_OP_ADD_SMALL"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 57,
+        "j": 14
+      },
+      "subNodes": []
     },
     {
       "id": "FILL_IN_BLANK_SUBTRACT_SMALL",
-      "i": 57,
-      "j": 15,
       "deps": [
         "FILL_IN_BLANK_ADD_SMALL",
         "MULTI_OP_SUB_SMALL"
@@ -1504,12 +1850,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 57,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "FILL_IN_BLANK_MULT_SMALL",
-      "i": 57,
-      "j": 16,
       "deps": [
         "FILL_IN_BLANK_SUBTRACT_SMALL",
         "MULTI_OP_MULT_SMALL"
@@ -1517,24 +1866,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 57,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "OPERATOR_ORDER",
-      "i": 56,
-      "j": 15,
       "deps": [
         "MULTI_OP_SUB_SMALL"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 56,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "OPERATOR_PRECEDENCE",
-      "i": 56,
-      "j": 17,
       "deps": [
         "OPERATOR_ORDER",
         "MULTI_OP_DIV_SMALL"
@@ -1542,12 +1897,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 56,
+        "j": 17
+      },
+      "subNodes": []
     },
     {
       "id": "FILL_IN_BLANK_4_OPS_NEG_PAREN",
-      "i": 57,
-      "j": 21,
       "deps": [
         "FILL_IN_BLANK_4_OPS",
         "MULTI_OP_4_OPS_NEG_PAREN"
@@ -1555,24 +1913,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 57,
+        "j": 21
+      },
+      "subNodes": []
     },
     {
       "id": "PARENTHESES",
-      "i": 56,
-      "j": 19,
       "deps": [
         "OPERATOR_PRECEDENCE"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 56,
+        "j": 19
+      },
+      "subNodes": []
     },
     {
       "id": "FILL_IN_BLANK_DIV_SMALL",
-      "i": 57,
-      "j": 17,
       "deps": [
         "FILL_IN_BLANK_MULT_SMALL",
         "MULTI_OP_DIV_SMALL"
@@ -1580,12 +1944,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 57,
+        "j": 17
+      },
+      "subNodes": []
     },
     {
       "id": "FILL_IN_BLANK_ADD_SUBTRACT_NEG_SMALL",
-      "i": 57,
-      "j": 18,
       "deps": [
         "FILL_IN_BLANK_DIV_SMALL",
         "MULTI_OP_ADD_SUB_NEG_SMALL"
@@ -1593,12 +1960,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 57,
+        "j": 18
+      },
+      "subNodes": []
     },
     {
       "id": "FILL_IN_BLANK_4_OPS_NEG_SMALL",
-      "i": 57,
-      "j": 19,
       "deps": [
         "FILL_IN_BLANK_ADD_SUBTRACT_NEG_SMALL",
         "MULTI_OP_4_OPS_NEG_SMALL"
@@ -1606,12 +1976,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 57,
+        "j": 19
+      },
+      "subNodes": []
     },
     {
       "id": "FILL_IN_BLANK_4_OPS",
-      "i": 57,
-      "j": 20,
       "deps": [
         "FILL_IN_BLANK_4_OPS_NEG_SMALL",
         "MULTI_OP_4_OPS"
@@ -1619,12 +1992,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 57,
+        "j": 20
+      },
+      "subNodes": []
     },
     {
       "id": "EXP_SMALL",
-      "i": 54,
-      "j": 18,
       "deps": [
         "MULT_NEGATIVE",
         "MULT_UP_TO_10_X_10"
@@ -1632,36 +2008,45 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 54,
+        "j": 18
+      },
+      "subNodes": []
     },
     {
       "id": "EXP_NEGATIVE_BASE_SMALL",
-      "i": 54,
-      "j": 19,
       "deps": [
         "EXP_SMALL"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 54,
+        "j": 19
+      },
+      "subNodes": []
     },
     {
       "id": "EXP_INTEGER",
-      "i": 54,
-      "j": 20,
       "deps": [
         "EXP_NEGATIVE_BASE_SMALL"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 54,
+        "j": 20
+      },
+      "subNodes": []
     },
     {
       "id": "FILL_IN_BLANK_5_OPS",
-      "i": 57,
-      "j": 22,
       "deps": [
         "FILL_IN_BLANK_4_OPS_NEG_PAREN",
         "MULTI_OP_5_OPS"
@@ -1669,12 +2054,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 57,
+        "j": 22
+      },
+      "subNodes": []
     },
     {
       "id": "SQRT",
-      "i": 54,
-      "j": 21,
       "deps": [
         "EXP_INTEGER",
         "LONG_MULT_ANY_INTS"
@@ -1682,12 +2070,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 54,
+        "j": 21
+      },
+      "subNodes": []
     },
     {
       "id": "CUBE_ROOT",
-      "i": 54,
-      "j": 22,
       "deps": [
         "SQRT",
         "ADD_SUBTRACT_2_FRACTIONS_DIFF_DENOM"
@@ -1695,12 +2086,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 54,
+        "j": 22
+      },
+      "subNodes": []
     },
     {
       "id": "FILL_IN_BLANK_6_OPS",
-      "i": 57,
-      "j": 23,
       "deps": [
         "FILL_IN_BLANK_5_OPS",
         "MULTI_OP_6_OPS"
@@ -1708,36 +2102,45 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 57,
+        "j": 23
+      },
+      "subNodes": []
     },
     {
       "id": "EXP_NEG_POW",
-      "i": 54,
-      "j": 23,
       "deps": [
         "CUBE_ROOT"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 54,
+        "j": 23
+      },
+      "subNodes": []
     },
     {
       "id": "EXP_FRAC_POW",
-      "i": 53,
-      "j": 23,
       "deps": [
         "CUBE_ROOT"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 53,
+        "j": 23
+      },
+      "subNodes": []
     },
     {
       "id": "EXP_NEG_FRAC_POW",
-      "i": 54,
-      "j": 24,
       "deps": [
         "EXP_NEG_POW",
         "EXP_FRAC_POW"
@@ -1745,12 +2148,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 54,
+        "j": 24
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_4_OPS_NEG_PAREN",
-      "i": 58,
-      "j": 22,
       "deps": [
         "FILL_IN_BLANK_4_OPS_NEG_PAREN",
         "EQUATIONS_4_OPS"
@@ -1758,12 +2164,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 22
+      },
+      "subNodes": []
     },
     {
       "id": "ARITHMETIC",
-      "i": 54,
-      "j": 25,
       "deps": [
         "EXP_NEG_FRAC_POW",
         "ADD_SUBTRACT_MULTIPLE_FRACTIONS"
@@ -1771,12 +2180,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 54,
+        "j": 25
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_5_OPS",
-      "i": 58,
-      "j": 23,
       "deps": [
         "FILL_IN_BLANK_5_OPS",
         "EQUATIONS_4_OPS_NEG_PAREN"
@@ -1784,24 +2196,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 23
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_ADD_SMALL",
-      "i": 58,
-      "j": 15,
       "deps": [
         "FILL_IN_BLANK_ADD_SMALL"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_SUBTRACT_SMALL",
-      "i": 58,
-      "j": 16,
       "deps": [
         "FILL_IN_BLANK_SUBTRACT_SMALL",
         "EQUATIONS_ADD_SMALL"
@@ -1809,12 +2227,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_MULT_SMALL",
-      "i": 58,
-      "j": 17,
       "deps": [
         "EQUATIONS_SUBTRACT_SMALL",
         "FILL_IN_BLANK_MULT_SMALL"
@@ -1822,12 +2243,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 17
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_DIV_SMALL",
-      "i": 58,
-      "j": 18,
       "deps": [
         "EQUATIONS_MULT_SMALL",
         "FILL_IN_BLANK_DIV_SMALL"
@@ -1835,12 +2259,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 18
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_ADD_SUB_NEG_SMALL",
-      "i": 58,
-      "j": 19,
       "deps": [
         "EQUATIONS_DIV_SMALL",
         "FILL_IN_BLANK_ADD_SUBTRACT_NEG_SMALL"
@@ -1848,24 +2275,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 19
+      },
+      "subNodes": []
     },
     {
       "id": "MULTI_OP_ADD_SMALL",
-      "i": 55,
-      "j": 13,
       "deps": [
         "ADD_UP_TO_20"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 55,
+        "j": 13
+      },
+      "subNodes": []
     },
     {
       "id": "MULTI_OP_SUB_SMALL",
-      "i": 55,
-      "j": 14,
       "deps": [
         "MULTI_OP_ADD_SMALL",
         "SUBTRACT_1_DIGIT",
@@ -1874,12 +2307,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 55,
+        "j": 14
+      },
+      "subNodes": []
     },
     {
       "id": "MULTI_OP_MULT_SMALL",
-      "i": 55,
-      "j": 15,
       "deps": [
         "MULTI_OP_SUB_SMALL",
         "MULT_UP_TO_5_X_5"
@@ -1887,12 +2323,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 55,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "MULTI_OP_DIV_SMALL",
-      "i": 55,
-      "j": 16,
       "deps": [
         "MULTI_OP_MULT_SMALL",
         "DIV_UP_TO_5_X_5"
@@ -1900,12 +2339,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 55,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "MULTI_OP_ADD_SUB_NEG_SMALL",
-      "i": 55,
-      "j": 17,
       "deps": [
         "MULTI_OP_DIV_SMALL",
         "SUBTRACT_2_DIGIT_WITH_NEGATIVE"
@@ -1913,12 +2355,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 55,
+        "j": 17
+      },
+      "subNodes": []
     },
     {
       "id": "MULTI_OP_4_OPS_NEG_SMALL",
-      "i": 55,
-      "j": 18,
       "deps": [
         "MULTI_OP_ADD_SUB_NEG_SMALL",
         "DIV_UP_TO_5_X_10",
@@ -1928,12 +2373,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 55,
+        "j": 18
+      },
+      "subNodes": []
     },
     {
       "id": "MULTI_OP_4_OPS",
-      "i": 55,
-      "j": 19,
       "deps": [
         "MULTI_OP_4_OPS_NEG_SMALL",
         "DIV_UP_TO_10_X_10"
@@ -1941,12 +2389,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 55,
+        "j": 19
+      },
+      "subNodes": []
     },
     {
       "id": "MULTI_OP_4_OPS_NEG_PAREN",
-      "i": 55,
-      "j": 20,
       "deps": [
         "MULTI_OP_4_OPS",
         "PARENTHESES"
@@ -1954,12 +2405,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 55,
+        "j": 20
+      },
+      "subNodes": []
     },
     {
       "id": "MULTI_OP_5_OPS",
-      "i": 55,
-      "j": 21,
       "deps": [
         "MULTI_OP_4_OPS_NEG_PAREN",
         "EXP_INTEGER"
@@ -1967,12 +2421,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 55,
+        "j": 21
+      },
+      "subNodes": []
     },
     {
       "id": "MULTI_OP_6_OPS",
-      "i": 55,
-      "j": 22,
       "deps": [
         "SQRT",
         "MULTI_OP_5_OPS"
@@ -1980,12 +2437,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 55,
+        "j": 22
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_4_OPS_NEG_SMALL",
-      "i": 58,
-      "j": 20,
       "deps": [
         "EQUATIONS_ADD_SUB_NEG_SMALL",
         "FILL_IN_BLANK_4_OPS_NEG_SMALL"
@@ -1993,12 +2453,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 20
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_4_OPS",
-      "i": 58,
-      "j": 21,
       "deps": [
         "EQUATIONS_4_OPS_NEG_SMALL",
         "FILL_IN_BLANK_4_OPS"
@@ -2006,12 +2469,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 21
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_6_OPS",
-      "i": 58,
-      "j": 25,
       "deps": [
         "FILL_IN_BLANK_6_OPS",
         "EQUATIONS_5_OPS"
@@ -2019,24 +2485,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 25
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_2_UNKNOWNS_SMALL",
-      "i": 59,
-      "j": 22,
       "deps": [
         "EQUATIONS_4_OPS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 59,
+        "j": 22
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_2_UNKNOWNS",
-      "i": 59,
-      "j": 23,
       "deps": [
         "EQUATIONS_2_UNKNOWNS_SMALL",
         "EQUATIONS_4_OPS_NEG_PAREN"
@@ -2044,24 +2516,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 59,
+        "j": 23
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_3_UNKNOWNS_SMALL",
-      "i": 59,
-      "j": 24,
       "deps": [
         "EQUATIONS_2_UNKNOWNS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 59,
+        "j": 24
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_N_UNKNOWNS",
-      "i": 59,
-      "j": 26,
       "deps": [
         "EQUATIONS_3_UNKNOWNS",
         "EQUATIONS_6_OPS"
@@ -2069,24 +2547,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 59,
+        "j": 26
+      },
+      "subNodes": []
     },
     {
       "id": "EQUATIONS_3_UNKNOWNS",
-      "i": 59,
-      "j": 25,
       "deps": [
         "EQUATIONS_3_UNKNOWNS_SMALL"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 59,
+        "j": 25
+      },
+      "subNodes": []
     },
     {
       "id": "ALGEBRA",
-      "i": 59,
-      "j": 27,
       "deps": [
         "EQUATIONS_N_UNKNOWNS",
         "ARITHMETIC"
@@ -2094,12 +2578,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 59,
+        "j": 27
+      },
+      "subNodes": []
     },
     {
       "id": "ACCOUNT_AND_PASSWORD",
-      "i": 24,
-      "j": 15,
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
         "READ_SHORT_SENTENCES",
@@ -2109,12 +2596,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 24,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "OPEN_APPLICATION",
-      "i": 26,
-      "j": 15,
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
         "USE_MOUSE"
@@ -2122,12 +2612,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 26,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "TERMINAL_COMMANDS_SIMPLE",
-      "i": 25,
-      "j": 15,
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
         "READ_SHORT_SENTENCES"
@@ -2135,12 +2628,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 25,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "TERMINAL_COMMANDS",
-      "i": 25,
-      "j": 16,
       "deps": [
         "TERMINAL_COMMANDS_SIMPLE",
         "OPEN_APPLICATION",
@@ -2150,12 +2646,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 25,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "SKETCH_VARIABLE_SIMPLE",
-      "i": 26,
-      "j": 16,
       "deps": [
         "TERMINAL_COMMANDS_SIMPLE",
         "OPEN_APPLICATION",
@@ -2164,96 +2663,120 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 26,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "SKETCH_IF_SIMPLE",
-      "i": 26,
-      "j": 17,
       "deps": [
         "SKETCH_VARIABLE_SIMPLE"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 26,
+        "j": 17
+      },
+      "subNodes": []
     },
     {
       "id": "SKETCH_LOOP_SIMPLE",
-      "i": 26,
-      "j": 18,
       "deps": [
         "SKETCH_IF_SIMPLE"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 26,
+        "j": 18
+      },
+      "subNodes": []
     },
     {
       "id": "VECTORS",
-      "i": 59,
-      "j": 28,
       "deps": [
         "ALGEBRA"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 59,
+        "j": 28
+      },
+      "subNodes": []
     },
     {
       "id": "LINEAR_ALGEBRA",
-      "i": 59,
-      "j": 29,
       "deps": [
         "VECTORS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 59,
+        "j": 29
+      },
+      "subNodes": []
     },
     {
       "id": "TRIGONOMETRY",
-      "i": 19,
-      "j": 28,
       "deps": [
         "ALGEBRA"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 19,
+        "j": 28
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_HOVER_FAST",
-      "i": 31,
-      "j": 9,
       "deps": [
         "USE_MOUSE_HOVER"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 31,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_HOVER_SMALL",
-      "i": 32,
-      "j": 9,
       "deps": [
         "USE_MOUSE_HOVER"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 32,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "SPELL_50_SIMPLE_WORDS",
-      "i": 18,
-      "j": 12,
       "deps": [
         "READ_50_SIMPLE_WORDS",
         "SOUND_TO_BIGRAM",
@@ -2262,12 +2785,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 18,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "SPELL_200_SIMPLE_WORDS",
-      "i": 18,
-      "j": 13,
       "deps": [
         "SPELL_50_SIMPLE_WORDS",
         "READ_200_SIMPLE_WORDS"
@@ -2275,24 +2801,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 18,
+        "j": 13
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_SCROLL_VERT",
-      "i": 28,
-      "j": 9,
       "deps": [
         "USE_MOUSE_HOVER"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 28,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE",
-      "i": 30,
-      "j": 14,
       "deps": [
         "USE_MOUSE_SCROLL_FAST",
         "USE_MOUSE_DBLCLICK_DRAG"
@@ -2300,12 +2832,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 30,
+        "j": 14
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_ORDER_2",
-      "i": 58,
-      "j": 8,
       "deps": [
         "RECOGNIZE_BEFORE",
         "RECOGNIZE_BEFORE_THAT",
@@ -2318,12 +2853,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_ORDER_3",
-      "i": 58,
-      "j": 9,
       "deps": [
         "RECOGNIZE_ORDER_2",
         "BEFORE_AFTER_10"
@@ -2331,84 +2869,105 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_ORDER_4",
-      "i": 58,
-      "j": 10,
       "deps": [
         "RECOGNIZE_ORDER_3"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_ORDER_MANY",
-      "i": 58,
-      "j": 11,
       "deps": [
         "RECOGNIZE_ORDER_4"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "GEOMETRY",
-      "i": 20,
-      "j": 26,
       "deps": [
         "ARITHMETIC"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 20,
+        "j": 26
+      },
+      "subNodes": []
     },
     {
       "id": "CALCULUS",
-      "i": 21,
-      "j": 28,
       "deps": [
         "ALGEBRA"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 21,
+        "j": 28
+      },
+      "subNodes": []
     },
     {
       "id": "NUMBER THEORY",
-      "i": 22,
-      "j": 28,
       "deps": [
         "ALGEBRA"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 22,
+        "j": 28
+      },
+      "subNodes": []
     },
     {
       "id": "PROBABILITY",
-      "i": 23,
-      "j": 28,
       "deps": [
         "ALGEBRA"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 23,
+        "j": 28
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_HOVER_SMALL_FAST",
-      "i": 31,
-      "j": 10,
       "deps": [
         "USE_MOUSE_HOVER_FAST",
         "USE_MOUSE_HOVER_SMALL"
@@ -2416,12 +2975,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 31,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "FINGER_TRACE_LINE",
-      "i": 15,
-      "j": 6,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS",
         "PINCER_GRASP"
@@ -2429,12 +2991,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 15,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "FINGER_TRACE_SHAPES",
-      "i": 15,
-      "j": 7,
       "deps": [
         "FINGER_TRACE_LINE",
         "RECOGNIZE_SHAPES"
@@ -2442,12 +3007,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 15,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "PEN_TRACE_LINE",
-      "i": 17,
-      "j": 7,
       "deps": [
         "FINGER_TRACE_LINE",
         "HOLD_PEN",
@@ -2456,24 +3024,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 17,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "FINGER_TRACE_SQUIGGLE",
-      "i": 16,
-      "j": 7,
       "deps": [
         "FINGER_TRACE_LINE"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 16,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_SHAPES",
-      "i": 16,
-      "j": 8,
       "deps": [
         "PEN_TRACE_LINE",
         "FINGER_TRACE_SHAPES"
@@ -2481,12 +3055,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 16,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_SQUIGGLE",
-      "i": 17,
-      "j": 8,
       "deps": [
         "PEN_TRACE_LINE",
         "FINGER_TRACE_SQUIGGLE"
@@ -2494,12 +3071,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 17,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_CAPITAL_A_E",
-      "i": 5,
-      "j": 9,
       "deps": [
         "PENCIL_TRACE_SHAPES",
         "PENCIL_TRACE_SQUIGGLE",
@@ -2508,12 +3088,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 5,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "FINGER_TRACE_CAPITAL_U_Z",
-      "i": 13,
-      "j": 8,
       "deps": [
         "READ_LETTERS",
         "FINGER_TRACE_SQUIGGLE",
@@ -2522,36 +3105,45 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 13,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_WRITE_CAPITAL_A_E",
-      "i": 5,
-      "j": 11,
       "deps": [
         "PENCIL_COPY_CAPITAL_A_E"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 5,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_DIGITS_MORE_LESS",
-      "i": 42,
-      "j": 10,
       "deps": [
         "ALL_BEFORE_AFTER_10"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 42,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_CLICK_FAST_SMALL",
-      "i": 33,
-      "j": 11,
       "deps": [
         "USE_MOUSE_HOVER_SMALL_FAST",
         "USE_MOUSE_CLICK_FAST",
@@ -2560,12 +3152,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 33,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "HOLD_PEN",
-      "i": 17,
-      "j": 6,
       "deps": [
         "RECOGNIZE_SIMPLE_CONCEPTS",
         "PINCER_GRASP"
@@ -2573,12 +3168,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 17,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_ORDER_TAP_LETTERS",
-      "i": 19,
-      "j": 8,
       "deps": [
         "RECOGNIZE_FIRST",
         "RECOGNIZE_SECOND",
@@ -2588,12 +3186,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 19,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "PECK_CAPITALS_AND_PUNCTUTATION",
-      "i": 25,
-      "j": 13,
       "deps": [
         "READ_PUNCTUATION",
         "PECK_KEYS_ON_KEYBOARD_FAST"
@@ -2601,12 +3202,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 25,
+        "j": 13
+      },
+      "subNodes": []
     },
     {
       "id": "BEFORE_AFTER_10",
-      "i": 42,
-      "j": 7,
       "deps": [
         "COUNT_TO_10",
         "BEFORE_5",
@@ -2615,12 +3219,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 42,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_NTH_ORDER_10",
-      "i": 44,
-      "j": 9,
       "deps": [
         "COUNT_OBJECTS_TO_10",
         "RECOGNIZE_ORDER_2"
@@ -2628,12 +3235,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 44,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_NTH_ORDER_ANY",
-      "i": 44,
-      "j": 12,
       "deps": [
         "READ_NUMBERS_UP_TO_100",
         "RECOGNIZE_NTH_ORDER_10",
@@ -2642,24 +3252,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 44,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_OPPONENT_FINGERS",
-      "i": 48,
-      "j": 6,
       "deps": [
         "COUNT_TO_5"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 48,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_DICE",
-      "i": 50,
-      "j": 6,
       "deps": [
         "COUNT_TO_5",
         "READ_DIGITS"
@@ -2667,12 +3283,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 50,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "PECK_DIGITS_ON_KEYBOARD",
-      "i": 27,
-      "j": 8,
       "deps": [
         "READ_DIGITS",
         "SPEAK_SIMPLE_MAPPINGS"
@@ -2680,12 +3299,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 27,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_LEFT",
-      "i": 25,
-      "j": 8,
       "deps": [
         "SING_ALPHABET",
         "READ_LETTERS",
@@ -2694,12 +3316,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 25,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_HOME_ROW_RIGHT",
-      "i": 28,
-      "j": 15,
       "deps": [
         "USE_MOUSE",
         "READ_LONG_SENTENCES",
@@ -2710,12 +3335,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 28,
+        "j": 15
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_INDEX_FINGER_RIGHT",
-      "i": 28,
-      "j": 16,
       "deps": [
         "TYPING_HOME_ROW_RIGHT",
         "READ_PARAGRAPHS"
@@ -2723,120 +3351,150 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 28,
+        "j": 16
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_MIDDLE_FINGER_RIGHT",
-      "i": 28,
-      "j": 17,
       "deps": [
         "TYPING_INDEX_FINGER_RIGHT"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 28,
+        "j": 17
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_RING_FINGER_RIGHT",
-      "i": 28,
-      "j": 18,
       "deps": [
         "TYPING_MIDDLE_FINGER_RIGHT"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 28,
+        "j": 18
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_PINKY_FINGER_RIGHT",
-      "i": 28,
-      "j": 19,
       "deps": [
         "TYPING_RING_FINGER_RIGHT"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 28,
+        "j": 19
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_CAPITALS_LEFT_SHIFT",
-      "i": 27,
-      "j": 20,
       "deps": [
         "TYPING_PINKY_FINGER_LEFT"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 27,
+        "j": 20
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_CAPITALS_RIGHT_SHIFT",
-      "i": 28,
-      "j": 20,
       "deps": [
         "TYPING_PINKY_FINGER_RIGHT"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 28,
+        "j": 20
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_NUMBERS_MIDDLE",
-      "i": 27,
-      "j": 22,
       "deps": [
         "TYPING_NUMBERS_INDEX"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 27,
+        "j": 22
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_NUMBERS_RING",
-      "i": 27,
-      "j": 23,
       "deps": [
         "TYPING_NUMBERS_MIDDLE"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 27,
+        "j": 23
+      },
+      "subNodes": []
     },
     {
       "id": "TYING_NUMBERS_PINKY",
-      "i": 27,
-      "j": 24,
       "deps": [
         "TYPING_NUMBERS_RING"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 27,
+        "j": 24
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_PUNCTUATION_INDEX",
-      "i": 28,
-      "j": 22,
       "deps": [
         "TYPING_NUMBERS_INDEX"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 28,
+        "j": 22
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_PUNCTUATION_MIDDLE",
-      "i": 28,
-      "j": 23,
       "deps": [
         "TYPING_NUMBERS_MIDDLE",
         "TYPING_PUNCTUATION_INDEX"
@@ -2844,12 +3502,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 28,
+        "j": 23
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_PUNCTUATION_RING",
-      "i": 28,
-      "j": 24,
       "deps": [
         "TYPING_PUNCTUATION_MIDDLE",
         "TYPING_NUMBERS_RING"
@@ -2857,12 +3518,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 28,
+        "j": 24
+      },
+      "subNodes": []
     },
     {
       "id": "TYPING_PUNCTUATION_PINKY",
-      "i": 28,
-      "j": 25,
       "deps": [
         "TYING_NUMBERS_PINKY",
         "TYPING_PUNCTUATION_RING"
@@ -2870,48 +3534,60 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 28,
+        "j": 25
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_ADD_OPPONENT_FINGERS_FAST",
-      "i": 48,
-      "j": 10,
       "deps": [
         "COUNT_ADD_OPPONENT_FINGERS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 48,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_ADD_DICE_FAST",
-      "i": 50,
-      "j": 10,
       "deps": [
         "COUNT_ADD_DICE"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 50,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "SUBTRACT_1",
-      "i": 48,
-      "j": 11,
       "deps": [
         "ADD_UP_TO_10"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 48,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_NTH_FRAC_10",
-      "i": 38,
-      "j": 9,
       "deps": [
         "COUNT_OBJECTS_TO_10",
         "RECOGNIZE_NTH_FRAC_SIMPLE_5"
@@ -2919,12 +3595,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 38,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_PITCH_HIGH_LOW_2",
-      "i": 67,
-      "j": 9,
       "deps": [
         "RECOGNIZE_ORDER_2",
         "RECOGNIZE_TIMBRE",
@@ -2933,12 +3612,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 67,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_PITCH_HIGH_LOW_3",
-      "i": 67,
-      "j": 10,
       "deps": [
         "RECOGNIZE_PITCH_HIGH_LOW_2",
         "RECOGNIZE_ORDER_3",
@@ -2947,24 +3629,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 67,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_TIMBRE",
-      "i": 67,
-      "j": 7,
       "deps": [
         "SPEAK_SIMPLE_CONCEPTS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 67,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "COUNT_ADD_NUMBER_LINE",
-      "i": 52,
-      "j": 9,
       "deps": [
         "COUNT_OBJECTS_TO_10",
         "RECOGNIZE_ORDER_2"
@@ -2972,12 +3660,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 52,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "FINGER_TRACE_DIGITS",
-      "i": 36,
-      "j": 8,
       "deps": [
         "READ_DIGITS",
         "FINGER_TRACE_SHAPES",
@@ -2986,12 +3677,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 36,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_DIGITS",
-      "i": 36,
-      "j": 9,
       "deps": [
         "FINGER_TRACE_DIGITS",
         "PENCIL_TRACE_SHAPES",
@@ -3000,24 +3694,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 36,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_WRITE_DIGITS",
-      "i": 36,
-      "j": 10,
       "deps": [
         "PENCIL_TRACE_DIGITS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 36,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_BEFORE",
-      "i": 57,
-      "j": 7,
       "deps": [
         "RECOGNIZE_OPPOSITES",
         "RECOGNIZE_COLORS",
@@ -3026,12 +3726,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 57,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_BEFORE_TEMPORAL",
-      "i": 55,
-      "j": 7,
       "deps": [
         "RECOGNIZE_OPPOSITES",
         "RECOGNIZE_COLORS",
@@ -3040,12 +3743,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 55,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_BEFORE_THAT",
-      "i": 58,
-      "j": 7,
       "deps": [
         "RECOGNIZE_OPPOSITES",
         "RECOGNIZE_COLORS",
@@ -3054,12 +3760,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 58,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_AFTER",
-      "i": 59,
-      "j": 7,
       "deps": [
         "RECOGNIZE_OPPOSITES",
         "RECOGNIZE_COLORS",
@@ -3068,12 +3777,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 59,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_AFTER_TEMPORAL",
-      "i": 56,
-      "j": 7,
       "deps": [
         "RECOGNIZE_OPPOSITES",
         "RECOGNIZE_COLORS",
@@ -3082,12 +3794,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 56,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_AFTER_THAT",
-      "i": 60,
-      "j": 7,
       "deps": [
         "RECOGNIZE_OPPOSITES",
         "RECOGNIZE_COLORS",
@@ -3096,12 +3811,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 60,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_FIRST",
-      "i": 61,
-      "j": 7,
       "deps": [
         "RECOGNIZE_OPPOSITES",
         "RECOGNIZE_COLORS",
@@ -3110,12 +3828,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 61,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_SECOND",
-      "i": 62,
-      "j": 7,
       "deps": [
         "RECOGNIZE_OPPOSITES",
         "RECOGNIZE_COLORS",
@@ -3124,12 +3845,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 62,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_NTH_FRAC_SIMPLE_5",
-      "i": 38,
-      "j": 8,
       "deps": [
         "COUNT_TO_10",
         "SPEAK_COLORS",
@@ -3138,12 +3862,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 38,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_LAST",
-      "i": 63,
-      "j": 7,
       "deps": [
         "RECOGNIZE_SHAPES",
         "RECOGNIZE_COLORS",
@@ -3152,24 +3879,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 63,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "READ_CLOCK_HOURS",
-      "i": 37,
-      "j": 10,
       "deps": [
         "READ_NUMBERS_TO_20"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 37,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "READ_CLOCK_MINUTES",
-      "i": 37,
-      "j": 11,
       "deps": [
         "READ_CLOCK_HOURS",
         "READ_NUMBERS_UP_TO_100"
@@ -3177,24 +3910,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 37,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "READ_CLOCK",
-      "i": 37,
-      "j": 12,
       "deps": [
         "READ_CLOCK_MINUTES"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 37,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_ORDER_TEMPORAL_2",
-      "i": 56,
-      "j": 8,
       "deps": [
         "RECOGNIZE_AFTER_TEMPORAL",
         "RECOGNIZE_BEFORE_TEMPORAL"
@@ -3202,60 +3941,75 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 56,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_ORDER_TEMPORAL_3",
-      "i": 56,
-      "j": 9,
       "deps": [
         "RECOGNIZE_ORDER_TEMPORAL_2"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 56,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_LEFT_FAST",
-      "i": 25,
-      "j": 9,
       "deps": [
         "PECK_KEYS_ON_KEYBOARD_LEFT"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 25,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_RIGHT_FAST",
-      "i": 26,
-      "j": 9,
       "deps": [
         "PECK_KEYS_ON_KEYBOARD_RIGHT"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 26,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "PECK_DIGITS_ON_KEYBOARD_FAST",
-      "i": 27,
-      "j": 9,
       "deps": [
         "PECK_DIGITS_ON_KEYBOARD"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 27,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "BEFORE_5",
-      "i": 42,
-      "j": 6,
       "deps": [
         "READ_DIGITS",
         "COUNT_TO_5"
@@ -3263,12 +4017,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 42,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "AFTER_5",
-      "i": 43,
-      "j": 6,
       "deps": [
         "READ_DIGITS",
         "COUNT_TO_5"
@@ -3276,12 +4033,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 43,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "ALL_BEFORE_AFTER_10",
-      "i": 42,
-      "j": 9,
       "deps": [
         "BEFORE_AFTER_10",
         "COUNT_OBJECTS_TO_10"
@@ -3289,12 +4049,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 42,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_ORDER_TYPE_LETTERS",
-      "i": 19,
-      "j": 11,
       "deps": [
         "RECOGNIZE_ORDER_TAP_LETTERS",
         "PECK_KEYS_ON_KEYBOARD_FAST"
@@ -3302,12 +4065,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 19,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_DBLCLICK_FAST_SMALL",
-      "i": 32,
-      "j": 12,
       "deps": [
         "USE_MOUSE_DBLCLICK_SMALL",
         "USE_MOUSE_CLICK_FAST_SMALL",
@@ -3316,12 +4082,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 32,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_2_LETTER_WORDS",
-      "i": 15,
-      "j": 10,
       "deps": [
         "PENCIL_TRACE_CAPITAL_A_E",
         "PENCIL_TRACE_LOWER_A_E",
@@ -3337,24 +4106,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 15,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_3_LETTER_WORDS",
-      "i": 15,
-      "j": 11,
       "deps": [
         "PENCIL_TRACE_2_LETTER_WORDS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 15,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_COPY_3_LETTER_WORDS",
-      "i": 16,
-      "j": 12,
       "deps": [
         "PENCIL_TRACE_3_LETTER_WORDS",
         "READ_50_SIMPLE_WORDS",
@@ -3363,12 +4138,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 16,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_COPY_4_LETTER_WORDS",
-      "i": 16,
-      "j": 13,
       "deps": [
         "PENCIL_COPY_3_LETTER_WORDS",
         "READ_200_SIMPLE_WORDS"
@@ -3376,12 +4154,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 16,
+        "j": 13
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_WRITE_3_LETTER_WORDS",
-      "i": 17,
-      "j": 13,
       "deps": [
         "PENCIL_COPY_3_LETTER_WORDS",
         "SPELL_50_SIMPLE_WORDS",
@@ -3390,12 +4171,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 17,
+        "j": 13
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_CLICK_FAST",
-      "i": 33,
-      "j": 10,
       "deps": [
         "USE_MOUSE_CLICK",
         "USE_MOUSE_HOVER_FAST"
@@ -3403,12 +4187,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 33,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_CLICK_SMALL",
-      "i": 34,
-      "j": 10,
       "deps": [
         "USE_MOUSE_CLICK",
         "USE_MOUSE_HOVER_SMALL"
@@ -3416,24 +4203,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 34,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_SCROLL_HORZ",
-      "i": 29,
-      "j": 9,
       "deps": [
         "USE_MOUSE_HOVER"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 29,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_SCROLL_VERT_FAST",
-      "i": 28,
-      "j": 10,
       "deps": [
         "USE_MOUSE_SCROLL_VERT",
         "USE_MOUSE_HOVER_FAST"
@@ -3441,12 +4234,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 28,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_SCROLL_HORZ_FAST",
-      "i": 29,
-      "j": 10,
       "deps": [
         "USE_MOUSE_SCROLL_HORZ",
         "USE_MOUSE_HOVER_FAST"
@@ -3454,12 +4250,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 29,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_DBLCLICK_FAST",
-      "i": 31,
-      "j": 11,
       "deps": [
         "USE_MOUSE_DBLCLICK",
         "USE_MOUSE_CLICK_FAST"
@@ -3467,12 +4266,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 31,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_DBLCLICK_SMALL",
-      "i": 32,
-      "j": 11,
       "deps": [
         "USE_MOUSE_DBLCLICK",
         "USE_MOUSE_CLICK_SMALL"
@@ -3480,12 +4282,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 32,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_SCROLL",
-      "i": 30,
-      "j": 10,
       "deps": [
         "USE_MOUSE_SCROLL_VERT",
         "USE_MOUSE_SCROLL_HORZ"
@@ -3493,12 +4298,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 30,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_SCROLL_FAST",
-      "i": 30,
-      "j": 11,
       "deps": [
         "USE_MOUSE_SCROLL",
         "USE_MOUSE_SCROLL_HORZ_FAST",
@@ -3507,24 +4315,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 30,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_DRAG",
-      "i": 35,
-      "j": 10,
       "deps": [
         "USE_MOUSE_CLICK"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 35,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_DRAG_FAST",
-      "i": 34,
-      "j": 11,
       "deps": [
         "USE_MOUSE_CLICK_FAST",
         "USE_MOUSE_DRAG"
@@ -3532,12 +4346,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 34,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_DRAG_SMALL",
-      "i": 35,
-      "j": 11,
       "deps": [
         "USE_MOUSE_CLICK_SMALL",
         "USE_MOUSE_DRAG"
@@ -3545,12 +4362,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 35,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_DRAG_FAST_SMALL",
-      "i": 35,
-      "j": 12,
       "deps": [
         "USE_MOUSE_DRAG_FAST",
         "USE_MOUSE_DRAG_SMALL"
@@ -3558,12 +4378,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 35,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "USE_MOUSE_DBLCLICK_DRAG",
-      "i": 32,
-      "j": 13,
       "deps": [
         "USE_MOUSE_DBLCLICK_FAST_SMALL",
         "USE_MOUSE_DRAG_FAST_SMALL"
@@ -3571,12 +4394,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 32,
+        "j": 13
+      },
+      "subNodes": []
     },
     {
       "id": "FINGER_TRACE_CAPITAL_A_E",
-      "i": 5,
-      "j": 8,
       "deps": [
         "READ_LETTERS",
         "FINGER_TRACE_SHAPES",
@@ -3585,12 +4411,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 5,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "FINGER_TRACE_CAPITAL_F_J",
-      "i": 7,
-      "j": 8,
       "deps": [
         "READ_LETTERS",
         "FINGER_TRACE_SHAPES",
@@ -3599,12 +4428,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 7,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "FINGER_TRACE_CAPITAL_K_O",
-      "i": 9,
-      "j": 8,
       "deps": [
         "READ_LETTERS",
         "FINGER_TRACE_SHAPES",
@@ -3613,12 +4445,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 9,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "FINGER_TRACE_CAPITAL_P_T",
-      "i": 11,
-      "j": 8,
       "deps": [
         "READ_LETTERS",
         "FINGER_TRACE_SHAPES",
@@ -3627,12 +4462,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 11,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "FINGER_TRACE_LOWER_A_E",
-      "i": 6,
-      "j": 8,
       "deps": [
         "READ_LETTERS",
         "FINGER_TRACE_SHAPES",
@@ -3641,12 +4479,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 6,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "FINGER_TRACE_LOWER_F_J",
-      "i": 8,
-      "j": 8,
       "deps": [
         "READ_LETTERS",
         "FINGER_TRACE_SHAPES",
@@ -3655,12 +4496,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 8,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "FINGER_TRACE_LOWER_K_O",
-      "i": 10,
-      "j": 8,
       "deps": [
         "READ_LETTERS",
         "FINGER_TRACE_SHAPES",
@@ -3669,12 +4513,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 10,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "FINGER_TRACE_LOWER_P_T",
-      "i": 12,
-      "j": 8,
       "deps": [
         "READ_LETTERS",
         "FINGER_TRACE_SHAPES",
@@ -3683,12 +4530,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 12,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "FINGER_TRACE_LOWER_U_Z",
-      "i": 14,
-      "j": 8,
       "deps": [
         "READ_LETTERS",
         "FINGER_TRACE_SHAPES",
@@ -3697,12 +4547,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 14,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_LOWER_A_E",
-      "i": 6,
-      "j": 9,
       "deps": [
         "FINGER_TRACE_LOWER_A_E",
         "PENCIL_TRACE_SHAPES",
@@ -3711,12 +4564,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 6,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_CAPITAL_F_J",
-      "i": 7,
-      "j": 9,
       "deps": [
         "FINGER_TRACE_CAPITAL_F_J",
         "PENCIL_TRACE_SHAPES",
@@ -3725,36 +4581,45 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 7,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_WRITE_LOWER_A_E",
-      "i": 6,
-      "j": 11,
       "deps": [
         "PENCIL_COPY_LOWER_A_E"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 6,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_WRITE_CAPITAL_F_J",
-      "i": 7,
-      "j": 11,
       "deps": [
         "PENCIL_COPY_CAPITAL_F_J"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 7,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_LOWER_F_J",
-      "i": 8,
-      "j": 9,
       "deps": [
         "FINGER_TRACE_LOWER_F_J",
         "PENCIL_TRACE_SHAPES",
@@ -3763,24 +4628,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 8,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_WRITE_LOWER_F_J",
-      "i": 8,
-      "j": 11,
       "deps": [
         "PENCIL_COPY_LOWER_F_J"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 8,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_CAPITAL_K_O",
-      "i": 9,
-      "j": 9,
       "deps": [
         "FINGER_TRACE_CAPITAL_K_O",
         "PENCIL_TRACE_SHAPES",
@@ -3789,24 +4660,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 9,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_WRITE_CAPITAL_K_O",
-      "i": 9,
-      "j": 11,
       "deps": [
         "PENCIL_COPY_CAPITAL_K_O"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 9,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_LOWER_K_O",
-      "i": 10,
-      "j": 9,
       "deps": [
         "FINGER_TRACE_LOWER_K_O",
         "PENCIL_TRACE_SHAPES",
@@ -3815,24 +4692,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 10,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_WRITE_LOWER_K_O",
-      "i": 10,
-      "j": 11,
       "deps": [
         "PENCIL_COPY_LOWER_K_O"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 10,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_CAPITAL_P_T",
-      "i": 11,
-      "j": 9,
       "deps": [
         "FINGER_TRACE_CAPITAL_P_T",
         "PENCIL_TRACE_SHAPES",
@@ -3841,24 +4724,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 11,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_WRITE_CAPITAL_P_T",
-      "i": 11,
-      "j": 11,
       "deps": [
         "PENCIL_COPY_CAPITAL_P_T"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 11,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_LOWER_P_T",
-      "i": 12,
-      "j": 9,
       "deps": [
         "FINGER_TRACE_LOWER_P_T",
         "PENCIL_TRACE_SHAPES",
@@ -3867,24 +4756,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 12,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_WRITE_LOWER_P_T",
-      "i": 12,
-      "j": 11,
       "deps": [
         "PENCIL_COPY_LOWER_P_T"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 12,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_CAPITAL_U_Z",
-      "i": 13,
-      "j": 9,
       "deps": [
         "FINGER_TRACE_CAPITAL_U_Z",
         "PENCIL_TRACE_SHAPES",
@@ -3893,24 +4788,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 13,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_WRITE_CAPITAL_U_Z",
-      "i": 13,
-      "j": 11,
       "deps": [
         "PENCIL_COPY_CAPITAL_U_Z"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 13,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_TRACE_LOWER_U_Z",
-      "i": 14,
-      "j": 9,
       "deps": [
         "FINGER_TRACE_LOWER_U_Z",
         "PENCIL_TRACE_SHAPES",
@@ -3919,24 +4820,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 14,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_WRITE_LOWER_U_Z",
-      "i": 14,
-      "j": 11,
       "deps": [
         "PENCIL_COPY_LOWER_U_Z"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 14,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_WRITE_4_LETTER_WORDS",
-      "i": 17,
-      "j": 14,
       "deps": [
         "PENCIL_WRITE_3_LETTER_WORDS",
         "PENCIL_COPY_4_LETTER_WORDS",
@@ -3945,12 +4852,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 17,
+        "j": 14
+      },
+      "subNodes": []
     },
     {
       "id": "SOUND_TO_LETTER_A_I",
-      "i": 16,
-      "j": 9,
       "deps": [
         "PECK_KEYS_ON_KEYBOARD_LEFT",
         "PECK_KEYS_ON_KEYBOARD_RIGHT"
@@ -3958,12 +4868,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 16,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "SOUND_TO_LETTER_J_Q",
-      "i": 17,
-      "j": 9,
       "deps": [
         "PECK_KEYS_ON_KEYBOARD_LEFT",
         "PECK_KEYS_ON_KEYBOARD_RIGHT"
@@ -3971,12 +4884,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 17,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "SOUND_TO_LETTER_R_Z",
-      "i": 18,
-      "j": 9,
       "deps": [
         "PECK_KEYS_ON_KEYBOARD_LEFT",
         "PECK_KEYS_ON_KEYBOARD_RIGHT"
@@ -3984,132 +4900,165 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 18,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_COPY_CAPITAL_A_E",
-      "i": 5,
-      "j": 10,
       "deps": [
         "PENCIL_TRACE_CAPITAL_A_E"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 5,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_COPY_LOWER_A_E",
-      "i": 6,
-      "j": 10,
       "deps": [
         "PENCIL_TRACE_LOWER_A_E"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 6,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_COPY_CAPITAL_F_J",
-      "i": 7,
-      "j": 10,
       "deps": [
         "PENCIL_TRACE_CAPITAL_F_J"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 7,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_COPY_LOWER_F_J",
-      "i": 8,
-      "j": 10,
       "deps": [
         "PENCIL_TRACE_LOWER_F_J"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 8,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_COPY_CAPITAL_K_O",
-      "i": 9,
-      "j": 10,
       "deps": [
         "PENCIL_TRACE_CAPITAL_K_O"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 9,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_COPY_LOWER_K_O",
-      "i": 10,
-      "j": 10,
       "deps": [
         "PENCIL_TRACE_LOWER_K_O"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 10,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_COPY_CAPITAL_P_T",
-      "i": 11,
-      "j": 10,
       "deps": [
         "PENCIL_TRACE_CAPITAL_P_T"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 11,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_COPY_LOWER_P_T",
-      "i": 12,
-      "j": 10,
       "deps": [
         "PENCIL_TRACE_LOWER_P_T"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 12,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_COPY_CAPITAL_U_Z",
-      "i": 13,
-      "j": 10,
       "deps": [
         "PENCIL_TRACE_CAPITAL_U_Z"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 13,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_COPY_LOWER_U_Z",
-      "i": 14,
-      "j": 10,
       "deps": [
         "PENCIL_TRACE_LOWER_U_Z"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 14,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_COPY_2_LETTER_WORDS",
-      "i": 16,
-      "j": 11,
       "deps": [
         "PENCIL_TRACE_2_LETTER_WORDS",
         "PENCIL_COPY_CAPITAL_A_E",
@@ -4126,12 +5075,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 16,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "PENCIL_WRITE_2_LETTER_WORDS",
-      "i": 17,
-      "j": 12,
       "deps": [
         "PENCIL_COPY_2_LETTER_WORDS",
         "PENCIL_WRITE_LOWER_U_Z",
@@ -4148,24 +5100,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 17,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "READ_3_LETTER_WORDS_PICTURES",
-      "i": 20,
-      "j": 9,
       "deps": [
         "RECOGNIZE_ORDER_TAP_LETTERS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 20,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "READ_3_LTTER_WORDS",
-      "i": 20,
-      "j": 10,
       "deps": [
         "READ_3_LETTER_WORDS_PICTURES",
         "LETTER_TO_SOUND"
@@ -4173,24 +5131,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 20,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "READ_4_LETTER_WORDS_PICTURES",
-      "i": 21,
-      "j": 10,
       "deps": [
         "READ_3_LETTER_WORDS_PICTURES"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 21,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "READ_4_LETTER_WORDS",
-      "i": 21,
-      "j": 11,
       "deps": [
         "BIGRAM_TO_SOUND",
         "READ_4_LETTER_WORDS_PICTURES",
@@ -4199,24 +5163,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 21,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "READ_5_LETTER_WORDS_PICTURES",
-      "i": 22,
-      "j": 11,
       "deps": [
         "READ_4_LETTER_WORDS_PICTURES"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 22,
+        "j": 11
+      },
+      "subNodes": []
     },
     {
       "id": "READ_5_LETTER_WORDS",
-      "i": 22,
-      "j": 12,
       "deps": [
         "READ_4_LETTER_WORDS",
         "READ_5_LETTER_WORDS_PICTURES"
@@ -4224,24 +5194,30 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 22,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "READ_6_LETTER_WORDS",
-      "i": 22,
-      "j": 13,
       "deps": [
         "READ_5_LETTER_WORDS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 22,
+        "j": 13
+      },
+      "subNodes": []
     },
     {
       "id": "RECOGNIZE_EYES_FACES",
-      "i": 23,
-      "j": 0,
       "deps": [],
       "title": "Recognize eyes and faces",
       "description": "The very first skill a baby learns is to recognize your eyes and face. To complete this module, a baby needs to be able to make and hold eye contact.",
@@ -4256,96 +5232,120 @@
           "title": "This is a teaching video?",
           "url": "https://yahoo.com"
         }
-      ]
+      ],
+      "cell": {
+        "i": 23,
+        "j": 0
+      },
+      "subNodes": []
     },
     {
       "id": "BABBLE",
-      "i": 26,
-      "j": 1,
       "deps": [
         "RECOGNIZE_EYES_FACES"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 26,
+        "j": 1
+      },
+      "subNodes": []
     },
     {
       "id": "SELF_SUPPORT_NECK",
-      "i": 3,
-      "j": 2,
       "deps": [
         "TUMMY_LIFT_HEAD"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 3,
+        "j": 2
+      },
+      "subNodes": []
     },
     {
       "id": "TUMMY_LIFT_HEAD",
-      "i": 3,
-      "j": 1,
       "deps": [
         "RECOGNIZE_EYES_FACES"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 3,
+        "j": 1
+      },
+      "subNodes": []
     },
     {
       "id": "SOCIAL_SMILE",
-      "i": 25,
-      "j": 1,
       "deps": [
         "RECOGNIZE_EYES_FACES"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 25,
+        "j": 1
+      },
+      "subNodes": []
     },
     {
       "id": "TRACKING_FACE",
-      "i": 4,
-      "j": 1,
       "deps": [
         "RECOGNIZE_EYES_FACES"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 4,
+        "j": 1
+      },
+      "subNodes": []
     },
     {
       "id": "ROLL_OVER_BACK_TO_FRONT",
-      "i": 2,
-      "j": 2,
       "deps": [
         "TUMMY_LIFT_HEAD"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 2,
+        "j": 2
+      },
+      "subNodes": []
     },
     {
       "id": "ROLL_OVER_FRONT_TO_BACK",
-      "i": 1,
-      "j": 2,
       "deps": [
         "TUMMY_LIFT_HEAD"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 1,
+        "j": 2
+      },
+      "subNodes": []
     },
     {
       "id": "SIT_UNSUPPORTED",
-      "i": 3,
-      "j": 3,
       "deps": [
         "ROLL_OVER_FRONT_TO_BACK",
         "ROLL_OVER_BACK_TO_FRONT",
@@ -4354,36 +5354,45 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 3,
+        "j": 3
+      },
+      "subNodes": []
     },
     {
       "id": "SIT_UP_UNSUPPORTED",
-      "i": 3,
-      "j": 4,
       "deps": [
         "SIT_UNSUPPORTED"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 3,
+        "j": 4
+      },
+      "subNodes": []
     },
     {
       "id": "CRAWL",
-      "i": 4,
-      "j": 4,
       "deps": [
         "SIT_UNSUPPORTED"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 4,
+        "j": 4
+      },
+      "subNodes": []
     },
     {
       "id": "WALK_SUPPORTED",
-      "i": 3,
-      "j": 5,
       "deps": [
         "CRAWL",
         "SIT_UP_UNSUPPORTED"
@@ -4391,48 +5400,60 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 3,
+        "j": 5
+      },
+      "subNodes": []
     },
     {
       "id": "WALK_UNSUPPORTED",
-      "i": 3,
-      "j": 6,
       "deps": [
         "WALK_SUPPORTED"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 3,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "RUN",
-      "i": 3,
-      "j": 7,
       "deps": [
         "WALK_UNSUPPORTED"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 3,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "JUMP",
-      "i": 3,
-      "j": 8,
       "deps": [
         "RUN"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 3,
+        "j": 8
+      },
+      "subNodes": []
     },
     {
       "id": "KICK_A_BALL",
-      "i": 2,
-      "j": 7,
       "deps": [
         "WALK_UNSUPPORTED",
         "OBJECT_MANIPULATION"
@@ -4440,12 +5461,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 2,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "THROW",
-      "i": 1,
-      "j": 7,
       "deps": [
         "WALK_UNSUPPORTED",
         "OBJECT_MANIPULATION"
@@ -4453,12 +5477,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 1,
+        "j": 7
+      },
+      "subNodes": []
     },
     {
       "id": "RAKING_GRASP",
-      "i": 5,
-      "j": 3,
       "deps": [
         "ROLL_OVER_FRONT_TO_BACK",
         "ROLL_OVER_BACK_TO_FRONT",
@@ -4468,12 +5495,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 5,
+        "j": 3
+      },
+      "subNodes": []
     },
     {
       "id": "PINCER_GRASP",
-      "i": 5,
-      "j": 5,
       "deps": [
         "RAKING_GRASP",
         "SIT_UP_UNSUPPORTED"
@@ -4481,84 +5511,105 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 5,
+        "j": 5
+      },
+      "subNodes": []
     },
     {
       "id": "OBJECT_MANIPULATION",
-      "i": 5,
-      "j": 6,
       "deps": [
         "PINCER_GRASP"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 5,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "STACKING",
-      "i": 6,
-      "j": 6,
       "deps": [
         "PINCER_GRASP"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 6,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "DRINKING_FROM_STRAW",
-      "i": 10,
-      "j": 6,
       "deps": [
         "PINCER_GRASP"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 10,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "DRINKING_FROM_CUP",
-      "i": 11,
-      "j": 6,
       "deps": [
         "PINCER_GRASP"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 11,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "JUMPING_JACK",
-      "i": 3,
-      "j": 9,
       "deps": [
         "JUMP"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 3,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "FROG_JUMP",
-      "i": 2,
-      "j": 9,
       "deps": [
         "JUMP"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 2,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "SPORTS",
-      "i": 3,
-      "j": 12,
       "deps": [
         "JUMPING_JACK",
         "FROG_JUMP"
@@ -4566,12 +5617,15 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 3,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "MARTIAL_ARTS",
-      "i": 2,
-      "j": 12,
       "deps": [
         "JUMPING_JACK",
         "FROG_JUMP"
@@ -4579,67 +5633,87 @@
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 2,
+        "j": 12
+      },
+      "subNodes": []
     },
     {
       "id": "CLAPPING",
-      "i": 7,
-      "j": 6,
       "deps": [
         "PINCER_GRASP"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 7,
+        "j": 6
+      },
+      "subNodes": []
     },
     {
       "id": "USE_POTTY_PROMPTED",
-      "i": 1,
-      "j": 9,
       "deps": [
         "JUMP"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 1,
+        "j": 9
+      },
+      "subNodes": []
     },
     {
       "id": "USE_POTTY_UNPROMPTED",
-      "i": 1,
-      "j": 10,
       "deps": [
         "USE_POTTY_PROMPTED"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 1,
+        "j": 10
+      },
+      "subNodes": []
     },
     {
       "id": "TRACKING_SOUND",
-      "i": 24,
-      "j": 1,
       "deps": [
         "RECOGNIZE_EYES_FACES"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 24,
+        "j": 1
+      },
+      "subNodes": []
     },
     {
       "id": "TRACKING_OBJECTS",
-      "i": 5,
-      "j": 2,
       "deps": [
         "TRACKING_FACE"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
-      "teacherVideos": []
+      "teacherVideos": [],
+      "cell": {
+        "i": 5,
+        "j": 2
+      },
+      "subNodes": []
     },
     {
       "id": "ADD_UP_TO_15",
@@ -4647,14 +5721,17 @@
       "description": "",
       "studentVideos": [],
       "teacherVideos": [],
-      "i": 46,
-      "j": 11,
       "deps": [
         "ADD_UP_TO_10",
         "COUNT_ADD_OPPONENT_FINGERS_FAST",
         "COUNT_ADD_SELF_FINGERS",
         "COUNT_ADD_DICE_FAST"
-      ]
+      ],
+      "cell": {
+        "i": 46,
+        "j": 11
+      },
+      "subNodes": []
     }
   ]
 }

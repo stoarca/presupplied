@@ -32,7 +32,7 @@ export class TechTree extends DepGraph<GraphNode> {
     if (this._memoizedRows === 0 && this._memoizedCols === 0) {
       let topSorted = this.overallOrder();
       topSorted.forEach((node) => {
-        let {i, j} = this.getNodeData(node);
+        let {i, j} = this.getNodeData(node).cell;
         this._memoizedGrid[i][j] = node;
         this._memoizedRows = Math.max(i, this._memoizedRows);
         this._memoizedCols = Math.max(j, this._memoizedCols);

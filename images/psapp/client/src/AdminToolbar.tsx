@@ -9,24 +9,8 @@ import {
 
 export let TOOLBAR_WIDTH = '550px';
 
-interface Progress {
-  reached: string[],
-}
-
-interface ToolbarForOneProps {
-  selectedCell: Cell,
-  grid: string[][],
-  knowledgeGraph: TechTree,
-  reached: Set<string>,
-  onChangeNode: (oldId: string, newVal: GraphNodeInfo) => void,
-  onChangeReached: (newReached: Set<string>) => void,
-  onMoveTreeLeft: (id: string) => void,
-  onMoveTreeRight: (id: string) => void,
-  onMoveTreeUp: (id: string) => void,
-  onMoveTreeDown: (id: string) => void,
-}
-
-type C = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+type C = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
+type M = React.MouseEvent<HTMLButtonElement>;
 
 let mapToMdLinks = (videoInfos: VideoInfo[]): string => {
   return videoInfos.map(({title, url}) => {
@@ -49,6 +33,18 @@ let mapFromMdLinks = (str: string): VideoInfo[] => {
   }
   return ret;
 };
+
+interface ToolbarForOneProps {
+  selectedCell: Cell,
+  grid: string[][],
+  knowledgeGraph: TechTree,
+  onChangeNode: (oldId: string, newVal: GraphNodeInfo) => void,
+  onMoveTreeLeft: (id: string) => void,
+  onMoveTreeRight: (id: string) => void,
+  onMoveTreeUp: (id: string) => void,
+  onMoveTreeDown: (id: string) => void,
+  onAddSubNode: (id: string) => void,
+}
 
 let ToolbarForOne = (props: ToolbarForOneProps) => {
   let ref = React.useRef<HTMLInputElement>(null);
@@ -128,31 +124,25 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
     props.onChangeNode,
   ]);
 
-  let handleChangeReached = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    let newReached = new Set(props.reached);
-    if (e.target.checked) {
-      newReached.add(kmid);
-    } else {
-      newReached.delete(kmid);
-    }
-    props.onChangeReached(newReached);
-  }, [kmid, props.reached, props.onChangeReached]);
-
-  let handleMoveTreeLeft = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+  let handleMoveTreeLeft = React.useCallback((e: M) => {
     props.onMoveTreeLeft(kmid);
   }, [kmid, props.onMoveTreeLeft]);
 
-  let handleMoveTreeRight = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+  let handleMoveTreeRight = React.useCallback((e: M) => {
     props.onMoveTreeRight(kmid);
   }, [kmid, props.onMoveTreeRight]);
 
-  let handleMoveTreeUp = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+  let handleMoveTreeUp = React.useCallback((e: M) => {
     props.onMoveTreeUp(kmid);
   }, [kmid, props.onMoveTreeUp]);
 
-  let handleMoveTreeDown = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+  let handleMoveTreeDown = React.useCallback((e: M) => {
     props.onMoveTreeDown(kmid);
   }, [kmid, props.onMoveTreeDown]);
+
+  let handleAddSubNode = React.useCallback((e: M) => {
+    props.onAddSubNode(kmid);
+  }, [kmid, props.onAddSubNode]);
 
   return (
     <div>
@@ -200,14 +190,6 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
         </div>
       </form>
       <div>
-        <label>
-          <input type="checkbox"
-              checked={props.reached.has(kmid)}
-              onChange={handleChangeReached}/>
-          Reached
-        </label>
-      </div>
-      <div>
         <Link to={`/modules/${kmid}`}>
           Go to lesson
         </Link>
@@ -227,6 +209,9 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
       <div>
         <button onClick={handleMoveTreeDown}>Move Tree Down</button>
       </div>
+      <div>
+        <button onClick={handleAddSubNode}>Add SubNode</button>
+      </div>
     </div>
   );
 };
@@ -238,13 +223,12 @@ interface ToolbarProps {
   grid: string[][],
   rows: number,
   cols: number,
-  reached: Set<string>,
   onChangeNode: (oldId: string, newVal: GraphNodeInfo) => void,
-  onChangeReached: (newReached: Set<string>) => void,
   onMoveTreeLeft: (id: string) => void,
   onMoveTreeRight: (id: string) => void,
   onMoveTreeUp: (id: string) => void,
   onMoveTreeDown: (id: string) => void,
+  onAddSubNode: (id: string) => void,
   onSelectIds: (ids: string[]) => void,
   onDeleteIds: (ids: string[]) => void,
 }
@@ -257,17 +241,16 @@ export let AdminToolbar = (props: ToolbarProps) => {
           selectedCell={props.selectedCells[0]}
           knowledgeGraph={props.knowledgeGraph}
           grid={props.grid}
-          reached={props.reached}
           onChangeNode={props.onChangeNode}
-          onChangeReached={props.onChangeReached}
           onMoveTreeLeft={props.onMoveTreeLeft}
           onMoveTreeRight={props.onMoveTreeRight}
           onMoveTreeUp={props.onMoveTreeUp}
-          onMoveTreeDown={props.onMoveTreeDown}/>
+          onMoveTreeDown={props.onMoveTreeDown}
+          onAddSubNode={props.onAddSubNode}/>
     );
   }
 
-  let handleDelete = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+  let handleDelete = React.useCallback((e: M) => {
     props.onDeleteIds(props.selectedCells.map(x => props.grid[x.i][x.j]));
   }, [props.selectedCells, props.grid, props.onDeleteIds]);
   let forSelected = null;
@@ -279,7 +262,7 @@ export let AdminToolbar = (props: ToolbarProps) => {
     );
   }
 
-  let handleSelectAll = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+  let handleSelectAll = React.useCallback((e: M) => {
     props.onSelectIds(props.knowledgeMap.nodes.map(x => x.id));
   }, [props.onSelectIds]);
 
@@ -298,42 +281,9 @@ export let AdminToolbar = (props: ToolbarProps) => {
     a.remove();
   }, []);
 
-  let uploadJson = React.useCallback(() => {
-    return new Promise((resolve) => {
-      let input = document.createElement('input');
-      input.type='file';
-      document.body.appendChild(input);
-      input.addEventListener('change', (e) => {
-        if (!input.files) {
-          throw new Error('No files specified');
-        }
-        if (input.files.length !==  1) {
-          throw new Error('Wrong number of files uploaded');
-        }
-        let file = input.files[0];
-        let reader = new FileReader();
-        reader.onload = (e) => { resolve(JSON.parse(e.target!.result as string)); };
-        reader.readAsText(file);
-      });
-      input.click();
-      input.remove();
-    });
-  }, []);
-
-  let handleExportGraph = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+  let handleExportGraph = React.useCallback((e: M) => {
     downloadJson(props.knowledgeMap, 'knowledge-map.json');
   }, [props.knowledgeMap, downloadJson]);
-
-  let handleExportProgress = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    downloadJson({
-      reached: Array.from(props.reached),
-    }, 'progress.json');
-  }, [props.reached]);
-
-  let handleImportProgress = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
-    let newProgress = await uploadJson() as Progress;
-    props.onChangeReached(new Set(newProgress.reached));
-  }, [props.onChangeReached]);
 
   let toolbarStyle = {
     position: 'fixed',
@@ -352,12 +302,6 @@ export let AdminToolbar = (props: ToolbarProps) => {
       </div>
       <div>
         <button onClick={handleExportGraph}>Export Graph</button>
-      </div>
-      <div>
-        <button onClick={handleExportProgress}>Export Progress</button>
-      </div>
-      <div>
-        <button onClick={handleImportProgress}>Import Progress</button>
       </div>
       <div>
         {props.knowledgeMap.nodes.length}
