@@ -59,6 +59,7 @@ interface KnowledgeNodeProps {
   reachable: Set<string>,
   dependants: string[],
   selectedCells: Cell[],
+  admin: boolean,
 };
 
 let KnowledgeNode = ({
@@ -68,6 +69,7 @@ let KnowledgeNode = ({
   reachable,
   dependants,
   selectedCells,
+  admin,
 }: KnowledgeNodeProps) => {
   let node = knowledgeGraph.getNodeData(kmid);
   let pos = nodePos(node.cell);
@@ -117,6 +119,8 @@ let KnowledgeNode = ({
     fill = '#90EE90';
   } else if (reachable.has(kmid)) {
     fill = '#F1EB9C';
+  } else if (admin && knowledgeGraph.directDependantsOf(kmid).length === 0) {
+    fill = '#F19C9C';
   } else {
     fill = '#777777';
   }
@@ -142,7 +146,7 @@ interface BaseKnowledgeMapProps {
   reached: Set<string>;
   reachable: Set<string>;
   selectedCells: Cell[];
-  allowHoverEmptyCell: boolean;
+  admin: boolean;
   onHoverCellUpdated?: (cell: Cell | null) => void;
   onMouseDown?: PanZoomSvgProps['onMouseDown'],
   onMouseUp?: PanZoomSvgProps['onMouseUp'];
@@ -154,7 +158,7 @@ export let BaseKnowledgeMap = ({
   reached,
   reachable,
   selectedCells,
-  allowHoverEmptyCell,
+  admin,
   onHoverCellUpdated,
   onMouseDown,
   onMouseUp,
@@ -242,7 +246,7 @@ export let BaseKnowledgeMap = ({
       return;
     }
 
-    if (!allowHoverEmptyCell) {
+    if (!admin) {
       let hoverNodeId = grid[newHoverCell.i][newHoverCell.j];
       if (!hoverNodeId) {
         setHoverCell(null);
@@ -259,7 +263,7 @@ export let BaseKnowledgeMap = ({
       setHoverCell(newHoverCell);
       return;
     }
-  }, [hoverCell, grid, allowHoverEmptyCell, viewBox]);
+  }, [hoverCell, grid, admin, viewBox]);
 
   let nodes = [];
   for (let i = 0; i < topSorted.length; ++i) {
@@ -272,7 +276,8 @@ export let BaseKnowledgeMap = ({
           reached={reached}
           reachable={reachable}
           dependants={dependants}
-          selectedCells={selectedCells}/>
+          selectedCells={selectedCells}
+          admin={admin}/>
     );
   }
 
@@ -302,7 +307,7 @@ export let BaseKnowledgeMap = ({
   }
 
   let originMarker = null;
-  if (allowHoverEmptyCell) {
+  if (admin) {
     originMarker = (
       <circle
           cx={0}
@@ -317,7 +322,7 @@ export let BaseKnowledgeMap = ({
     flex: '1 1 0',
   } as React.CSSProperties;
   let viewLimitBox = React.useMemo(() => {
-    return {x: -100, y: -100, w: 15000, h: 12000};
+    return {x: -100, y: -100, w: 20000, h: 15000};
   }, []);
   return (
     <PanZoomSvg
@@ -326,7 +331,7 @@ export let BaseKnowledgeMap = ({
         viewBox={viewBox}
         viewLimitBox={viewLimitBox}
         minZoomWidth={1000}
-        maxZoomWidth={15000}
+        maxZoomWidth={20000}
         onUpdateViewBox={setViewBox}
         onMouseDown={onMouseDown}
         onMouseMove={handleMouseMove}
@@ -774,6 +779,27 @@ let AdminKnowledgeMap = ({
   }, [handleMoveTreeVert]);
 
   let handleAddSubNode = React.useCallback((id: string) => {
+    setKnowledgeMap({
+      nodes: knowledgeMap.nodes.map(x => {
+        if (x.id === id) {
+          return {
+            ...x,
+            subNodes: [
+              ...x.subNodes,
+              {
+                id: 'newnode' + genId(),
+                title: '',
+                description: '',
+                studentVideos: [],
+                teacherVideos: [],
+              }
+            ],
+          };
+        } else {
+          return x;
+        }
+      })
+    });
 
   }, [knowledgeMap, knowledgeGraph]);
 
@@ -800,7 +826,7 @@ let AdminKnowledgeMap = ({
           reached={reached}
           reachable={reachable}
           selectedCells={selectedCells}
-          allowHoverEmptyCell={true}
+          admin={true}
           onHoverCellUpdated={setHoverCell}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}/>
@@ -954,7 +980,7 @@ let StudentKnowledgeMap = ({
           reached={reached}
           reachable={reachable}
           selectedCells={selectedCells}
-          allowHoverEmptyCell={false}
+          admin={false}
           onHoverCellUpdated={setHoverCell}
           onClick={handleClick}/>
       <Drawer anchor="right"

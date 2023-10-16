@@ -49,6 +49,7 @@ export class Student {
           events: [],
         };
       }
+      progress[moduleVanityId].status = status;
       progress[moduleVanityId].events.push({
         time: Date.now(),
         status: status,

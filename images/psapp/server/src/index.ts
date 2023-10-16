@@ -100,7 +100,6 @@ let syncKnowledgeMapIdsToDb = async () => {
   if (idsToRemove.length) {
     console.error('Old modules found in db!');
     console.error(idsToRemove);
-    process.exit(1);
   }
 };
 
