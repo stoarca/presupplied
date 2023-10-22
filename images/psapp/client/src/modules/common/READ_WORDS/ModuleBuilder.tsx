@@ -10,7 +10,7 @@ import whatWordIsThis from './what_word_is_this.wav';
 
 type Variant = {
   word: string,
-  sounds: [number, keyof typeof LETTER_SOUNDS | keyof typeof BIGRAM_SOUNDS][],
+  sounds: readonly (readonly [number, keyof typeof LETTER_SOUNDS | keyof typeof BIGRAM_SOUNDS])[],
   spoken: string,
 };
 
