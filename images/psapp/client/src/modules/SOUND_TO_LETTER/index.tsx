@@ -10,9 +10,10 @@ import {LETTER_SOUNDS} from '@src/modules/common/READING/util';
 import whichLetter from './which_letter.wav';
 
 let soundToLetters: {[key in keyof typeof LETTER_SOUNDS]: string[]} = {
-  aShort: ['a'],
+  aShortAt: ['a'],
+  aShortAre: ['a', 'o'],
+  aShortAnd: ['a'],
   aLong: ['a'],
-  aAlways: ['a', 'o'],
   b: ['b'],
   d: ['d'],
   eShort: ['e'],
@@ -27,20 +28,23 @@ let soundToLetters: {[key in keyof typeof LETTER_SOUNDS]: string[]} = {
   l: ['l'],
   m: ['m'],
   n: ['n'],
-  oShort: ['o'],
-  oLong: ['o'],
+  oShortMom: ['o'],
+  oLongGo: ['o'],
+  oLongMore: ['o'],
   p: ['p'],
   q: ['q'],
   r: ['r'],
   s: ['s', 'c'],
   t: ['t'],
   uShort: ['u'],
-  uLong: ['u'],
+  uLongMute: ['u'],
+  uLongBlue: ['u'],
   v: ['v'],
   w: ['w'],
   x: ['x'],
   yConsonant: ['y'],
   z: ['z'],
+  schwa: ['a', 'e', 'i', 'o', 'u'],
 };
 
 type Variant = keyof typeof soundToLetters;

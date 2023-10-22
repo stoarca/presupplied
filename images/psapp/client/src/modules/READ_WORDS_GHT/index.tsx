@@ -36,7 +36,7 @@ export default ModuleBuilder({
     spoken: nightWord,
   }, {
     word: 'ought',
-    sounds: [[0, 'oShort'], [2, 't']],
+    sounds: [[0, 'oShortMom'], [2, 't']],
     spoken: oughtWord,
   }, {
     word: 'eight',
@@ -60,7 +60,7 @@ export default ModuleBuilder({
     spoken: brightWord,
   }, {
     word: 'fought',
-    sounds: [[0, 'f'], [1, 'oShort'], [3, 't']],
+    sounds: [[0, 'f'], [1, 'oShortMom'], [3, 't']],
     spoken: foughtWord,
   }],
 });

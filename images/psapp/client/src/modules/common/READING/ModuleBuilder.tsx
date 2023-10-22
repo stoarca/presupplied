@@ -54,7 +54,7 @@ export let ModuleBuilder = ({
       playOnEveryExercise: true,
       vlist: vlist,
     });
-    
+
     let style: React.CSSProperties = {
       fontFamily: 'sans-serif',
       fontSize: '100px',

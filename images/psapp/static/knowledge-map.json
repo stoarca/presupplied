@@ -749,7 +749,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 45,
+        "i": 47,
         "j": 13
       },
       "subNodes": []
@@ -765,14 +765,19 @@
         "READ_WORDS_OA",
         "READ_WORDS_EI",
         "READ_SENTENCES_SHORT",
-        "READ_WORDS_LK"
+        "READ_WORDS_LK",
+        "READ_WORDS_ST",
+        "READ_WORDS_AI",
+        "READ_WORDS_AY",
+        "READ_WORDS_IE",
+        "READ_WORDS_OU"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 46,
+        "i": 48,
         "j": 12
       },
       "subNodes": []
@@ -782,29 +787,30 @@
       "deps": [
         "READ_SENTENCES_WITH_NUMBERS",
         "READ_PUNCTUATION",
-        "READ_WORDS_WEIRD_GH",
+        "READ_WORDS_GH_LIKE_LAUGH",
         "READ_WORDS_CH_EXCEPTION",
-        "READ_WORDS_VEHICLE",
         "READ_WORDS_SCHOOL",
-        "READ_WORDS_GARDEN",
         "READ_WORDS_FOOD",
         "READ_WORDS_KITCHEN",
         "READ_WORDS_BATHROOM",
         "READ_WORDS_BEDROOM",
-        "READ_WORDS_COMPUTERS",
-        "READ_WORDS_NUMBERS",
+        "READ_WORDS_CARDINALS",
         "READ_WORDS_COLORS",
         "READ_WORDS_COMMON_ANIMALS",
-        "READ_WORDS_OCCUPATION",
+        "READ_WORDS_OCCUPATIONS",
         "READ_WORDS_FAMILY",
-        "READ_WORDS_EMOTION"
+        "READ_WORDS_EMOTIONS",
+        "READ_WORDS_SOFT_C",
+        "READ_WORDS_ORDINALS",
+        "READ_WORDS_FRUITS",
+        "READ_WORDS_VEGETABLES"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 46,
+        "i": 48,
         "j": 14
       },
       "subNodes": [],
@@ -1079,7 +1085,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 46,
+        "i": 48,
         "j": 16
       },
       "subNodes": [],
@@ -1340,7 +1346,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 46,
+        "i": 48,
         "j": 17
       },
       "subNodes": [],
@@ -1350,15 +1356,15 @@
     {
       "id": "GRAMMAR_NOUNS",
       "deps": [
-        "READ_PARAGRAPHS"
+        "READ_SENTENCES_LONG"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 44,
-        "j": 17
+        "i": 46,
+        "j": 15
       },
       "subNodes": [],
       "i": 46,
@@ -5669,7 +5675,9 @@
         "j": 10
       },
       "deps": [
-        "READ_WORDS_SHORT_A_LIKE_AT"
+        "READ_WORDS_SHORT_A_LIKE_AT",
+        "READ_WORDS_SHORT_A_LIKE_AND",
+        "READ_WORDS_SHORT_A_LIKE_ARE"
       ],
       "subNodes": []
     },
@@ -5755,7 +5763,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 34,
+        "i": 35,
         "j": 11
       },
       "deps": [
@@ -5765,13 +5773,13 @@
       "subNodes": []
     },
     {
-      "id": "READ_WORDS_TH",
+      "id": "READ_WORDS_TH_LIKE_THIS",
       "title": "",
       "description": "",
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 39,
+        "i": 31,
         "j": 12
       },
       "deps": [
@@ -5818,7 +5826,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 35,
+        "i": 36,
         "j": 11
       },
       "deps": [
@@ -5865,7 +5873,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 37,
+        "i": 39,
         "j": 11
       },
       "deps": [
@@ -5880,7 +5888,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 38,
+        "i": 39,
         "j": 12
       },
       "deps": [
@@ -5895,7 +5903,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 35,
+        "i": 32,
         "j": 12
       },
       "deps": [
@@ -5910,10 +5918,13 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 37,
+        "i": 39,
         "j": 9
       },
-      "deps": [],
+      "deps": [
+        "LETTER_TO_SOUND_A_TO_O",
+        "LETTER_TO_SOUND_M_TO_Z"
+      ],
       "subNodes": []
     },
     {
@@ -5923,7 +5934,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 37,
+        "i": 39,
         "j": 10
       },
       "deps": [
@@ -5938,12 +5949,11 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 40,
-        "j": 9
+        "i": 42,
+        "j": 11
       },
       "deps": [
-        "LETTER_TO_SOUND_A_TO_O",
-        "LETTER_TO_SOUND_M_TO_Z"
+        "READ_SENTENCES_VERY_SHORT"
       ],
       "subNodes": []
     },
@@ -5954,12 +5964,11 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 41,
-        "j": 9
+        "i": 33,
+        "j": 12
       },
       "deps": [
-        "LETTER_TO_SOUND_A_TO_O",
-        "LETTER_TO_SOUND_M_TO_Z"
+        "READ_SENTENCES_SHORT"
       ],
       "subNodes": []
     },
@@ -5970,7 +5979,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 38,
+        "i": 40,
         "j": 11
       },
       "deps": [
@@ -5985,7 +5994,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 32,
+        "i": 38,
         "j": 12
       },
       "deps": [
@@ -6000,7 +6009,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 46,
+        "i": 48,
         "j": 13
       },
       "deps": [
@@ -6008,7 +6017,7 @@
         "READ_NUMBERS_UP_TO_1000",
         "READ_WORDS_GHT",
         "READ_WORDS_QU",
-        "READ_WORDS_TH",
+        "READ_WORDS_TH_LIKE_THIS",
         "READ_WORDS_SILENT_K",
         "READ_WORDS_WH",
         "READ_WORDS_SH",
@@ -6017,7 +6026,12 @@
         "READ_WORDS_SILENT_B",
         "READ_WORDS_PH",
         "READ_WORDS_AU",
-        "READ_WORDS_AW"
+        "READ_WORDS_AW",
+        "READ_WORDS_TR",
+        "READ_WORDS_HARD_C",
+        "READ_WORDS_DR",
+        "READ_WORDS_TH_LIKE_THINK",
+        "READ_WORDS_VOICED_S"
       ],
       "subNodes": []
     },
@@ -6028,7 +6042,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 39,
+        "i": 41,
         "j": 11
       },
       "deps": [
@@ -6073,10 +6087,12 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 39,
-        "j": 9
+        "i": 45,
+        "j": 12
       },
-      "deps": [],
+      "deps": [
+        "READ_SENTENCES_SHORT"
+      ],
       "subNodes": []
     },
     {
@@ -6086,11 +6102,12 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 39,
-        "j": 10
+        "i": 45,
+        "j": 13
       },
       "deps": [
-        "READ_WORDS_HARD_C"
+        "READ_WORDS_HARD_C",
+        "READ_SENTENCES_MEDIUM"
       ],
       "subNodes": []
     },
@@ -6101,10 +6118,13 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 38,
+        "i": 40,
         "j": 9
       },
-      "deps": [],
+      "deps": [
+        "LETTER_TO_SOUND_A_TO_O",
+        "LETTER_TO_SOUND_M_TO_Z"
+      ],
       "subNodes": []
     },
     {
@@ -6114,7 +6134,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 38,
+        "i": 40,
         "j": 10
       },
       "deps": [
@@ -6172,7 +6192,7 @@
       "subNodes": []
     },
     {
-      "id": "READ_WORDS_WEIRD_GH",
+      "id": "READ_WORDS_GH_LIKE_LAUGH",
       "title": "",
       "description": "",
       "studentVideos": [],
@@ -6194,7 +6214,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 34,
+        "i": 36,
         "j": 12
       },
       "deps": [
@@ -6209,7 +6229,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 33,
+        "i": 35,
         "j": 12
       },
       "deps": [
@@ -6224,7 +6244,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 36,
+        "i": 37,
         "j": 12
       },
       "deps": [
@@ -6254,11 +6274,11 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 45,
-        "j": 17
+        "i": 47,
+        "j": 15
       },
       "deps": [
-        "READ_PARAGRAPHS"
+        "READ_SENTENCES_LONG"
       ],
       "subNodes": []
     },
@@ -6269,8 +6289,8 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 44,
-        "j": 18
+        "i": 46,
+        "j": 16
       },
       "deps": [
         "GRAMMAR_NOUNS"
@@ -6284,8 +6304,8 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 45,
-        "j": 18
+        "i": 47,
+        "j": 16
       },
       "deps": [
         "GRAMMAR_VERBS"
@@ -6299,20 +6319,21 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 46,
+        "i": 48,
         "j": 10
       },
       "deps": [
-        "READ_WORDS_TR",
-        "READ_WORDS_ST",
-        "READ_WORDS_HARD_C",
         "READ_WORDS_HARD_Y",
         "READ_WORDS_HARD_G",
         "READ_WORDS_SHORT_U",
         "READ_WORDS_SHORT_O",
         "READ_WORDS_SHORT_I",
         "READ_WORDS_SHORT_E",
-        "READ_WORDS_SHORT_A_LIKE_AT"
+        "READ_WORDS_SHORT_A_LIKE_AT",
+        "READ_WORDS_SHORT_A_LIKE_AND",
+        "READ_WORDS_SHORT_A_LIKE_ARE",
+        "COMMON_BIGRAM_TO_SOUND",
+        "READ_WORDS_UNVOICED_S"
       ],
       "subNodes": []
     },
@@ -6323,20 +6344,18 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 46,
+        "i": 48,
         "j": 11
       },
       "deps": [
         "READ_SENTENCES_VERY_SHORT",
-        "READ_WORDS_SOFT_C",
         "READ_WORDS_VOWEL_Y",
         "READ_WORDS_SOFT_G",
         "READ_WORDS_LONG_U",
         "READ_WORDS_LONG_O",
         "READ_WORDS_LONG_I",
         "READ_WORDS_LONG_E",
-        "READ_WORDS_LONG_A",
-        "READ_WORDS_SHORT_A_LIKE_AND"
+        "READ_WORDS_LONG_A"
       ],
       "subNodes": []
     },
@@ -6347,7 +6366,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 47,
+        "i": 49,
         "j": 11
       },
       "deps": [
@@ -6362,7 +6381,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 47,
+        "i": 49,
         "j": 12
       },
       "deps": [
@@ -6378,7 +6397,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 47,
+        "i": 49,
         "j": 13
       },
       "deps": [
@@ -6394,7 +6413,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 47,
+        "i": 49,
         "j": 14
       },
       "deps": [
@@ -6434,7 +6453,7 @@
       "subNodes": []
     },
     {
-      "id": "READ_WORDS_NUMBERS",
+      "id": "READ_WORDS_CARDINALS",
       "title": "",
       "description": "",
       "studentVideos": [],
@@ -6456,11 +6475,11 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 34,
-        "j": 13
+        "i": 39,
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "READ_SENTENCES_WITH_NUMBERS"
       ],
       "subNodes": []
     },
@@ -6501,11 +6520,11 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 39,
-        "j": 13
+        "i": 40,
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "READ_SENTENCES_WITH_NUMBERS"
       ],
       "subNodes": []
     },
@@ -6516,7 +6535,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 40,
+        "i": 41,
         "j": 13
       },
       "deps": [
@@ -6555,17 +6574,17 @@
       "subNodes": []
     },
     {
-      "id": "READ_WORDS_VEHICLE",
+      "id": "READ_WORDS_VEHICLES",
       "title": "",
       "description": "",
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
         "i": 41,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "READ_SENTENCES_WITH_NUMBERS"
       ],
       "subNodes": []
     },
@@ -6576,7 +6595,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 47,
+        "i": 49,
         "j": 15
       },
       "deps": [
@@ -6592,7 +6611,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 46,
+        "i": 48,
         "j": 15
       },
       "deps": [
@@ -6606,7 +6625,10 @@
         "READ_WORDS_WATER_ANIMALS",
         "READ_WORDS_FARM_ANIMALS",
         "READ_WORDS_JUNGLE_ANIMALS",
-        "READ_WORDS_ARCTIC_ANIMALS"
+        "READ_COMPOUND_WORDS",
+        "READ_WORDS_COMPUTERS",
+        "READ_WORDS_GARDEN",
+        "READ_WORDS_VEHICLES"
       ],
       "subNodes": []
     },
@@ -6617,7 +6639,7 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 47,
+        "i": 49,
         "j": 16
       },
       "deps": [
@@ -6672,21 +6694,6 @@
       "subNodes": []
     },
     {
-      "id": "READ_WORDS_ARCTIC_ANIMALS",
-      "title": "",
-      "description": "",
-      "studentVideos": [],
-      "teacherVideos": [],
-      "cell": {
-        "i": 29,
-        "j": 14
-      },
-      "deps": [
-        "READ_SENTENCES_WITH_NUMBERS"
-      ],
-      "subNodes": []
-    },
-    {
       "id": "READ_WORDS_INSECTS",
       "title": "",
       "description": "",
@@ -6702,7 +6709,7 @@
       "subNodes": []
     },
     {
-      "id": "READ_WORDS_OCCUPATION",
+      "id": "READ_WORDS_OCCUPATIONS",
       "title": "",
       "description": "",
       "studentVideos": [],
@@ -6717,7 +6724,7 @@
       "subNodes": []
     },
     {
-      "id": "READ_WORDS_EMOTION",
+      "id": "READ_WORDS_EMOTIONS",
       "title": "",
       "description": "",
       "studentVideos": [],
@@ -6829,10 +6836,229 @@
       "teacherVideos": [],
       "cell": {
         "i": 30,
-        "j": 10
+        "j": 9
       },
       "deps": [
-        "READ_WORDS_SHORT_A_LIKE_AT"
+        "LETTER_TO_SOUND_A_TO_O",
+        "LETTER_TO_SOUND_M_TO_Z"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "READ_WORDS_SHORT_A_LIKE_ARE",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 29,
+        "j": 9
+      },
+      "deps": [
+        "LETTER_TO_SOUND_A_TO_O",
+        "LETTER_TO_SOUND_M_TO_Z"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "READ_WORDS_AI",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 30,
+        "j": 11
+      },
+      "deps": [
+        "READ_WORDS_LONG_A",
+        "READ_WORDS_LONG_I"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "READ_WORDS_AY",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 29,
+        "j": 11
+      },
+      "deps": [
+        "READ_WORDS_LONG_A",
+        "READ_WORDS_VOWEL_Y"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "READ_WORDS_IE",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 34,
+        "j": 11
+      },
+      "deps": [
+        "READ_WORDS_LONG_E",
+        "READ_WORDS_LONG_I"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "READ_WORDS_DR",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 34,
+        "j": 12
+      },
+      "deps": [
+        "READ_SENTENCES_SHORT"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "READ_WORDS_UNVOICED_S",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 46,
+        "j": 9
+      },
+      "deps": [
+        "LETTER_TO_SOUND_M_TO_Z",
+        "LETTER_TO_SOUND_A_TO_O"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "READ_WORDS_VOICED_S",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 46,
+        "j": 12
+      },
+      "deps": [
+        "READ_SENTENCES_SHORT",
+        "READ_WORDS_UNVOICED_S"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "READ_WORDS_OU",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 37,
+        "j": 11
+      },
+      "deps": [
+        "READ_WORDS_LONG_U",
+        "READ_WORDS_LONG_O"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "COMMON_BIGRAM_TO_SOUND",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 47,
+        "j": 9
+      },
+      "deps": [
+        "LETTER_TO_SOUND_M_TO_Z",
+        "LETTER_TO_SOUND_A_TO_O"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "READ_WORDS_TH_LIKE_THINK",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 30,
+        "j": 12
+      },
+      "deps": [
+        "READ_SENTENCES_SHORT"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "READ_COMPOUND_WORDS",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 47,
+        "j": 14
+      },
+      "deps": [
+        "READ_SENTENCES_WITH_NUMBERS"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "READ_WORDS_ORDINALS",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 34,
+        "j": 13
+      },
+      "deps": [
+        "READ_SENTENCES_MEDIUM"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "READ_WORDS_FRUITS",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 39,
+        "j": 13
+      },
+      "deps": [
+        "READ_SENTENCES_MEDIUM"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "READ_WORDS_VEGETABLES",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 40,
+        "j": 13
+      },
+      "deps": [
+        "READ_SENTENCES_MEDIUM"
       ],
       "subNodes": []
     }

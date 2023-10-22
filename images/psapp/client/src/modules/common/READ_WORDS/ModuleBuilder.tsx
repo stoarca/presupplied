@@ -4,13 +4,13 @@ import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
 import {VariantList} from '@src/util';
 import {STTModule} from '@src/modules/common/SPEECH_TO_TEXT_SHIM/ModuleBuilder';
-import {LETTER_SOUNDS} from '@src/modules/common/READING/util';
+import {LETTER_SOUNDS, BIGRAM_SOUNDS} from '@src/modules/common/READING/util';
 
 import whatWordIsThis from './what_word_is_this.wav';
 
 type Variant = {
   word: string,
-  sounds: [number, keyof typeof LETTER_SOUNDS][],
+  sounds: [number, keyof typeof LETTER_SOUNDS | keyof typeof BIGRAM_SOUNDS][],
   spoken: string,
 };
 
