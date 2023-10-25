@@ -72,9 +72,17 @@ export let ModuleBuilder = ({
           lastPos = exercise.variant.sounds[i + 1][0];
         }
         setFailPosition([startPos, lastPos]);
-        await moduleContext.playAudio(
-          LETTER_SOUNDS[exercise.variant.sounds[i][1]]
-        );
+        let sound = exercise.variant.sounds[i][1];
+        if (sound in LETTER_SOUNDS) {
+          // TODO: why does typescript not narrow the type here by itself?
+          await moduleContext.playAudio(
+            LETTER_SOUNDS[sound as keyof typeof LETTER_SOUNDS]
+          );
+        } else {
+          await moduleContext.playAudio(
+            BIGRAM_SOUNDS[sound as keyof typeof BIGRAM_SOUNDS]
+          );
+        }
         if (!doingFailure.current) {
           return;
         }
