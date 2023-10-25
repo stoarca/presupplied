@@ -1,81 +1,21 @@
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
-import toWord from './to.wav';
-import tooWord from './too.wav';
-import zooWord from './zoo.wav';
-import mooWord from './moo.wav';
-import foodWord from './food.wav';
-import footWord from './foot.wav';
-import goodWord from './good.wav';
-import hookWord from './hook.wav';
-import poolWord from './pool.wav';
-import coolWord from './cool.wav';
-import woodWord from './wood.wav';
-import cookWord from './cook.wav';
-import loopWord from './loop.wav';
-import floorWord from './floor.wav';
-import spoonWord from './spoon.wav';
+import toWord from '@src/modules/common/READING/words/to';
+import tooWord from '@src/modules/common/READING/words/too';
+import zooWord from '@src/modules/common/READING/words/zoo';
+import mooWord from '@src/modules/common/READING/words/moo';
+import foodWord from '@src/modules/common/READING/words/food';
+import footWord from '@src/modules/common/READING/words/foot';
+import goodWord from '@src/modules/common/READING/words/good';
+import hookWord from '@src/modules/common/READING/words/hook';
+import poolWord from '@src/modules/common/READING/words/pool';
+import coolWord from '@src/modules/common/READING/words/cool';
+import woodWord from '@src/modules/common/READING/words/wood';
+import cookWord from '@src/modules/common/READING/words/cook';
+import loopWord from '@src/modules/common/READING/words/loop';
+import floorWord from '@src/modules/common/READING/words/floor';
+import spoonWord from '@src/modules/common/READING/words/spoon';
 
 export default ModuleBuilder({
-  variants: [{
-    word: 'to',
-    sounds: [[0, 't'], [1, 'uLongBlue']],
-    spoken: toWord,
-  }, {
-    word: 'too',
-    sounds: [[0, 't'], [1, 'uLongBlue']],
-    spoken: tooWord,
-  }, {
-    word: 'zoo',
-    sounds: [[0, 'z'], [1, 'uLongBlue']],
-    spoken: zooWord,
-  }, {
-    word: 'moo',
-    sounds: [[0, 'm'], [1, 'uLongBlue']],
-    spoken: mooWord,
-  }, {
-    word: 'food',
-    sounds: [[0, 'f'], [1, 'uLongBlue'], [3, 'd']],
-    spoken: foodWord,
-  }, {
-    word: 'foot',
-    sounds: [[0, 'f'], [1, 'uLongBlue'], [3, 't']],
-    spoken: footWord,
-  }, {
-    word: 'good',
-    sounds: [[0, 'gHard'], [1, 'uLongBlue'], [3, 'd']],
-    spoken: goodWord,
-  }, {
-    word: 'hook',
-    sounds: [[0, 'h'], [1, 'uLongBlue'], [3, 'k']],
-    spoken: hookWord,
-  }, {
-    word: 'pool',
-    sounds: [[0, 'p'], [1, 'uLongBlue'], [3, 'l']],
-    spoken: poolWord,
-  }, {
-    word: 'cool',
-    sounds: [[0, 'k'], [1, 'uLongBlue'], [3, 'l']],
-    spoken: coolWord,
-  }, {
-    word: 'wood',
-    sounds: [[0, 'w'], [1, 'schwa'], [3, 'd']],
-    spoken: woodWord,
-  }, {
-    word: 'cook',
-    sounds: [[0, 'k'], [1, 'uLongBlue'], [3, 'k']],
-    spoken: cookWord,
-  }, {
-    word: 'loop',
-    sounds: [[0, 'l'], [1, 'uLongBlue'], [3, 'p']],
-    spoken: loopWord,
-  }, {
-    word: 'floor',
-    sounds: [[0, 'f'], [1, 'l'], [2, 'oLongMore'], [4, 'r']],
-    spoken: floorWord,
-  }, {
-    word: 'spoon',
-    sounds: [[0, 's'], [1, 'p'], [2, 'uLongBlue'], [4, 'n']],
-    spoken: spoonWord,
-  }],
+  variants: [toWord, tooWord, zooWord, mooWord, foodWord, footWord, goodWord, hookWord, poolWord, coolWord, woodWord, cookWord, loopWord, floorWord, spoonWord],
 });

@@ -1,77 +1,21 @@
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
-import hatWord from './hat.wav';
-import matWord from './mat.wav';
-import patWord from './pat.wav';
-import batWord from './bat.wav';
-import atWord from './at.wav';
-import palWord from './pal.wav';
-import dadWord from './dad.wav';
-import hadWord from './had.wav';
-import badWord from './bad.wav';
-import madWord from './mad.wav';
-import crabWord from './crab.wav';
-import ladWord from './lad.wav';
-import padWord from './pad.wav';
-import labWord from './lab.wav';
+import hatWord from '@src/modules/common/READING/words/hat';
+import matWord from '@src/modules/common/READING/words/mat';
+import patWord from '@src/modules/common/READING/words/pat';
+import batWord from '@src/modules/common/READING/words/bat';
+import atWord from '@src/modules/common/READING/words/at';
+import palWord from '@src/modules/common/READING/words/pal';
+import dadWord from '@src/modules/common/READING/words/dad';
+import hadWord from '@src/modules/common/READING/words/had';
+import badWord from '@src/modules/common/READING/words/bad';
+import madWord from '@src/modules/common/READING/words/mad';
+import crabWord from '@src/modules/common/READING/words/crab';
+import ladWord from '@src/modules/common/READING/words/lad';
+import padWord from '@src/modules/common/READING/words/pad';
+import labWord from '@src/modules/common/READING/words/lab';
 
 export default ModuleBuilder({
-  variants: [{
-    word: 'hat',
-    sounds: [[0, 'h'], [1, 'aShortAt'], [2, 't']],
-    spoken: hatWord,
-  }, {
-    word: 'mat',
-    sounds: [[0, 'm'], [1, 'aShortAt'], [2, 't']],
-    spoken: matWord,
-  }, {
-    word: 'pat',
-    sounds: [[0, 'p'], [1, 'aShortAt'], [2, 't']],
-    spoken: patWord,
-  }, {
-    word: 'bat',
-    sounds: [[0, 'b'], [1, 'aShortAt'], [2, 't']],
-    spoken: batWord,
-  }, {
-    word: 'at',
-    sounds: [[0, 'aShortAt'], [1, 't']],
-    spoken: atWord,
-  }, {
-    word: 'pal',
-    sounds: [[0, 'p'], [1, 'aShortAt'], [2, 'l']],
-    spoken: palWord,
-  }, {
-    word: 'dad',
-    sounds: [[0, 'd'], [1, 'aShortAt'], [2, 'd']],
-    spoken: dadWord,
-  }, {
-    word: 'had',
-    sounds: [[0, 'h'], [1, 'aShortAt'], [2, 'd']],
-    spoken: hadWord,
-  }, {
-    word: 'bad',
-    sounds: [[0, 'b'], [1, 'aShortAt'], [2, 'd']],
-    spoken: badWord,
-  }, {
-    word: 'mad',
-    sounds: [[0, 'm'], [1, 'aShortAt'], [2, 'd']],
-    spoken: madWord,
-  }, {
-    word: 'crab',
-    sounds: [[0, 'k'], [1, 'r'], [2, 'aShortAt'], [3, 'b']],
-    spoken: crabWord,
-  }, {
-    word: 'lad',
-    sounds: [[0, 'l'], [1, 'aShortAt'], [2, 'd']],
-    spoken: ladWord,
-  }, {
-    word: 'pad',
-    sounds: [[0, 'p'], [1, 'aShortAt'], [2, 'd']],
-    spoken: padWord,
-  }, {
-    word: 'lab',
-    sounds: [[0, 'l'], [1, 'aShortAt'], [2, 'b']],
-    spoken: labWord,
-  }],
+  variants: [hatWord, matWord, patWord, batWord, atWord, palWord, dadWord, hadWord, badWord, madWord, crabWord, ladWord, padWord, labWord],
 });
 

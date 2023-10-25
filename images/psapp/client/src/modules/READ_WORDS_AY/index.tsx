@@ -1,61 +1,17 @@
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
-import mayWord from './may.wav';
-import layWord from './lay.wav';
-import payWord from './pay.wav';
-import sayWord from './say.wav';
-import dayWord from './day.wav';
-import wayWord from './way.wav';
-import playWord from './play.wav';
-import layerWord from './layer.wav';
-import alwaysWord from './always.wav';
-import todayWord from './today.wav';
-import okayWord from './okay.wav';
+import mayWord from '@src/modules/common/READING/words/may';
+import layWord from '@src/modules/common/READING/words/lay';
+import payWord from '@src/modules/common/READING/words/pay';
+import sayWord from '@src/modules/common/READING/words/say';
+import dayWord from '@src/modules/common/READING/words/day';
+import wayWord from '@src/modules/common/READING/words/way';
+import playWord from '@src/modules/common/READING/words/play';
+import layerWord from '@src/modules/common/READING/words/layer';
+import alwaysWord from '@src/modules/common/READING/words/always';
+import todayWord from '@src/modules/common/READING/words/today';
+import okayWord from '@src/modules/common/READING/words/okay';
 
 export default ModuleBuilder({
-  variants: [{
-    word: 'may',
-    sounds: [[0, 'm'], [1, 'aLong']],
-    spoken: mayWord,
-  }, {
-    word: 'lay',
-    sounds: [[0, 'l'], [1, 'aLong']],
-    spoken: layWord,
-  }, {
-    word: 'pay',
-    sounds: [[0, 'p'], [1, 'aLong']],
-    spoken: payWord,
-  }, {
-    word: 'say',
-    sounds: [[0, 's'], [1, 'aLong']],
-    spoken: sayWord,
-  }, {
-    word: 'day',
-    sounds: [[0, 'd'], [1, 'aLong']],
-    spoken: dayWord,
-  }, {
-    word: 'way',
-    sounds: [[0, 'w'], [1, 'aLong']],
-    spoken: wayWord,
-  }, {
-    word: 'play',
-    sounds: [[0, 'p'], [1, 'l'], [2, 'aLong']],
-    spoken: playWord,
-  }, {
-    word: 'layer',
-    sounds: [[0, 'l'], [1, 'aLong'], [2, 'yConsonant'], [3, 'eShort'], [4, 'r']],
-    spoken: layerWord,
-  }, {
-    word: 'always',
-    sounds: [[0, 'aShortAre'], [1, 'l'], [2, 'w'], [3, 'aLong'], [5, 'z']],
-    spoken: alwaysWord,
-  }, {
-    word: 'today',
-    sounds: [[0, 't'], [1, 'uLongBlue'], [2, 'd'], [3, 'aLong']],
-    spoken: todayWord,
-  }, {
-    word: 'okay',
-    sounds: [[0, 'oShortMom'], [1, 'k'], [2, 'aLong']],
-    spoken: okayWord,
-  }],
+  variants: [mayWord, layWord, payWord, sayWord, dayWord, wayWord, playWord, layerWord, alwaysWord, todayWord, okayWord],
 });

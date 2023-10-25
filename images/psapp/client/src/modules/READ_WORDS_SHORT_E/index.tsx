@@ -1,66 +1,18 @@
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
-import betWord from './bet.wav';
-import setWord from './set.wav';
-import letWord from './let.wav';
-import metWord from './met.wav';
-import fedWord from './fed.wav';
-import ledWord from './led.wav';
-import tellWord from './tell.wav';
-import bellWord from './bell.wav';
-import wellWord from './well.wav';
-import bedWord from './bed.wav';
-import sellWord from './sell.wav';
-import fellWord from './fell.wav';
+import betWord from '@src/modules/common/READING/words/bet';
+import setWord from '@src/modules/common/READING/words/set';
+import letWord from '@src/modules/common/READING/words/let';
+import metWord from '@src/modules/common/READING/words/met';
+import fedWord from '@src/modules/common/READING/words/fed';
+import ledWord from '@src/modules/common/READING/words/led';
+import tellWord from '@src/modules/common/READING/words/tell';
+import bellWord from '@src/modules/common/READING/words/bell';
+import wellWord from '@src/modules/common/READING/words/well';
+import bedWord from '@src/modules/common/READING/words/bed';
+import sellWord from '@src/modules/common/READING/words/sell';
+import fellWord from '@src/modules/common/READING/words/fell';
 
 export default ModuleBuilder({
-  variants: [{
-    word: 'bet',
-    sounds: [[0, 'b'], [1, 'eShort'], [2, 't']],
-    spoken: betWord,
-  }, {
-    word: 'set',
-    sounds: [[0, 's'], [1, 'eShort'], [2, 't']],
-    spoken: setWord,
-  }, {
-    word: 'let',
-    sounds: [[0, 'l'], [1, 'eShort'], [2, 't']],
-    spoken: letWord,
-  }, {
-    word: 'met',
-    sounds: [[0, 'm'], [1, 'eShort'], [2, 't']],
-    spoken: metWord,
-  }, {
-    word: 'fed',
-    sounds: [[0, 'f'], [1, 'eShort'], [2, 'd']],
-    spoken: fedWord,
-  }, {
-    word: 'led',
-    sounds: [[0, 'l'], [1, 'eShort'], [2, 'd']],
-    spoken: ledWord,
-  }, {
-    word: 'tell',
-    sounds: [[0, 't'], [1, 'eShort'], [2, 'l']],
-    spoken: tellWord,
-  }, {
-    word: 'bell',
-    sounds: [[0, 'b'], [1, 'eShort'], [2, 'l']],
-    spoken: bellWord,
-  }, {
-    word: 'well',
-    sounds: [[0, 'w'], [1, 'eShort'], [2, 'l']],
-    spoken: wellWord,
-  }, {
-    word: 'bed',
-    sounds: [[0, 'b'], [1, 'eShort'], [2, 'd']],
-    spoken: bedWord,
-  }, {
-    word: 'sell',
-    sounds: [[0, 's'], [1, 'eShort'], [2, 'l']],
-    spoken: sellWord,
-  }, {
-    word: 'fell',
-    sounds: [[0, 'f'], [1, 'eShort'], [2, 'l']],
-    spoken: fellWord,
-  }],
+  variants: [betWord, setWord, letWord, metWord, fedWord, ledWord, tellWord, bellWord, wellWord, bedWord, sellWord, fellWord],
 });
