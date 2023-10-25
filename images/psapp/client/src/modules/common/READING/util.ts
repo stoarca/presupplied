@@ -28,6 +28,7 @@ import s from './s.wav';
 import t from './t.wav';
 import uShortDuck from './u_short_duck.wav';
 import uShortFull from './u_short_full.wav';
+import uShortCurious from './u_short_curious.wav';
 import uLongMute from './u_long_mute.wav';
 import uLongBlue from './u_long_blue.wav';
 import v from './v.wav';
