@@ -5,7 +5,7 @@ import autoWord from '@src/modules/common/READING/words/auto';
 import automaticWord from '@src/modules/common/READING/words/automatic';
 import haulWord from '@src/modules/common/READING/words/haul';
 import sausageWord from '@src/modules/common/READING/words/sausage';
-import paulWord from '@src/modules/common/READING/words/Paul';
+import paulWord from '@src/modules/common/READING/words/paul';
 import dinosaurWord from '@src/modules/common/READING/words/dinosaur';
 import beautifulWord from '@src/modules/common/READING/words/beautiful';
 import vaultWord from '@src/modules/common/READING/words/vault';

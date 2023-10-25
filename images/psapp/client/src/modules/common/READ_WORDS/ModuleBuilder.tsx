@@ -72,9 +72,12 @@ export let ModuleBuilder = ({
           lastPos = exercise.variant.sounds[i + 1][0];
         }
         setFailPosition([startPos, lastPos]);
-        await moduleContext.playAudio(
-          LETTER_SOUNDS[exercise.variant.sounds[i][1]]
-        );
+        let sound = exercise.variant.sounds[i][1];
+        if (sound in LETTER_SOUNDS) {
+          await moduleContext.playAudio(LETTER_SOUNDS[sound]);
+        } else {
+          await moduleContext.playAudio(BIGRAM_SOUNDS[sound]);
+        }
         if (!doingFailure.current) {
           return;
         }
