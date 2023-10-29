@@ -1,4 +1,5 @@
 import React from 'react';
+import availableModules from './autogen/available-modules.json';
 
 interface AudioOptions {
   channel?: number,
@@ -57,9 +58,15 @@ let buildModuleContext = (moduleName: string): ModuleContextProps => {
 };
 
 export let moduleComponents: {[id: string]: React.ReactElement} = {};
-require.context('./modules', true, /^\.\/[^\/]+$/).keys().forEach(moduleName => {
-  moduleName = moduleName.substring(2); // strip ./ prefix
-  let Lesson = React.lazy(() => import('./modules/' + moduleName));
+
+availableModules.forEach(moduleName => {
+  let Lesson = React.lazy(() => import(
+    /* webpackChunkName: 'modules/[request]' */
+    /* webpackInclude: /index\.tsx$/ */
+    /* webpackExclude: /\/common\// */
+    './modules/' + moduleName
+  ));
+
   moduleComponents[moduleName] = (
     <ModuleContext.Provider value={buildModuleContext(moduleName)}>
       <Lesson/>

@@ -27,28 +27,23 @@ export let ModuleBuilder = ({
     let moduleContext = React.useContext(ModuleContext);
 
     React.useEffect(() => {
-      let promises = [];
+      let preloads = new Set<string>();
       for (let variant of variants) {
-        promises.push(new Promise((resolve) => {
-          let audio = new Audio(variant.spoken);
-          audio.addEventListener('canplaythrough', resolve);
-        }));
+        preloads.add(variant.spoken);
         for (let [_, sound] of variant.sounds) {
-          promises.push(new Promise((resolve) => {
-            let audio;
-            if (sound in LETTER_SOUNDS) {
-              audio = new Audio(
-                LETTER_SOUNDS[sound as keyof typeof LETTER_SOUNDS]
-              );
-            } else {
-              audio = new Audio(
-                BIGRAM_SOUNDS[sound as keyof typeof BIGRAM_SOUNDS]
-              );
-            }
-            audio.addEventListener('canplaythrough', resolve);
-          }));
+          if (sound in LETTER_SOUNDS) {
+            preloads.add(LETTER_SOUNDS[sound as keyof typeof LETTER_SOUNDS]);
+          } else {
+            preloads.add(BIGRAM_SOUNDS[sound as keyof typeof BIGRAM_SOUNDS]);
+          }
         }
       }
+      let promises = Array.from(preloads.values()).map((x) => {
+        return new Promise((resolve) => {
+          let audio = new Audio(x);
+          audio.addEventListener('canplaythrough', resolve);
+        });
+      });
       Promise.all(promises).then(() => {
         console.log('all sounds are loaded');
       });
