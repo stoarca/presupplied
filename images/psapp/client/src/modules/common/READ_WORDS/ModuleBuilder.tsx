@@ -109,7 +109,13 @@ export let ModuleBuilder = ({
         if (!doingFailure.current) {
           return;
         }
-        await new Promise(r => setTimeout(r, 500));
+        if (exercise.variant.sounds.length > 6) {
+          await new Promise(r => setTimeout(r, 50));
+        } else if (exercise.variant.sounds.length > 4) {
+          await new Promise(r => setTimeout(r, 250));
+        } else {
+          await new Promise(r => setTimeout(r, 500));
+        }
       }
       if (!doingFailure.current) {
         return;

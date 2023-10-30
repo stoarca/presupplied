@@ -146,6 +146,14 @@ AppDataSource.initialize().then(async () => {
     app.post(endpointKey, handler);
   };
 
+  let threeDaysInMilliseconds = 3 * 24 * 60 * 60 * 1000;
+  app.use('/static/dist/wav', express.static(
+    path.join(__dirname, '../../static/dist/wav'),
+    {
+      maxAge: threeDaysInMilliseconds,
+      immutable: true,
+    },
+  ));
   app.use('/static', express.static(path.join(__dirname, '../../static')));
 
   app.get('/', (req, resp) => {
