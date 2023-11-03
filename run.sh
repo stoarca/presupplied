@@ -2,4 +2,4 @@
 
 set -eu -o pipefail
 
-docker compose -f <(node docker-compose.yml.js dev) up --build
+docker compose -f <(node docker-compose.yml.js dev) --project-directory ./ up --build

@@ -46,14 +46,14 @@ let config = {
         `traefik.http.routers.psapprouter.rule=Host("${host}")`,
         'traefik.http.routers.psapprouter.entrypoints=web',
         'traefik.http.services.psappservice.loadbalancer.server.port=8080',
-      ].concat(DEV ? [
-      ] : [
         `traefik.http.routers.psapprouter-secure.rule=Host("${host}")`,
         'traefik.http.routers.psapprouter-secure.entrypoints=websecure',
         'traefik.http.routers.psapprouter-secure.tls=true',
-        'traefik.http.routers.psapprouter-secure.tls.certresolver=myresolver',
         'traefik.http.middlewares.psapp-redirect.redirectscheme.scheme=https',
         'traefik.http.routers.psapprouter.middlewares=psapp-redirect',
+      ].concat(DEV ? [
+      ] : [
+        'traefik.http.routers.psapprouter-secure.tls.certresolver=myresolver',
       ]),
       restart: 'always',
       volumes: [
@@ -101,7 +101,9 @@ let config = {
       },
     },
     psingress: {
-      image: 'traefik:2.10',
+      build: {
+        context: path.join(__dirname, 'images/psingress/'),
+      },
       restart: 'always',
       ports: [
         '80:80',
@@ -111,16 +113,20 @@ let config = {
       volumes: [
         '/var/run/docker.sock:/var/run/docker.sock:ro',
         '/data/presupplied/ingress/letsencrypt:/letsencrypt',
-      ],
+      ].concat(DEV ? [
+        `${path.join(__dirname, './images/psingress/certs')}:/certs`,
+        `${path.join(__dirname, './images/psingress/certs-traefik.yml')}:/etc/traefik/dynamic/certs-traefik.yml`,
+      ] : []),
       command: [
         '--providers.docker=true',
         '--providers.docker.exposedbydefault=false',
         '--entrypoints.web.address=:80',
+        '--entrypoints.websecure.address=:443',
       ].concat(DEV ? [
         '--log.level=DEBUG',
         '--api.insecure=true',
+        '--providers.file.directory=/etc/traefik/dynamic',
       ] : [
-        '--entrypoints.websecure.address=:443',
         '--certificatesresolvers.myresolver.acme.tlschallenge=true',
         '--certificatesresolvers.myresolver.acme.email=t.sergiu@gmail.com',
         '--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json',
