@@ -1,5 +1,5 @@
 import {
-  StudentDTO, StudentProgressDTOEntry, ProgressStatus, KMId, Omit
+  StudentDTO, StudentProgressDTOEntry, ProgressStatus, KMId, Omit, TrainingEvent
 } from './types';
 
 interface _Endpoint {
@@ -31,6 +31,10 @@ export const endpoints = {
   '/api/learning/events': {
     method: 'post',
     endpoint: '/api/learning/events',
+  },
+  '/api/training/events': {
+    method: 'post',
+    endpoint: '/api/training/events',
   },
 } as const;
 
@@ -123,6 +127,22 @@ type _Endpoints = {
     } | {
       errorCode: 'learning.event.noStudent',
       email: string,
+      message: string,
+    } | {
+      success: true,
+    },
+  },
+  '/api/training/events': {
+    Params: never,
+    Query: never,
+    Body: {
+      id: string,
+      sequenceId: number,
+      webmSoundB64: string,
+      events: TrainingEvent[],
+    },
+    Response: {
+      errorCode: 'training.events.tooLate',
       message: string,
     } | {
       success: true,

@@ -3,7 +3,10 @@ import React from 'react';
 import {ModuleContext} from '@src/ModuleContext';
 import {useStudentContext} from '@src/StudentContext';
 import {VariantList} from '@src/util';
-import {ProgressStatus} from '../../common/types';
+import {
+  ProgressStatus, InputTrainingEvent, TrainingEvent
+} from '../../common/types';
+import {typedFetch} from './typedFetch';
 
 import {
   waitPlease, badBuzzer, goodDing, goodJob
@@ -30,6 +33,100 @@ interface DoFailureProps {
   sound?: string,
   goToNewExercise?: boolean,
 }
+
+let blobToBase64 = async (blob: Blob): Promise<string> =>{
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.onerror = (e) => reject(fileReader.error);
+    fileReader.onloadend = (e) => {
+      const dataUrl = fileReader.result as string;
+      // remove "data:mime/type;base64," prefix from data url
+      const base64 = dataUrl.substring(dataUrl.indexOf(',') + 1);
+      resolve(base64);
+    };
+    fileReader.readAsDataURL(blob);
+  });
+}
+
+export let useTrainingDataRecorder = () => {
+  let recorder = React.useRef<{
+    microphone: MediaRecorder,
+    events: TrainingEvent[],
+  }>();
+
+  let id = React.useMemo(() => {
+    return Date.now() + '-' + crypto.randomUUID();
+  }, []);
+
+  let addEvent = React.useCallback((event: InputTrainingEvent) => {
+    if (!recorder.current) {
+      console.warn('ignoring training event');
+      console.warn(event);
+      return;
+    }
+    recorder.current.events.push({
+      ...event,
+      time: new Date(),
+    });
+  }, []);
+
+  React.useEffect(() => {
+    let unmounted = false;
+    let sequenceId = 0;
+    let handleDataAvailable = async (e: BlobEvent) => {
+      let sid = sequenceId++;
+      let events = recorder.current!.events;
+      recorder.current!.events = [];
+      await typedFetch({
+        endpoint: '/api/training/events',
+        method: 'post',
+        body: {
+          id: id,
+          sequenceId: sid,
+          webmSoundB64: await blobToBase64(e.data),
+          events: events,
+        },
+      });
+    };
+    (async () => {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        let stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+        if (unmounted) {
+          return;
+        }
+        console.log('setting media recorder');
+        let m = new MediaRecorder(stream, {
+          mimeType: 'audio/webm',
+          audioBitsPerSecond: 64000,
+        });
+        console.log(m.audioBitsPerSecond);
+        recorder.current = {
+          microphone: m,
+          events: [],
+        };
+        m.addEventListener('dataavailable', handleDataAvailable);
+        m.start(5000);
+        addEvent({status: 'microphoneStart'});
+      }
+    })();
+    return () => {
+      console.log('unmounted');
+      unmounted = true;
+      if (recorder.current) {
+        recorder.current.microphone.stop();
+        recorder.current.microphone.removeEventListener(
+          'dataavailable', handleDataAvailable
+        );
+      }
+    };
+  }, [addEvent]);
+
+  return {
+    addEvent: addEvent,
+  };
+};
 
 export let useExercise = <E extends Ex<V>, V, P>({
   onGenExercise,
@@ -89,9 +186,6 @@ export let useExercise = <E extends Ex<V>, V, P>({
     let ex = onGenExercise(exercise);
     console.log('generated exercise');
     console.log(ex);
-    if (!ex) {
-      debugger;
-    }
     setExercise(ex);
     setPartial(initialPartial);
     setAlreadyFailed(false);

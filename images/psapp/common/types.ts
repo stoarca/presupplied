@@ -57,3 +57,17 @@ export interface GraphJson {
   nodes: GraphNode[],
 }
 
+interface MicrophoneStartTrainingEvent {
+  status: 'microphoneStart',
+}
+interface ModuleTrainingEvent {
+  kmid: string,
+  exerciseData: any,
+  status: 'start' | 'success' | 'fail'
+}
+export type InputTrainingEvent =
+    MicrophoneStartTrainingEvent | ModuleTrainingEvent;
+export type TrainingEvent = InputTrainingEvent & {
+  time: Date,
+};
+

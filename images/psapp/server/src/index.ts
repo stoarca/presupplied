@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
 import express from 'express';
+import fs from 'node:fs/promises';
 import jwt from 'jsonwebtoken';
 import proxy from 'express-http-proxy';
 import path from 'path';
@@ -106,7 +107,7 @@ let syncKnowledgeMapIdsToDb = async () => {
 AppDataSource.initialize().then(async () => {
   await syncKnowledgeMapIdsToDb();
   const app = express();
-  app.use(express.json());
+  app.use(express.json({limit: '1000kb'}));
   app.use(cookieParser());
   app.use((req, resp, next) => {
     req.jwtStudent = null;
@@ -319,6 +320,39 @@ AppDataSource.initialize().then(async () => {
         status: mostRecentEvent.status,
       };
     }), ['student', 'module'])
+
+    return resp.json({success: true});
+  });
+
+  let ONE_HOUR_IN_MILLISECONDS = 1000 * 60 * 60;
+  let roundToPreviousDay = (timestamp: number) => {
+    let date = new Date(timestamp);
+    date.setHours(0, 0, 0, 0);
+    return date.getTime();
+  }
+  typedPost('/api/training/events', async (req, resp, next) => {
+    let date = parseInt(req.body.id.split('-')[0]);
+    if (Date.now() - date > ONE_HOUR_IN_MILLISECONDS) {
+      return resp.status(410).json({
+        errorCode: 'training.events.tooLate',
+        message: 'The request was sent too late',
+      });
+    }
+
+    let previousDay = roundToPreviousDay(date);
+    let dir = path.join('/training_data/', previousDay.toString(), req.body.id);
+    await fs.mkdir(dir, {recursive: true});
+    let seqId = req.body.sequenceId.toString().padStart(4, '0');
+
+    let wavChunk = new Buffer(req.body.webmSoundB64, 'base64');
+    await fs.writeFile(
+      path.join(dir, seqId + '.webmpart'),
+      wavChunk
+    );
+    await fs.writeFile(
+      path.join(dir, seqId + '.chunks'),
+      JSON.stringify(req.body.events, undefined, 2)
+    );
 
     return resp.json({success: true});
   });

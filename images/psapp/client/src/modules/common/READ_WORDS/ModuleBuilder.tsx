@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Module, useExercise, Ex} from '@src/Module';
+import {useExercise, useTrainingDataRecorder, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
 import {VariantList} from '@src/util';
 import {STTModule} from '@src/modules/common/SPEECH_TO_TEXT_SHIM/ModuleBuilder';
@@ -25,6 +25,7 @@ export let ModuleBuilder = ({
 }: ModuleBuilderProps) => {
   return (props: void) => {
     let moduleContext = React.useContext(ModuleContext);
+    let trainingRecorder = useTrainingDataRecorder();
 
     React.useEffect(() => {
       let preloads = new Set<string>();
@@ -49,12 +50,18 @@ export let ModuleBuilder = ({
       });
     }, [variants]);
 
-    let vlist = React.useMemo(() => new VariantList(variants, 5), []);
+    let vlist = React.useMemo(() => new VariantList(variants, 2), []);
     let generateExercise = React.useCallback(() => {
+      let variant = vlist.pickVariant();
+      trainingRecorder.addEvent({
+        kmid: 'READ_WORDS',
+        exerciseData: variant.word,
+        status: 'start'
+      });
       return {
         variant: vlist.pickVariant(),
       };
-    }, [vlist]);
+    }, [vlist, trainingRecorder]);
     let playInstructions = React.useCallback(async (exercise: MyEx) => {
       await moduleContext.playAudio(whatWordIsThis);
     }, [moduleContext]);
@@ -75,12 +82,23 @@ export let ModuleBuilder = ({
       vlist: vlist,
     });
 
+    let addTrainingEvent = React.useCallback((
+      status: 'start' | 'success' | 'fail'
+    ) => {
+      trainingRecorder.addEvent({
+        kmid: 'READ_WORDS',
+        exerciseData: exercise.variant.word,
+        status: status,
+      });
+    }, [trainingRecorder, exercise]);
+
     let doingFailure = React.useRef(false);
     let [failPosition, setFailPosition] = React.useState([0, 0]);
     let handleFailure = React.useCallback(async () => {
       if (doingFailure.current) {
         return;
       }
+      addTrainingEvent('fail');
       doFailure();
       doingFailure.current = true;
       for (let i = 0; i < exercise.variant.sounds.length; ++i) {
@@ -124,13 +142,21 @@ export let ModuleBuilder = ({
       await moduleContext.playAudio(exercise.variant.spoken);
       setFailPosition([0, 0]);
       doingFailure.current = false;
-    }, [exercise, failPosition, doingFailure, doFailure, moduleContext]);
+    }, [
+      exercise,
+      failPosition,
+      doingFailure,
+      doFailure,
+      moduleContext,
+      addTrainingEvent
+    ]);
 
     let handleSuccess = React.useCallback(() => {
       doSuccess();
+      addTrainingEvent('success');
       doingFailure.current = false;
       setFailPosition([0, 0]);
-    }, []);
+    }, [addTrainingEvent]);
 
     let textStyle: React.CSSProperties = {
       fontFamily: 'sans-serif',

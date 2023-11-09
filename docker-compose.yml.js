@@ -57,6 +57,7 @@ let config = {
       ]),
       restart: 'always',
       volumes: [
+        '/data/presupplied/training_data:/training_data',
       ].concat(DEV ? [
         `${path.join(__dirname, './images/psapp')}:/presupplied/images/psapp`,
       ] : []),
