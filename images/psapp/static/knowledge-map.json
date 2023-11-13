@@ -199,15 +199,16 @@
       "teacherVideos": [],
       "cell": {
         "i": 40,
-        "j": 6
+        "j": 7
       },
       "subNodes": []
     },
     {
-      "id": "READ_LOWERCASE_VOWELS",
+      "id": "READ_LOWERCASE_A_TO_M",
       "deps": [
         "REPEAT_VOWELS",
-        "RECOGNIZE_LOWERCASE_LETTERS"
+        "RECOGNIZE_LOWERCASE_LETTERS",
+        "REPEAT_CONSONANTS"
       ],
       "title": "",
       "description": "",
@@ -220,10 +221,11 @@
       "subNodes": []
     },
     {
-      "id": "READ_LOWERCASE_CONSONANTS",
+      "id": "READ_LOWERCASE_N_TO_Z",
       "deps": [
         "REPEAT_CONSONANTS",
-        "RECOGNIZE_LOWERCASE_LETTERS"
+        "RECOGNIZE_LOWERCASE_LETTERS",
+        "REPEAT_VOWELS"
       ],
       "title": "",
       "description": "",
@@ -236,10 +238,11 @@
       "subNodes": []
     },
     {
-      "id": "READ_UPPERCASE_CONSONANTS",
+      "id": "READ_UPPERCASE_N_TO_Z",
       "deps": [
         "REPEAT_CONSONANTS",
-        "RECOGNIZE_UPPERCASE_LETTERS"
+        "RECOGNIZE_UPPERCASE_LETTERS",
+        "REPEAT_VOWELS"
       ],
       "title": "",
       "description": "",
@@ -254,8 +257,8 @@
     {
       "id": "READ_LOWERCASE_LETTERS",
       "deps": [
-        "READ_LOWERCASE_CONSONANTS",
-        "READ_LOWERCASE_VOWELS"
+        "READ_LOWERCASE_N_TO_Z",
+        "READ_LOWERCASE_A_TO_M"
       ],
       "title": "",
       "description": "",
@@ -268,10 +271,11 @@
       "subNodes": []
     },
     {
-      "id": "READ_UPPERCASE_VOWELS",
+      "id": "READ_UPPERCASE_A_TO_M",
       "deps": [
         "REPEAT_VOWELS",
-        "RECOGNIZE_UPPERCASE_LETTERS"
+        "RECOGNIZE_UPPERCASE_LETTERS",
+        "REPEAT_CONSONANTS"
       ],
       "title": "",
       "description": "",
@@ -286,8 +290,8 @@
     {
       "id": "READ_UPPERCASE_LETTERS",
       "deps": [
-        "READ_UPPERCASE_VOWELS",
-        "READ_UPPERCASE_CONSONANTS"
+        "READ_UPPERCASE_A_TO_M",
+        "READ_UPPERCASE_N_TO_Z"
       ],
       "title": "",
       "description": "",
@@ -623,9 +627,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 70,
-        "j": 12
+        "j": 13
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 70,
+      "j": 13
     },
     {
       "id": "COUNT_OBJECTS_TO_20",
@@ -687,14 +693,17 @@
       "teacherVideos": [],
       "cell": {
         "i": 70,
-        "j": 13
+        "j": 14
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 70,
+      "j": 14
     },
     {
-      "id": "LETTER_TO_SOUND_M_TO_Z",
+      "id": "CONSONANT_TO_SOUND_N_TO_Z",
       "deps": [
-        "READ_LETTERS"
+        "READ_LETTERS",
+        "SING_ALPHABET"
       ],
       "title": "",
       "description": "",
@@ -742,7 +751,7 @@
     {
       "id": "READ_PUNCTUATION",
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "READ_SENTENCES_SHORT"
       ],
       "title": "",
       "description": "",
@@ -750,12 +759,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 47,
-        "j": 13
+        "j": 14
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 47,
+      "j": 14
     },
     {
-      "id": "READ_SENTENCES_MEDIUM",
+      "id": "REVIEW_WORDS_4",
       "deps": [
         "READ_WORDS_OO",
         "READ_WORDS_CK",
@@ -764,7 +775,7 @@
         "READ_WORDS_EE",
         "READ_WORDS_OA",
         "READ_WORDS_EI",
-        "READ_SENTENCES_SHORT",
+        "REVIEW_WORDS_3",
         "READ_WORDS_LK",
         "READ_WORDS_ST",
         "READ_WORDS_AI",
@@ -778,15 +789,16 @@
       "teacherVideos": [],
       "cell": {
         "i": 48,
-        "j": 12
+        "j": 13
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 48,
+      "j": 13
     },
     {
-      "id": "READ_SENTENCES_LONG",
+      "id": "REVIEW_WORDS_6",
       "deps": [
-        "READ_SENTENCES_WITH_NUMBERS",
-        "READ_PUNCTUATION",
+        "REVIEW_WORDS_5",
         "READ_WORDS_GH_LIKE_LAUGH",
         "READ_WORDS_CH_EXCEPTION",
         "READ_WORDS_SCHOOL",
@@ -811,10 +823,10 @@
       "teacherVideos": [],
       "cell": {
         "i": 48,
-        "j": 14
+        "j": 15
       },
       "subNodes": [],
-      "i": 45,
+      "i": 48,
       "j": 15
     },
     {
@@ -846,7 +858,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 73,
-        "j": 12
+        "j": 13
       },
       "subNodes": []
     },
@@ -861,9 +873,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 70,
-        "j": 14
+        "j": 15
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 70,
+      "j": 15
     },
     {
       "id": "VISUAL_SIMPLE_FRACTIONS",
@@ -895,9 +909,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 69,
-        "j": 13
+        "j": 14
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 69,
+      "j": 14
     },
     {
       "id": "READ_ANY_FRACTION_UNDER_1",
@@ -911,9 +927,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 69,
-        "j": 15
+        "j": 16
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 69,
+      "j": 16
     },
     {
       "id": "ADD_1",
@@ -957,9 +975,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 69,
-        "j": 14
+        "j": 15
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 69,
+      "j": 15
     },
     {
       "id": "COUNT_ADD_OPPONENT_FINGERS",
@@ -1006,9 +1026,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 69,
-        "j": 16
+        "j": 17
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 69,
+      "j": 17
     },
     {
       "id": "READ_ANY_FRACTION_OVER_1",
@@ -1021,9 +1043,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 69,
-        "j": 17
+        "j": 19
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 69,
+      "j": 18
     },
     {
       "id": "PECK_NUMBERS_ON_KEYBOARD",
@@ -1054,7 +1078,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 55,
-        "j": 14
+        "j": 15
       },
       "subNodes": []
     },
@@ -1077,7 +1101,6 @@
     {
       "id": "READ_PARAGRAPHS",
       "deps": [
-        "READ_PROPER_NOUNS",
         "READ_SENTENCES_MULTIPLE"
       ],
       "title": "",
@@ -1085,12 +1108,12 @@
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 48,
-        "j": 16
+        "i": 49,
+        "j": 18
       },
       "subNodes": [],
-      "i": 45,
-      "j": 16
+      "i": 49,
+      "j": 18
     },
     {
       "id": "ADD_UP_TO_10",
@@ -1172,9 +1195,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 77,
-        "j": 13
+        "j": 14
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 77,
+      "j": 14
     },
     {
       "id": "ADD_2_FRACTIONS_UNDER_1_SAME_DENOM",
@@ -1188,9 +1213,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 77,
-        "j": 16
+        "j": 17
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 77,
+      "j": 17
     },
     {
       "id": "ADD_2_FRACTIONS_OVER_1_SAME_DENOM",
@@ -1205,7 +1232,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 77,
-        "j": 19
+        "j": 20
       },
       "subNodes": []
     },
@@ -1271,9 +1298,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 81,
-        "j": 14
+        "j": 15
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 81,
+      "j": 15
     },
     {
       "id": "MULT_UP_TO_5_X_10",
@@ -1286,9 +1315,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 81,
-        "j": 15
+        "j": 16
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 81,
+      "j": 16
     },
     {
       "id": "MULT_UP_TO_10_X_10",
@@ -1301,9 +1332,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 82,
-        "j": 16
+        "j": 17
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 82,
+      "j": 17
     },
     {
       "id": "LONG_ADDITION_3_DIGITS",
@@ -1316,7 +1349,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 78,
-        "j": 15
+        "j": 16
       },
       "subNodes": []
     },
@@ -1331,32 +1364,31 @@
       "teacherVideos": [],
       "cell": {
         "i": 78,
-        "j": 16
+        "j": 17
       },
       "subNodes": []
     },
     {
       "id": "READ_PICTURE_BOOKS",
       "deps": [
-        "READ_PARAGRAPHS",
-        "REVIEW_WORDS_6"
+        "READ_PARAGRAPHS"
       ],
       "title": "",
       "description": "",
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
-        "i": 48,
-        "j": 17
+        "i": 49,
+        "j": 19
       },
       "subNodes": [],
-      "i": 45,
-      "j": 17
+      "i": 49,
+      "j": 19
     },
     {
       "id": "GRAMMAR_NOUNS",
       "deps": [
-        "READ_SENTENCES_LONG"
+        "READ_SENTENCES_WITH_NUMBERS"
       ],
       "title": "",
       "description": "",
@@ -1364,11 +1396,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 46,
-        "j": 15
+        "j": 16
       },
       "subNodes": [],
       "i": 46,
-      "j": 17
+      "j": 16
     },
     {
       "id": "LONG_ADDITION_MULTIPLE_INTS",
@@ -1381,7 +1413,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 78,
-        "j": 18
+        "j": 19
       },
       "subNodes": []
     },
@@ -1397,7 +1429,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 82,
-        "j": 18
+        "j": 19
       },
       "subNodes": []
     },
@@ -1413,7 +1445,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 82,
-        "j": 19
+        "j": 20
       },
       "subNodes": []
     },
@@ -1430,7 +1462,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 77,
-        "j": 20
+        "j": 21
       },
       "subNodes": []
     },
@@ -1445,9 +1477,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 83,
-        "j": 15
+        "j": 16
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 83,
+      "j": 16
     },
     {
       "id": "DIV_UP_TO_5_X_10",
@@ -1461,9 +1495,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 83,
-        "j": 16
+        "j": 17
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 83,
+      "j": 17
     },
     {
       "id": "DIV_UP_TO_10_X_10",
@@ -1477,7 +1513,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 83,
-        "j": 18
+        "j": 19
       },
       "subNodes": []
     },
@@ -1492,7 +1528,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 84,
-        "j": 18
+        "j": 19
       },
       "subNodes": []
     },
@@ -1509,7 +1545,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 83,
-        "j": 19
+        "j": 20
       },
       "subNodes": []
     },
@@ -1526,7 +1562,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 79,
-        "j": 13
+        "j": 14
       },
       "subNodes": []
     },
@@ -1543,7 +1579,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 79,
-        "j": 15
+        "j": 16
       },
       "subNodes": []
     },
@@ -1559,7 +1595,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 79,
-        "j": 16
+        "j": 17
       },
       "subNodes": []
     },
@@ -1575,7 +1611,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 79,
-        "j": 17
+        "j": 18
       },
       "subNodes": []
     },
@@ -1590,7 +1626,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 80,
-        "j": 14
+        "j": 15
       },
       "subNodes": []
     },
@@ -1606,7 +1642,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 80,
-        "j": 16
+        "j": 17
       },
       "subNodes": []
     },
@@ -1623,7 +1659,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 80,
-        "j": 19
+        "j": 20
       },
       "subNodes": []
     },
@@ -1640,7 +1676,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 82,
-        "j": 20
+        "j": 21
       },
       "subNodes": []
     },
@@ -1656,7 +1692,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 81,
-        "j": 17
+        "j": 18
       },
       "subNodes": []
     },
@@ -1672,7 +1708,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 81,
-        "j": 19
+        "j": 20
       },
       "subNodes": []
     },
@@ -1711,7 +1747,7 @@
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
         "PECK_NUMBERS_ON_KEYBOARD",
-        "READ_SENTENCES_LONG",
+        "REVIEW_WORDS_6",
         "USE_MOUSE",
         "PECK_CAPITALS_AND_PUNCTUTATION"
       ],
@@ -1721,15 +1757,17 @@
       "teacherVideos": [],
       "cell": {
         "i": 56,
-        "j": 15
+        "j": 16
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 56,
+      "j": 16
     },
     {
       "id": "TYPING_INDEX_FINGER_LEFT",
       "deps": [
         "TYPING_HOME_ROW_LEFT",
-        "READ_PARAGRAPHS"
+        "READ_SENTENCES_MULTIPLE"
       ],
       "title": "",
       "description": "",
@@ -1737,9 +1775,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 56,
-        "j": 17
+        "j": 18
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 56,
+      "j": 18
     },
     {
       "id": "TYPING_MIDDLE_FINGER_LEFT",
@@ -1752,9 +1792,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 56,
-        "j": 18
+        "j": 19
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 56,
+      "j": 19
     },
     {
       "id": "TYPING_RING_FINGER_LEFT",
@@ -1767,9 +1809,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 56,
-        "j": 19
+        "j": 20
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 56,
+      "j": 20
     },
     {
       "id": "TYPING_PINKY_FINGER_LEFT",
@@ -1782,9 +1826,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 56,
-        "j": 20
+        "j": 21
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 56,
+      "j": 21
     },
     {
       "id": "TYPING_NUMBERS_INDEX",
@@ -1798,9 +1844,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 56,
-        "j": 22
+        "j": 23
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 56,
+      "j": 23
     },
     {
       "id": "ADD_SUBTRACT_MULTIPLE_FRACTIONS",
@@ -1813,7 +1861,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 77,
-        "j": 21
+        "j": 22
       },
       "subNodes": []
     },
@@ -1828,7 +1876,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 88,
-        "j": 14
+        "j": 15
       },
       "subNodes": []
     },
@@ -1844,9 +1892,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 88,
-        "j": 15
+        "j": 16
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 88,
+      "j": 16
     },
     {
       "id": "FILL_IN_BLANK_MULT_SMALL",
@@ -1860,9 +1910,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 88,
-        "j": 16
+        "j": 17
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 88,
+      "j": 17
     },
     {
       "id": "OPERATOR_ORDER",
@@ -1875,9 +1927,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 87,
-        "j": 15
+        "j": 16
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 87,
+      "j": 16
     },
     {
       "id": "OPERATOR_PRECEDENCE",
@@ -1891,9 +1945,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 87,
-        "j": 17
+        "j": 18
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 87,
+      "j": 18
     },
     {
       "id": "FILL_IN_BLANK_4_OPS_NEG_PAREN",
@@ -1907,9 +1963,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 88,
-        "j": 21
+        "j": 22
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 88,
+      "j": 22
     },
     {
       "id": "PARENTHESES",
@@ -1922,7 +1980,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 87,
-        "j": 19
+        "j": 20
       },
       "subNodes": []
     },
@@ -1938,9 +1996,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 88,
-        "j": 17
+        "j": 18
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 88,
+      "j": 18
     },
     {
       "id": "FILL_IN_BLANK_ADD_SUBTRACT_NEG_SMALL",
@@ -1954,9 +2014,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 88,
-        "j": 18
+        "j": 19
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 88,
+      "j": 19
     },
     {
       "id": "FILL_IN_BLANK_4_OPS_NEG_SMALL",
@@ -1970,9 +2032,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 88,
-        "j": 19
+        "j": 20
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 88,
+      "j": 20
     },
     {
       "id": "FILL_IN_BLANK_4_OPS",
@@ -1986,9 +2050,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 88,
-        "j": 20
+        "j": 21
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 88,
+      "j": 21
     },
     {
       "id": "EXP_SMALL",
@@ -2002,7 +2068,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 85,
-        "j": 18
+        "j": 19
       },
       "subNodes": []
     },
@@ -2017,7 +2083,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 85,
-        "j": 19
+        "j": 20
       },
       "subNodes": []
     },
@@ -2032,7 +2098,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 85,
-        "j": 20
+        "j": 21
       },
       "subNodes": []
     },
@@ -2048,9 +2114,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 88,
-        "j": 22
+        "j": 23
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 88,
+      "j": 23
     },
     {
       "id": "SQRT",
@@ -2064,7 +2132,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 85,
-        "j": 21
+        "j": 22
       },
       "subNodes": []
     },
@@ -2080,7 +2148,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 85,
-        "j": 22
+        "j": 23
       },
       "subNodes": []
     },
@@ -2096,9 +2164,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 88,
-        "j": 23
+        "j": 24
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 88,
+      "j": 24
     },
     {
       "id": "EXP_NEG_POW",
@@ -2111,7 +2181,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 85,
-        "j": 23
+        "j": 24
       },
       "subNodes": []
     },
@@ -2126,7 +2196,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 84,
-        "j": 23
+        "j": 24
       },
       "subNodes": []
     },
@@ -2142,7 +2212,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 85,
-        "j": 24
+        "j": 25
       },
       "subNodes": []
     },
@@ -2158,9 +2228,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 89,
-        "j": 22
+        "j": 23
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 89,
+      "j": 23
     },
     {
       "id": "ARITHMETIC",
@@ -2174,7 +2246,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 85,
-        "j": 25
+        "j": 26
       },
       "subNodes": []
     },
@@ -2190,9 +2262,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 89,
-        "j": 23
+        "j": 24
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 89,
+      "j": 24
     },
     {
       "id": "EQUATIONS_ADD_SMALL",
@@ -2205,7 +2279,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 89,
-        "j": 15
+        "j": 16
       },
       "subNodes": []
     },
@@ -2221,9 +2295,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 89,
-        "j": 16
+        "j": 17
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 89,
+      "j": 17
     },
     {
       "id": "EQUATIONS_MULT_SMALL",
@@ -2237,9 +2313,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 89,
-        "j": 17
+        "j": 18
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 89,
+      "j": 18
     },
     {
       "id": "EQUATIONS_DIV_SMALL",
@@ -2253,9 +2331,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 89,
-        "j": 18
+        "j": 19
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 89,
+      "j": 19
     },
     {
       "id": "EQUATIONS_ADD_SUB_NEG_SMALL",
@@ -2269,9 +2349,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 89,
-        "j": 19
+        "j": 20
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 89,
+      "j": 20
     },
     {
       "id": "MULTI_OP_ADD_SMALL",
@@ -2301,9 +2383,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 86,
-        "j": 14
+        "j": 15
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 86,
+      "j": 15
     },
     {
       "id": "MULTI_OP_MULT_SMALL",
@@ -2317,9 +2401,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 86,
-        "j": 15
+        "j": 16
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 86,
+      "j": 16
     },
     {
       "id": "MULTI_OP_DIV_SMALL",
@@ -2333,9 +2419,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 86,
-        "j": 16
+        "j": 17
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 86,
+      "j": 17
     },
     {
       "id": "MULTI_OP_ADD_SUB_NEG_SMALL",
@@ -2349,9 +2437,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 86,
-        "j": 17
+        "j": 18
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 86,
+      "j": 18
     },
     {
       "id": "MULTI_OP_4_OPS_NEG_SMALL",
@@ -2367,9 +2457,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 86,
-        "j": 18
+        "j": 19
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 86,
+      "j": 19
     },
     {
       "id": "MULTI_OP_4_OPS",
@@ -2383,9 +2475,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 86,
-        "j": 19
+        "j": 20
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 86,
+      "j": 20
     },
     {
       "id": "MULTI_OP_4_OPS_NEG_PAREN",
@@ -2399,9 +2493,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 86,
-        "j": 20
+        "j": 21
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 86,
+      "j": 21
     },
     {
       "id": "MULTI_OP_5_OPS",
@@ -2415,9 +2511,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 86,
-        "j": 21
+        "j": 22
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 86,
+      "j": 22
     },
     {
       "id": "MULTI_OP_6_OPS",
@@ -2431,9 +2529,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 86,
-        "j": 22
+        "j": 23
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 86,
+      "j": 23
     },
     {
       "id": "EQUATIONS_4_OPS_NEG_SMALL",
@@ -2447,9 +2547,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 89,
-        "j": 20
+        "j": 21
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 89,
+      "j": 21
     },
     {
       "id": "EQUATIONS_4_OPS",
@@ -2463,9 +2565,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 89,
-        "j": 21
+        "j": 22
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 89,
+      "j": 22
     },
     {
       "id": "EQUATIONS_6_OPS",
@@ -2479,7 +2583,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 89,
-        "j": 25
+        "j": 26
       },
       "subNodes": []
     },
@@ -2494,9 +2598,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 90,
-        "j": 22
+        "j": 23
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 90,
+      "j": 23
     },
     {
       "id": "EQUATIONS_2_UNKNOWNS",
@@ -2510,9 +2616,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 90,
-        "j": 23
+        "j": 24
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 90,
+      "j": 24
     },
     {
       "id": "EQUATIONS_3_UNKNOWNS_SMALL",
@@ -2525,9 +2633,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 90,
-        "j": 24
+        "j": 25
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 90,
+      "j": 25
     },
     {
       "id": "EQUATIONS_N_UNKNOWNS",
@@ -2541,9 +2651,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 90,
-        "j": 26
+        "j": 27
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 90,
+      "j": 27
     },
     {
       "id": "EQUATIONS_3_UNKNOWNS",
@@ -2556,9 +2668,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 90,
-        "j": 25
+        "j": 26
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 90,
+      "j": 26
     },
     {
       "id": "ALGEBRA",
@@ -2572,9 +2686,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 90,
-        "j": 27
+        "j": 28
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 90,
+      "j": 28
     },
     {
       "id": "ACCOUNT_AND_PASSWORD",
@@ -2582,7 +2698,7 @@
         "PECK_WORDS_ON_KEYBOARD",
         "USE_MOUSE",
         "PECK_CAPITALS_AND_PUNCTUTATION",
-        "READ_SENTENCES_LONG"
+        "REVIEW_WORDS_6"
       ],
       "title": "",
       "description": "",
@@ -2590,9 +2706,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 51,
-        "j": 15
+        "j": 16
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 51,
+      "j": 16
     },
     {
       "id": "OPEN_APPLICATION",
@@ -2606,7 +2724,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 53,
-        "j": 15
+        "j": 16
       },
       "subNodes": []
     },
@@ -2614,7 +2732,7 @@
       "id": "TERMINAL_COMMANDS_SIMPLE",
       "deps": [
         "PECK_WORDS_ON_KEYBOARD",
-        "READ_SENTENCES_LONG"
+        "REVIEW_WORDS_6"
       ],
       "title": "",
       "description": "",
@@ -2622,9 +2740,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 52,
-        "j": 15
+        "j": 16
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 52,
+      "j": 16
     },
     {
       "id": "TERMINAL_COMMANDS",
@@ -2632,7 +2752,7 @@
         "TERMINAL_COMMANDS_SIMPLE",
         "OPEN_APPLICATION",
         "ACCOUNT_AND_PASSWORD",
-        "READ_PARAGRAPHS"
+        "READ_SENTENCES_MULTIPLE"
       ],
       "title": "",
       "description": "",
@@ -2640,9 +2760,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 53,
-        "j": 17
+        "j": 18
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 53,
+      "j": 18
     },
     {
       "id": "SKETCH_VARIABLE_SIMPLE",
@@ -2657,7 +2779,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 54,
-        "j": 17
+        "j": 18
       },
       "subNodes": []
     },
@@ -2672,7 +2794,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 54,
-        "j": 18
+        "j": 19
       },
       "subNodes": []
     },
@@ -2687,7 +2809,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 54,
-        "j": 19
+        "j": 20
       },
       "subNodes": []
     },
@@ -2702,9 +2824,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 82,
-        "j": 28
+        "j": 29
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 82,
+      "j": 29
     },
     {
       "id": "LINEAR_ALGEBRA",
@@ -2717,9 +2841,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 82,
-        "j": 29
+        "j": 30
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 82,
+      "j": 30
     },
     {
       "id": "TRIGONOMETRY",
@@ -2732,9 +2858,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 77,
-        "j": 28
+        "j": 29
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 77,
+      "j": 29
     },
     {
       "id": "USE_MOUSE_HOVER_FAST",
@@ -2777,7 +2905,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 27,
-        "j": 13
+        "j": 14
       },
       "subNodes": [],
       "i": 26,
@@ -2794,7 +2922,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 26,
-        "j": 14
+        "j": 15
       },
       "subNodes": [],
       "i": 26,
@@ -2827,7 +2955,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 59,
-        "j": 14
+        "j": 15
       },
       "subNodes": []
     },
@@ -2894,7 +3022,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 89,
-        "j": 11
+        "j": 12
       },
       "subNodes": []
     },
@@ -2909,7 +3037,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 78,
-        "j": 26
+        "j": 27
       },
       "subNodes": []
     },
@@ -2924,9 +3052,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 79,
-        "j": 28
+        "j": 29
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 79,
+      "j": 29
     },
     {
       "id": "NUMBER THEORY",
@@ -2939,9 +3069,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 80,
-        "j": 28
+        "j": 29
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 80,
+      "j": 29
     },
     {
       "id": "PROBABILITY",
@@ -2954,9 +3086,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 81,
-        "j": 28
+        "j": 29
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 81,
+      "j": 29
     },
     {
       "id": "USE_MOUSE_HOVER_SMALL_FAST",
@@ -3179,9 +3313,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 54,
-        "j": 14
+        "j": 15
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 54,
+      "j": 15
     },
     {
       "id": "BEFORE_AFTER_10",
@@ -3301,7 +3437,7 @@
       "id": "TYPING_HOME_ROW_RIGHT",
       "deps": [
         "USE_MOUSE",
-        "READ_SENTENCES_LONG",
+        "REVIEW_WORDS_6",
         "PECK_NUMBERS_ON_KEYBOARD",
         "PECK_WORDS_ON_KEYBOARD",
         "PECK_CAPITALS_AND_PUNCTUTATION"
@@ -3312,15 +3448,17 @@
       "teacherVideos": [],
       "cell": {
         "i": 57,
-        "j": 15
+        "j": 16
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 57,
+      "j": 16
     },
     {
       "id": "TYPING_INDEX_FINGER_RIGHT",
       "deps": [
         "TYPING_HOME_ROW_RIGHT",
-        "READ_PARAGRAPHS"
+        "READ_SENTENCES_MULTIPLE"
       ],
       "title": "",
       "description": "",
@@ -3328,9 +3466,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 57,
-        "j": 17
+        "j": 18
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 57,
+      "j": 18
     },
     {
       "id": "TYPING_MIDDLE_FINGER_RIGHT",
@@ -3343,9 +3483,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 57,
-        "j": 18
+        "j": 19
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 57,
+      "j": 19
     },
     {
       "id": "TYPING_RING_FINGER_RIGHT",
@@ -3358,9 +3500,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 57,
-        "j": 19
+        "j": 20
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 57,
+      "j": 20
     },
     {
       "id": "TYPING_PINKY_FINGER_RIGHT",
@@ -3373,9 +3517,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 57,
-        "j": 20
+        "j": 21
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 57,
+      "j": 21
     },
     {
       "id": "TYPING_CAPITALS_LEFT_SHIFT",
@@ -3388,9 +3534,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 56,
-        "j": 21
+        "j": 22
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 56,
+      "j": 22
     },
     {
       "id": "TYPING_CAPITALS_RIGHT_SHIFT",
@@ -3403,9 +3551,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 57,
-        "j": 21
+        "j": 22
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 57,
+      "j": 22
     },
     {
       "id": "TYPING_NUMBERS_MIDDLE",
@@ -3418,9 +3568,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 56,
-        "j": 23
+        "j": 24
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 56,
+      "j": 24
     },
     {
       "id": "TYPING_NUMBERS_RING",
@@ -3433,9 +3585,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 56,
-        "j": 24
+        "j": 25
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 56,
+      "j": 25
     },
     {
       "id": "TYING_NUMBERS_PINKY",
@@ -3448,9 +3602,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 56,
-        "j": 25
+        "j": 26
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 56,
+      "j": 26
     },
     {
       "id": "TYPING_PUNCTUATION_INDEX",
@@ -3463,9 +3619,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 57,
-        "j": 23
+        "j": 24
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 57,
+      "j": 24
     },
     {
       "id": "TYPING_PUNCTUATION_MIDDLE",
@@ -3479,9 +3637,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 57,
-        "j": 24
+        "j": 25
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 57,
+      "j": 25
     },
     {
       "id": "TYPING_PUNCTUATION_RING",
@@ -3495,9 +3655,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 57,
-        "j": 25
+        "j": 26
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 57,
+      "j": 26
     },
     {
       "id": "TYPING_PUNCTUATION_PINKY",
@@ -3511,9 +3673,11 @@
       "teacherVideos": [],
       "cell": {
         "i": 57,
-        "j": 26
+        "j": 27
       },
-      "subNodes": []
+      "subNodes": [],
+      "i": 57,
+      "j": 27
     },
     {
       "id": "COUNT_ADD_OPPONENT_FINGERS_FAST",
@@ -4113,7 +4277,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 24,
-        "j": 14
+        "j": 15
       },
       "subNodes": []
     },
@@ -4130,7 +4294,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 25,
-        "j": 14
+        "j": 15
       },
       "subNodes": [],
       "i": 25,
@@ -4813,7 +4977,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 25,
-        "j": 15
+        "j": 16
       },
       "subNodes": [],
       "i": 25,
@@ -5070,8 +5234,9 @@
     {
       "id": "READ_WORDS_SHORT_U",
       "deps": [
-        "LETTER_TO_SOUND_M_TO_Z",
-        "LETTER_TO_SOUND_A_TO_O"
+        "CONSONANT_TO_SOUND_N_TO_Z",
+        "CONSONANT_TO_SOUND_A_TO_M",
+        "VOWEL_TO_SOUND_SHORT"
       ],
       "title": "",
       "description": "",
@@ -5611,8 +5776,9 @@
         "j": 9
       },
       "deps": [
-        "LETTER_TO_SOUND_M_TO_Z",
-        "LETTER_TO_SOUND_A_TO_O"
+        "CONSONANT_TO_SOUND_N_TO_Z",
+        "CONSONANT_TO_SOUND_A_TO_M",
+        "VOWEL_TO_SOUND_SHORT"
       ],
       "subNodes": []
     },
@@ -5627,8 +5793,9 @@
         "j": 9
       },
       "deps": [
-        "LETTER_TO_SOUND_M_TO_Z",
-        "LETTER_TO_SOUND_A_TO_O"
+        "CONSONANT_TO_SOUND_N_TO_Z",
+        "CONSONANT_TO_SOUND_A_TO_M",
+        "VOWEL_TO_SOUND_SHORT"
       ],
       "subNodes": []
     },
@@ -5643,8 +5810,9 @@
         "j": 9
       },
       "deps": [
-        "LETTER_TO_SOUND_M_TO_Z",
-        "LETTER_TO_SOUND_A_TO_O"
+        "CONSONANT_TO_SOUND_N_TO_Z",
+        "CONSONANT_TO_SOUND_A_TO_M",
+        "VOWEL_TO_SOUND_SHORT"
       ],
       "subNodes": []
     },
@@ -5659,8 +5827,9 @@
         "j": 9
       },
       "deps": [
-        "LETTER_TO_SOUND_M_TO_Z",
-        "LETTER_TO_SOUND_A_TO_O"
+        "CONSONANT_TO_SOUND_N_TO_Z",
+        "CONSONANT_TO_SOUND_A_TO_M",
+        "VOWEL_TO_SOUND_SHORT"
       ],
       "subNodes": []
     },
@@ -5672,7 +5841,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 31,
-        "j": 10
+        "j": 11
       },
       "deps": [
         "READ_WORDS_SHORT_A_LIKE_AT",
@@ -5689,7 +5858,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 32,
-        "j": 10
+        "j": 11
       },
       "deps": [
         "READ_WORDS_SHORT_E"
@@ -5704,7 +5873,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 33,
-        "j": 10
+        "j": 11
       },
       "deps": [
         "READ_WORDS_SHORT_I"
@@ -5719,7 +5888,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 34,
-        "j": 10
+        "j": 11
       },
       "deps": [
         "READ_WORDS_SHORT_O"
@@ -5734,7 +5903,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 35,
-        "j": 10
+        "j": 11
       },
       "deps": [
         "READ_WORDS_SHORT_U"
@@ -5749,12 +5918,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 43,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 43,
+      "j": 13
     },
     {
       "id": "READ_WORDS_OO",
@@ -5764,13 +5935,15 @@
       "teacherVideos": [],
       "cell": {
         "i": 35,
-        "j": 11
+        "j": 12
       },
       "deps": [
         "READ_WORDS_LONG_O",
-        "READ_SENTENCES_VERY_SHORT"
+        "REVIEW_WORDS_2"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 35,
+      "j": 12
     },
     {
       "id": "READ_WORDS_TH_LIKE_THIS",
@@ -5780,12 +5953,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 31,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 31,
+      "j": 13
     },
     {
       "id": "READ_WORDS_SH",
@@ -5795,12 +5970,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 42,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 42,
+      "j": 13
     },
     {
       "id": "READ_WORDS_EA",
@@ -5810,14 +5987,16 @@
       "teacherVideos": [],
       "cell": {
         "i": 31,
-        "j": 11
+        "j": 12
       },
       "deps": [
         "READ_WORDS_LONG_E",
         "READ_WORDS_LONG_A",
-        "READ_SENTENCES_VERY_SHORT"
+        "REVIEW_WORDS_2"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 31,
+      "j": 12
     },
     {
       "id": "READ_WORDS_OA",
@@ -5827,14 +6006,16 @@
       "teacherVideos": [],
       "cell": {
         "i": 36,
-        "j": 11
+        "j": 12
       },
       "deps": [
         "READ_WORDS_LONG_A",
         "READ_WORDS_LONG_O",
-        "READ_SENTENCES_VERY_SHORT"
+        "REVIEW_WORDS_2"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 36,
+      "j": 12
     },
     {
       "id": "READ_WORDS_GHT",
@@ -5844,12 +6025,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 44,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 44,
+      "j": 13
     },
     {
       "id": "READ_WORDS_SILENT_K",
@@ -5859,12 +6042,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 40,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 40,
+      "j": 13
     },
     {
       "id": "READ_WORDS_CK",
@@ -5874,12 +6059,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 39,
-        "j": 11
+        "j": 12
       },
       "deps": [
-        "READ_SENTENCES_VERY_SHORT"
+        "REVIEW_WORDS_2"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 39,
+      "j": 12
     },
     {
       "id": "READ_WORDS_QU",
@@ -5889,12 +6076,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 39,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 39,
+      "j": 13
     },
     {
       "id": "READ_WORDS_PH",
@@ -5904,12 +6093,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 32,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 32,
+      "j": 13
     },
     {
       "id": "READ_WORDS_HARD_G",
@@ -5922,8 +6113,9 @@
         "j": 9
       },
       "deps": [
-        "LETTER_TO_SOUND_A_TO_O",
-        "LETTER_TO_SOUND_M_TO_Z"
+        "CONSONANT_TO_SOUND_A_TO_M",
+        "CONSONANT_TO_SOUND_N_TO_Z",
+        "VOWEL_TO_SOUND_SHORT"
       ],
       "subNodes": []
     },
@@ -5935,7 +6127,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 39,
-        "j": 10
+        "j": 11
       },
       "deps": [
         "READ_WORDS_HARD_G"
@@ -5950,12 +6142,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 42,
-        "j": 11
+        "j": 12
       },
       "deps": [
-        "READ_SENTENCES_VERY_SHORT"
+        "REVIEW_WORDS_2"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 42,
+      "j": 12
     },
     {
       "id": "READ_WORDS_TR",
@@ -5965,12 +6159,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 33,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 33,
+      "j": 13
     },
     {
       "id": "READ_WORDS_LK",
@@ -5980,12 +6176,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 40,
-        "j": 11
+        "j": 12
       },
       "deps": [
-        "READ_SENTENCES_VERY_SHORT"
+        "REVIEW_WORDS_2"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 40,
+      "j": 12
     },
     {
       "id": "READ_WORDS_WR",
@@ -5995,25 +6193,27 @@
       "teacherVideos": [],
       "cell": {
         "i": 38,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 38,
+      "j": 13
     },
     {
-      "id": "READ_SENTENCES_WITH_NUMBERS",
+      "id": "REVIEW_WORDS_5",
       "title": "",
       "description": "",
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
         "i": 48,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM",
+        "REVIEW_WORDS_4",
         "READ_NUMBERS_UP_TO_1000",
         "READ_WORDS_GHT",
         "READ_WORDS_QU",
@@ -6033,7 +6233,9 @@
         "READ_WORDS_TH_LIKE_THINK",
         "READ_WORDS_VOICED_S"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 48,
+      "j": 14
     },
     {
       "id": "READ_WORDS_LL",
@@ -6043,12 +6245,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 41,
-        "j": 11
+        "j": 12
       },
       "deps": [
-        "READ_SENTENCES_VERY_SHORT"
+        "REVIEW_WORDS_2"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 41,
+      "j": 12
     },
     {
       "id": "READ_WORDS_WH",
@@ -6058,15 +6262,17 @@
       "teacherVideos": [],
       "cell": {
         "i": 41,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 41,
+      "j": 13
     },
     {
-      "id": "LETTER_TO_SOUND_A_TO_O",
+      "id": "CONSONANT_TO_SOUND_A_TO_M",
       "title": "",
       "description": "",
       "studentVideos": [],
@@ -6076,7 +6282,8 @@
         "j": 8
       },
       "deps": [
-        "READ_LETTERS"
+        "READ_LETTERS",
+        "SING_ALPHABET"
       ],
       "subNodes": []
     },
@@ -6088,12 +6295,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 45,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 45,
+      "j": 13
     },
     {
       "id": "READ_WORDS_SOFT_C",
@@ -6103,13 +6312,15 @@
       "teacherVideos": [],
       "cell": {
         "i": 45,
-        "j": 13
+        "j": 14
       },
       "deps": [
         "READ_WORDS_HARD_C",
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 45,
+      "j": 14
     },
     {
       "id": "READ_WORDS_HARD_Y",
@@ -6122,10 +6333,13 @@
         "j": 9
       },
       "deps": [
-        "LETTER_TO_SOUND_A_TO_O",
-        "LETTER_TO_SOUND_M_TO_Z"
+        "CONSONANT_TO_SOUND_A_TO_M",
+        "CONSONANT_TO_SOUND_N_TO_Z",
+        "VOWEL_TO_SOUND_SHORT"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 40,
+      "j": 10
     },
     {
       "id": "READ_WORDS_VOWEL_Y",
@@ -6135,12 +6349,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 40,
-        "j": 10
+        "j": 11
       },
       "deps": [
         "READ_WORDS_HARD_Y"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 40,
+      "j": 11
     },
     {
       "id": "READ_WORDS_EE",
@@ -6150,13 +6366,15 @@
       "teacherVideos": [],
       "cell": {
         "i": 32,
-        "j": 11
+        "j": 12
       },
       "deps": [
         "READ_WORDS_LONG_E",
-        "READ_SENTENCES_VERY_SHORT"
+        "REVIEW_WORDS_2"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 32,
+      "j": 12
     },
     {
       "id": "READ_WORDS_CH_EXCEPTION",
@@ -6166,13 +6384,15 @@
       "teacherVideos": [],
       "cell": {
         "i": 43,
-        "j": 13
+        "j": 14
       },
       "deps": [
         "READ_WORDS_CH",
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 43,
+      "j": 14
     },
     {
       "id": "READ_WORDS_EI",
@@ -6182,14 +6402,16 @@
       "teacherVideos": [],
       "cell": {
         "i": 33,
-        "j": 11
+        "j": 12
       },
       "deps": [
         "READ_WORDS_LONG_I",
         "READ_WORDS_LONG_E",
-        "READ_SENTENCES_VERY_SHORT"
+        "REVIEW_WORDS_2"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 33,
+      "j": 12
     },
     {
       "id": "READ_WORDS_GH_LIKE_LAUGH",
@@ -6199,13 +6421,15 @@
       "teacherVideos": [],
       "cell": {
         "i": 44,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM",
+        "REVIEW_WORDS_4",
         "READ_WORDS_GHT"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 44,
+      "j": 14
     },
     {
       "id": "READ_WORDS_AU",
@@ -6215,12 +6439,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 36,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 36,
+      "j": 13
     },
     {
       "id": "READ_WORDS_AW",
@@ -6230,12 +6456,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 35,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 35,
+      "j": 13
     },
     {
       "id": "READ_WORDS_SILENT_B",
@@ -6245,12 +6473,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 37,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 37,
+      "j": 13
     },
     {
       "id": "READ_PROPER_NOUNS",
@@ -6260,12 +6490,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 45,
-        "j": 15
+        "j": 16
       },
       "deps": [
-        "READ_SENTENCES_LONG"
+        "REVIEW_WORDS_6"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 45,
+      "j": 16
     },
     {
       "id": "GRAMMAR_VERBS",
@@ -6275,12 +6507,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 47,
-        "j": 15
+        "j": 16
       },
       "deps": [
-        "READ_SENTENCES_LONG"
+        "READ_SENTENCES_WITH_NUMBERS"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 47,
+      "j": 16
     },
     {
       "id": "GRAMMAR_ADJECTIVES",
@@ -6290,12 +6524,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 46,
-        "j": 16
+        "j": 17
       },
       "deps": [
         "GRAMMAR_NOUNS"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 46,
+      "j": 17
     },
     {
       "id": "GRAMMAR_ADVERBS",
@@ -6305,15 +6541,17 @@
       "teacherVideos": [],
       "cell": {
         "i": 47,
-        "j": 16
+        "j": 17
       },
       "deps": [
         "GRAMMAR_VERBS"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 47,
+      "j": 17
     },
     {
-      "id": "READ_SENTENCES_VERY_SHORT",
+      "id": "REVIEW_WORDS_1",
       "title": "",
       "description": "",
       "studentVideos": [],
@@ -6332,50 +6570,39 @@
         "READ_WORDS_SHORT_A_LIKE_AT",
         "READ_WORDS_SHORT_A_LIKE_AND",
         "READ_WORDS_SHORT_A_LIKE_ARE",
-        "COMMON_BIGRAM_TO_SOUND",
+        "BIGRAM_TO_SOUND_COMMON",
         "READ_WORDS_UNVOICED_S"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 48,
+      "j": 11
     },
     {
-      "id": "READ_SENTENCES_SHORT",
+      "id": "REVIEW_WORDS_3",
       "title": "",
       "description": "",
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
         "i": 48,
-        "j": 11
+        "j": 12
       },
       "deps": [
-        "READ_SENTENCES_VERY_SHORT",
         "READ_WORDS_VOWEL_Y",
         "READ_WORDS_SOFT_G",
         "READ_WORDS_LONG_U",
         "READ_WORDS_LONG_O",
         "READ_WORDS_LONG_I",
         "READ_WORDS_LONG_E",
-        "READ_WORDS_LONG_A"
+        "READ_WORDS_LONG_A",
+        "REVIEW_WORDS_2"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 48,
+      "j": 12
     },
     {
-      "id": "REVIEW_WORDS_1",
-      "title": "",
-      "description": "",
-      "studentVideos": [],
-      "teacherVideos": [],
-      "cell": {
-        "i": 49,
-        "j": 11
-      },
-      "deps": [
-        "READ_SENTENCES_VERY_SHORT"
-      ],
-      "subNodes": []
-    },
-    {
-      "id": "REVIEW_WORDS_2",
+      "id": "READ_SENTENCES_VERY_SHORT",
       "title": "",
       "description": "",
       "studentVideos": [],
@@ -6385,13 +6612,14 @@
         "j": 12
       },
       "deps": [
-        "REVIEW_WORDS_1",
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_2"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 49,
+      "j": 12
     },
     {
-      "id": "REVIEW_WORDS_3",
+      "id": "READ_SENTENCES_SHORT",
       "title": "",
       "description": "",
       "studentVideos": [],
@@ -6401,13 +6629,15 @@
         "j": 13
       },
       "deps": [
-        "REVIEW_WORDS_2",
-        "READ_SENTENCES_MEDIUM"
+        "READ_SENTENCES_VERY_SHORT",
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 49,
+      "j": 13
     },
     {
-      "id": "REVIEW_WORDS_4",
+      "id": "READ_SENTENCES_MEDIUM",
       "title": "",
       "description": "",
       "studentVideos": [],
@@ -6417,10 +6647,31 @@
         "j": 14
       },
       "deps": [
-        "REVIEW_WORDS_3",
-        "READ_SENTENCES_WITH_NUMBERS"
+        "READ_SENTENCES_SHORT",
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 49,
+      "j": 14
+    },
+    {
+      "id": "READ_SENTENCES_WITH_NUMBERS",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 49,
+        "j": 15
+      },
+      "deps": [
+        "READ_SENTENCES_MEDIUM",
+        "REVIEW_WORDS_5",
+        "READ_PUNCTUATION"
+      ],
+      "subNodes": [],
+      "i": 49,
+      "j": 15
     },
     {
       "id": "READ_WORDS_COMMON_ANIMALS",
@@ -6430,12 +6681,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 31,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 31,
+      "j": 14
     },
     {
       "id": "READ_WORDS_COLORS",
@@ -6445,12 +6698,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 32,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 32,
+      "j": 14
     },
     {
       "id": "READ_WORDS_CARDINALS",
@@ -6460,13 +6715,15 @@
       "teacherVideos": [],
       "cell": {
         "i": 33,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM",
+        "REVIEW_WORDS_4",
         "READ_NUMBERS_UP_TO_1000"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 33,
+      "j": 14
     },
     {
       "id": "READ_WORDS_COMPUTERS",
@@ -6476,12 +6733,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 39,
-        "j": 14
+        "j": 15
       },
       "deps": [
-        "READ_SENTENCES_WITH_NUMBERS"
+        "REVIEW_WORDS_5"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 39,
+      "j": 15
     },
     {
       "id": "READ_WORDS_BEDROOM",
@@ -6491,12 +6750,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 35,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 35,
+      "j": 14
     },
     {
       "id": "READ_WORDS_BATHROOM",
@@ -6506,12 +6767,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 36,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 36,
+      "j": 14
     },
     {
       "id": "READ_WORDS_GARDEN",
@@ -6521,12 +6784,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 40,
-        "j": 14
+        "j": 15
       },
       "deps": [
-        "READ_SENTENCES_WITH_NUMBERS"
+        "REVIEW_WORDS_5"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 40,
+      "j": 15
     },
     {
       "id": "READ_WORDS_SCHOOL",
@@ -6536,12 +6801,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 41,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 41,
+      "j": 14
     },
     {
       "id": "READ_WORDS_KITCHEN",
@@ -6551,12 +6818,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 37,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 37,
+      "j": 14
     },
     {
       "id": "READ_WORDS_FOOD",
@@ -6566,12 +6835,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 38,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 38,
+      "j": 14
     },
     {
       "id": "READ_WORDS_VEHICLES",
@@ -6581,41 +6852,45 @@
       "teacherVideos": [],
       "cell": {
         "i": 41,
-        "j": 14
+        "j": 15
       },
       "deps": [
-        "READ_SENTENCES_WITH_NUMBERS"
+        "REVIEW_WORDS_5"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 41,
+      "j": 15
     },
     {
-      "id": "REVIEW_WORDS_5",
+      "id": "READ_SENTENCES_LONG",
       "title": "",
       "description": "",
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
         "i": 49,
-        "j": 15
+        "j": 16
       },
       "deps": [
-        "READ_SENTENCES_LONG",
-        "REVIEW_WORDS_4"
+        "REVIEW_WORDS_6",
+        "READ_SENTENCES_WITH_NUMBERS"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 49,
+      "j": 16
     },
     {
-      "id": "READ_SENTENCES_MULTIPLE",
+      "id": "REVIEW_WORDS_7",
       "title": "",
       "description": "",
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
         "i": 48,
-        "j": 15
+        "j": 16
       },
       "deps": [
-        "READ_SENTENCES_LONG",
+        "REVIEW_WORDS_6",
         "READ_WORDS_TOYS",
         "READ_WORDS_BODY_PARTS",
         "READ_WORDS_PLAYGROUND",
@@ -6630,23 +6905,28 @@
         "READ_WORDS_GARDEN",
         "READ_WORDS_VEHICLES"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 48,
+      "j": 16
     },
     {
-      "id": "REVIEW_WORDS_6",
+      "id": "READ_SENTENCES_MULTIPLE",
       "title": "",
       "description": "",
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
         "i": 49,
-        "j": 16
+        "j": 17
       },
       "deps": [
-        "READ_SENTENCES_MULTIPLE",
-        "REVIEW_WORDS_5"
+        "REVIEW_WORDS_7",
+        "READ_SENTENCES_LONG",
+        "READ_PROPER_NOUNS"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 49,
+      "j": 17
     },
     {
       "id": "READ_WORDS_FARM_ANIMALS",
@@ -6656,12 +6936,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 31,
-        "j": 14
+        "j": 15
       },
       "deps": [
-        "READ_SENTENCES_WITH_NUMBERS"
+        "REVIEW_WORDS_5"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 31,
+      "j": 15
     },
     {
       "id": "READ_WORDS_JUNGLE_ANIMALS",
@@ -6671,12 +6953,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 30,
-        "j": 14
+        "j": 15
       },
       "deps": [
-        "READ_SENTENCES_WITH_NUMBERS"
+        "REVIEW_WORDS_5"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 30,
+      "j": 15
     },
     {
       "id": "READ_WORDS_WATER_ANIMALS",
@@ -6686,12 +6970,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 32,
-        "j": 14
+        "j": 15
       },
       "deps": [
-        "READ_SENTENCES_WITH_NUMBERS"
+        "REVIEW_WORDS_5"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 32,
+      "j": 15
     },
     {
       "id": "READ_WORDS_INSECTS",
@@ -6701,12 +6987,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 33,
-        "j": 14
+        "j": 15
       },
       "deps": [
-        "READ_SENTENCES_WITH_NUMBERS"
+        "REVIEW_WORDS_5"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 33,
+      "j": 15
     },
     {
       "id": "READ_WORDS_OCCUPATIONS",
@@ -6716,12 +7004,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 30,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 30,
+      "j": 14
     },
     {
       "id": "READ_WORDS_EMOTIONS",
@@ -6731,12 +7021,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 29,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 29,
+      "j": 14
     },
     {
       "id": "READ_WORDS_FAMILY",
@@ -6746,12 +7038,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 42,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 42,
+      "j": 14
     },
     {
       "id": "READ_WORDS_OFFICE",
@@ -6761,12 +7055,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 34,
-        "j": 14
+        "j": 15
       },
       "deps": [
-        "READ_SENTENCES_WITH_NUMBERS"
+        "REVIEW_WORDS_5"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 34,
+      "j": 15
     },
     {
       "id": "READ_WORDS_CONSTRUCTION",
@@ -6776,12 +7072,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 35,
-        "j": 14
+        "j": 15
       },
       "deps": [
-        "READ_SENTENCES_WITH_NUMBERS"
+        "REVIEW_WORDS_5"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 35,
+      "j": 15
     },
     {
       "id": "READ_WORDS_PLAYGROUND",
@@ -6791,12 +7089,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 36,
-        "j": 14
+        "j": 15
       },
       "deps": [
-        "READ_SENTENCES_WITH_NUMBERS"
+        "REVIEW_WORDS_5"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 36,
+      "j": 15
     },
     {
       "id": "READ_WORDS_BODY_PARTS",
@@ -6806,12 +7106,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 37,
-        "j": 14
+        "j": 15
       },
       "deps": [
-        "READ_SENTENCES_WITH_NUMBERS"
+        "REVIEW_WORDS_5"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 37,
+      "j": 15
     },
     {
       "id": "READ_WORDS_TOYS",
@@ -6821,12 +7123,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 38,
-        "j": 14
+        "j": 15
       },
       "deps": [
-        "READ_SENTENCES_WITH_NUMBERS"
+        "REVIEW_WORDS_5"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 38,
+      "j": 15
     },
     {
       "id": "READ_WORDS_SHORT_A_LIKE_AND",
@@ -6839,8 +7143,9 @@
         "j": 9
       },
       "deps": [
-        "LETTER_TO_SOUND_A_TO_O",
-        "LETTER_TO_SOUND_M_TO_Z"
+        "CONSONANT_TO_SOUND_A_TO_M",
+        "CONSONANT_TO_SOUND_N_TO_Z",
+        "VOWEL_TO_SOUND_SHORT"
       ],
       "subNodes": []
     },
@@ -6855,8 +7160,9 @@
         "j": 9
       },
       "deps": [
-        "LETTER_TO_SOUND_A_TO_O",
-        "LETTER_TO_SOUND_M_TO_Z"
+        "CONSONANT_TO_SOUND_A_TO_M",
+        "CONSONANT_TO_SOUND_N_TO_Z",
+        "VOWEL_TO_SOUND_SHORT"
       ],
       "subNodes": []
     },
@@ -6868,11 +7174,12 @@
       "teacherVideos": [],
       "cell": {
         "i": 30,
-        "j": 11
+        "j": 12
       },
       "deps": [
         "READ_WORDS_LONG_A",
-        "READ_WORDS_LONG_I"
+        "READ_WORDS_LONG_I",
+        "REVIEW_WORDS_2"
       ],
       "subNodes": []
     },
@@ -6884,13 +7191,16 @@
       "teacherVideos": [],
       "cell": {
         "i": 29,
-        "j": 11
+        "j": 12
       },
       "deps": [
         "READ_WORDS_LONG_A",
-        "READ_WORDS_VOWEL_Y"
+        "READ_WORDS_VOWEL_Y",
+        "REVIEW_WORDS_2"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 29,
+      "j": 12
     },
     {
       "id": "READ_WORDS_IE",
@@ -6900,11 +7210,12 @@
       "teacherVideos": [],
       "cell": {
         "i": 34,
-        "j": 11
+        "j": 12
       },
       "deps": [
         "READ_WORDS_LONG_E",
-        "READ_WORDS_LONG_I"
+        "READ_WORDS_LONG_I",
+        "REVIEW_WORDS_2"
       ],
       "subNodes": []
     },
@@ -6916,12 +7227,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 34,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 34,
+      "j": 13
     },
     {
       "id": "READ_WORDS_UNVOICED_S",
@@ -6934,8 +7247,9 @@
         "j": 9
       },
       "deps": [
-        "LETTER_TO_SOUND_M_TO_Z",
-        "LETTER_TO_SOUND_A_TO_O"
+        "CONSONANT_TO_SOUND_N_TO_Z",
+        "CONSONANT_TO_SOUND_A_TO_M",
+        "VOWEL_TO_SOUND_SHORT"
       ],
       "subNodes": []
     },
@@ -6947,13 +7261,15 @@
       "teacherVideos": [],
       "cell": {
         "i": 46,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT",
+        "REVIEW_WORDS_3",
         "READ_WORDS_UNVOICED_S"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 46,
+      "j": 13
     },
     {
       "id": "READ_WORDS_OU",
@@ -6963,16 +7279,17 @@
       "teacherVideos": [],
       "cell": {
         "i": 37,
-        "j": 11
+        "j": 12
       },
       "deps": [
         "READ_WORDS_LONG_U",
-        "READ_WORDS_LONG_O"
+        "READ_WORDS_LONG_O",
+        "REVIEW_WORDS_2"
       ],
       "subNodes": []
     },
     {
-      "id": "COMMON_BIGRAM_TO_SOUND",
+      "id": "BIGRAM_TO_SOUND_COMMON",
       "title": "",
       "description": "",
       "studentVideos": [],
@@ -6982,8 +7299,9 @@
         "j": 9
       },
       "deps": [
-        "LETTER_TO_SOUND_M_TO_Z",
-        "LETTER_TO_SOUND_A_TO_O"
+        "CONSONANT_TO_SOUND_N_TO_Z",
+        "CONSONANT_TO_SOUND_A_TO_M",
+        "VOWEL_TO_SOUND_SHORT"
       ],
       "subNodes": []
     },
@@ -6995,12 +7313,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 30,
-        "j": 12
+        "j": 13
       },
       "deps": [
-        "READ_SENTENCES_SHORT"
+        "REVIEW_WORDS_3"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 30,
+      "j": 13
     },
     {
       "id": "READ_COMPOUND_WORDS",
@@ -7010,12 +7330,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 47,
-        "j": 14
+        "j": 15
       },
       "deps": [
-        "READ_SENTENCES_WITH_NUMBERS"
+        "REVIEW_WORDS_5"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 47,
+      "j": 15
     },
     {
       "id": "READ_WORDS_ORDINALS",
@@ -7025,12 +7347,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 34,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 34,
+      "j": 14
     },
     {
       "id": "READ_WORDS_FRUITS",
@@ -7040,12 +7364,14 @@
       "teacherVideos": [],
       "cell": {
         "i": 39,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
       ],
-      "subNodes": []
+      "subNodes": [],
+      "i": 39,
+      "j": 14
     },
     {
       "id": "READ_WORDS_VEGETABLES",
@@ -7055,10 +7381,43 @@
       "teacherVideos": [],
       "cell": {
         "i": 40,
-        "j": 13
+        "j": 14
       },
       "deps": [
-        "READ_SENTENCES_MEDIUM"
+        "REVIEW_WORDS_4"
+      ],
+      "subNodes": [],
+      "i": 40,
+      "j": 14
+    },
+    {
+      "id": "VOWEL_TO_SOUND_SHORT",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 38,
+        "j": 8
+      },
+      "deps": [
+        "SING_ALPHABET",
+        "READ_LETTERS"
+      ],
+      "subNodes": []
+    },
+    {
+      "id": "REVIEW_WORDS_2",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 48,
+        "j": 11
+      },
+      "deps": [
+        "REVIEW_WORDS_1"
       ],
       "subNodes": []
     }

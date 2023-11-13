@@ -74,7 +74,7 @@ interface PickFromBagOptions {
   withReplacement: boolean,
 }
 
-export let pickFromBag = <T>(bag: T[], n: number, {
+export let pickFromBag = <T>(bag: readonly T[], n: number, {
   withReplacement,
 }: PickFromBagOptions): T[] => {
   let selected: T[] = [];
@@ -91,10 +91,18 @@ export let pickFromBag = <T>(bag: T[], n: number, {
   return selected;
 };
 
+export let shuffle = <T>(arr: T[]) => {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+};
+
 export class VariantList<T> {
-  variants: T[];
+  variants: readonly T[];
   variantsMap: Map<T, {maxScore: number, score: number}>;
-  constructor(variants: T[], maxScore: number) {
+  constructor(variants: readonly T[], maxScore: number) {
     this.variants = variants;
     this.variantsMap = new Map();
     for (let i = 0; i < variants.length; ++i) {

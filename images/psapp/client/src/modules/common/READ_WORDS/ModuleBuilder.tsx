@@ -7,6 +7,7 @@ import {STTModule} from '@src/modules/common/SPEECH_TO_TEXT_SHIM/ModuleBuilder';
 import {LETTER_SOUNDS, BIGRAM_SOUNDS} from '@src/modules/common/READING/util';
 
 import whatWordIsThis from './what_word_is_this.wav';
+import whatSoundDoesThisMake from './what_sound_does_this_make.wav';
 
 type Variant = {
   word: string,
@@ -19,9 +20,10 @@ interface MyEx extends Ex<Variant> {
 
 interface ModuleBuilderProps {
   variants: Variant[];
+  isSingleSound?: boolean;
 }
 export let ModuleBuilder = ({
-  variants
+  variants, isSingleSound,
 }: ModuleBuilderProps) => {
   return (props: void) => {
     let moduleContext = React.useContext(ModuleContext);
@@ -63,7 +65,11 @@ export let ModuleBuilder = ({
       };
     }, [vlist, trainingRecorder]);
     let playInstructions = React.useCallback(async (exercise: MyEx) => {
-      await moduleContext.playAudio(whatWordIsThis);
+      if (isSingleSound) {
+        await moduleContext.playAudio(whatSoundDoesThisMake);
+      } else {
+        await moduleContext.playAudio(whatWordIsThis);
+      }
     }, [moduleContext]);
     let {
       exercise,
@@ -139,7 +145,9 @@ export let ModuleBuilder = ({
         return;
       }
       setFailPosition([0, exercise.variant.word.length]);
-      await moduleContext.playAudio(exercise.variant.spoken);
+      if (!isSingleSound) {
+        await moduleContext.playAudio(exercise.variant.spoken);
+      }
       setFailPosition([0, 0]);
       doingFailure.current = false;
     }, [
@@ -156,7 +164,7 @@ export let ModuleBuilder = ({
       addTrainingEvent('success');
       doingFailure.current = false;
       setFailPosition([0, 0]);
-    }, [addTrainingEvent]);
+    }, [addTrainingEvent, doSuccess]);
 
     let textStyle: React.CSSProperties = {
       fontFamily: 'sans-serif',
