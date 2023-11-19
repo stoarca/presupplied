@@ -25,176 +25,174 @@ interface ModuleBuilderProps {
 export let ModuleBuilder = ({
   variants, isSingleSound,
 }: ModuleBuilderProps) => {
-  return (props: void) => {
-    let moduleContext = React.useContext(ModuleContext);
-    let trainingRecorder = useTrainingDataRecorder();
+  let moduleContext = React.useContext(ModuleContext);
+  let trainingRecorder = useTrainingDataRecorder();
 
-    React.useEffect(() => {
-      let preloads = new Set<string>();
-      for (let variant of variants) {
-        preloads.add(variant.spoken);
-        for (let [_, sound] of variant.sounds) {
-          if (sound in LETTER_SOUNDS) {
-            preloads.add(LETTER_SOUNDS[sound as keyof typeof LETTER_SOUNDS]);
-          } else {
-            preloads.add(BIGRAM_SOUNDS[sound as keyof typeof BIGRAM_SOUNDS]);
-          }
+  React.useEffect(() => {
+    let preloads = new Set<string>();
+    for (let variant of variants) {
+      preloads.add(variant.spoken);
+      for (let [_, sound] of variant.sounds) {
+        if (sound in LETTER_SOUNDS) {
+          preloads.add(LETTER_SOUNDS[sound as keyof typeof LETTER_SOUNDS]);
+        } else {
+          preloads.add(BIGRAM_SOUNDS[sound as keyof typeof BIGRAM_SOUNDS]);
         }
       }
-      let promises = Array.from(preloads.values()).map((x) => {
-        return new Promise((resolve) => {
-          let audio = new Audio(x);
-          audio.addEventListener('canplaythrough', resolve);
-        });
+    }
+    let promises = Array.from(preloads.values()).map((x) => {
+      return new Promise((resolve) => {
+        let audio = new Audio(x);
+        audio.addEventListener('canplaythrough', resolve);
       });
-      Promise.all(promises).then(() => {
-        console.log('all sounds are loaded');
-      });
-    }, [variants]);
-
-    let vlist = React.useMemo(() => new VariantList(variants, 2), []);
-    let generateExercise = React.useCallback(() => {
-      let variant = vlist.pickVariant();
-      trainingRecorder.addEvent({
-        kmid: 'READ_WORDS',
-        exerciseData: variant.word,
-        status: 'start'
-      });
-      return {
-        variant: vlist.pickVariant(),
-      };
-    }, [vlist, trainingRecorder]);
-    let playInstructions = React.useCallback(async (exercise: MyEx) => {
-      if (isSingleSound) {
-        await moduleContext.playAudio(whatSoundDoesThisMake);
-      } else {
-        await moduleContext.playAudio(whatWordIsThis);
-      }
-    }, [moduleContext]);
-    let {
-      exercise,
-      partial,
-      score,
-      maxScore,
-      doSuccess,
-      doPartialSuccess,
-      doFailure,
-      alreadyFailed,
-    } = useExercise({
-      onGenExercise: generateExercise,
-      initialPartial: () => null,
-      onPlayInstructions: playInstructions,
-      playOnEveryExercise: false,
-      vlist: vlist,
     });
+    Promise.all(promises).then(() => {
+      console.log('all sounds are loaded');
+    });
+  }, [variants]);
 
-    let addTrainingEvent = React.useCallback((
-      status: 'start' | 'success' | 'fail'
-    ) => {
-      trainingRecorder.addEvent({
-        kmid: 'READ_WORDS',
-        exerciseData: exercise.variant.word,
-        status: status,
-      });
-    }, [trainingRecorder, exercise]);
+  let vlist = React.useMemo(() => new VariantList(variants, 2), []);
+  let generateExercise = React.useCallback(() => {
+    let variant = vlist.pickVariant();
+    trainingRecorder.addEvent({
+      kmid: 'READ_WORDS',
+      exerciseData: variant.word,
+      status: 'start'
+    });
+    return {
+      variant: vlist.pickVariant(),
+    };
+  }, [vlist, trainingRecorder]);
+  let playInstructions = React.useCallback(async (exercise: MyEx) => {
+    if (isSingleSound) {
+      await moduleContext.playAudio(whatSoundDoesThisMake);
+    } else {
+      await moduleContext.playAudio(whatWordIsThis);
+    }
+  }, [moduleContext]);
+  let {
+    exercise,
+    partial,
+    score,
+    maxScore,
+    doSuccess,
+    doPartialSuccess,
+    doFailure,
+    alreadyFailed,
+  } = useExercise({
+    onGenExercise: generateExercise,
+    initialPartial: () => null,
+    onPlayInstructions: playInstructions,
+    playOnEveryExercise: false,
+    vlist: vlist,
+  });
 
-    let doingFailure = React.useRef(false);
-    let [failPosition, setFailPosition] = React.useState([0, 0]);
-    let handleFailure = React.useCallback(async () => {
-      if (doingFailure.current) {
+  let addTrainingEvent = React.useCallback((
+    status: 'start' | 'success' | 'fail'
+  ) => {
+    trainingRecorder.addEvent({
+      kmid: 'READ_WORDS',
+      exerciseData: exercise.variant.word,
+      status: status,
+    });
+  }, [trainingRecorder, exercise]);
+
+  let doingFailure = React.useRef(false);
+  let [failPosition, setFailPosition] = React.useState([0, 0]);
+  let handleFailure = React.useCallback(async () => {
+    if (doingFailure.current) {
+      return;
+    }
+    addTrainingEvent('fail');
+    doFailure();
+    doingFailure.current = true;
+    for (let i = 0; i < exercise.variant.sounds.length; ++i) {
+      if (!doingFailure.current) {
         return;
       }
-      addTrainingEvent('fail');
-      doFailure();
-      doingFailure.current = true;
-      for (let i = 0; i < exercise.variant.sounds.length; ++i) {
-        if (!doingFailure.current) {
-          return;
-        }
-        let startPos = exercise.variant.sounds[i][0];
-        let lastPos;
-        if (i === exercise.variant.sounds.length - 1) {
-          lastPos = exercise.variant.word.length;
-        } else {
-          lastPos = exercise.variant.sounds[i + 1][0];
-        }
-        setFailPosition([startPos, lastPos]);
-        let sound = exercise.variant.sounds[i][1];
-        if (sound in LETTER_SOUNDS) {
-          // TODO: why does typescript not narrow the type here by itself?
-          await moduleContext.playAudio(
-            LETTER_SOUNDS[sound as keyof typeof LETTER_SOUNDS]
-          );
-        } else {
-          await moduleContext.playAudio(
-            BIGRAM_SOUNDS[sound as keyof typeof BIGRAM_SOUNDS]
-          );
-        }
-        if (!doingFailure.current) {
-          return;
-        }
-        if (exercise.variant.sounds.length > 6) {
-          await new Promise(r => setTimeout(r, 50));
-        } else if (exercise.variant.sounds.length > 4) {
-          await new Promise(r => setTimeout(r, 250));
-        } else {
-          await new Promise(r => setTimeout(r, 500));
-        }
+      let startPos = exercise.variant.sounds[i][0];
+      let lastPos;
+      if (i === exercise.variant.sounds.length - 1) {
+        lastPos = exercise.variant.word.length;
+      } else {
+        lastPos = exercise.variant.sounds[i + 1][0];
+      }
+      setFailPosition([startPos, lastPos]);
+      let sound = exercise.variant.sounds[i][1];
+      if (sound in LETTER_SOUNDS) {
+        // TODO: why does typescript not narrow the type here by itself?
+        await moduleContext.playAudio(
+          LETTER_SOUNDS[sound as keyof typeof LETTER_SOUNDS]
+        );
+      } else {
+        await moduleContext.playAudio(
+          BIGRAM_SOUNDS[sound as keyof typeof BIGRAM_SOUNDS]
+        );
       }
       if (!doingFailure.current) {
         return;
       }
-      setFailPosition([0, exercise.variant.word.length]);
-      if (!isSingleSound) {
-        await moduleContext.playAudio(exercise.variant.spoken);
+      if (exercise.variant.sounds.length > 6) {
+        await new Promise(r => setTimeout(r, 50));
+      } else if (exercise.variant.sounds.length > 4) {
+        await new Promise(r => setTimeout(r, 250));
+      } else {
+        await new Promise(r => setTimeout(r, 500));
       }
-      setFailPosition([0, 0]);
-      doingFailure.current = false;
-    }, [
-      exercise,
-      failPosition,
-      doingFailure,
-      doFailure,
-      moduleContext,
-      addTrainingEvent
-    ]);
+    }
+    if (!doingFailure.current) {
+      return;
+    }
+    setFailPosition([0, exercise.variant.word.length]);
+    if (!isSingleSound) {
+      await moduleContext.playAudio(exercise.variant.spoken);
+    }
+    setFailPosition([0, 0]);
+    doingFailure.current = false;
+  }, [
+    exercise,
+    failPosition,
+    doingFailure,
+    doFailure,
+    moduleContext,
+    addTrainingEvent
+  ]);
 
-    let handleSuccess = React.useCallback(() => {
-      doSuccess();
-      addTrainingEvent('success');
-      doingFailure.current = false;
-      setFailPosition([0, 0]);
-    }, [addTrainingEvent, doSuccess]);
+  let handleSuccess = React.useCallback(() => {
+    doSuccess();
+    addTrainingEvent('success');
+    doingFailure.current = false;
+    setFailPosition([0, 0]);
+  }, [addTrainingEvent, doSuccess]);
 
-    let textStyle: React.CSSProperties = {
-      fontFamily: 'sans-serif',
-      fontSize: '200px',
-    };
-    let text = (
-      <text style={textStyle}
-          dominantBaseline="central"
-          textAnchor="middle"
-          y="50%"
-          x="50%">
-        <tspan>
-          {exercise.variant.word.substring(0, failPosition[0])}
-        </tspan>
-        <tspan fill="red">
-          {exercise.variant.word.substring(failPosition[0], failPosition[1])}
-        </tspan>
-        <tspan>
-          {exercise.variant.word.substring(failPosition[1])}
-        </tspan>
-      </text>
-    );
-
-    return (
-      <STTModule doSuccess={handleSuccess}
-          doFailure={handleFailure}
-          score={score}
-          maxScore={maxScore}>
-        {text}
-      </STTModule>
-    );
+  let textStyle: React.CSSProperties = {
+    fontFamily: 'sans-serif',
+    fontSize: '200px',
   };
+  let text = (
+    <text style={textStyle}
+        dominantBaseline="central"
+        textAnchor="middle"
+        y="50%"
+        x="50%">
+      <tspan>
+        {exercise.variant.word.substring(0, failPosition[0])}
+      </tspan>
+      <tspan fill="red">
+        {exercise.variant.word.substring(failPosition[0], failPosition[1])}
+      </tspan>
+      <tspan>
+        {exercise.variant.word.substring(failPosition[1])}
+      </tspan>
+    </text>
+  );
+
+  return (
+    <STTModule doSuccess={handleSuccess}
+        doFailure={handleFailure}
+        score={score}
+        maxScore={maxScore}>
+      {text}
+    </STTModule>
+  );
 };
