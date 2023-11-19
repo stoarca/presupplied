@@ -27,6 +27,8 @@ interface ModuleBuilderProps {
 export let ModuleBuilder = ({
   variants, maxScorePerVariant=2, isSingleSound, pronounceOnSuccess,
 }: ModuleBuilderProps) => {
+  let url = new URL(window.location.href);
+  let admin = url.searchParams.get('admin') === '1';
   let moduleContext = React.useContext(ModuleContext);
   let trainingRecorder = useTrainingDataRecorder();
 
@@ -56,11 +58,13 @@ export let ModuleBuilder = ({
   let vlist = React.useMemo(() => new VariantList(variants, maxScorePerVariant), []);
   let generateExercise = React.useCallback(() => {
     let variant = vlist.pickVariant();
-    trainingRecorder.addEvent({
-      kmid: 'READ_WORDS',
-      exerciseData: variant.word,
-      status: 'start'
-    });
+    if (!admin) {
+      trainingRecorder.addEvent({
+        kmid: 'READ_WORDS',
+        exerciseData: variant.word,
+        status: 'start'
+      });
+    }
     return {
       variant: vlist.pickVariant(),
     };
@@ -92,11 +96,13 @@ export let ModuleBuilder = ({
   let addTrainingEvent = React.useCallback((
     status: 'start' | 'success' | 'fail'
   ) => {
-    trainingRecorder.addEvent({
-      kmid: 'READ_WORDS',
-      exerciseData: exercise.variant.word,
-      status: status,
-    });
+    if (!admin) {
+      trainingRecorder.addEvent({
+        kmid: 'READ_WORDS',
+        exerciseData: exercise.variant.word,
+        status: status,
+      });
+    }
   }, [trainingRecorder, exercise]);
 
   let pronounceAbortController = React.useRef(new AbortController());
