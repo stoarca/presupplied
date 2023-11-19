@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import engineerWord from '@src/modules/common/READING/words/engineer';
@@ -13,7 +14,22 @@ import mechanicWord from '@src/modules/common/READING/words/mechanic';
 import accountantWord from '@src/modules/common/READING/words/accountant';
 import custodianWord from '@src/modules/common/READING/words/custodian';
 
-export default ModuleBuilder({
-  variants: [engineerWord, astronautWord, firefighterWord, doctorWord, painterWord, plumberWord, driverWord, chefWord, actorWord, mechanicWord, accountantWord, custodianWord],
-});
+export let words = [
+  engineerWord,
+  astronautWord,
+  firefighterWord,
+  doctorWord,
+  painterWord,
+  plumberWord,
+  driverWord,
+  chefWord,
+  actorWord,
+  mechanicWord,
+  accountantWord,
+  custodianWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import binWord from '@src/modules/common/READING/words/bin';
@@ -15,6 +16,23 @@ import ripWord from '@src/modules/common/READING/words/rip';
 import sipWord from '@src/modules/common/READING/words/sip';
 import mixWord from '@src/modules/common/READING/words/mix';
 
-export default ModuleBuilder({
-  variants: [binWord, sitWord, litWord, didWord, hidWord, kidWord, lidWord, pigWord, bigWord, digWord, himWord, ripWord, sipWord, mixWord],
-});
+export let words = [
+  binWord,
+  sitWord,
+  litWord,
+  didWord,
+  hidWord,
+  kidWord,
+  lidWord,
+  pigWord,
+  bigWord,
+  digWord,
+  himWord,
+  ripWord,
+  sipWord,
+  mixWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

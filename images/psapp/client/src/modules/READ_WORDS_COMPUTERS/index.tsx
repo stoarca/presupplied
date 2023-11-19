@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import computerWord from '@src/modules/common/READING/words/computer';
@@ -14,21 +15,23 @@ import displayWord from '@src/modules/common/READING/words/display';
 import windowWord from '@src/modules/common/READING/words/window';
 import programWord from '@src/modules/common/READING/words/program';
 
-export default ModuleBuilder({
-  variants: [
-    computerWord,
-    tabletWord,
-    smartphoneWord,
-    applicationWord,
-    mouseWord,
-    keyboardWord,
-    screenWord,
-    monitorWord,
-    cablesWord,
-    graphicsWord,
-    displayWord,
-    windowWord,
-    programWord,
-  ],
-});
+export let words = [
+  computerWord,
+  tabletWord,
+  smartphoneWord,
+  applicationWord,
+  mouseWord,
+  keyboardWord,
+  screenWord,
+  monitorWord,
+  cablesWord,
+  graphicsWord,
+  displayWord,
+  windowWord,
+  programWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

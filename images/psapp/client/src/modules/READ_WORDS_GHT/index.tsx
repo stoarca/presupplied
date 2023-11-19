@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import mightWord from '@src/modules/common/READING/words/might';
@@ -13,6 +14,21 @@ import frightWord from '@src/modules/common/READING/words/fright';
 import brightWord from '@src/modules/common/READING/words/bright';
 import foughtWord from '@src/modules/common/READING/words/fought';
 
-export default ModuleBuilder({
-  variants: [mightWord, fightWord, rightWord, tightWord, nightWord, oughtWord, eightWord, weightWord, heightWord, frightWord, brightWord, foughtWord],
-});
+export let words = [
+  mightWord,
+  fightWord,
+  rightWord,
+  tightWord,
+  nightWord,
+  oughtWord,
+  eightWord,
+  weightWord,
+  heightWord,
+  frightWord,
+  brightWord,
+  foughtWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

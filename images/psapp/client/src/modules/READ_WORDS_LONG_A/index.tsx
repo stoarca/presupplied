@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import cakeWord from '@src/modules/common/READING/words/cake';
@@ -12,6 +13,20 @@ import bakeWord from '@src/modules/common/READING/words/bake';
 import gameWord from '@src/modules/common/READING/words/game';
 import taleWord from '@src/modules/common/READING/words/tale';
 
-export default ModuleBuilder({
-  variants: [cakeWord, lakeWord, gateWord, grapeWord, flameWord, planeWord, braveWord, pasteWord, bakeWord, gameWord, taleWord],
-});
+export let words = [
+  cakeWord,
+  lakeWord,
+  gateWord,
+  grapeWord,
+  flameWord,
+  planeWord,
+  braveWord,
+  pasteWord,
+  bakeWord,
+  gameWord,
+  taleWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import armsWord from '@src/modules/common/READING/words/arms';
@@ -14,7 +15,23 @@ import noseWord from '@src/modules/common/READING/words/nose';
 import mouthWord from '@src/modules/common/READING/words/mouth';
 import earsWord from '@src/modules/common/READING/words/ears';
 
-export default ModuleBuilder({
-  variants: [armsWord, legsWord, shouldersWord, headWord, hairWord, feetWord, elbowsWord, kneesWord, anklesWord, eyesWord, noseWord, mouthWord, earsWord],
-});
+export let words = [
+  armsWord,
+  legsWord,
+  shouldersWord,
+  headWord,
+  hairWord,
+  feetWord,
+  elbowsWord,
+  kneesWord,
+  anklesWord,
+  eyesWord,
+  noseWord,
+  mouthWord,
+  earsWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import fishWord from '@src/modules/common/READING/words/fish';
@@ -13,7 +14,22 @@ import crabWord from '@src/modules/common/READING/words/crab';
 import penguinWord from '@src/modules/common/READING/words/penguin';
 import seahorseWord from '@src/modules/common/READING/words/seahorse';
 
-export default ModuleBuilder({
-  variants: [fishWord, walrusWord, sealWord, whaleWord, starfishWord, jellyfishWord, dolphinWord, sharkWord, otterWord, crabWord, penguinWord, seahorseWord],
-});
+export let words = [
+  fishWord,
+  walrusWord,
+  sealWord,
+  whaleWord,
+  starfishWord,
+  jellyfishWord,
+  dolphinWord,
+  sharkWord,
+  otterWord,
+  crabWord,
+  penguinWord,
+  seahorseWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

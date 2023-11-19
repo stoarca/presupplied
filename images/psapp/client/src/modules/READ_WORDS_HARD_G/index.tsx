@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import gapWord from '@src/modules/common/READING/words/gap';
@@ -12,6 +13,20 @@ import bagWord from '@src/modules/common/READING/words/bag';
 import hugWord from '@src/modules/common/READING/words/hug';
 import bugWord from '@src/modules/common/READING/words/bug';
 
-export default ModuleBuilder({
-  variants: [gapWord, gaspWord, golfWord, gripWord, getWord, gumWord, gasWord, logWord, bagWord, hugWord, bugWord],
-});
+export let words = [
+  gapWord,
+  gaspWord,
+  golfWord,
+  gripWord,
+  getWord,
+  gumWord,
+  gasWord,
+  logWord,
+  bagWord,
+  hugWord,
+  bugWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

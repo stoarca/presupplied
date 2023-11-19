@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import talkWord from '@src/modules/common/READING/words/talk';
@@ -10,7 +11,19 @@ import hulkWord from '@src/modules/common/READING/words/hulk';
 import elkWord from '@src/modules/common/READING/words/elk';
 import silkWord from '@src/modules/common/READING/words/silk';
 
-export default ModuleBuilder({
-  variants: [talkWord, walkWord, milkWord, yolkWord, bulkyWord, folksWord, hulkWord, elkWord, silkWord],
-});
+export let words = [
+  talkWord,
+  walkWord,
+  milkWord,
+  yolkWord,
+  bulkyWord,
+  folksWord,
+  hulkWord,
+  elkWord,
+  silkWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

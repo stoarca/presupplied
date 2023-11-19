@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import trainWord from '@src/modules/common/READING/words/train';
@@ -11,6 +12,19 @@ import trollWord from '@src/modules/common/READING/words/troll';
 import trickWord from '@src/modules/common/READING/words/trick';
 import tryWord from '@src/modules/common/READING/words/try';
 
-export default ModuleBuilder({
-  variants: [trainWord, tripWord, trayWord, trueWord, trustWord, trendWord, tribeWord, trollWord, trickWord, tryWord],
-});
+export let words = [
+  trainWord,
+  tripWord,
+  trayWord,
+  trueWord,
+  trustWord,
+  trendWord,
+  tribeWord,
+  trollWord,
+  trickWord,
+  tryWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

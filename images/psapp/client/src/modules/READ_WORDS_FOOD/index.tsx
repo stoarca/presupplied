@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import pizzaWord from '@src/modules/common/READING/words/pizza';
@@ -13,7 +14,22 @@ import baguetteWord from '@src/modules/common/READING/words/baguette';
 import oatmealWord from '@src/modules/common/READING/words/oatmeal';
 import yogurtWord from '@src/modules/common/READING/words/yogurt';
 
-export default ModuleBuilder({
-  variants: [pizzaWord, pastaWord, milkWord, meatWord, salamiWord, breadWord, fruitsWord, vegetablesWord, beefWord, baguetteWord, oatmealWord, yogurtWord],
-});
+export let words = [
+  pizzaWord,
+  pastaWord,
+  milkWord,
+  meatWord,
+  salamiWord,
+  breadWord,
+  fruitsWord,
+  vegetablesWord,
+  beefWord,
+  baguetteWord,
+  oatmealWord,
+  yogurtWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

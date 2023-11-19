@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import tieWord from '@src/modules/common/READING/words/tie';
@@ -12,6 +13,20 @@ import genieWord from '@src/modules/common/READING/words/genie';
 import friendWord from '@src/modules/common/READING/words/friend';
 import alienWord from '@src/modules/common/READING/words/alien';
 
-export default ModuleBuilder({
-  variants: [tieWord, dieWord, lieWord, pieWord, viewWord, fieldWord, briefWord, movieWord, genieWord, friendWord, alienWord],
-});
+export let words = [
+  tieWord,
+  dieWord,
+  lieWord,
+  pieWord,
+  viewWord,
+  fieldWord,
+  briefWord,
+  movieWord,
+  genieWord,
+  friendWord,
+  alienWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

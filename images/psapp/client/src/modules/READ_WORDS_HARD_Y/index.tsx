@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import yesWord from '@src/modules/common/READING/words/yes';
@@ -9,6 +10,8 @@ import yetWord from '@src/modules/common/READING/words/yet';
 import yumWord from '@src/modules/common/READING/words/yum';
 import yapWord from '@src/modules/common/READING/words/yap';
 
-export default ModuleBuilder({
-  variants: [yesWord, yellWord, yamWord, yardWord, yarnWord, yetWord, yumWord, yapWord],
-});
+export let words = [yesWord, yellWord, yamWord, yardWord, yarnWord, yetWord, yumWord, yapWord];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

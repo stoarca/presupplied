@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import cowWord from '@src/modules/common/READING/words/cow';
@@ -12,7 +13,21 @@ import honeybeeWord from '@src/modules/common/READING/words/honeybee';
 import gooseWord from '@src/modules/common/READING/words/goose';
 import llamaWord from '@src/modules/common/READING/words/llama';
 
-export default ModuleBuilder({
-  variants: [cowWord, pigWord, goatWord, sheepWord, donkeyWord, chickenWord, poultryWord, turkeyWord, honeybeeWord, gooseWord, llamaWord],
-});
+export let words = [
+  cowWord,
+  pigWord,
+  goatWord,
+  sheepWord,
+  donkeyWord,
+  chickenWord,
+  poultryWord,
+  turkeyWord,
+  honeybeeWord,
+  gooseWord,
+  llamaWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

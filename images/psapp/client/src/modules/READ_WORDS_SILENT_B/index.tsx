@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import combWord from '@src/modules/common/READING/words/comb';
@@ -13,7 +14,22 @@ import subtleWord from '@src/modules/common/READING/words/subtle';
 import doubtWord from '@src/modules/common/READING/words/doubt';
 import debtWord from '@src/modules/common/READING/words/debt';
 
-export default ModuleBuilder({
-  variants: [combWord, climbWord, bombWord, lambWord, thumbWord, tombWord, numbWord, crumbWord, dumbWord, subtleWord, doubtWord, debtWord],
-});
+export let words = [
+  combWord,
+  climbWord,
+  bombWord,
+  lambWord,
+  thumbWord,
+  tombWord,
+  numbWord,
+  crumbWord,
+  dumbWord,
+  subtleWord,
+  doubtWord,
+  debtWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

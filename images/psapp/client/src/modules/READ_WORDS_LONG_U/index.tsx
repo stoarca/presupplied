@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import tubeWord from '@src/modules/common/READING/words/tube';
@@ -12,6 +13,20 @@ import rudeWord from '@src/modules/common/READING/words/rude';
 import ruleWord from '@src/modules/common/READING/words/rule';
 import trueWord from '@src/modules/common/READING/words/true';
 
-export default ModuleBuilder({
-  variants: [tubeWord, tuneWord, muteWord, muleWord, fluteWord, pruneWord, glueWord, clueWord, rudeWord, ruleWord, trueWord],
-});
+export let words = [
+  tubeWord,
+  tuneWord,
+  muteWord,
+  muleWord,
+  fluteWord,
+  pruneWord,
+  glueWord,
+  clueWord,
+  rudeWord,
+  ruleWord,
+  trueWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

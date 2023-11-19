@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import equalWord from '@src/modules/common/READING/words/equal';
@@ -13,7 +14,22 @@ import squeakWord from '@src/modules/common/READING/words/squeak';
 import squirtWord from '@src/modules/common/READING/words/squirt';
 import squishWord from '@src/modules/common/READING/words/squish';
 
-export default ModuleBuilder({
-  variants: [equalWord, quackWord, quarterWord, queenWord, quickWord, quietWord, quiteWord, quitWord, squashWord, squeakWord, squirtWord, squishWord],
-});
+export let words = [
+  equalWord,
+  quackWord,
+  quarterWord,
+  queenWord,
+  quickWord,
+  quietWord,
+  quiteWord,
+  quitWord,
+  squashWord,
+  squeakWord,
+  squirtWord,
+  squishWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

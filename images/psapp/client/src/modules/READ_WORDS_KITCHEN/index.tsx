@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import ovenWord from '@src/modules/common/READING/words/oven';
@@ -13,7 +14,22 @@ import forkWord from '@src/modules/common/READING/words/fork';
 import plateWord from '@src/modules/common/READING/words/plate';
 import bowlWord from '@src/modules/common/READING/words/bowl';
 
-export default ModuleBuilder({
-  variants: [ovenWord, fridgeWord, freezerWord, cupboardWord, counterWord, stoveWord, toasterWord, kettleWord, spoonWord, forkWord, plateWord, bowlWord],
-});
+export let words = [
+  ovenWord,
+  fridgeWord,
+  freezerWord,
+  cupboardWord,
+  counterWord,
+  stoveWord,
+  toasterWord,
+  kettleWord,
+  spoonWord,
+  forkWord,
+  plateWord,
+  bowlWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

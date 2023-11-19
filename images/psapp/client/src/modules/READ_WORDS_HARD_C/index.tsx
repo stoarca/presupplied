@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import clapWord from '@src/modules/common/READING/words/clap';
@@ -10,6 +11,18 @@ import coldWord from '@src/modules/common/READING/words/cold';
 import cordWord from '@src/modules/common/READING/words/cord';
 import corkWord from '@src/modules/common/READING/words/cork';
 
-export default ModuleBuilder({
-  variants: [clapWord, clipWord, cubeWord, copeWord, campWord, caveWord, coldWord, cordWord, corkWord],
-});
+export let words = [
+  clapWord,
+  clipWord,
+  cubeWord,
+  copeWord,
+  campWord,
+  caveWord,
+  coldWord,
+  cordWord,
+  corkWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import pencilWord from '@src/modules/common/READING/words/pencil';
@@ -13,7 +14,22 @@ import mathWord from '@src/modules/common/READING/words/math';
 import computersWord from '@src/modules/common/READING/words/computers';
 import learningWord from '@src/modules/common/READING/words/learning';
 
-export default ModuleBuilder({
-  variants: [pencilWord, eraserWord, schoolWord, teacherWord, studentsWord, deskWord, paperWord, readingWord, writingWord, mathWord, computersWord, learningWord],
-});
+export let words = [
+  pencilWord,
+  eraserWord,
+  schoolWord,
+  teacherWord,
+  studentsWord,
+  deskWord,
+  paperWord,
+  readingWord,
+  writingWord,
+  mathWord,
+  computersWord,
+  learningWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

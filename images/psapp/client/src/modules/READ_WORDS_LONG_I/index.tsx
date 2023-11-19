@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import rideWord from '@src/modules/common/READING/words/ride';
@@ -13,6 +14,21 @@ import bikeWord from '@src/modules/common/READING/words/bike';
 import lifeWord from '@src/modules/common/READING/words/life';
 import sizeWord from '@src/modules/common/READING/words/size';
 
-export default ModuleBuilder({
-  variants: [rideWord, timeWord, findWord, likeWord, lineWord, mineWord, sideWord, wipeWord, fireWord, bikeWord, lifeWord, sizeWord],
-});
+export let words = [
+  rideWord,
+  timeWord,
+  findWord,
+  likeWord,
+  lineWord,
+  mineWord,
+  sideWord,
+  wipeWord,
+  fireWord,
+  bikeWord,
+  lifeWord,
+  sizeWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

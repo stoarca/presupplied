@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import alphabetWord from '@src/modules/common/READING/words/alphabet';
@@ -10,7 +11,19 @@ import sphereWord from '@src/modules/common/READING/words/sphere';
 import microphoneWord from '@src/modules/common/READING/words/microphone';
 import dolphinWord from '@src/modules/common/READING/words/dolphin';
 
-export default ModuleBuilder({
-  variants: [alphabetWord, elephantWord, pharmacyWord, phoneWord, photographWord, photosWord, sphereWord, microphoneWord, dolphinWord],
-});
+export let words = [
+  alphabetWord,
+  elephantWord,
+  pharmacyWord,
+  phoneWord,
+  photographWord,
+  photosWord,
+  sphereWord,
+  microphoneWord,
+  dolphinWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

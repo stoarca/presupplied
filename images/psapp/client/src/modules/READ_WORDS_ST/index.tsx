@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import bestWord from '@src/modules/common/READING/words/best';
@@ -15,6 +16,23 @@ import stillWord from '@src/modules/common/READING/words/still';
 import stingWord from '@src/modules/common/READING/words/sting';
 import stopWord from '@src/modules/common/READING/words/stop';
 
-export default ModuleBuilder({
-  variants: [bestWord, fastWord, listWord, pastWord, restWord, testWord, justWord, lastWord, rustWord, dustWord, stepWord, stillWord, stingWord, stopWord],
-});
+export let words = [
+  bestWord,
+  fastWord,
+  listWord,
+  pastWord,
+  restWord,
+  testWord,
+  justWord,
+  lastWord,
+  rustWord,
+  dustWord,
+  stepWord,
+  stillWord,
+  stingWord,
+  stopWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

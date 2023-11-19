@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import andWord from '@src/modules/common/READING/words/and';
@@ -13,6 +14,21 @@ import jamWord from '@src/modules/common/READING/words/jam';
 import nagWord from '@src/modules/common/READING/words/nag';
 import tanWord from '@src/modules/common/READING/words/tan';
 
-export default ModuleBuilder({
-  variants: [andWord, sandWord, bandWord, landWord, canWord, manWord, fanWord, panWord, ranWord, jamWord, nagWord, tanWord],
-});
+export let words = [
+  andWord,
+  sandWord,
+  bandWord,
+  landWord,
+  canWord,
+  manWord,
+  fanWord,
+  panWord,
+  ranWord,
+  jamWord,
+  nagWord,
+  tanWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

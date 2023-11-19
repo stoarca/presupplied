@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import thinkWord from '@src/modules/common/READING/words/think';
@@ -12,7 +13,21 @@ import thickWord from '@src/modules/common/READING/words/thick';
 import thinWord from '@src/modules/common/READING/words/thin';
 import withWord from '@src/modules/common/READING/words/with';
 
-export default ModuleBuilder({
-  variants: [thinkWord, thingWord, bathWord, birthdayWord, mathWord, monthWord, teethWord, thanksWord, thickWord, thinWord, withWord],
-});
+export let words = [
+  thinkWord,
+  thingWord,
+  bathWord,
+  birthdayWord,
+  mathWord,
+  monthWord,
+  teethWord,
+  thanksWord,
+  thickWord,
+  thinWord,
+  withWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import mayWord from '@src/modules/common/READING/words/may';
@@ -12,6 +13,20 @@ import alwaysWord from '@src/modules/common/READING/words/always';
 import todayWord from '@src/modules/common/READING/words/today';
 import okayWord from '@src/modules/common/READING/words/okay';
 
-export default ModuleBuilder({
-  variants: [mayWord, layWord, payWord, sayWord, dayWord, wayWord, playWord, layerWord, alwaysWord, todayWord, okayWord],
-});
+export let words = [
+  mayWord,
+  layWord,
+  payWord,
+  sayWord,
+  dayWord,
+  wayWord,
+  playWord,
+  layerWord,
+  alwaysWord,
+  todayWord,
+  okayWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

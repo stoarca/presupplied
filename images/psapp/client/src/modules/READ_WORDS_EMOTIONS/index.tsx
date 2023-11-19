@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import happyWord from '@src/modules/common/READING/words/happy';
@@ -12,7 +13,21 @@ import scaredWord from '@src/modules/common/READING/words/scared';
 import calmWord from '@src/modules/common/READING/words/calm';
 import boredWord from '@src/modules/common/READING/words/bored';
 
-export default ModuleBuilder({
-  variants: [happyWord, sadWord, angryWord, jealousWord, proudWord, excitedWord, lonelyWord, nervousWord, scaredWord, calmWord, boredWord],
-});
+export let words = [
+  happyWord,
+  sadWord,
+  angryWord,
+  jealousWord,
+  proudWord,
+  excitedWord,
+  lonelyWord,
+  nervousWord,
+  scaredWord,
+  calmWord,
+  boredWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import beingWord from '@src/modules/common/READING/words/being';
@@ -8,6 +9,8 @@ import weirdWord from '@src/modules/common/READING/words/weird';
 import seizeWord from '@src/modules/common/READING/words/seize';
 import heistWord from '@src/modules/common/READING/words/heist';
 
-export default ModuleBuilder({
-  variants: [beingWord, veilWord, veinsWord, heirsWord, weirdWord, seizeWord, heistWord],
-});
+export let words = [beingWord, veilWord, veinsWord, heirsWord, weirdWord, seizeWord, heistWord];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

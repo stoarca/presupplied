@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import seeWord from '@src/modules/common/READING/words/see';
@@ -12,6 +13,20 @@ import freeWord from '@src/modules/common/READING/words/free';
 import feedWord from '@src/modules/common/READING/words/feed';
 import sleepWord from '@src/modules/common/READING/words/sleep';
 
-export default ModuleBuilder({
-  variants: [seeWord, beeWord, sweetWord, eelWord, sweepWord, peelWord, feelWord, needWord, freeWord, feedWord, sleepWord],
-});
+export let words = [
+  seeWord,
+  beeWord,
+  sweetWord,
+  eelWord,
+  sweepWord,
+  peelWord,
+  feelWord,
+  needWord,
+  freeWord,
+  feedWord,
+  sleepWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

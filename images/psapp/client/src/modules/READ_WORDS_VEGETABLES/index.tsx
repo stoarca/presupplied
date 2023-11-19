@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import tomatoWord from '@src/modules/common/READING/words/tomato';
@@ -12,7 +13,21 @@ import cabbageWord from '@src/modules/common/READING/words/cabbage';
 import cauliflowerWord from '@src/modules/common/READING/words/cauliflower';
 import carrotWord from '@src/modules/common/READING/words/carrot';
 
-export default ModuleBuilder({
-  variants: [tomatoWord, cucumberWord, eggplantWord, zucchiniWord, pepperWord, asparagusWord, onionWord, garlicWord, cabbageWord, cauliflowerWord, carrotWord],
-});
+export let words = [
+  tomatoWord,
+  cucumberWord,
+  eggplantWord,
+  zucchiniWord,
+  pepperWord,
+  asparagusWord,
+  onionWord,
+  garlicWord,
+  cabbageWord,
+  cauliflowerWord,
+  carrotWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

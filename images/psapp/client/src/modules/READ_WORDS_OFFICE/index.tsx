@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import officeWord from '@src/modules/common/READING/words/office';
@@ -11,7 +12,20 @@ import startupWord from '@src/modules/common/READING/words/startup';
 import employeeWord from '@src/modules/common/READING/words/employee';
 import employerWord from '@src/modules/common/READING/words/employer';
 
-export default ModuleBuilder({
-  variants: [officeWord, deskWord, jobWord, workWord, productWord, serviceWord, businessWord, startupWord, employeeWord, employerWord],
-});
+export let words = [
+  officeWord,
+  deskWord,
+  jobWord,
+  workWord,
+  productWord,
+  serviceWord,
+  businessWord,
+  startupWord,
+  employeeWord,
+  employerWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

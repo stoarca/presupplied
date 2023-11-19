@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import oneWord from '@src/modules/common/READING/words/one';
@@ -14,7 +15,23 @@ import elevenWord from '@src/modules/common/READING/words/eleven';
 import twelveWord from '@src/modules/common/READING/words/twelve';
 import thirteenWord from '@src/modules/common/READING/words/thirteen';
 
-export default ModuleBuilder({
-  variants: [oneWord, twoWord, threeWord, fourWord, fiveWord, sixWord, sevenWord, eightWord, nineWord, tenWord, elevenWord, twelveWord, thirteenWord],
-});
+export let words = [
+  oneWord,
+  twoWord,
+  threeWord,
+  fourWord,
+  fiveWord,
+  sixWord,
+  sevenWord,
+  eightWord,
+  nineWord,
+  tenWord,
+  elevenWord,
+  twelveWord,
+  thirteenWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

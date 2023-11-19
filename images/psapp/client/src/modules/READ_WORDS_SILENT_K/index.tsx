@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import knifeWord from '@src/modules/common/READING/words/knife';
@@ -11,7 +12,20 @@ import nightWord from '@src/modules/common/READING/words/night';
 import knuckleWord from '@src/modules/common/READING/words/knuckle';
 import knitWord from '@src/modules/common/READING/words/knit';
 
-export default ModuleBuilder({
-  variants: [knifeWord, kneeWord, knowWord, noWord, knotWord, notWord, knightWord, nightWord, knuckleWord, knitWord],
-});
+export let words = [
+  knifeWord,
+  kneeWord,
+  knowWord,
+  noWord,
+  knotWord,
+  notWord,
+  knightWord,
+  nightWord,
+  knuckleWord,
+  knitWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

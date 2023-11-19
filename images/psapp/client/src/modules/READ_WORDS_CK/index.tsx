@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import backWord from '@src/modules/common/READING/words/back';
@@ -12,6 +13,20 @@ import pocketWord from '@src/modules/common/READING/words/pocket';
 import pickleWord from '@src/modules/common/READING/words/pickle';
 import luckyWord from '@src/modules/common/READING/words/lucky';
 
-export default ModuleBuilder({
-  variants: [backWord, packWord, kickWord, lickWord, ickyWord, sockWord, stickWord, rockWord, pocketWord, pickleWord, luckyWord],
-});
+export let words = [
+  backWord,
+  packWord,
+  kickWord,
+  lickWord,
+  ickyWord,
+  sockWord,
+  stickWord,
+  rockWord,
+  pocketWord,
+  pickleWord,
+  luckyWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

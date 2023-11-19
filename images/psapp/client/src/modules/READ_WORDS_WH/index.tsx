@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import whatWord from '@src/modules/common/READING/words/what';
@@ -12,7 +13,21 @@ import whoaWord from '@src/modules/common/READING/words/whoa';
 import anywhereWord from '@src/modules/common/READING/words/anywhere';
 import somewhereWord from '@src/modules/common/READING/words/somewhere';
 
-export default ModuleBuilder({
-  variants: [whatWord, whenWord, whoWord, whyWord, wheelWord, whichWord, wholeWord, holeWord, whoaWord, anywhereWord, somewhereWord],
-});
+export let words = [
+  whatWord,
+  whenWord,
+  whoWord,
+  whyWord,
+  wheelWord,
+  whichWord,
+  wholeWord,
+  holeWord,
+  whoaWord,
+  anywhereWord,
+  somewhereWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

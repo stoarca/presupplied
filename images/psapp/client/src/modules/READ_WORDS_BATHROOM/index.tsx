@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import showerWord from '@src/modules/common/READING/words/shower';
@@ -12,7 +13,21 @@ import bathtubWord from '@src/modules/common/READING/words/bathtub';
 import flushWord from '@src/modules/common/READING/words/flush';
 import robeWord from '@src/modules/common/READING/words/robe';
 
-export default ModuleBuilder({
-  variants: [showerWord, toiletWord, mirrorWord, bathroomWord, scaleWord, brushWord, towelWord, faucetWord, bathtubWord, flushWord, robeWord],
-});
+export let words = [
+  showerWord,
+  toiletWord,
+  mirrorWord,
+  bathroomWord,
+  scaleWord,
+  brushWord,
+  towelWord,
+  faucetWord,
+  bathtubWord,
+  flushWord,
+  robeWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

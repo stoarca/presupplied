@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import thisWord from '@src/modules/common/READING/words/this';
@@ -13,7 +14,22 @@ import theirWord from '@src/modules/common/READING/words/their';
 import theyWord from '@src/modules/common/READING/words/they';
 import thenWord from '@src/modules/common/READING/words/then';
 
-export default ModuleBuilder({
-  variants: [thisWord, thatWord, thoseWord, theseWord, brotherWord, motherWord, otherWord, anotherWord, thereWord, theirWord, theyWord, thenWord],
-});
+export let words = [
+  thisWord,
+  thatWord,
+  thoseWord,
+  theseWord,
+  brotherWord,
+  motherWord,
+  otherWord,
+  anotherWord,
+  thereWord,
+  theirWord,
+  theyWord,
+  thenWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

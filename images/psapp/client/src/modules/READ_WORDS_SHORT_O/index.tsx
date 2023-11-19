@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import potWord from '@src/modules/common/READING/words/pot';
@@ -14,6 +15,22 @@ import fogWord from '@src/modules/common/READING/words/fog';
 import jobWord from '@src/modules/common/READING/words/job';
 import popWord from '@src/modules/common/READING/words/pop';
 
-export default ModuleBuilder({
-  variants: [potWord, dogWord, hotWord, topWord, boxWord, mopWord, hopWord, someWord, lotWord, dotWord, fogWord, jobWord, popWord],
-});
+export let words = [
+  potWord,
+  dogWord,
+  hotWord,
+  topWord,
+  boxWord,
+  mopWord,
+  hopWord,
+  someWord,
+  lotWord,
+  dotWord,
+  fogWord,
+  jobWord,
+  popWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

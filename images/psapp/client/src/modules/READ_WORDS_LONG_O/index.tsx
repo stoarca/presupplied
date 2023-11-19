@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import goWord from '@src/modules/common/READING/words/go';
@@ -12,6 +13,20 @@ import belowWord from '@src/modules/common/READING/words/below';
 import forkWord from '@src/modules/common/READING/words/fork';
 import helloWord from '@src/modules/common/READING/words/hello';
 
-export default ModuleBuilder({
-  variants: [goWord, noWord, soWord, toeWord, moreWord, soreWord, fortWord, snowWord, belowWord, forkWord, helloWord],
-});
+export let words = [
+  goWord,
+  noWord,
+  soWord,
+  toeWord,
+  moreWord,
+  soreWord,
+  fortWord,
+  snowWord,
+  belowWord,
+  forkWord,
+  helloWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

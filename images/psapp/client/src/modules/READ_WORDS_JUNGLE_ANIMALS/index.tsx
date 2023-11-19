@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import tigerWord from '@src/modules/common/READING/words/tiger';
@@ -11,7 +12,20 @@ import crocodileWord from '@src/modules/common/READING/words/crocodile';
 import rhinocerosWord from '@src/modules/common/READING/words/rhinoceros';
 import chimpanzeeWord from '@src/modules/common/READING/words/chimpanzee';
 
-export default ModuleBuilder({
-  variants: [tigerWord, gorillaWord, elephantWord, lionWord, toucanWord, hippoWord, slothWord, crocodileWord, rhinocerosWord, chimpanzeeWord],
-});
+export let words = [
+  tigerWord,
+  gorillaWord,
+  elephantWord,
+  lionWord,
+  toucanWord,
+  hippoWord,
+  slothWord,
+  crocodileWord,
+  rhinocerosWord,
+  chimpanzeeWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

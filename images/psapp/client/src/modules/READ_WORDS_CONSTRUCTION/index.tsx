@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import buildingWord from '@src/modules/common/READING/words/building';
@@ -11,7 +12,20 @@ import tunnelWord from '@src/modules/common/READING/words/tunnel';
 import demolitionWord from '@src/modules/common/READING/words/demolition';
 import constructionWord from '@src/modules/common/READING/words/construction';
 
-export default ModuleBuilder({
-  variants: [buildingWord, craneWord, cementWord, asphaltWord, repairWord, renovationWord, bridgeWord, tunnelWord, demolitionWord, constructionWord],
-});
+export let words = [
+  buildingWord,
+  craneWord,
+  cementWord,
+  asphaltWord,
+  repairWord,
+  renovationWord,
+  bridgeWord,
+  tunnelWord,
+  demolitionWord,
+  constructionWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import redWord from '@src/modules/common/READING/words/red';
@@ -13,7 +14,22 @@ import whiteWord from '@src/modules/common/READING/words/white';
 import grayWord from '@src/modules/common/READING/words/gray';
 import pinkWord from '@src/modules/common/READING/words/pink';
 
-export default ModuleBuilder({
-  variants: [redWord, blueWord, orangeWord, greenWord, violetWord, purpleWord, yellowWord, brownWord, blackWord, whiteWord, grayWord, pinkWord],
-});
+export let words = [
+  redWord,
+  blueWord,
+  orangeWord,
+  greenWord,
+  violetWord,
+  purpleWord,
+  yellowWord,
+  brownWord,
+  blackWord,
+  whiteWord,
+  grayWord,
+  pinkWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

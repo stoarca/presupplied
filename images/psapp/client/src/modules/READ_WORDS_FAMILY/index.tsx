@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import momWord from '@src/modules/common/READING/words/mom';
@@ -14,7 +15,23 @@ import grandfatherWord from '@src/modules/common/READING/words/grandfather';
 import grandmaWord from '@src/modules/common/READING/words/grandma';
 import grandpaWord from '@src/modules/common/READING/words/grandpa';
 
-export default ModuleBuilder({
-  variants: [momWord, dadWord, brotherWord, sisterWord, auntWord, uncleWord, cousinWord, sonWord, daughterWord, grandmotherWord, grandfatherWord, grandmaWord, grandpaWord],
-});
+export let words = [
+  momWord,
+  dadWord,
+  brotherWord,
+  sisterWord,
+  auntWord,
+  uncleWord,
+  cousinWord,
+  sonWord,
+  daughterWord,
+  grandmotherWord,
+  grandfatherWord,
+  grandmaWord,
+  grandpaWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

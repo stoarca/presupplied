@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import willWord from '@src/modules/common/READING/words/will';
@@ -11,7 +12,20 @@ import fellowWord from '@src/modules/common/READING/words/fellow';
 import followWord from '@src/modules/common/READING/words/follow';
 import millionWord from '@src/modules/common/READING/words/million';
 
-export default ModuleBuilder({
-  variants: [willWord, hillWord, dullWord, tallWord, smellWord, allowWord, dollarWord, fellowWord, followWord, millionWord],
-});
+export let words = [
+  willWord,
+  hillWord,
+  dullWord,
+  tallWord,
+  smellWord,
+  allowWord,
+  dollarWord,
+  fellowWord,
+  followWord,
+  millionWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

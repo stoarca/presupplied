@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import auntWord from '@src/modules/common/READING/words/aunt';
@@ -10,7 +11,19 @@ import dinosaurWord from '@src/modules/common/READING/words/dinosaur';
 import beautifulWord from '@src/modules/common/READING/words/beautiful';
 import vaultWord from '@src/modules/common/READING/words/vault';
 
-export default ModuleBuilder({
-  variants: [auntWord, autoWord, automaticWord, haulWord, sausageWord, paulWord, dinosaurWord, beautifulWord, vaultWord],
-});
+export let words = [
+  auntWord,
+  autoWord,
+  automaticWord,
+  haulWord,
+  sausageWord,
+  paulWord,
+  dinosaurWord,
+  beautifulWord,
+  vaultWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

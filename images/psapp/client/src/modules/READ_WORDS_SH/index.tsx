@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import brushWord from '@src/modules/common/READING/words/brush';
@@ -13,7 +14,22 @@ import shareWord from '@src/modules/common/READING/words/share';
 import sharpWord from '@src/modules/common/READING/words/sharp';
 import shedWord from '@src/modules/common/READING/words/shed';
 
-export default ModuleBuilder({
-  variants: [brushWord, cashWord, smashWord, crashWord, sheWord, dishWord, fishWord, sharkWord, shallowWord, shareWord, sharpWord, shedWord],
-});
+export let words = [
+  brushWord,
+  cashWord,
+  smashWord,
+  crashWord,
+  sheWord,
+  dishWord,
+  fishWord,
+  sharkWord,
+  shallowWord,
+  shareWord,
+  sharpWord,
+  shedWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

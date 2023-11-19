@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import parkWord from '@src/modules/common/READING/words/park';
@@ -12,7 +13,21 @@ import fountainWord from '@src/modules/common/READING/words/fountain';
 import benchWord from '@src/modules/common/READING/words/bench';
 import seesawWord from '@src/modules/common/READING/words/seesaw';
 
-export default ModuleBuilder({
-  variants: [parkWord, playgroundWord, slideWord, swingWord, climbWord, hideWord, tagWord, sandboxWord, fountainWord, benchWord, seesawWord],
-});
+export let words = [
+  parkWord,
+  playgroundWord,
+  slideWord,
+  swingWord,
+  climbWord,
+  hideWord,
+  tagWord,
+  sandboxWord,
+  fountainWord,
+  benchWord,
+  seesawWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

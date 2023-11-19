@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import gymWord from '@src/modules/common/READING/words/gym';
@@ -12,6 +13,20 @@ import ageWord from '@src/modules/common/READING/words/age';
 import logicWord from '@src/modules/common/READING/words/logic';
 import legendWord from '@src/modules/common/READING/words/legend';
 
-export default ModuleBuilder({
-  variants: [gymWord, gemWord, germWord, gingerWord, gelWord, generalWord, largeWord, angelWord, ageWord, logicWord, legendWord],
-});
+export let words = [
+  gymWord,
+  gemWord,
+  germWord,
+  gingerWord,
+  gelWord,
+  generalWord,
+  largeWord,
+  angelWord,
+  ageWord,
+  logicWord,
+  legendWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

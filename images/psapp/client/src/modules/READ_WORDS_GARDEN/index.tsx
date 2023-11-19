@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import flowersWord from '@src/modules/common/READING/words/flowers';
@@ -13,7 +14,22 @@ import flowerbedWord from '@src/modules/common/READING/words/flowerbed';
 import plantsWord from '@src/modules/common/READING/words/plants';
 import grassWord from '@src/modules/common/READING/words/grass';
 
-export default ModuleBuilder({
-  variants: [flowersWord, gardenWord, bushesWord, roseWord, birdfeederWord, backyardWord, treesWord, patioWord, soilWord, flowerbedWord, plantsWord, grassWord],
-});
+export let words = [
+  flowersWord,
+  gardenWord,
+  bushesWord,
+  roseWord,
+  birdfeederWord,
+  backyardWord,
+  treesWord,
+  patioWord,
+  soilWord,
+  flowerbedWord,
+  plantsWord,
+  grassWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

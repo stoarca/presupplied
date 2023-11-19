@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import cutWord from '@src/modules/common/READING/words/cut';
@@ -16,6 +17,24 @@ import funWord from '@src/modules/common/READING/words/fun';
 import lugWord from '@src/modules/common/READING/words/lug';
 import sumWord from '@src/modules/common/READING/words/sum';
 
-export default ModuleBuilder({
-  variants: [cutWord, gumWord, hutWord, jugWord, mudWord, nutWord, pupWord, runWord, subWord, tugWord, busWord, cupWord, funWord, lugWord, sumWord],
-});
+export let words = [
+  cutWord,
+  gumWord,
+  hutWord,
+  jugWord,
+  mudWord,
+  nutWord,
+  pupWord,
+  runWord,
+  subWord,
+  tugWord,
+  busWord,
+  cupWord,
+  funWord,
+  lugWord,
+  sumWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

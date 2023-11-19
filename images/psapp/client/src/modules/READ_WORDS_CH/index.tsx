@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import archWord from '@src/modules/common/READING/words/arch';
@@ -14,7 +15,23 @@ import peachWord from '@src/modules/common/READING/words/peach';
 import reachWord from '@src/modules/common/READING/words/reach';
 import touchWord from '@src/modules/common/READING/words/touch';
 
-export default ModuleBuilder({
-  variants: [archWord, torchWord, benchWord, checkWord, chainWord, branchWord, bunchWord, chairWord, chaseWord, lunchWord, peachWord, reachWord, touchWord],
-});
+export let words = [
+  archWord,
+  torchWord,
+  benchWord,
+  checkWord,
+  chainWord,
+  branchWord,
+  bunchWord,
+  chairWord,
+  chaseWord,
+  lunchWord,
+  peachWord,
+  reachWord,
+  touchWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 

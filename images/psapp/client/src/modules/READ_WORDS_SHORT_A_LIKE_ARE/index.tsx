@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import areWord from '@src/modules/common/READING/words/are';
@@ -12,6 +13,20 @@ import barWord from '@src/modules/common/READING/words/bar';
 import mallWord from '@src/modules/common/READING/words/mall';
 import starWord from '@src/modules/common/READING/words/star';
 
-export default ModuleBuilder({
-  variants: [areWord, allWord, ballWord, callWord, wallWord, fallWord, farWord, carWord, barWord, mallWord, starWord],
-});
+export let words = [
+  areWord,
+  allWord,
+  ballWord,
+  callWord,
+  wallWord,
+  fallWord,
+  farWord,
+  carWord,
+  barWord,
+  mallWord,
+  starWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};

@@ -1,3 +1,4 @@
+import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
 import antWord from '@src/modules/common/READING/words/ant';
@@ -14,7 +15,23 @@ import mothWord from '@src/modules/common/READING/words/moth';
 import cricketWord from '@src/modules/common/READING/words/cricket';
 import grasshopperWord from '@src/modules/common/READING/words/grasshopper';
 
-export default ModuleBuilder({
-  variants: [antWord, bugWord, beetleWord, butterflyWord, beeWord, cockroachWord, dragonflyWord, waspWord, caterpillarWord, ladybugWord, mothWord, cricketWord, grasshopperWord],
-});
+export let words = [
+  antWord,
+  bugWord,
+  beetleWord,
+  butterflyWord,
+  beeWord,
+  cockroachWord,
+  dragonflyWord,
+  waspWord,
+  caterpillarWord,
+  ladybugWord,
+  mothWord,
+  cricketWord,
+  grasshopperWord
+];
+
+export default (props: never) => {
+  return <ModuleBuilder variants={words} />;
+};
 
