@@ -778,32 +778,6 @@ let AdminKnowledgeMap = ({
     return handleMoveTreeVert(id, 'down');
   }, [handleMoveTreeVert]);
 
-  let handleAddSubNode = React.useCallback((id: string) => {
-    setKnowledgeMap({
-      nodes: knowledgeMap.nodes.map(x => {
-        if (x.id === id) {
-          return {
-            ...x,
-            subNodes: [
-              ...x.subNodes,
-              {
-                id: 'newnode' + genId(),
-                title: '',
-                description: '',
-                studentVideos: [],
-                teacherVideos: [],
-              }
-            ],
-          };
-        } else {
-          return x;
-        }
-      })
-    });
-
-  }, [knowledgeMap, knowledgeGraph]);
-
-
   let handleSelectIds = React.useCallback((idsToSelect: string[]) => {
     setSelectedCells(idsToSelect.map(x => knowledgeGraph.getNodeData(x).cell));
   }, [knowledgeGraph]);
@@ -841,7 +815,6 @@ let AdminKnowledgeMap = ({
           onMoveTreeRight={handleMoveTreeRight}
           onMoveTreeUp={handleMoveTreeUp}
           onMoveTreeDown={handleMoveTreeDown}
-          onAddSubNode={handleAddSubNode}
           onSelectIds={handleSelectIds}
           onDeleteIds={handleDeleteIds}/>
     </div>

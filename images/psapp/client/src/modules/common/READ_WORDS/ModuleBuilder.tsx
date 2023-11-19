@@ -9,7 +9,7 @@ import {LETTER_SOUNDS, BIGRAM_SOUNDS} from '@src/modules/common/READING/util';
 import whatWordIsThis from './what_word_is_this.wav';
 import whatSoundDoesThisMake from './what_sound_does_this_make.wav';
 
-type Variant = {
+export type Variant = {
   word: string,
   sounds: readonly (readonly [number, keyof typeof LETTER_SOUNDS | keyof typeof BIGRAM_SOUNDS])[],
   spoken: string,
@@ -20,10 +20,11 @@ interface MyEx extends Ex<Variant> {
 
 interface ModuleBuilderProps {
   variants: Variant[];
+  maxScorePerVariant?: number;
   isSingleSound?: boolean;
 }
 export let ModuleBuilder = ({
-  variants, isSingleSound,
+  variants, maxScorePerVariant=2, isSingleSound,
 }: ModuleBuilderProps) => {
   let moduleContext = React.useContext(ModuleContext);
   let trainingRecorder = useTrainingDataRecorder();
@@ -51,7 +52,7 @@ export let ModuleBuilder = ({
     });
   }, [variants]);
 
-  let vlist = React.useMemo(() => new VariantList(variants, 2), []);
+  let vlist = React.useMemo(() => new VariantList(variants, maxScorePerVariant), []);
   let generateExercise = React.useCallback(() => {
     let variant = vlist.pickVariant();
     trainingRecorder.addEvent({

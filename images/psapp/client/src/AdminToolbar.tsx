@@ -43,7 +43,6 @@ interface ToolbarForOneProps {
   onMoveTreeRight: (id: string) => void,
   onMoveTreeUp: (id: string) => void,
   onMoveTreeDown: (id: string) => void,
-  onAddSubNode: (id: string) => void,
 }
 
 let ToolbarForOne = (props: ToolbarForOneProps) => {
@@ -140,10 +139,6 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
     props.onMoveTreeDown(kmid);
   }, [kmid, props.onMoveTreeDown]);
 
-  let handleAddSubNode = React.useCallback((e: M) => {
-    props.onAddSubNode(kmid);
-  }, [kmid, props.onAddSubNode]);
-
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -209,9 +204,6 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
       <div>
         <button onClick={handleMoveTreeDown}>Move Tree Down</button>
       </div>
-      <div>
-        <button onClick={handleAddSubNode}>Add SubNode</button>
-      </div>
     </div>
   );
 };
@@ -228,7 +220,6 @@ interface ToolbarProps {
   onMoveTreeRight: (id: string) => void,
   onMoveTreeUp: (id: string) => void,
   onMoveTreeDown: (id: string) => void,
-  onAddSubNode: (id: string) => void,
   onSelectIds: (ids: string[]) => void,
   onDeleteIds: (ids: string[]) => void,
 }
@@ -245,8 +236,7 @@ export let AdminToolbar = (props: ToolbarProps) => {
           onMoveTreeLeft={props.onMoveTreeLeft}
           onMoveTreeRight={props.onMoveTreeRight}
           onMoveTreeUp={props.onMoveTreeUp}
-          onMoveTreeDown={props.onMoveTreeDown}
-          onAddSubNode={props.onAddSubNode}/>
+          onMoveTreeDown={props.onMoveTreeDown}/>
     );
   }
 
