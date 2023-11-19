@@ -13,6 +13,8 @@ interface ReadWordsReviewProps {
   reviewModule__dirname: string,
 }
 export let ModuleBuilder = (props: ReadWordsReviewProps) => {
+  let url = new URL(window.location.href);
+  let admin = url.searchParams.get('admin') === '1';
   let [allWords, setAllWords] = React.useState<Variant[]>([]);
   React.useEffect(() => {
     let moduleName = props.reviewModule__dirname.split('/').at(-1) as string;
@@ -29,16 +31,13 @@ export let ModuleBuilder = (props: ReadWordsReviewProps) => {
 
       let arrayOfArrays = [];
       for (let k in wordModuleDeps) {
-        console.log(k);
         arrayOfArrays.push((await r(wordModuleDeps[k])).words);
       }
-      console.log('words are');
-      console.log(arrayOfArrays.flat());
       setAllWords(arrayOfArrays.flat());
     })();
   }, [props.reviewModule__dirname]);
   if (allWords.length === 0) {
     return <div>loading</div>;
   }
-  return <InnerModuleBuilder variants={allWords} maxScorePerVariant={1}/>;
+  return <InnerModuleBuilder variants={allWords} maxScorePerVariant={1} pronounceOnSuccess={admin}/>;
 };

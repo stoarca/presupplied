@@ -2,7 +2,7 @@ import React from 'react';
 
 import {useExercise, useTrainingDataRecorder, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-import {VariantList} from '@src/util';
+import {VariantList, withAbort} from '@src/util';
 import {STTModule} from '@src/modules/common/SPEECH_TO_TEXT_SHIM/ModuleBuilder';
 import {LETTER_SOUNDS, BIGRAM_SOUNDS} from '@src/modules/common/READING/util';
 
@@ -21,10 +21,11 @@ interface MyEx extends Ex<Variant> {
 interface ModuleBuilderProps {
   variants: Variant[];
   maxScorePerVariant?: number;
+  pronounceOnSuccess?: boolean;
   isSingleSound?: boolean;
 }
 export let ModuleBuilder = ({
-  variants, maxScorePerVariant=2, isSingleSound,
+  variants, maxScorePerVariant=2, isSingleSound, pronounceOnSuccess,
 }: ModuleBuilderProps) => {
   let moduleContext = React.useContext(ModuleContext);
   let trainingRecorder = useTrainingDataRecorder();
@@ -98,19 +99,10 @@ export let ModuleBuilder = ({
     });
   }, [trainingRecorder, exercise]);
 
-  let doingFailure = React.useRef(false);
-  let [failPosition, setFailPosition] = React.useState([0, 0]);
-  let handleFailure = React.useCallback(async () => {
-    if (doingFailure.current) {
-      return;
-    }
-    addTrainingEvent('fail');
-    doFailure();
-    doingFailure.current = true;
+  let pronounceAbortController = React.useRef(new AbortController());
+  let [pronouncePosition, setPronouncePosition] = React.useState([0, 0]);
+  let _pronounce = React.useCallback(async (signal: AbortSignal) => {
     for (let i = 0; i < exercise.variant.sounds.length; ++i) {
-      if (!doingFailure.current) {
-        return;
-      }
       let startPos = exercise.variant.sounds[i][0];
       let lastPos;
       if (i === exercise.variant.sounds.length - 1) {
@@ -118,53 +110,62 @@ export let ModuleBuilder = ({
       } else {
         lastPos = exercise.variant.sounds[i + 1][0];
       }
-      setFailPosition([startPos, lastPos]);
+      setPronouncePosition([startPos, lastPos]);
       let sound = exercise.variant.sounds[i][1];
       if (sound in LETTER_SOUNDS) {
         // TODO: why does typescript not narrow the type here by itself?
-        await moduleContext.playAudio(
+        await withAbort(() => moduleContext.playAudio(
           LETTER_SOUNDS[sound as keyof typeof LETTER_SOUNDS]
-        );
+        ), signal);
       } else {
-        await moduleContext.playAudio(
+        await withAbort(() => moduleContext.playAudio(
           BIGRAM_SOUNDS[sound as keyof typeof BIGRAM_SOUNDS]
-        );
-      }
-      if (!doingFailure.current) {
-        return;
+        ), signal);
       }
       if (exercise.variant.sounds.length > 6) {
-        await new Promise(r => setTimeout(r, 50));
+        await withAbort(() => new Promise(r => setTimeout(r, 50)), signal);
       } else if (exercise.variant.sounds.length > 4) {
-        await new Promise(r => setTimeout(r, 250));
+        await withAbort(() => new Promise(r => setTimeout(r, 250)), signal);
       } else {
-        await new Promise(r => setTimeout(r, 500));
+        await withAbort(() => new Promise(r => setTimeout(r, 500)), signal);
       }
     }
-    if (!doingFailure.current) {
+    setPronouncePosition([0, exercise.variant.word.length]);
+    if (!isSingleSound) {
+      await withAbort(
+        () => moduleContext.playAudio(exercise.variant.spoken),
+        signal
+      );
+    }
+  }, [exercise, moduleContext]);
+  let pronounce = React.useCallback(async () => {
+    pronounceAbortController.current.abort();
+    pronounceAbortController.current = new AbortController();
+    await _pronounce(pronounceAbortController.current);
+    setPronouncePosition([0, 0]);
+  }, [_pronounce]);
+
+  let doingFailure = React.useRef(false);
+  let handleFailure = React.useCallback(async () => {
+    if (doingFailure.current) {
       return;
     }
-    setFailPosition([0, exercise.variant.word.length]);
-    if (!isSingleSound) {
-      await moduleContext.playAudio(exercise.variant.spoken);
-    }
-    setFailPosition([0, 0]);
+    addTrainingEvent('fail');
+    doFailure();
+    doingFailure.current = true;
+    await pronounce();
     doingFailure.current = false;
-  }, [
-    exercise,
-    failPosition,
-    doingFailure,
-    doFailure,
-    moduleContext,
-    addTrainingEvent
-  ]);
+  }, [doFailure, addTrainingEvent, pronounce]);
 
-  let handleSuccess = React.useCallback(() => {
-    doSuccess();
-    addTrainingEvent('success');
+  let handleSuccess = React.useCallback(async () => {
     doingFailure.current = false;
-    setFailPosition([0, 0]);
-  }, [addTrainingEvent, doSuccess]);
+    addTrainingEvent('success');
+    if (pronounceOnSuccess) {
+      await pronounce();
+    }
+    pronounceAbortController.current.abort();
+    doSuccess();
+  }, [doSuccess, addTrainingEvent, pronounce]);
 
   let textStyle: React.CSSProperties = {
     fontFamily: 'sans-serif',
@@ -177,13 +178,13 @@ export let ModuleBuilder = ({
         y="50%"
         x="50%">
       <tspan>
-        {exercise.variant.word.substring(0, failPosition[0])}
+        {exercise.variant.word.substring(0, pronouncePosition[0])}
       </tspan>
       <tspan fill="red">
-        {exercise.variant.word.substring(failPosition[0], failPosition[1])}
+        {exercise.variant.word.substring(pronouncePosition[0], pronouncePosition[1])}
       </tspan>
       <tspan>
-        {exercise.variant.word.substring(failPosition[1])}
+        {exercise.variant.word.substring(pronouncePosition[1])}
       </tspan>
     </text>
   );

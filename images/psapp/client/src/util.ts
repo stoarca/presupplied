@@ -379,3 +379,18 @@ export let PRONUNCIATIONS = {
   'z': 'zee',
 };
 
+export let withAbort = async <T>(fn: () => Promise<T>, signal: AbortSignal): Promise<T | null> => {
+  if (signal.aborted) {
+    return null;
+  }
+  try {
+    const result = await fn();
+    if (signal.aborted) {
+      return null;
+    }
+    return result;
+  } catch (e) {
+    // Handle or rethrow the error
+    throw e;
+  }
+};
