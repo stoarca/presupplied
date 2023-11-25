@@ -75,7 +75,7 @@ export let ModuleBuilder = ({
     } else {
       await moduleContext.playAudio(whatWordIsThis);
     }
-  }, [moduleContext]);
+  }, [moduleContext, isSingleSound]);
   let {
     exercise,
     partial,
@@ -143,7 +143,7 @@ export let ModuleBuilder = ({
         signal
       );
     }
-  }, [exercise, moduleContext]);
+  }, [exercise, moduleContext, isSingleSound]);
   let pronounce = React.useCallback(async () => {
     pronounceAbortController.current.abort();
     pronounceAbortController.current = new AbortController();

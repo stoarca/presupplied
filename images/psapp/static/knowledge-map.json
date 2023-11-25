@@ -775,7 +775,8 @@
         "READ_WORDS_AI",
         "READ_WORDS_AY",
         "READ_WORDS_IE",
-        "READ_SENTENCES_VERY_SHORT_2"
+        "READ_SENTENCES_VERY_SHORT_2",
+        "READ_WORDS_UNVOICED_S"
       ],
       "title": "",
       "description": "",
@@ -6547,7 +6548,6 @@
         "READ_WORDS_VOWEL_Y",
         "READ_WORDS_SOFT_G",
         "READ_WORDS_REVIEW_2",
-        "READ_WORDS_UNVOICED_S",
         "READ_SENTENCES_VERY_SHORT_1"
       ],
       "subNodes": [],
@@ -7186,12 +7186,10 @@
       "teacherVideos": [],
       "cell": {
         "i": 40,
-        "j": 11
+        "j": 12
       },
       "deps": [
-        "CONSONANT_TO_SOUND_N_TO_Z",
-        "CONSONANT_TO_SOUND_A_TO_M",
-        "VOWEL_TO_SOUND_SHORT"
+        "READ_WORDS_REVIEW_2"
       ],
       "subNodes": []
     },
