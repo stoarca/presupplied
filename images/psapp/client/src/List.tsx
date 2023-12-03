@@ -7,9 +7,10 @@ import StarIcon from '@mui/icons-material/Star';
 import Grid from '@mui/material/Grid';
 
 import {buildGraph, TechTree} from './dependency-graph';
+import {moduleComponents} from './ModuleContext';
+import {NavBar} from './NavBar';
 import {useStudentContext} from './StudentContext';
 import {ProgressStatus, KNOWLEDGE_MAP} from '../../common/types';
-import {NavBar} from './NavBar';
 
 let knowledgeGraph = buildGraph(KNOWLEDGE_MAP);
 
@@ -29,18 +30,23 @@ export let List = () => {
     return ret;
   }, [reached]);
 
-  let cards = Array.from(reachable).map(kmid => {
+  let reachableAndImplemented = React.useMemo(() => {
+    return new Set(Array.from(reachable).filter(x => !!moduleComponents[x]));
+  }, [reachable]);
+
+  let cards = Array.from(reachableAndImplemented).map(kmid => {
     let node = knowledgeGraph.getNodeData(kmid);
+    let backgroundFile = node.forTeachers ? 'for_teachers' : kmid;
     let shadow = '2px 2px 3px #00000033';
     let innerStyle = {
       display: 'flex',
       alignItems: 'center',
       aspectRatio: '2/1',
-      background: `url('/static/images/module_cards/${kmid}.png')`,
+      background: `url('/static/images/module_cards/${backgroundFile}.png')`,
       backgroundSize: 'contain',
       fontFamily: 'Handlee, sans-serif',
       color: '#221111',
-      borderRadius: '10px',
+      borderRadius: '4px',
       paddingLeft: '20px',
       paddingRight: '150px',
       boxShadow: shadow,
@@ -51,6 +57,23 @@ export let List = () => {
       background: 'linear-gradient(to right, #08c953, #24d669)',
       boxShadow: shadow,
     };
+    let videoButton;
+    if (
+      node.forTeachers && node.teacherVideos.length ||
+          !node.forTeachers && node.studentVideos.length
+    ) {
+        videoButton = (
+          <Grid item xs={6}>
+            <Button variant="contained"
+                color="success"
+                style={buttonStyle}>
+              <MovieIcon sx={{fontSize: '40px'}}/>
+            </Button>
+          </Grid>
+        );
+    } else {
+      videoButton = null;
+    }
     return (
       <Grid item
           key={kmid}
@@ -65,14 +88,8 @@ export let List = () => {
               </div>
             </Link>
           </Grid>
-          <Grid item xs={6}>
-            <Button variant="contained"
-                color="success"
-                style={buttonStyle}>
-              <MovieIcon sx={{fontSize: '40px'}}/>
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
+          {videoButton}
+          <Grid item xs={videoButton ? 6 : 12}>
             <Button variant="contained"
                 component={Link}
                 to={`/modules/${kmid}`}

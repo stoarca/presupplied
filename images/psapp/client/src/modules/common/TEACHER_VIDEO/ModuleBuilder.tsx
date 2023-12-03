@@ -90,7 +90,7 @@ export let ModuleBuilder = ({lecture}: ModuleBuilderProps) => {
     let choices = snippet.exercises[partial].choices;
     return (
       <Module type="div" score={0} maxScore={1} hideScore={true}>
-        <ChoiceSelector question="Did you watch the video?"
+        <ChoiceSelector question={snippet.exercises[partial].question}
             howManyPerRow={2}
             choices={choices}
             choiceWidth={300}

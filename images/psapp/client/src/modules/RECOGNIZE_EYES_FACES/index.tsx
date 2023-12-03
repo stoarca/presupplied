@@ -4,13 +4,13 @@ import {
   ModuleBuilder, VideoLecture
 } from '@src/modules/common/TEACHER_VIDEO/ModuleBuilder';
 
-
 export default (props: never) => {
   let lecture: VideoLecture = {
     snippets: [{
-      youtubeId: '7sNtpcKpRYU',
+      youtubeId: '2TZDgDCQ1Jo',
+      startTimeSeconds: 100,
       exercises: [{
-        question: 'Did you watch the video?',
+        question: 'Can your baby consistently make eye contact with you?',
         choices: ['yes', 'no'],
         answerIndex: 0,
       }],

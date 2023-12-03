@@ -9,7 +9,8 @@ import {
 
 export let TOOLBAR_WIDTH = '550px';
 
-type C = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
+type CI = React.ChangeEvent<HTMLInputElement>;
+type CT = React.ChangeEvent<HTMLTextAreaElement>;
 type M = React.MouseEvent<HTMLButtonElement>;
 
 let mapToMdLinks = (videoInfos: VideoInfo[]): string => {
@@ -54,9 +55,15 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
   let [tempDesc, setTempDesc] = React.useState(node.description);
   let [tempStudentVids, setTempStudentVids] = React.useState('');
   let [tempTeacherVids, setTempTeacherVids] = React.useState('');
+  let [tempForTeachers, setTempForTeachers] = React.useState(
+    Boolean(node.forTeachers)
+  );
   React.useEffect(() => {
+    setTempTitle(node.title);
+    setTempDesc(node.description);
     setTempStudentVids(mapToMdLinks(node.studentVideos));
     setTempTeacherVids(mapToMdLinks(node.teacherVideos));
+    setTempForTeachers(Boolean(node.forTeachers));
   }, [node]);
   React.useEffect(() => {
     setTempId(kmid);
@@ -65,20 +72,23 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
       ref.current!.select();
     }, 0);
   }, [kmid]);
-  let handleChangeId = React.useCallback((e: C) => {
+  let handleChangeId = React.useCallback((e: CI) => {
     setTempId(e.target.value);
   }, []);
-  let handleChangeTitle = React.useCallback((e: C) => {
+  let handleChangeTitle = React.useCallback((e: CI) => {
     setTempTitle(e.target.value);
   }, []);
-  let handleChangeDesc = React.useCallback((e: C) => {
+  let handleChangeDesc = React.useCallback((e: CT) => {
     setTempDesc(e.target.value);
   }, []);
-  let handleChangeStudentVids = React.useCallback((e: C) => {
+  let handleChangeStudentVids = React.useCallback((e: CT) => {
     setTempStudentVids(e.target.value);
   }, []);
-  let handleChangeTeacherVids = React.useCallback((e: C) => {
+  let handleChangeTeacherVids = React.useCallback((e: CT) => {
     setTempTeacherVids(e.target.value);
+  }, []);
+  let handleChangeForTeachers = React.useCallback((e: CI) => {
+    setTempForTeachers(e.target.checked);
   }, []);
 
   let handleSubmit = React.useCallback((e: React.MouseEvent<HTMLFormElement>) => {
@@ -112,6 +122,7 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
       description: tempDesc,
       studentVideos: newStudentVids,
       teacherVideos: newTeacherVids,
+      forTeachers: tempForTeachers,
     });
   }, [
     kmid,
@@ -120,6 +131,7 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
     tempDesc,
     tempStudentVids,
     tempTeacherVids,
+    tempForTeachers,
     props.onChangeNode,
   ]);
 
@@ -179,6 +191,14 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
               value={tempTeacherVids}
               placeholder="videos for teaching"
               onChange={handleChangeTeacherVids}/>
+        </div>
+        <div>
+          <label>
+            This module is only for teachers/parents
+            <input type="checkbox"
+                onChange={handleChangeForTeachers}
+                checked={tempForTeachers}/>
+          </label>
         </div>
         <div>
           <button type="submit">Apply</button>

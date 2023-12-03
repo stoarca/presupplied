@@ -43,6 +43,7 @@ export interface GraphNodeInfo {
   description: string,
   studentVideos: VideoInfo[],
   teacherVideos: VideoInfo[],
+  forTeachers?: boolean,
 }
 export interface GraphNode extends GraphNodeInfo {
   cell: {

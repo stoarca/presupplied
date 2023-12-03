@@ -55,7 +55,10 @@ export class TechTree extends DepGraph<GraphNode> {
     });
     reached.forEach(x => {
       this.directDependentsOf(x).forEach(y => {
-        if (this.directDependenciesOf(y).every(z => reached.has(z))) {
+        if (
+          !reached.has(y) &&
+              this.directDependenciesOf(y).every(z => reached.has(z))
+        ) {
           reachable.add(y);
         }
       });
