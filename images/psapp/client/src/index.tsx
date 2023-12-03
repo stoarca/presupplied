@@ -11,6 +11,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
 import {moduleComponents} from './ModuleContext';
 import {KnowledgeMap} from './KnowledgeMap';
+import {List} from './List';
 import {Login} from './Login';
 import {Register} from './Register';
 import {Student, StudentContext} from './StudentContext';
@@ -33,7 +34,8 @@ let App = (props: AppProps) => {
           <React.Suspense fallback={"loading..."}>
             <Routes>
               <Route path="/">
-                <Route index element={<KnowledgeMap/>}/>
+                <Route index element={<List/>}/>
+                <Route path="map" element={<KnowledgeMap/>}/>
                 <Route path="login" element={<Login/>}/>
                 <Route path="register" element={<Register/>}/>
                 <Route path="modules">

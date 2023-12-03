@@ -1042,11 +1042,11 @@ export let KnowledgeMap = () => {
           setSelectedCells={setSelectedCells}/>
     );
   }
-  let containerStyle = {
+  let containerStyle: React.CSSProperties = {
     flex: '1 1 0',
     display: 'flex',
     flexDirection: 'column',
-  } as React.CSSProperties;
+  };
   return (
     <div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
       <NavBar/>

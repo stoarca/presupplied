@@ -161,6 +161,10 @@ AppDataSource.initialize().then(async () => {
     resp.sendFile(path.join(__dirname, '../../static/index.html'));
   });
 
+  app.get('/map', (req, resp) => {
+    resp.sendFile(path.join(__dirname, '../../static/index.html'));
+  });
+
   app.get('/login', (req, resp) => {
     resp.sendFile(path.join(__dirname, '../../static/index.html'));
   });
