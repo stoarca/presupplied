@@ -250,18 +250,57 @@ export let useExercise = <E extends Ex<V>, V, P>({
   };
 };
 
+export let useWin = () => {
+  let student = useStudentContext();
+
+  let [win, setWin] = React.useState(false);
+
+  let doWin = React.useCallback(() => {
+    setWin(true);
+    (async () => {
+      let kmid = window.location.href.match(/modules\/(.*)/)![1];
+      await student.markReached(kmid, ProgressStatus.PASSED);
+      await new Promise(r => setTimeout(r, 2000));
+      window.location.href = '/?scroll=' + kmid;
+    })();
+  }, [student]);
+
+  let element;
+  if (win) {
+    let centerStyle: React.CSSProperties = {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      width: '100%',
+      height: '100%',
+      textAlign: 'center',
+    };
+    element = (
+      <div style={centerStyle}>
+        Win!
+      </div>
+    );
+  } else {
+    element = null;
+  }
+
+  return {win: element, doWin: doWin};
+};
+
 interface ModuleProps {
   children: React.ReactNode,
   score: number,
   maxScore: number,
-  type: 'svg',
+  type: 'svg' | 'div',
   extraSvgStyles?: React.CSSProperties,
+  hideScore?: boolean,
   [id: string]: any,
 };
 
 export let Module: React.FC<ModuleProps> = (props) => {
-  let student = useStudentContext();
-  let {children, score, maxScore, type, extraSvgStyles, ...rest} = props;
+  let {
+    children, score, maxScore, type, extraSvgStyles, hideScore, ...rest
+  } = props;
 
   let ref = React.useRef<HTMLDivElement | null>(null);
 
@@ -275,22 +314,20 @@ export let Module: React.FC<ModuleProps> = (props) => {
     return () => el.removeEventListener('touchmove', preventDefault);
   }, []);
 
-  let [win, setWin] = React.useState(false);
+  let {win, doWin} = useWin();
   React.useEffect(() => {
     if (score === maxScore) {
-      setWin(true);
-      (async () => {
-        let kmid = window.location.href.match(/modules\/(.*)/)![1];
-        await student.markReached(kmid, ProgressStatus.PASSED);
-        await new Promise(r => setTimeout(r, 2000));
-        window.location.href = '/?scroll=' + kmid;
-      })();
+      doWin();
     }
-  }, [score, maxScore, student]);
+  }, [score, maxScore, doWin]);
 
   let handleContextMenu = React.useCallback((e: React.MouseEvent) => {
     e.preventDefault();
   }, []);
+
+  if (win) {
+    return win;
+  }
 
   let scoreStyle = {
     position: 'fixed',
@@ -300,11 +337,16 @@ export let Module: React.FC<ModuleProps> = (props) => {
     fontFamily: 'sans-serif',
     fontWeight: 'bold',
   } as React.CSSProperties;
-  let scoreEl = (
-    <div style={scoreStyle}>
-      Score: {score} / {maxScore}
-    </div>
-  );
+  let scoreEl;
+  if (hideScore) {
+    scoreEl = null;
+  } else {
+    scoreEl = (
+      <div style={scoreStyle}>
+        Score: {score} / {maxScore}
+      </div>
+    );
+  }
 
   let containerStyle = {
     width: '100%',
@@ -312,24 +354,7 @@ export let Module: React.FC<ModuleProps> = (props) => {
     userSelect: 'none',
   } as React.CSSProperties;
 
-  if (win) {
-    let centerStyle = {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      width: '100%',
-      height: '100%',
-      textAlign: 'center',
-    } as React.CSSProperties;
-    return (
-      <div style={containerStyle}>
-        <div style={centerStyle}>
-          Win!
-        </div>
-        {scoreEl}
-      </div>
-    );
-  } else if (type === 'svg') {
+  if (type === 'svg') {
     let svgStyle = {
       ...extraSvgStyles,
       width: '100%',
@@ -347,7 +372,23 @@ export let Module: React.FC<ModuleProps> = (props) => {
         {scoreEl}
       </div>
     );
+  } else if (type === 'div') {
+    let divStyle = {
+      width: '100%',
+      height: '100%',
+    };
+    return (
+      <div style={containerStyle}
+          ref={ref}
+          onContextMenu={handleContextMenu}
+          {...rest}>
+        <div style={divStyle}>
+          {children}
+        </div>
+        {scoreEl}
+      </div>
+    );
   } else {
-    return null;
+    throw new Error('Unrecognized type ' + type);
   }
 };
