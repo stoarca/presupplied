@@ -10,10 +10,16 @@ import { In } from 'typeorm';
 import { AppDataSource } from './data-source';
 import { Student } from './entity/Student';
 import { StudentProgress } from './entity/StudentProgress';
+import { StudentProgressVideo } from './entity/StudentProgressVideo';
 import { Module } from './entity/Module';
 import { env } from './env';
 import {
-  GraphNode, GraphJson, StudentProgressDTO, KNOWLEDGE_MAP
+  GraphNode,
+  GraphJson,
+  StudentProgressDTO,
+  KNOWLEDGE_MAP,
+  ProgressStatus,
+  ProgressVideoStatus,
 } from '../../common/types';
 import { EndpointKeys, endpoints, Endpoints } from '../../common/apitypes';
 
@@ -235,7 +241,6 @@ AppDataSource.initialize().then(async () => {
   });
 
   typedPost('/api/auth/logout', async (req, resp, next) => {
-    console.log('logging out');
     clearLoginCookie(resp);
     resp.json({success: true});
   });
@@ -277,6 +282,72 @@ AppDataSource.initialize().then(async () => {
     });
   });
 
+  typedGet('/api/learning/progressvideos/:kmid', async (req, resp, next) => {
+    if (!req.jwtStudent) {
+      return resp.status(401).json({
+        errorCode: 'learning.progressvideos.noLogin',
+        message: 'You need to be logged in get video progress',
+      });
+    }
+
+    let studentRepo = AppDataSource.getRepository(Student);
+    let student = await studentRepo.findOneBy({ email: req.jwtStudent.email });
+    if (!student) {
+      return resp.status(401).json({
+        errorCode: 'learning.progressvideos.noStudent',
+        email: req.jwtStudent.email,
+        message: 'Could not find a student with this email',
+      });
+    }
+
+    let moduleRepo = AppDataSource.getRepository(Module);
+    let module = await moduleRepo.findOneBy({
+      vanityId: req.params.kmid,
+    });
+    if (!module) {
+      return resp.status(400).json({
+        errorCode: 'learning.progressvideos.noModule',
+        moduleVanityId: req.params.kmid,
+        message: 'Could not find a student with this email',
+      });
+    }
+
+    let studentProgressRepo = AppDataSource.getRepository(StudentProgress);
+    let notNullStudent = student;
+    let notNullModule = module;
+    let studentProgress = await studentProgressRepo.findOneBy({
+      student: { id: notNullStudent.id },
+      module: { id: notNullModule.id },
+    });
+
+    if (!studentProgress) {
+      return resp.json({
+        success: true,
+        videos: {},
+      });
+    }
+
+    console.log('got student progress');
+    console.log(studentProgress);
+    let studentProgressVideoRepo = AppDataSource.getRepository(
+      StudentProgressVideo
+    );
+    let studentProgressVideos = await studentProgressVideoRepo.findBy({
+      studentProgress: { id: studentProgress.id },
+    });
+
+    console.log(studentProgressVideos);
+
+    let videos: Record<string, ProgressVideoStatus> = {};
+    studentProgressVideos.forEach(x => {
+      videos[x.videoVanityId] = x.status;
+    });
+    return resp.json({
+      success: true,
+      videos: videos,
+    });
+  });
+
   typedPost('/api/learning/events', async (req, resp, next) => {
     if (!req.jwtStudent) {
       return resp.status(401).json({
@@ -285,7 +356,9 @@ AppDataSource.initialize().then(async () => {
       });
     }
 
-    let moduleIds = Object.keys(req.body.modules);
+    let moduleIds = Object.keys(
+      req.body.type === 'module' ? req.body.modules : req.body.moduleVideos
+    );
     let moduleRepo = AppDataSource.getRepository(Module);
     let modules = await moduleRepo.findBy({
       vanityId: In(moduleIds),
@@ -315,15 +388,63 @@ AppDataSource.initialize().then(async () => {
 
     let studentProgressRepo = AppDataSource.getRepository(StudentProgress);
     let notNullStudent = student;
-    await studentProgressRepo.upsert(modules.map(x => {
-      let events = req.body.modules[x.vanityId].events;
-      let mostRecentEvent = events.sort((a, b) => b.time - a.time)[0];
-      return {
-        student: notNullStudent,
-        module: x,
-        status: mostRecentEvent.status,
-      };
-    }), ['student', 'module'])
+    if (req.body.type === 'module') {
+      let body = req.body;
+      await studentProgressRepo.upsert(modules.map(x => {
+        let events = body.modules[x.vanityId].events;
+        let mostRecentEvent = events.sort((a, b) => b.time - a.time)[0];
+        return {
+          student: notNullStudent,
+          module: x,
+          status: mostRecentEvent.status,
+        };
+      }), ['student', 'module'])
+    } else {
+      try {
+        let asdf = await studentProgressRepo.insert(modules.map(x => {
+          return {
+            student: notNullStudent,
+            module: x,
+            status: ProgressStatus.NOT_ATTEMPTED,
+          };
+        }));
+        console.log(asdf);
+      } catch (e) {
+        // row will alrady exist when we're watching a video on a module
+        // we've attempted before. Ignore this.
+        console.log('GOT AN ERROR WHEN TRYING TO INSERT');
+        console.log(e);
+      }
+
+      let studentProgresses = await studentProgressRepo.find({
+        where: {
+          student: { id: notNullStudent.id },
+          module: { id: In(modules.map(x => x.id)) },
+        },
+        relations: {
+          module: true,
+        },
+      });
+      console.log(studentProgresses);
+      let studentProgressMap: Record<string, StudentProgress> = {};
+      studentProgresses.forEach((x) => {
+        studentProgressMap[x.module.vanityId] = x;
+      });
+      let studentProgressVideoRepo = AppDataSource.getRepository(
+        StudentProgressVideo
+      );
+      let inserts = [];
+      for (let kmid in req.body.moduleVideos) {
+        for (let videoVanityId in req.body.moduleVideos[kmid]) {
+          inserts.push({
+            studentProgress: studentProgressMap[kmid],
+            videoVanityId: videoVanityId,
+            status: req.body.moduleVideos[kmid][videoVanityId],
+          });
+        }
+      }
+      await studentProgressVideoRepo.insert(inserts);
+    }
 
     return resp.json({success: true});
   });

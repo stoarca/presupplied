@@ -12,6 +12,11 @@ export enum ProgressStatus {
   PASSED = 'passed',
 }
 
+export enum ProgressVideoStatus {
+  NOT_WATCHED = 'not_watched',
+  WATCHED = 'watched',
+}
+
 type KMType = typeof _KNOWLEDGE_MAP;
 export type KMId = KMType['nodes'][number]['id'];
 
@@ -24,6 +29,10 @@ export interface StudentProgressDTOEntry {
 }
 export interface StudentProgressDTO {
   [K: KMId]: StudentProgressDTOEntry
+}
+
+export interface StudentProgressVideoDTO {
+  [K: KMId]: Record<string, ProgressVideoStatus>
 }
 
 export interface StudentDTO {

@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
   password: env['POSTGRES_CONNECTION_PASSWORD'],
   database: env['POSTGRES_CONNECTION_DB'],
   synchronize: false,
-  logging: false,
+  logging: true,
   entities: [path.join(__dirname, './entity/**/*.ts')],
   migrations: [path.join(__dirname, './migration/**/*.ts')],
   subscribers: [],

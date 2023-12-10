@@ -1,6 +1,8 @@
 import React from 'react';
 
-import {StudentDTO, KMId, ProgressStatus, StudentProgressDTO} from '../../common/types';
+import {
+  StudentDTO, KMId, ProgressStatus, ProgressVideoStatus, StudentProgressDTO
+} from '../../common/types';
 import {typedFetch} from './typedFetch';
 import {typedLocalStorage} from './typedLocalStorage';
 import {mapObject} from './util';
@@ -23,12 +25,33 @@ export class Student {
     }
   }
 
+  async videos(kmid: KMId): Promise<Record<string, ProgressVideoStatus>> {
+    if (this.dto) {
+      let resp = await typedFetch({
+        endpoint: '/api/learning/progressvideos/:kmid',
+        method: 'get',
+        params: {
+          kmid: kmid,
+        },
+      });
+      if ('success' in resp) {
+        return resp.videos;
+      }
+      throw new Error(JSON.stringify(resp));
+    } else {
+      let progressVideo = typedLocalStorage.getJson('progressVideo');
+
+      return progressVideo && progressVideo[kmid] || {};
+    }
+  }
+
   async markReached(modules: Record<KMId, ProgressStatus>) {
     if (this.dto) {
       let resp = await typedFetch({
         endpoint: '/api/learning/events',
         method: 'post',
         body: {
+          type: 'module',
           modules: mapObject(modules, ([kmid, status]) => {
             return [kmid, {
               events: [{
@@ -62,12 +85,45 @@ export class Student {
     }
   }
 
+  async markWatched(
+    moduleVideos: Record<KMId, Record<string, ProgressVideoStatus>>
+  ) {
+    if (this.dto) {
+      let resp = await typedFetch({
+        endpoint: '/api/learning/events',
+        method: 'post',
+        body: {
+          type: 'video',
+          moduleVideos: moduleVideos,
+        },
+      });
+    } else {
+      let progressVideo = typedLocalStorage.getJson('progressVideo');
+      if (!progressVideo) {
+        progressVideo = {};
+      }
+
+      for (let kmid in moduleVideos) {
+        if (!progressVideo[kmid]) {
+          progressVideo[kmid] = {};
+        }
+
+        let videos = moduleVideos[kmid];
+        for (let videoVanityId in videos) {
+          progressVideo[kmid][videoVanityId] = videos[videoVanityId];
+        }
+      }
+      typedLocalStorage.setJson('progressVideo', progressVideo);
+    }
+  }
+
   async mergeToServer() {
     let progress = typedLocalStorage.getJson('progress') || {};
     let resp = await typedFetch({
       endpoint: '/api/learning/events',
       method: 'post',
       body: {
+        type: 'module',
         modules: Object.entries(progress).reduce((acc, [kmid, entry]) => {
           if (entry.status === ProgressStatus.PASSED) {
             acc[kmid] = entry;
@@ -78,9 +134,26 @@ export class Student {
     });
     if ('success' in resp) {
       typedLocalStorage.removeJson('progress');
+    } else {
+      alert('An error has occurred ' + JSON.stringify(resp));
       return;
     }
-    alert('An error has occurred ' + JSON.stringify(resp));
+
+    let progressVideo = typedLocalStorage.getJson('progressVideo') || {};
+    resp = await typedFetch({
+      endpoint: '/api/learning/events',
+      method: 'post',
+      body: {
+        type: 'video',
+        moduleVideos: progressVideo,
+      },
+    });
+    if ('success' in resp) {
+      typedLocalStorage.removeJson('progressVideo');
+    } else {
+      alert('An error has occurred ' + JSON.stringify(resp));
+      return;
+    }
   }
 }
 

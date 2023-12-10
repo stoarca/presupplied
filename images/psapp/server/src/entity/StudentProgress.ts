@@ -3,13 +3,16 @@ import {
   PrimaryGeneratedColumn,
   Column,
   Index,
+  OneToMany,
   ManyToOne,
+  JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm"
 
 import { Student } from './Student';
 import { Module } from './Module';
+import { StudentProgressVideo } from './StudentProgressVideo';
 import { ProgressStatus } from '../../../common/types';
 
 interface StudentProgressParams {
@@ -42,6 +45,12 @@ export class StudentProgress {
     default: ProgressStatus.NOT_ATTEMPTED,
   })
   status: ProgressStatus;
+
+  @OneToMany(
+    () => StudentProgressVideo,
+    (studentProgressVideo) => studentProgressVideo.studentProgress
+  )
+  videos!: StudentProgressVideo[];
 
   constructor(params: StudentProgressParams) {
     this.student = params.student;

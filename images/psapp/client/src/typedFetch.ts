@@ -22,8 +22,15 @@ export let typedFetch = async <K extends EndpointKeys>(
   // in typescript. It's not clear to me if this function is actually being
   // typechecked or not. And it's not possible to call other functions
   // using the same conditional types as above.
-  // TODO: make this splice params in as well
   let url: string = request.endpoint;
+  if ('params' in request && request.params) {
+    let p = request.params;
+    for (let k in request.params) {
+      // TODO: not sure why I need to force "as string' here, but it doesn't
+      // work without it.
+      url = url.replace(':' + k, p[k] as string);
+    }
+  }
   if (request.query) {
     url += '?' + new URLSearchParams(request.query).toString();
   }
@@ -37,7 +44,3 @@ export let typedFetch = async <K extends EndpointKeys>(
   return response.json() as Promise<Endpoints[K]['Response']>;
 };
 
-let resp = await typedFetch<'/api/student'>({
-  endpoint: '/api/student',
-  method: 'get',
-});

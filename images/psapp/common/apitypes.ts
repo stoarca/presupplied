@@ -1,5 +1,12 @@
 import {
-  StudentDTO, StudentProgressDTOEntry, ProgressStatus, KMId, Omit, TrainingEvent
+  StudentDTO,
+  StudentProgressDTOEntry,
+  StudentProgressVideoDTO,
+  ProgressStatus,
+  ProgressVideoStatus,
+  KMId,
+  Omit,
+  TrainingEvent
 } from './types';
 
 interface _Endpoint {
@@ -27,6 +34,10 @@ export const endpoints = {
   '/api/student': {
     method: 'get',
     endpoint: '/api/student',
+  },
+  '/api/learning/progressvideos/:kmid': {
+    method: 'get',
+    endpoint: '/api/learning/progressvideos/:kmid',
   },
   '/api/learning/events': {
     method: 'post',
@@ -109,13 +120,39 @@ type _Endpoints = {
       student: StudentDTO | null,
     },
   },
+  '/api/learning/progressvideos/:kmid': {
+    Params: {
+      kmid: KMId,
+    },
+    Query: never,
+    Body: never,
+    Response: {
+      videos: Record<string, ProgressVideoStatus>,
+      success: true,
+    } | {
+      errorCode: 'learning.progressvideos.noLogin',
+      message: string,
+    } | {
+      errorCode: 'learning.progressvideos.noStudent',
+      email: string,
+      message: string,
+    } | {
+      errorCode: 'learning.progressvideos.noModule',
+      moduleVanityId: KMId,
+      message: string,
+    },
+  },
   '/api/learning/events': {
     Params: never,
     Query: never,
     Body: {
+      type: 'module',
       modules: {
         [K in KMId]: Omit<StudentProgressDTOEntry, 'status'>
       },
+    } | {
+      type: 'video',
+      moduleVideos: StudentProgressVideoDTO,
     },
     Response: {
       errorCode: 'learning.event.noLogin',
