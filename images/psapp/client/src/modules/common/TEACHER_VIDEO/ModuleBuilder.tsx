@@ -5,77 +5,131 @@ import {Module, useWin} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
 import {ChoiceSelector} from '@src/ChoiceSelector2';
 
-export interface VideoLectureExercise {
-  question: string,
-  choices: string[],
-  answerIndex: number,
-}
-
-export interface VideoLectureSnippet {
+export interface Video {
   youtubeId: string,
   startTimeSeconds?: number,
   endTimeSeconds?: number,
+}
+
+export type FollowUpAction = {
+  action: 'next' | 'wrong' | 'replay';
+} | {
   exercises: VideoLectureExercise[],
+};
+
+export type FollowUpSideEffect = {
+  sideEffect?: (() => void) | (() => Promise<void>),
+};
+
+export interface VideoLectureExercise {
+  preVideo?: Video,
+  question: string,
+  choices: Record<string, FollowUpSideEffect & FollowUpAction>,
 }
 
 export interface VideoLecture {
-  snippets: VideoLectureSnippet[],
+  exercises: VideoLectureExercise[],
 }
 
 interface ModuleBuilderProps {
   lecture: VideoLecture;
 }
 
+// First element's choice is never used
+type ExercisePath = {choice: string, index: number}[];
+
+let getExerciseFromLecture = (
+  lecture: VideoLecture, path: ExercisePath
+): VideoLectureExercise => {
+  let exercise = lecture.exercises[path[0].index];
+  for (let i = 1; i < path.length; ++i) {
+    let choiceObj = exercise.choices[path[i].choice];
+    if (!('exercises' in choiceObj)) {
+      throw new Error('This path is invalid for the lecture');
+    }
+    let exercises = choiceObj.exercises;
+    if (!exercises) {
+      throw new Error('This path is invalid for the lecture');
+    }
+    exercise = exercises[path[i].index];
+  }
+  return exercise;
+};
+let getNextExercisePath = (
+  lecture: VideoLecture, path: ExercisePath
+): ExercisePath | null => {
+  // TODO: inefficient
+  let pathAttempt = [...path];
+  for (let i = pathAttempt.length - 1; i >= 0; --i) {
+    pathAttempt[i].index += 1;
+    if (!!getExerciseFromLecture(lecture, pathAttempt)) {
+      return pathAttempt;
+    }
+    pathAttempt.pop();
+  }
+  return null;
+};
+
 export let ModuleBuilder = ({lecture}: ModuleBuilderProps) => {
   let moduleContext = React.useContext(ModuleContext);
 
-  let [snippetIndex, setSnippetIndex] = React.useState(0);
-  let snippet = lecture.snippets[snippetIndex];
-  let [partial, setPartial] = React.useState(-1);
+  let [exercisePath, setExercisePath] = React.useState<ExercisePath>(
+    [{choice: '', index: 0}]
+  );
+  let exercise = React.useMemo(() => {
+    return getExerciseFromLecture(lecture, exercisePath);
+  }, [lecture, exercisePath]);
+  let [sawVideo, setSawVideo] = React.useState(false);
 
   let {win, doWin} = useWin();
 
-  let advance = React.useCallback(() => {
-    if (partial === snippet.exercises.length - 1) {
-      if (snippetIndex === lecture.snippets.length - 1) {
-        doWin();
-      } else {
-        setSnippetIndex(x => x + 1);
-        setPartial(-1);
-      }
-    } else {
-      setPartial(x => x + 1);
-    }
-  }, [snippet, partial, doWin]);
   let handleVideoStateChange = React.useCallback((event: YouTubeEvent) => {
     if (event.data === 0) { // data === 0 means video finished playing
-      advance();
+      setSawVideo(true);
     }
-  }, [advance]);
+  }, []);
   let getFill = React.useCallback(() => {
     return 'white';
   }, []);
-  let handleSelected = React.useCallback((index: number) => {
-    if (snippet.exercises[partial].answerIndex === index) {
-      advance();
+  let advance = React.useCallback(() => {
+    let newPath = getNextExercisePath(lecture, exercisePath);
+    if (newPath == null) {
+      doWin();
     } else {
-      // TODO: what to do when parent gets the "wrong" answer?
+      setExercisePath(newPath);
     }
-  }, [snippet, advance]);
+  }, [lecture, exercisePath, doWin]);
+  let handleSelected = React.useCallback(async (choice: string) => {
+    let choiceObj = exercise.choices[choice];
+    if (choiceObj.sideEffect) {
+      await choiceObj.sideEffect();
+    }
+    if ('action' in choiceObj) {
+      if (choiceObj.action === 'next') {
+        advance();
+      } else if (choiceObj.action === 'wrong') {
+        // TODO: some sort of buzzer sound?
+      } else if (choiceObj.action === 'replay') {
+        // TODO: implement
+      }
+    } else {
+      setExercisePath([...exercisePath, {choice: choice, index: 0}]);
+    }
+  }, [exercisePath, exercise, advance]);
 
   if (win) {
     return win;
   }
 
-  if (partial === -1) {
-    let embedId = snippet.youtubeId;
+  if (!sawVideo && exercise.preVideo) {
+    let embedId = exercise.preVideo.youtubeId;
     let opts: YouTubeProps['opts'] = {
       width: '100%',
       height: '100%',
       playerVars: {
         autoplay: 1,
-        start: snippet.startTimeSeconds,
-        end: snippet.endTimeSeconds,
+        start: exercise.preVideo.startTimeSeconds,
+        end: exercise.preVideo.endTimeSeconds,
         controls: 1,
       },
     };
@@ -87,10 +141,10 @@ export let ModuleBuilder = ({lecture}: ModuleBuilderProps) => {
           onStateChange={handleVideoStateChange}/>
     );
   } else {
-    let choices = snippet.exercises[partial].choices;
+    let choices = Object.keys(exercise.choices);
     return (
       <Module type="div" score={0} maxScore={1} hideScore={true}>
-        <ChoiceSelector question={snippet.exercises[partial].question}
+        <ChoiceSelector question={exercise.question}
             howManyPerRow={2}
             choices={choices}
             choiceWidth={300}

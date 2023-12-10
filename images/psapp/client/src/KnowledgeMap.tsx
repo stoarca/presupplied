@@ -880,10 +880,11 @@ let StudentKnowledgeMap = ({
     }
     if (e.shiftKey) {
       let kmid = grid[hoverCell.i][hoverCell.j];
-      await student.markReached(
-        kmid,
-        reached.has(kmid) ? ProgressStatus.NOT_ATTEMPTED : ProgressStatus.PASSED
-      );
+      await student.markReached({
+        [kmid]: reached.has(kmid) ?
+            ProgressStatus.NOT_ATTEMPTED :
+            ProgressStatus.PASSED
+      });
       let newReached = new Set(reached);
       if (reached.has(kmid)) {
         newReached.delete(kmid);

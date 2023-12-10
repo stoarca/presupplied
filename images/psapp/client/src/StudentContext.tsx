@@ -3,6 +3,7 @@ import React from 'react';
 import {StudentDTO, KMId, ProgressStatus, StudentProgressDTO} from '../../common/types';
 import {typedFetch} from './typedFetch';
 import {typedLocalStorage} from './typedLocalStorage';
+import {mapObject} from './util';
 
 export class Student {
   dto: StudentDTO | null;
@@ -22,20 +23,20 @@ export class Student {
     }
   }
 
-  async markReached(moduleVanityId: KMId, status: ProgressStatus) {
+  async markReached(modules: Record<KMId, ProgressStatus>) {
     if (this.dto) {
       let resp = await typedFetch({
         endpoint: '/api/learning/events',
         method: 'post',
         body: {
-          modules: {
-            [moduleVanityId]: {
+          modules: mapObject(modules, ([kmid, status]) => {
+            return [kmid, {
               events: [{
                 time: Date.now(),
                 status: status,
               }],
-            }
-          }
+            }];
+          }),
         },
       });
     } else {
@@ -43,17 +44,20 @@ export class Student {
       if (!progress) {
         progress = {};
       }
-      if (!progress[moduleVanityId]) {
-        progress[moduleVanityId] = {
+      for (let kmid in modules) {
+        let status = modules[kmid];
+        if (!progress[kmid]) {
+          progress[kmid] = {
+            status: status,
+            events: [],
+          };
+        }
+        progress[kmid].status = status;
+        progress[kmid].events.push({
+          time: Date.now(),
           status: status,
-          events: [],
-        };
+        });
       }
-      progress[moduleVanityId].status = status;
-      progress[moduleVanityId].events.push({
-        time: Date.now(),
-        status: status,
-      });
       typedLocalStorage.setJson('progress', progress);
     }
   }

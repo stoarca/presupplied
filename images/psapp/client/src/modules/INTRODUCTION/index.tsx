@@ -7,13 +7,19 @@ import {
 
 export default (props: never) => {
   let lecture: VideoLecture = {
-    snippets: [{
-      youtubeId: '7sNtpcKpRYU',
-      exercises: [{
-        question: 'Did you watch the video?',
-        choices: ['yes', 'no'],
-        answerIndex: 0,
-      }],
+    exercises: [{
+      preVideo: {
+        youtubeId: '7sNtpcKpRYU',
+      },
+      question: 'Did you watch the video?',
+      choices: {
+        yes: {
+          action: 'next',
+        },
+        no: {
+          action: 'replay',
+        },
+      },
     }],
   };
   return (

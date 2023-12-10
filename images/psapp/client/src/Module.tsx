@@ -259,7 +259,7 @@ export let useWin = () => {
     setWin(true);
     (async () => {
       let kmid = window.location.href.match(/modules\/(.*)/)![1];
-      await student.markReached(kmid, ProgressStatus.PASSED);
+      await student.markReached({[kmid]: ProgressStatus.PASSED});
       await new Promise(r => setTimeout(r, 2000));
       window.location.href = '/?scroll=' + kmid;
     })();

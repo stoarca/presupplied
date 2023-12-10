@@ -394,3 +394,10 @@ export let withAbort = async <T>(fn: () => Promise<T>, signal: AbortSignal): Pro
     throw e;
   }
 };
+
+export let mapObject = <T, U>(
+  obj: Record<string, T>,
+  fn: (x: [string, T]) => [string, U]
+): Record<string, U> => {
+  return Object.fromEntries(Object.entries(obj).map(x => fn(x)));
+}

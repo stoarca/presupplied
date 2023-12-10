@@ -6,14 +6,20 @@ import {
 
 export default (props: never) => {
   let lecture: VideoLecture = {
-    snippets: [{
-      youtubeId: '2TZDgDCQ1Jo',
-      startTimeSeconds: 100,
-      exercises: [{
-        question: 'Can your baby consistently make eye contact with you?',
-        choices: ['yes', 'no'],
-        answerIndex: 0,
-      }],
+    exercises: [{
+      preVideo: {
+        youtubeId: '2TZDgDCQ1Jo',
+        startTimeSeconds: 100,
+      },
+      question: 'Can your baby consistently make eye contact with you?',
+      choices: {
+        yes: {
+          action: 'next',
+        },
+        no: {
+          action: 'replay',
+        },
+      },
     }],
   };
   return (

@@ -7,20 +7,22 @@ interface ChoiceSelectorProps<T extends ChoiceType> {
   choices: T[],
   choiceWidth?: number,
   howManyPerRow: number,
-  getFill: (element: T) => string,
-  onSelected: (index: number) => void,
+  getFill: (choice: T) => string,
+  onSelected: (choice: T) => void,
 }
 
 export let ChoiceSelector = <T extends ChoiceType>(
   props: React.PropsWithChildren<ChoiceSelectorProps<T>>
 ) => {
   let handleClick = React.useCallback((e: React.MouseEvent) => {
+    console.log('GOT A CLICK');
     if (e.button !== 0) {
       return;
     }
     let index = parseInt(e.currentTarget.getAttribute('data-choice-index')!);
-    return props.onSelected(index);
-  }, [props.onSelected]);
+    console.log('doing onselected');
+    return props.onSelected(props.choices[index]);
+  }, [props.choices, props.onSelected]);
 
   let question;
   if (props.question) {
