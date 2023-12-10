@@ -12,7 +12,7 @@ export interface Video {
 }
 
 export type FollowUpAction = {
-  action: 'next' | 'wrong' | 'replay';
+  action: 'next' | 'wrong' | 'replay' | 'abort';
 } | {
   exercises: VideoLectureExercise[],
 };
@@ -111,6 +111,8 @@ export let ModuleBuilder = ({lecture}: ModuleBuilderProps) => {
         // TODO: some sort of buzzer sound?
       } else if (choiceObj.action === 'replay') {
         // TODO: implement
+      } else if (choiceObj.action === 'abort') {
+        window.location.href = '/';
       }
     } else {
       setExercisePath([...exercisePath, {choice: choice, index: 0}]);

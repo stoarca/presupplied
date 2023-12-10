@@ -327,16 +327,12 @@ AppDataSource.initialize().then(async () => {
       });
     }
 
-    console.log('got student progress');
-    console.log(studentProgress);
     let studentProgressVideoRepo = AppDataSource.getRepository(
       StudentProgressVideo
     );
     let studentProgressVideos = await studentProgressVideoRepo.findBy({
       studentProgress: { id: studentProgress.id },
     });
-
-    console.log(studentProgressVideos);
 
     let videos: Record<string, ProgressVideoStatus> = {};
     studentProgressVideos.forEach(x => {
@@ -401,19 +397,20 @@ AppDataSource.initialize().then(async () => {
       }), ['student', 'module'])
     } else {
       try {
-        let asdf = await studentProgressRepo.insert(modules.map(x => {
+        await studentProgressRepo.insert(modules.map(x => {
           return {
             student: notNullStudent,
             module: x,
             status: ProgressStatus.NOT_ATTEMPTED,
           };
         }));
-        console.log(asdf);
       } catch (e) {
-        // row will alrady exist when we're watching a video on a module
-        // we've attempted before. Ignore this.
-        console.log('GOT AN ERROR WHEN TRYING TO INSERT');
-        console.log(e);
+        if ((e as Error).message.includes('duplicate key value')) {
+          // row will alrady exist when we're watching a video on a module
+          // we've attempted before. Ignore this.
+        } else {
+          throw e;
+        }
       }
 
       let studentProgresses = await studentProgressRepo.find({
@@ -425,7 +422,6 @@ AppDataSource.initialize().then(async () => {
           module: true,
         },
       });
-      console.log(studentProgresses);
       let studentProgressMap: Record<string, StudentProgress> = {};
       studentProgresses.forEach((x) => {
         studentProgressMap[x.module.vanityId] = x;
@@ -443,7 +439,10 @@ AppDataSource.initialize().then(async () => {
           });
         }
       }
-      await studentProgressVideoRepo.insert(inserts);
+      await studentProgressVideoRepo.upsert(
+        inserts,
+        ['studentProgress', 'videoVanityId']
+      );
     }
 
     return resp.json({success: true});

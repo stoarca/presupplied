@@ -5293,45 +5293,66 @@
       "deps": [
         "RECOGNIZE_EYES_FACES"
       ],
-      "title": "",
-      "description": "",
+      "title": "Lifting head while on tummy",
+      "description": "In this module, we help develop your baby's ability to lift his/her head while on their tummy.",
       "studentVideos": [],
-      "teacherVideos": [],
+      "teacherVideos": [
+        {
+          "id": "TRAINING",
+          "title": "Tips for tummy time",
+          "url": "https://www.youtube.com/watch?v=V_t5WtG_MNY"
+        }
+      ],
       "cell": {
         "i": 3,
         "j": 3
       },
-      "subNodes": []
+      "subNodes": [],
+      "forTeachers": true
     },
     {
       "id": "SOCIAL_SMILE",
       "deps": [
         "TRACKING_FACE"
       ],
-      "title": "",
-      "description": "",
+      "title": "Social smiles and signs of affection",
+      "description": "In this module, we help develop your baby's ability to do a social smile.",
       "studentVideos": [],
-      "teacherVideos": [],
+      "teacherVideos": [
+        {
+          "id": "TRAINING",
+          "title": "Tips for getting your baby to do a social smile",
+          "url": "https://www.youtube.com/watch?v=x8iqKhAqzi0"
+        }
+      ],
       "cell": {
         "i": 40,
         "j": 4
       },
-      "subNodes": []
+      "subNodes": [],
+      "forTeachers": true
     },
     {
       "id": "TRACKING_FACE",
       "deps": [
         "RECOGNIZE_EYES_FACES"
       ],
-      "title": "",
-      "description": "",
+      "title": "Tracking faces",
+      "description": "In this module, we develop your baby's ability to follow your face as it moves around.",
       "studentVideos": [],
-      "teacherVideos": [],
+      "teacherVideos": [
+        {
+          "id": "TRAINING",
+          "title": "Tips for developing your baby's ability to follow your face",
+          "url": "https://www.youtube.com/watch?v=XN2bOw64gIU"
+        }
+      ],
       "cell": {
         "i": 4,
         "j": 3
       },
-      "subNodes": []
+      "subNodes": [],
+      "forTeachers": true
     },
     {
       "id": "ROLL_OVER_BACK_TO_FRONT",
@@ -5724,15 +5745,22 @@
       "deps": [
         "TRACKING_FACE"
       ],
-      "title": "",
-      "description": "",
+      "title": "Tracking objects",
+      "description": "In this module, we develop your baby's ability to follow objects with their eyes",
       "studentVideos": [],
-      "teacherVideos": [],
+      "teacherVideos": [
+        {
+          "id": "TRAINING",
+          "title": "Tips for developing your baby's ability to follow objects",
+          "url": "https://www.youtube.com/watch?v=WcFIZ-eDMfU"
+        }
+      ],
       "cell": {
         "i": 5,
         "j": 4
       },
-      "subNodes": []
+      "subNodes": [],
+      "forTeachers": true
     },
     {
       "id": "ADD_UP_TO_15",
