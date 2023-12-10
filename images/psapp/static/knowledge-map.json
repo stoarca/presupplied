@@ -5234,7 +5234,13 @@
       "title": "Recognizing eyes and faces",
       "description": "The very first skill a baby learns is to recognize your eyes and face. To complete this module, a baby needs to be able to make and hold eye contact.",
       "studentVideos": [],
-      "teacherVideos": [],
+      "teacherVideos": [
+        {
+          "id": "TRAINING",
+          "title": "Recognizing eyes and faces",
+          "url": "https://www.youtube.com/watch?v=2TZDgDCQ1Jo"
+        }
+      ],
       "cell": {
         "i": 39,
         "j": 1
@@ -5290,7 +5296,7 @@
     {
       "id": "SOCIAL_SMILE",
       "deps": [
-        "RECOGNIZE_EYES_FACES"
+        "TRACKING_FACE"
       ],
       "title": "",
       "description": "",
@@ -5298,7 +5304,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 43,
-        "j": 2
+        "j": 3
       },
       "subNodes": []
     },

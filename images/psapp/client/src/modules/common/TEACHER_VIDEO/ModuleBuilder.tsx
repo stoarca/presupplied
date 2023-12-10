@@ -76,7 +76,7 @@ export let ModuleBuilder = ({lecture}: ModuleBuilderProps) => {
         autoplay: 1,
         start: snippet.startTimeSeconds,
         end: snippet.endTimeSeconds,
-        controls: 0,
+        controls: 1,
       },
     };
     return (

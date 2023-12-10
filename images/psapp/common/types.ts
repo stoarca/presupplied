@@ -33,6 +33,7 @@ export interface StudentDTO {
 }
 
 export interface VideoInfo {
+  id: string, // This id only has to be unique within a module
   title: string,
   url: string,
 }

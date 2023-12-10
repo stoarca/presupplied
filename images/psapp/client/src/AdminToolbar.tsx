@@ -14,8 +14,8 @@ type CT = React.ChangeEvent<HTMLTextAreaElement>;
 type M = React.MouseEvent<HTMLButtonElement>;
 
 let mapToMdLinks = (videoInfos: VideoInfo[]): string => {
-  return videoInfos.map(({title, url}) => {
-    return `[${title}](${url})`; // markdown format
+  return videoInfos.map(({id, title, url}) => {
+    return `${id}: [${title}](${url})`; // markdown format
   }).join('\n');
 };
 
@@ -23,13 +23,14 @@ let mapFromMdLinks = (str: string): VideoInfo[] => {
   let ret: VideoInfo[] = [];
   let lines = str.split('\n').map(x => x.trim()).filter(x => !!x);
   for (let line of lines) {
-    let match = line.match(/^\[([^\[\]]+)\]\(([^\(\)]+)\)$/);
+    let match = line.match(/^([a-zA-Z0-9_]+):\s*\[([^\[\]]+)\]\(([^\(\)]+)\)$/);
     if (!match) {
       throw new Error('md links not valid');
     }
     ret.push({
-      title: match[1],
-      url: match[2],
+      id: match[1],
+      title: match[2],
+      url: match[3],
     });
   }
   return ret;
