@@ -1,7 +1,12 @@
 import React from 'react';
 
 import {
-  StudentDTO, KMId, ProgressStatus, ProgressVideoStatus, StudentProgressDTO
+  StudentDTO,
+  KNOWLEDGE_MAP,
+  KMId,
+  ProgressStatus,
+  ProgressVideoStatus,
+  StudentProgressDTO
 } from '../../common/types';
 import {typedFetch} from './typedFetch';
 import {typedLocalStorage} from './typedLocalStorage';
@@ -13,7 +18,7 @@ export class Student {
     this.dto = dto;
   }
 
-  progress() {
+  _progress() {
     if (this.dto) {
       return this.dto.progress;
     } else {
@@ -23,6 +28,20 @@ export class Student {
       }
       return progress;
     }
+  }
+
+  progress() {
+    let raw = this._progress();
+    let modulesThatExistToday = new Set(KNOWLEDGE_MAP.nodes.map(x => x.id));
+    let ret: StudentProgressDTO = {};
+    for (let k in raw) {
+      if (modulesThatExistToday.has(k)) {
+        ret[k] = raw[k];
+      } else {
+        console.error('Unexpected module in progress list: ' + k);
+      }
+    }
+    return ret;
   }
 
   async videos(kmid: KMId): Promise<Record<string, ProgressVideoStatus>> {

@@ -1,36 +1,6 @@
 {
   "nodes": [
     {
-      "id": "REPEAT_OPEN_SOUNDS",
-      "deps": [
-        "TRACKING_SOUND"
-      ],
-      "title": "",
-      "description": "",
-      "studentVideos": [],
-      "teacherVideos": [],
-      "cell": {
-        "i": 41,
-        "j": 4
-      },
-      "subNodes": []
-    },
-    {
-      "id": "REPEAT_CLOSED_SOUNDS",
-      "deps": [
-        "TRACKING_SOUND"
-      ],
-      "title": "",
-      "description": "",
-      "studentVideos": [],
-      "teacherVideos": [],
-      "cell": {
-        "i": 42,
-        "j": 4
-      },
-      "subNodes": []
-    },
-    {
       "id": "RECOGNIZE_SIMPLE_OBJECTS",
       "deps": [
         "TRACKING_OBJECTS"
@@ -48,20 +18,25 @@
     {
       "id": "REPEAT_SOUNDS",
       "deps": [
-        "REPEAT_OPEN_SOUNDS",
-        "REPEAT_CLOSED_SOUNDS",
-        "BABBLE",
-        "SOCIAL_SMILE"
+        "SOCIAL_SMILE",
+        "BABBLE"
       ],
-      "title": "",
-      "description": "",
-      "studentVideos": [],
+      "title": "Repeating sounds",
+      "description": "Help develop your baby's ability to repeat sounds.",
+      "studentVideos": [
+        {
+          "id": "REPEAT_SOUNDS",
+          "title": "Help develop your baby's ability to repeat sounds",
+          "url": "https://www.youtube.com/watch?v=pym0KCKT_tE"
+        }
+      ],
       "teacherVideos": [],
       "cell": {
-        "i": 43,
+        "i": 42,
         "j": 5
       },
-      "subNodes": []
+      "subNodes": [],
+      "forTeachers": true
     },
     {
       "id": "SPEAK_SIMPLE_OBJECTS",
@@ -143,7 +118,7 @@
       "subNodes": []
     },
     {
-      "id": "REPEAT_VOWELS",
+      "id": "REPEAT_A_TO_M",
       "deps": [
         "REPEAT_SOUNDS"
       ],
@@ -155,10 +130,11 @@
         "i": 42,
         "j": 6
       },
-      "subNodes": []
+      "subNodes": [],
+      "forTeachers": false
     },
     {
-      "id": "REPEAT_CONSONANTS",
+      "id": "REPEAT_N_TO_Z",
       "deps": [
         "REPEAT_SOUNDS"
       ],
@@ -170,13 +146,14 @@
         "i": 43,
         "j": 6
       },
-      "subNodes": []
+      "subNodes": [],
+      "forTeachers": false
     },
     {
       "id": "REPEAT_LETTERS",
       "deps": [
-        "REPEAT_VOWELS",
-        "REPEAT_CONSONANTS"
+        "REPEAT_A_TO_M",
+        "REPEAT_N_TO_Z"
       ],
       "title": "",
       "description": "",
@@ -193,22 +170,28 @@
       "deps": [
         "REPEAT_LETTERS"
       ],
-      "title": "",
-      "description": "",
-      "studentVideos": [],
+      "title": "Singing the alphabet",
+      "description": "Teach your child to sing the alphabet",
+      "studentVideos": [
+        {
+          "id": "SING_ALPHABET",
+          "title": "Teach your child to sing the alphabet",
+          "url": "https://www.youtube.com/watch?v=8jXJP8GR3x0"
+        }
+      ],
       "teacherVideos": [],
       "cell": {
         "i": 43,
         "j": 9
       },
-      "subNodes": []
+      "subNodes": [],
+      "forTeachers": true
     },
     {
       "id": "READ_LOWERCASE_A_TO_M",
       "deps": [
-        "REPEAT_VOWELS",
+        "REPEAT_A_TO_M",
         "RECOGNIZE_LOWERCASE_LETTERS",
-        "REPEAT_CONSONANTS",
         "SIT_UP_UNSUPPORTED"
       ],
       "title": "",
@@ -224,9 +207,8 @@
     {
       "id": "READ_LOWERCASE_N_TO_Z",
       "deps": [
-        "REPEAT_CONSONANTS",
+        "REPEAT_N_TO_Z",
         "RECOGNIZE_LOWERCASE_LETTERS",
-        "REPEAT_VOWELS",
         "SIT_UP_UNSUPPORTED"
       ],
       "title": "",
@@ -242,9 +224,8 @@
     {
       "id": "READ_UPPERCASE_N_TO_Z",
       "deps": [
-        "REPEAT_CONSONANTS",
+        "REPEAT_N_TO_Z",
         "RECOGNIZE_UPPERCASE_LETTERS",
-        "REPEAT_VOWELS",
         "SIT_UP_UNSUPPORTED"
       ],
       "title": "",
@@ -276,9 +257,8 @@
     {
       "id": "READ_UPPERCASE_A_TO_M",
       "deps": [
-        "REPEAT_VOWELS",
+        "REPEAT_A_TO_M",
         "RECOGNIZE_UPPERCASE_LETTERS",
-        "REPEAT_CONSONANTS",
         "SIT_UP_UNSUPPORTED"
       ],
       "title": "",
@@ -405,9 +385,7 @@
       "id": "RECOGNIZE_LOWERCASE_LETTERS",
       "deps": [
         "TRACKING_OBJECTS",
-        "SELF_SUPPORT_NECK",
-        "ROLL_OVER_BACK_TO_FRONT",
-        "ROLL_OVER_FRONT_TO_BACK"
+        "SOCIAL_SMILE"
       ],
       "title": "",
       "description": "",
@@ -415,7 +393,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 37,
-        "j": 5
+        "j": 6
       },
       "subNodes": []
     },
@@ -423,9 +401,7 @@
       "id": "RECOGNIZE_UPPERCASE_LETTERS",
       "deps": [
         "TRACKING_OBJECTS",
-        "SELF_SUPPORT_NECK",
-        "ROLL_OVER_BACK_TO_FRONT",
-        "ROLL_OVER_FRONT_TO_BACK"
+        "SOCIAL_SMILE"
       ],
       "title": "",
       "description": "",
@@ -433,7 +409,7 @@
       "teacherVideos": [],
       "cell": {
         "i": 38,
-        "j": 5
+        "j": 6
       },
       "subNodes": []
     },
@@ -5261,17 +5237,25 @@
     {
       "id": "BABBLE",
       "deps": [
-        "RECOGNIZE_EYES_FACES"
+        "TRACKING_SOUND",
+        "RECOGNIZE_SAY"
       ],
-      "title": "",
-      "description": "",
+      "title": "Babbling",
+      "description": "In this module, we'll help develop your baby's babbling.",
       "studentVideos": [],
-      "teacherVideos": [],
+      "teacherVideos": [
+        {
+          "id": "BABBLE",
+          "title": "Help your child develop the skill of babbling",
+          "url": "https://www.youtube.com/watch?v=_TUN9auJXKE"
+        }
+      ],
       "cell": {
         "i": 44,
-        "j": 3
+        "j": 4
       },
-      "subNodes": []
+      "subNodes": [],
+      "forTeachers": true
     },
     {
       "id": "SELF_SUPPORT_NECK",
@@ -5730,15 +5714,22 @@
       "deps": [
         "RECOGNIZE_EYES_FACES"
       ],
-      "title": "",
-      "description": "",
+      "title": "Tracking sound",
+      "description": "In this module, we help develop your baby's ability to track sounds with his eyes.",
       "studentVideos": [],
-      "teacherVideos": [],
+      "teacherVideos": [
+        {
+          "id": "TRAINING",
+          "title": "Helping your baby track sounds with his eyes",
+          "url": "https://www.youtube.com/watch?v=j0jZWUcwUWM"
+        }
+      ],
       "cell": {
         "i": 42,
         "j": 3
       },
-      "subNodes": []
+      "subNodes": [],
+      "forTeachers": true
     },
     {
       "id": "TRACKING_OBJECTS",
@@ -7773,6 +7764,44 @@
       ],
       "subNodes": [],
       "forTeachers": true
+    },
+    {
+      "id": "RECOGNIZE_SAY",
+      "title": "Recognizing \"say\"",
+      "description": "In this module, we help teach your baby the meaning of the word \"say\".",
+      "studentVideos": [],
+      "teacherVideos": [
+        {
+          "id": "TRAINING",
+          "title": "Helping your baby learn the word \"say\"",
+          "url": "https://www.youtube.com/watch?v=-G0xX5OdeCg"
+        }
+      ],
+      "cell": {
+        "i": 43,
+        "j": 3
+      },
+      "deps": [
+        "RECOGNIZE_EYES_FACES"
+      ],
+      "subNodes": [],
+      "forTeachers": true
+    },
+    {
+      "id": "REPEAT_WORDS",
+      "title": "",
+      "description": "",
+      "studentVideos": [],
+      "teacherVideos": [],
+      "cell": {
+        "i": 44,
+        "j": 7
+      },
+      "deps": [
+        "BABBLE"
+      ],
+      "subNodes": [],
+      "forTeachers": false
     }
   ]
 }

@@ -9,6 +9,7 @@ export interface Video {
   youtubeId: string,
   startTimeSeconds?: number,
   endTimeSeconds?: number,
+  hideControls?: boolean,
 }
 
 export type FollowUpAction = {
@@ -97,6 +98,7 @@ export let ModuleBuilder = ({lecture}: ModuleBuilderProps) => {
       doWin();
     } else {
       setExercisePath(newPath);
+      setSawVideo(false);
     }
   }, [lecture, exercisePath, doWin]);
   let handleSelected = React.useCallback(async (choice: string) => {
@@ -116,6 +118,7 @@ export let ModuleBuilder = ({lecture}: ModuleBuilderProps) => {
       }
     } else {
       setExercisePath([...exercisePath, {choice: choice, index: 0}]);
+      setSawVideo(false);
     }
   }, [exercisePath, exercise, advance]);
 
@@ -132,7 +135,7 @@ export let ModuleBuilder = ({lecture}: ModuleBuilderProps) => {
         autoplay: 1,
         start: exercise.preVideo.startTimeSeconds,
         end: exercise.preVideo.endTimeSeconds,
-        controls: 1,
+        controls: exercise.preVideo.hideControls ? 0 : 1,
       },
     };
     return (

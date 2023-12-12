@@ -55,8 +55,8 @@ let cellFromAbsoluteCoords = (x: number, y: number): Cell | null => {
 interface KnowledgeNodeProps {
   kmid: string,
   knowledgeGraph: TechTree,
-  reached: Set<string>,
-  reachable: Set<string>,
+  reached?: Set<string>,
+  reachable?: Set<string>,
   dependants: string[],
   selectedCells: Cell[],
   admin: boolean,
@@ -115,9 +115,9 @@ let KnowledgeNode = ({
   }
 
   let fill: string;
-  if (reached.has(kmid)) {
+  if (reached && reached.has(kmid)) {
     fill = '#90EE90';
-  } else if (reachable.has(kmid)) {
+  } else if (reachable && reachable.has(kmid)) {
     fill = '#F1EB9C';
   } else if (admin && knowledgeGraph.directDependantsOf(kmid).length === 0) {
     fill = '#F19C9C';
@@ -143,8 +143,8 @@ let KnowledgeNode = ({
 interface BaseKnowledgeMapProps {
   knowledgeGraph: TechTree;
   grid: string[][];
-  reached: Set<string>;
-  reachable: Set<string>;
+  reached?: Set<string>;
+  reachable?: Set<string>;
   selectedCells: Cell[];
   admin: boolean;
   onHoverCellUpdated?: (cell: Cell | null) => void;
@@ -177,21 +177,23 @@ export let BaseKnowledgeMap = ({
     } else {
       minCell = {i: 1000, j: 1000};
       let enabledMinCell = {i: 1000, j: 1000};
-      for (let kmid of reachable) {
-        let nodeCell = knowledgeGraph.getNodeData(kmid).cell;
-        if (
-          nodeCell.j < minCell.j ||
-          nodeCell.j === minCell.j && nodeCell.i < minCell.i
-        ) {
-          minCell = nodeCell;
-        }
-        if (
-          !!moduleComponents[kmid] && (
-            nodeCell.j < enabledMinCell.j ||
-            nodeCell.j === enabledMinCell.j && nodeCell.i < enabledMinCell.i
-          )
-        ) {
-          enabledMinCell = nodeCell;
+      if (reachable) {
+        for (let kmid of reachable) {
+          let nodeCell = knowledgeGraph.getNodeData(kmid).cell;
+          if (
+            nodeCell.j < minCell.j ||
+            nodeCell.j === minCell.j && nodeCell.i < minCell.i
+          ) {
+            minCell = nodeCell;
+          }
+          if (
+            !!moduleComponents[kmid] && (
+              nodeCell.j < enabledMinCell.j ||
+              nodeCell.j === enabledMinCell.j && nodeCell.i < enabledMinCell.i
+            )
+          ) {
+            enabledMinCell = nodeCell;
+          }
         }
       }
       if (enabledMinCell.i < 1000) {
@@ -353,9 +355,6 @@ interface AdminKnowledgeMapProps {
   grid: string[][];
   rows: number;
   cols: number;
-  reached: Set<string>;
-  reachable: Set<string>;
-  onChangeReached: (newReached: Set<string>) => void;
   selectedCells: Cell[];
   setSelectedCells: (cells: Cell[]) => void;
 }
@@ -366,9 +365,6 @@ let AdminKnowledgeMap = ({
   grid,
   rows,
   cols,
-  reached,
-  reachable,
-  onChangeReached,
   selectedCells,
   setSelectedCells,
 }: AdminKnowledgeMapProps) => {
@@ -797,8 +793,6 @@ let AdminKnowledgeMap = ({
       <BaseKnowledgeMap
           knowledgeGraph={knowledgeGraph}
           grid={grid}
-          reached={reached}
-          reachable={reachable}
           selectedCells={selectedCells}
           admin={true}
           onHoverCellUpdated={setHoverCell}
@@ -854,9 +848,6 @@ interface StudentKnowledgeMapProps {
   grid: string[][],
   rows: number,
   cols: number,
-  reached: Set<string>;
-  reachable: Set<string>;
-  onChangeReached: (newReached: Set<string>) => void;
   selectedCells: Cell[];
   setSelectedCells: (cells: Cell[]) => void;
 }
@@ -866,13 +857,24 @@ let StudentKnowledgeMap = ({
   grid,
   rows,
   cols,
-  reached,
-  reachable,
-  onChangeReached,
   selectedCells,
   setSelectedCells,
 }: StudentKnowledgeMapProps) => {
   let student = useStudentContext();
+
+  let [reached, setReached] = React.useState(new Set<string>(
+    Object.entries(student.progress()).filter(
+      ([k, v]) => v.status === ProgressStatus.PASSED
+    ).map(([k, v]) => k)
+  ));
+  let handleChangeReached = React.useCallback((newReached: Set<string>) => {
+    setReached(newReached);
+  }, []);
+  let reachable = React.useMemo(() => {
+    let ret = knowledgeGraph.getReachable(reached);
+    return ret;
+  }, [knowledgeGraph, reached]);
+
   let [hoverCell, setHoverCell] = React.useState<Cell | null>(null);
   let handleClick = React.useCallback(async (e: MouseEvent) => {
     if (!hoverCell) {
@@ -891,11 +893,11 @@ let StudentKnowledgeMap = ({
       } else {
         newReached.add(kmid);
       }
-      onChangeReached(newReached);
+      handleChangeReached(newReached);
       return;
     }
     setSelectedCells([hoverCell]);
-  }, [hoverCell, grid, reached]);
+  }, [hoverCell, grid, reached, handleChangeReached]);
   let handleCloseDrawer = React.useCallback(() => {
     setSelectedCells([]);
   }, []);
@@ -998,19 +1000,6 @@ export let KnowledgeMap = () => {
     knowledgeGraph.clearMemo();
     return knowledgeGraph.memoizedGrid();
   }, [knowledgeGraph]);
-  let [reached, setReached] = React.useState(new Set<string>(
-    Object.entries(student.progress()).filter(
-      ([k, v]) => v.status === ProgressStatus.PASSED
-    ).map(([k, v]) => k)
-  ));
-  let handleChangeReached = React.useCallback((newReached: Set<string>) => {
-    setReached(newReached);
-  }, []);
-  let reachable = React.useMemo(() => {
-    let ret = knowledgeGraph.getReachable(reached);
-    return ret;
-  }, [knowledgeGraph, reached]);
-
   let [selectedCells, setSelectedCells] = React.useState<Cell[]>([]);
 
   let ret;
@@ -1023,9 +1012,6 @@ export let KnowledgeMap = () => {
           grid={grid}
           rows={rows}
           cols={cols}
-          reached={reached}
-          reachable={reachable}
-          onChangeReached={handleChangeReached}
           selectedCells={selectedCells}
           setSelectedCells={setSelectedCells}/>
     );
@@ -1036,9 +1022,6 @@ export let KnowledgeMap = () => {
           grid={grid}
           rows={rows}
           cols={cols}
-          reached={reached}
-          reachable={reachable}
-          onChangeReached={handleChangeReached}
           selectedCells={selectedCells}
           setSelectedCells={setSelectedCells}/>
     );

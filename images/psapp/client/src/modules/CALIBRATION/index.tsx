@@ -20,22 +20,41 @@ export default (props: never) => {
   }, [student]);
   let lecture: VideoLecture = {
     exercises: [{
-      //preVideo: {
-      //  // CALIBRATION - introduce calibration
-      //  youtubeId: 'TODO',
-      //},
+      preVideo: {
+        youtubeId: 'aHxzgJWMnUI',
+        endTimeSeconds: 18,
+        hideControls: true,
+      },
       question: 'Can your child sing the alphabet without help?',
       choices: {
         yes: {
           exercises: [{
+            preVideo: {
+              youtubeId: 'aHxzgJWMnUI',
+              startTimeSeconds: 19,
+              endTimeSeconds: 31,
+              hideControls: true,
+            },
             question: 'Can your child recognize every uppercase and lowercase letter without help?',
             choices: {
               yes: {
                 exercises: [{
+                  preVideo: {
+                    youtubeId: 'aHxzgJWMnUI',
+                    startTimeSeconds: 32,
+                    endTimeSeconds: 35,
+                    hideControls: true,
+                  },
                   question: 'Can your child read a random page out of Harry Potter without help?',
                   choices: {
                     yes: {
                       exercises: [{
+                        preVideo: {
+                          youtubeId: 'aHxzgJWMnUI',
+                          startTimeSeconds: 36,
+                          endTimeSeconds: 63,
+                          hideControls: true,
+                        },
                         question: 'Your child is doing great! Our curriculum has nothing to offer you at this time. Would you like us to send you an email when we add other subjects?',
                         choices: {
                           yes: {
@@ -87,7 +106,13 @@ export default (props: never) => {
         },
         no: {
           exercises: [{
-            question: 'Can your child repeat at least 30 different sounds after you?',
+            preVideo: {
+              youtubeId: 'aHxzgJWMnUI',
+              startTimeSeconds: 64,
+              endTimeSeconds: 74,
+              hideControls: true,
+            },
+            question: 'Can your child repeat at least 20 different sounds after you?',
             choices: {
               yes: {
                 sideEffect: () => {
@@ -102,6 +127,12 @@ export default (props: never) => {
               },
               no: {
                 exercises: [{
+                  preVideo: {
+                    youtubeId: 'aHxzgJWMnUI',
+                    startTimeSeconds: 75,
+                    endTimeSeconds: 86,
+                    hideControls: true,
+                  },
                   question: 'Can your child follow sounds and objects with their eyes?',
                   choices: {
                     yes: {
@@ -132,10 +163,11 @@ export default (props: never) => {
         },
       },
     }, {
-      //preVideo: {
-      //  // UI_TUTORIAL - teach them about optional videos
-      //  youtubeId: 'TODO',
-      //},
+      preVideo: {
+        youtubeId: 'aHxzgJWMnUI',
+        startTimeSeconds: 87,
+        hideControls: true,
+      },
       question: 'Do you have to watch every single video?',
       choices: {
         yes: {

@@ -139,10 +139,11 @@ let Card = ({kmid, student}: CardProps) => {
     display: 'flex',
     alignItems: 'center',
     aspectRatio: '2/1',
-    background: `url('/static/images/module_cards/${backgroundFile}.png')`,
+    background: `url('/static/images/module_cards/${backgroundFile}.png'), url('/static/images/module_cards/for_kids.png')`,
     backgroundSize: 'contain',
     fontFamily: 'Handlee, sans-serif',
     color: '#221111',
+    webkitTextStroke: node.forTeachers ? 'unset' : '1px white',
     borderRadius: '4px',
     paddingLeft: '20px',
     paddingRight: '150px',
@@ -185,7 +186,7 @@ let Card = ({kmid, student}: CardProps) => {
               style={{textDecoration: 'none'}}>
             <div style={innerStyle}>
               <h1>
-                {node.title}
+                {node.title || node.id}
               </h1>
             </div>
           </Link>

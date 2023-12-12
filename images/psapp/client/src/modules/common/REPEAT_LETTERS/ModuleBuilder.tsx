@@ -5,10 +5,9 @@ import {ModuleContext} from '@src/ModuleContext';
 import {VariantList} from '@src/util';
 import {STTModule} from '@src/modules/common/SPEECH_TO_TEXT_SHIM/ModuleBuilder';
 import {LETTERS} from '@src/modules/common/READING/util';
+import sayWord from '@src/modules/common/READING/words/say';
 
-const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] as const;
-
-import whichLetterIsThis from './which_letter_is_this.wav';
+const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'] as const;
 
 export type Variant = typeof letters[number];
 
@@ -33,7 +32,7 @@ export let ModuleBuilder = ({
     let generateExercise = React.useCallback((): MyEx => {
       let variant = vlist.pickVariant();
       trainingRecorder.addEvent({
-        kmid: 'READ_LETTERS',
+        kmid: 'REPEAT_LETTERS',
         exerciseData: variant,
         status: 'start',
       });
@@ -41,8 +40,13 @@ export let ModuleBuilder = ({
         variant: variant,
       };
     }, [vlist, trainingRecorder]);
+    let [showLetter, setShowLetter] = React.useState(false);
     let playInstructions = React.useCallback(async (exercise: MyEx) => {
-      await moduleContext.playAudio(whichLetterIsThis);
+      await moduleContext.playAudio(sayWord.spoken);
+      setShowLetter(true);
+      await moduleContext.playAudio(LETTERS[exercise.variant]);
+      await new Promise(r => setTimeout(r, 2000));
+      setShowLetter(false);
     }, [moduleContext]);
     let {
       exercise,
@@ -57,7 +61,7 @@ export let ModuleBuilder = ({
       onGenExercise: generateExercise,
       initialPartial: () => 0,
       onPlayInstructions: playInstructions,
-      playOnEveryExercise: false,
+      playOnEveryExercise: true,
       vlist: vlist,
     });
 
@@ -67,7 +71,7 @@ export let ModuleBuilder = ({
         return;
       }
       trainingRecorder.addEvent({
-        kmid: 'READ_LETTERS',
+        kmid: 'REPEAT_LETTERS',
         exerciseData: exercise.variant,
         status: 'fail',
       });
@@ -82,26 +86,31 @@ export let ModuleBuilder = ({
     let handleSuccess = React.useCallback(() => {
       doSuccess();
       trainingRecorder.addEvent({
-        kmid: 'READ_LETTERS',
+        kmid: 'REPEAT_LETTERS',
         exerciseData: exercise.variant,
         status: 'success',
       });
       doingFailure.current = false;
     }, [exercise, trainingRecorder, doSuccess]);
 
-    let textStyle: React.CSSProperties = {
-      fontFamily: 'sans-serif',
-      fontSize: '200px',
-    };
-    let text = (
-      <text style={textStyle}
-          dominantBaseline="central"
-          textAnchor="middle"
-          x="50%"
-          y="50%">
-        {exercise.variant}
-      </text>
-    );
+    let text;
+    if (showLetter) {
+      let textStyle: React.CSSProperties = {
+        fontFamily: 'sans-serif',
+        fontSize: '200px',
+      };
+      text = (
+        <text style={textStyle}
+            dominantBaseline="central"
+            textAnchor="middle"
+            x="50%"
+            y="50%">
+          {exercise.variant.toUpperCase()} {exercise.variant}
+        </text>
+      );
+    } else {
+      text = null;
+    }
     return (
       <STTModule doSuccess={handleSuccess}
           doFailure={handleFailure}
