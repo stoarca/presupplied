@@ -1,4 +1,4 @@
 tls:
   certificates:
-    - certFile: /certs/selfsigned.crt
-      keyFile: /certs/selfsigned.key
+    - certFile: /certs/presupplied-selfsigned.crt
+      keyFile: /certs/presupplied-selfsigned.key
