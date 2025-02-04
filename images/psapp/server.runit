@@ -3,6 +3,7 @@
 set -eu -o pipefail
 
 cd /presupplied/images/psapp/server
+npm run migration:run
 if [ "$NODE_ENV" == "development" ]; then
   exec npm run dev
 else
