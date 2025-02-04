@@ -21,13 +21,16 @@ import {
   ProgressStatus,
   ProgressVideoStatus,
 } from '../../common/types';
-import { EndpointKeys, endpoints, Endpoints } from '../../common/apitypes';
+import { EndpointKeys, Endpoints, verifyApiTypes } from '../../common/apitypes';
+import { typedGet, typedPost } from './typedRoutes';
 
-if (endpoints) {
+if (verifyApiTypes) {
   // HACK: if we only import types, ts-node doesn't typecheck the file
   // so we have to use the varibale somehow. We use it in the condition and
   // intentionally do nothing
 }
+
+const router = express.Router();
 
 interface JWTStudent {
   email: string;
@@ -126,33 +129,6 @@ AppDataSource.initialize().then(async () => {
     next();
   });
 
-  type RouteHandler<K extends EndpointKeys> = (
-    req: express.Request<
-      Endpoints[K]['Params'],
-      Endpoints[K]['Response'],
-      Endpoints[K]['Body'],
-      Endpoints[K]['Query']
-    >,
-    resp: express.Response<Endpoints[K]['Response']>,
-    next: express.NextFunction,
-  ) => void;
-
-  let typedGet = <K extends EndpointKeys>(
-    endpointKey: Endpoints[K]['method'] extends 'get' ?
-      K : [K, 'does not impelement get method', never],
-    handler: RouteHandler<K>
-  ) => {
-    app.get(endpointKey, handler);
-  };
-
-  let typedPost = <K extends EndpointKeys>(
-    endpointKey: Endpoints[K]['method'] extends 'post' ?
-      K : [K, 'does not implement post method', never],
-    handler: RouteHandler<K>
-  ) => {
-    app.post(endpointKey, handler);
-  };
-
   let threeDaysInMilliseconds = 3 * 24 * 60 * 60 * 1000;
   app.use('/static/dist/wav', express.static(
     path.join(__dirname, '../../static/dist/wav'),
@@ -183,13 +159,15 @@ AppDataSource.initialize().then(async () => {
     resp.sendFile(path.join(__dirname, '../../static/index.html'));
   });
 
-  typedGet('/api/tts', async (req, resp, next) => {
+  app.use('/', router);
+
+  typedGet(router, '/api/tts', async (req, resp, next) => {
     return proxy(
       'http://pstts:5002/api/tts?text=' + encodeURIComponent(req.query.text)
     )(req, resp, next);
   });
 
-  typedPost('/api/auth/register', async (req, resp, next) => {
+  typedPost(router, '/api/auth/register', async (req, resp, next) => {
     if (!isValidEmail(req.body.email)) {
       return resp.status(422).json({
         errorCode: 'auth.register.email.invalid',
@@ -218,7 +196,7 @@ AppDataSource.initialize().then(async () => {
     resp.json({success: true});
   });
 
-  typedPost('/api/auth/login', async (req, resp, next) => {
+  typedPost(router, '/api/auth/login', async (req, resp, next) => {
     let studentRepo = AppDataSource.getRepository(Student);
     let student = await studentRepo.findOneBy({ email: req.body.email });
     if (!student) {
@@ -240,12 +218,12 @@ AppDataSource.initialize().then(async () => {
     resp.json({success: true});
   });
 
-  typedPost('/api/auth/logout', async (req, resp, next) => {
+  typedPost(router, '/api/auth/logout', async (req, resp, next) => {
     clearLoginCookie(resp);
     resp.json({success: true});
   });
 
-  typedGet('/api/student', async (req, resp) => {
+  typedGet(router, '/api/student', async (req, resp) => {
     if (!req.jwtStudent) {
       return resp.json({
         student: null,
@@ -282,7 +260,7 @@ AppDataSource.initialize().then(async () => {
     });
   });
 
-  typedGet('/api/learning/progressvideos/:kmid', async (req, resp, next) => {
+  typedGet(router, '/api/learning/progressvideos/:kmid', async (req, resp, next) => {
     if (!req.jwtStudent) {
       return resp.status(401).json({
         errorCode: 'learning.progressvideos.noLogin',
@@ -344,7 +322,7 @@ AppDataSource.initialize().then(async () => {
     });
   });
 
-  typedPost('/api/learning/events', async (req, resp, next) => {
+  typedPost(router, '/api/learning/events', async (req, resp, next) => {
     if (!req.jwtStudent) {
       return resp.status(401).json({
         errorCode: 'learning.event.noLogin',
@@ -454,7 +432,7 @@ AppDataSource.initialize().then(async () => {
     date.setHours(0, 0, 0, 0);
     return date.getTime();
   }
-  typedPost('/api/training/events', async (req, resp, next) => {
+  typedPost(router, '/api/training/events', async (req, resp, next) => {
     let date = parseInt(req.body.id.split('-')[0]);
     if (Date.now() - date > ONE_HOUR_IN_MILLISECONDS) {
       return resp.status(410).json({

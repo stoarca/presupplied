@@ -8,7 +8,7 @@ import {
   ProgressVideoStatus,
   StudentProgressDTO
 } from '../../common/types';
-import {typedFetch} from './typedFetch';
+import {typedFetch, API_HOST} from './typedFetch';
 import {typedLocalStorage} from './typedLocalStorage';
 import {mapObject} from './util';
 
@@ -47,6 +47,7 @@ export class Student {
   async videos(kmid: KMId): Promise<Record<string, ProgressVideoStatus>> {
     if (this.dto) {
       let resp = await typedFetch({
+        host: API_HOST,
         endpoint: '/api/learning/progressvideos/:kmid',
         method: 'get',
         params: {
@@ -67,6 +68,7 @@ export class Student {
   async markReached(modules: Record<KMId, ProgressStatus>) {
     if (this.dto) {
       let resp = await typedFetch({
+        host: API_HOST,
         endpoint: '/api/learning/events',
         method: 'post',
         body: {
@@ -109,6 +111,7 @@ export class Student {
   ) {
     if (this.dto) {
       let resp = await typedFetch({
+        host: API_HOST,
         endpoint: '/api/learning/events',
         method: 'post',
         body: {
@@ -139,6 +142,7 @@ export class Student {
   async mergeToServer() {
     let progress = typedLocalStorage.getJson('progress') || {};
     let resp = await typedFetch({
+      host: API_HOST,
       endpoint: '/api/learning/events',
       method: 'post',
       body: {
@@ -160,6 +164,7 @@ export class Student {
 
     let progressVideo = typedLocalStorage.getJson('progressVideo') || {};
     resp = await typedFetch({
+      host: API_HOST,
       endpoint: '/api/learning/events',
       method: 'post',
       body: {

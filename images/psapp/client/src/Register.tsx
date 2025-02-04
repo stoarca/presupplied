@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import {typedFetch} from './typedFetch';
+import {typedFetch, API_HOST} from './typedFetch';
 
 interface RegisterProps {
   [K: string]: never
@@ -37,6 +37,7 @@ export let Register = (props: RegisterProps) => {
     const data = new FormData(event.currentTarget);
     try {
       let resp = await typedFetch({
+        host: API_HOST,
         endpoint: '/api/auth/register',
         method: 'post',
         body: {

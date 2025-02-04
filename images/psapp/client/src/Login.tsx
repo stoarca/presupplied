@@ -8,7 +8,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
-import {typedFetch} from './typedFetch';
+import {typedFetch, API_HOST} from './typedFetch';
 import { useStudentContext } from './StudentContext';
 
 interface LoginProps {
@@ -41,6 +41,7 @@ export let Login = (props: LoginProps) => {
     const data = new FormData(event.currentTarget);
     try {
       let resp = await typedFetch({
+        host: API_HOST,
         endpoint: '/api/auth/login',
         method: 'post',
         body: {

@@ -15,7 +15,7 @@ import {List} from './List';
 import {Login} from './Login';
 import {Register} from './Register';
 import {Student, StudentContext} from './StudentContext';
-import {typedFetch} from './typedFetch';
+import {typedFetch, API_HOST} from './typedFetch';
 
 interface AppProps {
   student: Student;
@@ -54,6 +54,7 @@ let App = (props: AppProps) => {
 
 (async () => {
   let resp = await typedFetch({
+    host: API_HOST,
     endpoint: '/api/student',
     method: 'get',
   });

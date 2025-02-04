@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import {useStudentContext} from './StudentContext';
-import {typedFetch} from './typedFetch';
+import {typedFetch, API_HOST} from './typedFetch';
 
 type NavBarProps = Record<string, never>
 export let NavBar = (props: NavBarProps) => {
@@ -28,6 +28,7 @@ export let NavBar = (props: NavBarProps) => {
   }, []);
   let handleLogout = React.useCallback(async () => {
     await typedFetch({
+      host: API_HOST,
       endpoint: '/api/auth/logout',
       method: 'post',
     });

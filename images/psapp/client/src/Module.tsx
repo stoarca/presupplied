@@ -6,7 +6,7 @@ import {VariantList} from '@src/util';
 import {
   ProgressStatus, InputTrainingEvent, TrainingEvent
 } from '../../common/types';
-import {typedFetch} from './typedFetch';
+import {typedFetch, API_HOST} from './typedFetch';
 
 import {
   waitPlease, badBuzzer, goodDing, goodJob
@@ -78,6 +78,7 @@ export let useTrainingDataRecorder = () => {
       let events = recorder.current!.events;
       recorder.current!.events = [];
       await typedFetch({
+        host: API_HOST,
         endpoint: '/api/training/events',
         method: 'post',
         body: {
