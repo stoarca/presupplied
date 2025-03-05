@@ -1,25 +1,32 @@
 import React from 'react';
 import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import LoadingButton from '@mui/lab/LoadingButton';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 
-import {typedFetch, API_HOST} from './typedFetch';
+import {typedFetch, API_HOST} from '../typedFetch';
+import { useStudentContext } from '../StudentContext';
 
-interface RegisterProps {
+interface LoginProps {
   [K: string]: never
 };
 
 type E = React.FormEvent<HTMLFormElement>;
 
-export let Register = (props: RegisterProps) => {
+export let Login = (props: LoginProps) => {
+  let student = useStudentContext();
   let [loading, setLoading] = React.useState(false);
   let [fields, setFields] = React.useState({
     email: {error: false, helperText: ''},
+    password: {error: false, helperText: ''},
   });
+
 
   const handleSubmit = React.useCallback(async (event: E) => {
     event.preventDefault();
@@ -30,40 +37,44 @@ export let Register = (props: RegisterProps) => {
     setLoading(true);
     setFields({
       email: {error: false, helperText: ''},
+      password: {error: false, helperText: ''},
     });
 
     const data = new FormData(event.currentTarget);
     try {
       let resp = await typedFetch({
         host: API_HOST,
-        endpoint: '/api/auth/register',
+        endpoint: '/api/auth/login',
         method: 'post',
         body: {
-          name: data.get('name') as string,
           email: data.get('email') as string,
           password: data.get('password') as string,
         },
       });
       if ('success' in resp) {
+        await student.mergeToServer();
         window.location.href = '/';
         return;
       }
-      if (
-        resp.errorCode === 'auth.register.email.invalid' ||
-        resp.errorCode === 'auth.register.email.alreadyRegistered'
-      ) {
-        let narrow = resp; // to narrow the type for the callback
+      if (resp.errorCode === 'auth.login.email.nonexistent') {
+        let narrow = resp;
         setFields(fields => ({
           ...fields,
           email: {error: true, helperText: narrow.message}
         }));
+      } else if (resp.errorCode === 'auth.login.password.invalid') {
+        let narrow = resp;
+        setFields(fields => ({
+          ...fields,
+          password: {error: true, helperText: narrow.message}
+        }));
       } else {
-        let check: never = resp;  // eslint-disable-line no-unused-vars
+        let check: never = resp; // eslint-disable-line no-unused-vars
       }
     } finally {
       setLoading(false);
     }
-  }, [loading]);
+  }, [loading, student]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -79,19 +90,9 @@ export let Register = (props: RegisterProps) => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Register
+          Sign in
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="name"
-            label="Name"
-            name="name"
-            autoComplete="name"
-            autoFocus
-          />
           <TextField
             margin="normal"
             required
@@ -100,6 +101,7 @@ export let Register = (props: RegisterProps) => {
             label="Email"
             name="email"
             autoComplete="email"
+            autoFocus
             error={fields.email.error}
             helperText={fields.email.helperText}
           />
@@ -111,18 +113,25 @@ export let Register = (props: RegisterProps) => {
             label="Password"
             type="password"
             id="password"
-            autoComplete="new-password"
+            autoComplete="current-password"
+            error={fields.password.error}
+            helperText={fields.password.helperText}
           />
-          <LoadingButton
+          <Button
             type="submit"
             fullWidth
             variant="contained"
-            loading={loading}
-            loadingIndicator="Registering..."
             sx={{ mt: 3, mb: 2 }}
           >
-            Register
-          </LoadingButton>
+            Sign In
+          </Button>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link component={RouterLink} to="/register" variant="body2">
+                {'Don\'t have an account? Register here'}
+              </Link>
+            </Grid>
+          </Grid>
         </Box>
       </Box>
     </Container>
