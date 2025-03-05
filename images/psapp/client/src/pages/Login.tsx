@@ -6,9 +6,10 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { Link } from '@mui/material';
 
-import {typedFetch, API_HOST} from './typedFetch';
-import { useStudentContext } from './StudentContext';
+import {typedFetch, API_HOST} from '../typedFetch';
+import { useStudentContext } from '../StudentContext';
 
 interface LoginProps {
   [K: string]: never
@@ -81,15 +82,19 @@ export let Login = (props: LoginProps) => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          backgroundColor: '#f8f9fa',
+          padding: 4,
+          borderRadius: 2,
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
+        <Avatar sx={{ m: 1, bgcolor: '#2e7d32', width: 56, height: 56 }}>
+          <LockOutlinedIcon sx={{ fontSize: 32 }} />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h4" sx={{ color: '#1b5e20', fontWeight: 600, mb: 3 }}>
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, width: '100%' }}>
           <TextField
             margin="normal"
             required
@@ -101,6 +106,13 @@ export let Login = (props: LoginProps) => {
             autoFocus
             error={fields.email.error}
             helperText={fields.email.helperText}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#2e7d32',
+                },
+              },
+            }}
           />
           <TextField
             margin="normal"
@@ -113,15 +125,50 @@ export let Login = (props: LoginProps) => {
             autoComplete="current-password"
             error={fields.password.error}
             helperText={fields.password.helperText}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#2e7d32',
+                },
+              },
+            }}
           />
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{
+              mt: 3,
+              mb: 2,
+              bgcolor: '#2e7d32',
+              height: 48,
+              fontSize: '1.1rem',
+              '&:hover': {
+                bgcolor: '#1b5e20',
+              },
+            }}
           >
             Sign In
           </Button>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="body2" color="text.secondary" display="inline">
+              Don't have an account? {' '}
+            </Typography>
+            <Link
+              href="/register"
+              variant="body2"
+              sx={{
+                color: '#2e7d32',
+                textDecoration: 'none',
+                '&:hover': {
+                  textDecoration: 'underline',
+                  color: '#1b5e20'
+                }
+              }}
+            >
+              Register here
+            </Link>
+          </Box>
         </Box>
       </Box>
     </Container>

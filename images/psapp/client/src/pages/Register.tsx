@@ -6,8 +6,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { Link } from '@mui/material';
 
-import {typedFetch, API_HOST} from './typedFetch';
+import {typedFetch, API_HOST} from '../typedFetch';
 
 interface RegisterProps {
   [K: string]: never
@@ -73,15 +74,19 @@ export let Register = (props: RegisterProps) => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          backgroundColor: '#f8f9fa',
+          padding: 4,
+          borderRadius: 2,
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
+        <Avatar sx={{ m: 1, bgcolor: '#2e7d32', width: 56, height: 56 }}>
+          <LockOutlinedIcon sx={{ fontSize: 32 }} />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h4" sx={{ color: '#1b5e20', fontWeight: 600, mb: 3 }}>
           Register
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, width: '100%' }}>
           <TextField
             margin="normal"
             required
@@ -91,6 +96,13 @@ export let Register = (props: RegisterProps) => {
             name="name"
             autoComplete="name"
             autoFocus
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#2e7d32',
+                },
+              },
+            }}
           />
           <TextField
             margin="normal"
@@ -102,6 +114,13 @@ export let Register = (props: RegisterProps) => {
             autoComplete="email"
             error={fields.email.error}
             helperText={fields.email.helperText}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#2e7d32',
+                },
+              },
+            }}
           />
           <TextField
             margin="normal"
@@ -112,6 +131,13 @@ export let Register = (props: RegisterProps) => {
             type="password"
             id="password"
             autoComplete="new-password"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#2e7d32',
+                },
+              },
+            }}
           />
           <LoadingButton
             type="submit"
@@ -119,10 +145,38 @@ export let Register = (props: RegisterProps) => {
             variant="contained"
             loading={loading}
             loadingIndicator="Registering..."
-            sx={{ mt: 3, mb: 2 }}
+            sx={{
+              mt: 3,
+              mb: 2,
+              bgcolor: '#2e7d32',
+              height: 48,
+              fontSize: '1.1rem',
+              '&:hover': {
+                bgcolor: '#1b5e20',
+              },
+            }}
           >
             Register
           </LoadingButton>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="body2" color="text.secondary" display="inline">
+              Already have an account? {' '}
+            </Typography>
+            <Link
+              href="/login"
+              variant="body2"
+              sx={{
+                color: '#2e7d32',
+                textDecoration: 'none',
+                '&:hover': {
+                  textDecoration: 'underline',
+                  color: '#1b5e20'
+                }
+              }}
+            >
+              Sign in here
+            </Link>
+          </Box>
         </Box>
       </Box>
     </Container>
