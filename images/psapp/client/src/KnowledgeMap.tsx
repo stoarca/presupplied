@@ -19,7 +19,7 @@ import {
   GraphJson, ProgressStatus, KNOWLEDGE_MAP, GraphNodeInfo, VideoInfo
 } from '../../common/types';
 import {ViewBox, pixelToViewBoxPos, visibleViewBoxSize} from './util';
-import {NavBar} from './NavBar';
+import {NavBar} from './components/NavBar';
 
 let autoIncrementingId = 0;
 let genId = () => {

@@ -11,11 +11,12 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
 import {moduleComponents} from './ModuleContext';
 import {KnowledgeMap} from './KnowledgeMap';
-import {List} from './List';
-import {Login} from './Login';
-import {Register} from './Register';
+import {Login} from './pages/Login';
+import {Register} from './pages/Register';
 import {Student, StudentContext} from './StudentContext';
 import {typedFetch, API_HOST} from './typedFetch';
+import { ParentHomePage } from './pages/ParentHomePage';
+import { ChildHomePage } from './pages/ChildHomePage';
 
 interface AppProps {
   student: Student;
@@ -34,7 +35,8 @@ let App = (props: AppProps) => {
           <React.Suspense fallback={'loading...'}>
             <Routes>
               <Route path="/">
-                <Route index element={<List/>}/>
+                <Route index element={<ParentHomePage/>}/>
+                <Route path="child" element={<ChildHomePage/>}/>
                 <Route path="map" element={<KnowledgeMap/>}/>
                 <Route path="login" element={<Login/>}/>
                 <Route path="register" element={<Register/>}/>
