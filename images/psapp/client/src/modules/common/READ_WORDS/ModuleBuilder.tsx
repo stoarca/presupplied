@@ -36,7 +36,7 @@ export let ModuleBuilder = ({
     let preloads = new Set<string>();
     for (let variant of variants) {
       preloads.add(variant.spoken);
-      for (let [_, sound] of variant.sounds) {
+      for (let [_, sound] of variant.sounds) { // eslint-disable-line
         if (sound in LETTER_SOUNDS) {
           preloads.add(LETTER_SOUNDS[sound as keyof typeof LETTER_SOUNDS]);
         } else {

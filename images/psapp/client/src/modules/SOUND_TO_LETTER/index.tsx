@@ -9,7 +9,7 @@ import {LETTER_SOUNDS} from '@src/modules/common/READING/util';
 
 import whichLetter from './which_letter.wav';
 
-let soundToLetters: {[key in keyof typeof LETTER_SOUNDS]: string[]} = {
+let soundToLetters: {[key in keyof typeof LETTER_SOUNDS]: string[]} = { // eslint-disable-line
   aShortAt: ['a'],
   aShortAre: ['a', 'o'],
   aShortAnd: ['a'],

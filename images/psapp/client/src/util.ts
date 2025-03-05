@@ -99,6 +99,7 @@ export let shuffle = <T>(arr: T[]) => {
   return arr;
 };
 
+
 export class VariantList<T> {
   variants: readonly T[];
   variantsMap: Map<T, { maxScore: number, score: number }>;
