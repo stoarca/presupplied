@@ -6,6 +6,7 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
+    "build": "tsc",
     "migration:generate": "cd src/migration && typeorm-ts-node-commonjs migration:generate -d ../data-source.ts",
     "migration:run": "typeorm-ts-node-commonjs migration:run -d src/data-source.ts --transaction each",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/data-source.ts --transaction each",

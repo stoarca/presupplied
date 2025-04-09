@@ -43,21 +43,21 @@ export let NavBar = (props: NavBarProps) => {
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="Open settings">
           <Button ref={userMenuRef}
-              onClick={handleToggleUserMenu}
-              sx={{ p: 0, color: '#111111' }}
-              endIcon={<ExpandMoreIcon/>}>
+            onClick={handleToggleUserMenu}
+            sx={{ p: 0, color: '#111111' }}
+            endIcon={<ExpandMoreIcon/>}>
             {student.dto.email}
           </Button>
         </Tooltip>
         <Menu
-            sx={{ mt: '30px' }}
-            id="menu-appbar"
-            anchorEl={userMenuRef.current}
-            anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-            keepMounted
-            transformOrigin={{vertical: 'top', horizontal: 'right'}}
-            open={showUserMenu}
-            onClose={handleToggleUserMenu}>
+          sx={{ mt: '30px' }}
+          id="menu-appbar"
+          anchorEl={userMenuRef.current}
+          anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+          keepMounted
+          transformOrigin={{vertical: 'top', horizontal: 'right'}}
+          open={showUserMenu}
+          onClose={handleToggleUserMenu}>
           <MenuItem onClick={handleLogout}>
             <Typography textAlign="center">Logout</Typography>
           </MenuItem>
@@ -88,7 +88,7 @@ export let NavBar = (props: NavBarProps) => {
     <React.Fragment>
       <AppBar position="static" color="default" style={{flex: '0 0 auto'}}>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{flexGrow:1}}>
+          <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
             <img src="/static/images/logodark.svg" style={{height: '30px'}}/>
           </Typography>
           {navLinks}

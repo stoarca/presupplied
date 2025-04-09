@@ -4,12 +4,8 @@ import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
 import {VariantList, Point, genRandPoints, pickFromBag} from '@src/util';
 import {
-  VisualFractionType, VisualFractionTypes, VisualFraction
+  VisualFraction
 } from '@src/VisualFraction';
-import {
-  BadVisualFractionType, BadVisualFractionTypes, BadVisualFraction
-} from '@src/BadVisualFraction';
-
 type M = React.MouseEvent<SVGElement>;
 
 type Variant = number;
@@ -60,11 +56,9 @@ export default (props: void) => {
   }, [moduleContext]);
   let {
     exercise,
-    partial,
     score,
     maxScore,
     doSuccess,
-    doPartialSuccess,
     doFailure,
   } = useExercise({
     onGenExercise: generateExercise,
@@ -89,37 +83,37 @@ export default (props: void) => {
             ${exercise.positions[0].x - SIZE / 2},
             ${exercise.positions[0].y - SIZE / 2}
           )`}
-          onClick={handleSuccess}>
+      onClick={handleSuccess}>
         <VisualFraction
-            type="circle"
-            size={SIZE}
-            color="#ff0000"
-            numerator={1}
-            denominator={exercise.variant}/>
+          type="circle"
+          size={SIZE}
+          color="#ff0000"
+          numerator={1}
+          denominator={exercise.variant}/>
       </g>
       <g transform={`translate(
             ${exercise.positions[1].x - SIZE / 2},
             ${exercise.positions[1].y - SIZE / 2}
           )`}
-          onClick={handleFailure}>
+      onClick={handleFailure}>
         <VisualFraction
-            type="circle"
-            size={SIZE}
-            color="#ff0000"
-            numerator={1}
-            denominator={exercise.wrongDenoms[0]}/>
+          type="circle"
+          size={SIZE}
+          color="#ff0000"
+          numerator={1}
+          denominator={exercise.wrongDenoms[0]}/>
       </g>
       <g transform={`translate(
             ${exercise.positions[2].x - SIZE / 2},
             ${exercise.positions[2].y - SIZE / 2}
           )`}
-          onClick={handleFailure}>
+      onClick={handleFailure}>
         <VisualFraction
-            type="circle"
-            size={SIZE}
-            color="#ff0000"
-            numerator={1}
-            denominator={exercise.wrongDenoms[1]}/>
+          type="circle"
+          size={SIZE}
+          color="#ff0000"
+          numerator={1}
+          denominator={exercise.wrongDenoms[1]}/>
       </g>
     </Module>
   );

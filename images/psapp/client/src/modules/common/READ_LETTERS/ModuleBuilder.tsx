@@ -46,13 +46,10 @@ export let ModuleBuilder = ({
     }, [moduleContext]);
     let {
       exercise,
-      partial,
       score,
       maxScore,
       doSuccess,
-      doPartialSuccess,
       doFailure,
-      alreadyFailed,
     } = useExercise({
       onGenExercise: generateExercise,
       initialPartial: () => 0,
@@ -95,18 +92,18 @@ export let ModuleBuilder = ({
     };
     let text = (
       <text style={textStyle}
-          dominantBaseline="central"
-          textAnchor="middle"
-          x="50%"
-          y="50%">
+        dominantBaseline="central"
+        textAnchor="middle"
+        x="50%"
+        y="50%">
         {exercise.variant}
       </text>
     );
     return (
       <STTModule doSuccess={handleSuccess}
-          doFailure={handleFailure}
-          score={score}
-          maxScore={maxScore}>
+        doFailure={handleFailure}
+        score={score}
+        maxScore={maxScore}>
         {text}
       </STTModule>
     );

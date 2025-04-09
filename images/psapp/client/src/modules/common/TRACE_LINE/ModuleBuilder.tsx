@@ -2,7 +2,7 @@ import {
   ModuleBuilder as BaseModuleBuilder, Shape
 } from '@src/modules/common/TRACING/ModuleBuilder';
 import {
-  genRandPoints, Point
+  genRandPoints
 } from '@src/util';
 
 let VARIANTS = [

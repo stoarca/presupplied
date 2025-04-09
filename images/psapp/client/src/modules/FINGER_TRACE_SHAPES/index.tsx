@@ -2,7 +2,7 @@ import {
   ModuleBuilder, Shape
 } from '@src/modules/common/TRACING/ModuleBuilder';
 import {
-  genRandPoints, Point, rotate
+  genRandPoints, rotate
 } from '@src/util';
 
 let VARIANTS = [
@@ -13,17 +13,17 @@ let VARIANTS = [
     let angle = Math.random() * Math.PI * 2;
     let points = [
       point,
-      {x: point.x + 145, y: point.y + 250},
-      {x: point.x - 145, y: point.y + 250},
+      { x: point.x + 145, y: point.y + 250 },
+      { x: point.x - 145, y: point.y + 250 },
     ].map(x => rotate(x, point, angle));
     if (Math.random() > 0.5) {
       points = [points[0], points[2], points[1]];
     }
     return [
-      {type: 'moveto', point: points[0]},
-      {type: 'lineto', point: points[1]},
-      {type: 'lineto', point: points[2]},
-      {type: 'lineto', point: points[0]},
+      { type: 'moveto', point: points[0] },
+      { type: 'lineto', point: points[1] },
+      { type: 'lineto', point: points[2] },
+      { type: 'lineto', point: points[0] },
     ];
   },
   (): Shape[] => { // circle
@@ -35,7 +35,7 @@ let VARIANTS = [
       sweep = 1;
     }
     return [
-      {type: 'moveto', point: point},
+      { type: 'moveto', point: point },
       {
         type: 'arcto',
         point: {
@@ -65,20 +65,20 @@ let VARIANTS = [
     })[0];
     let angle = Math.random() * Math.PI * 2;
     let points = [
-      {x: point.x - 125, y: point.y - 125},
-      {x: point.x + 125, y: point.y - 125},
-      {x: point.x + 125, y: point.y + 125},
-      {x: point.x - 125, y: point.y + 125},
+      { x: point.x - 125, y: point.y - 125 },
+      { x: point.x + 125, y: point.y - 125 },
+      { x: point.x + 125, y: point.y + 125 },
+      { x: point.x - 125, y: point.y + 125 },
     ].map(x => rotate(x, point, angle));
     if (Math.random() > 0.5) {
       points = [points[0], points[3], points[2], points[1]];
     }
     return [
-      {type: 'moveto', point: points[0]},
-      {type: 'lineto', point: points[1]},
-      {type: 'lineto', point: points[2]},
-      {type: 'lineto', point: points[3]},
-      {type: 'lineto', point: points[0]},
+      { type: 'moveto', point: points[0] },
+      { type: 'lineto', point: points[1] },
+      { type: 'lineto', point: points[2] },
+      { type: 'lineto', point: points[3] },
+      { type: 'lineto', point: points[0] },
     ];
   },
   (): Shape[] => { // trapezoid
@@ -87,20 +87,20 @@ let VARIANTS = [
     })[0];
     let angle = Math.random() * Math.PI * 2;
     let points = [
-      {x: point.x - 100, y: point.y - 100},
-      {x: point.x + 100, y: point.y - 100},
-      {x: point.x + 200, y: point.y + 150},
-      {x: point.x - 200, y: point.y + 150},
+      { x: point.x - 100, y: point.y - 100 },
+      { x: point.x + 100, y: point.y - 100 },
+      { x: point.x + 200, y: point.y + 150 },
+      { x: point.x - 200, y: point.y + 150 },
     ].map(x => rotate(x, point, angle));
     if (Math.random() > 0.5) {
       points = [points[0], points[3], points[2], points[1]];
     }
     return [
-      {type: 'moveto', point: points[0]},
-      {type: 'lineto', point: points[1]},
-      {type: 'lineto', point: points[2]},
-      {type: 'lineto', point: points[3]},
-      {type: 'lineto', point: points[0]},
+      { type: 'moveto', point: points[0] },
+      { type: 'lineto', point: points[1] },
+      { type: 'lineto', point: points[2] },
+      { type: 'lineto', point: points[3] },
+      { type: 'lineto', point: points[0] },
     ];
   },
 ];

@@ -22,7 +22,7 @@ interface ModuleBuilderProps {
 export let ModuleBuilder = ({
   variants, maxScorePerVariant
 }: ModuleBuilderProps) => {
-  return (props: void) => {
+  return () => {
     let moduleContext = React.useContext(ModuleContext);
     let trainingRecorder = useTrainingDataRecorder();
 
@@ -50,13 +50,10 @@ export let ModuleBuilder = ({
     }, [moduleContext]);
     let {
       exercise,
-      partial,
       score,
       maxScore,
       doSuccess,
-      doPartialSuccess,
       doFailure,
-      alreadyFailed,
     } = useExercise({
       onGenExercise: generateExercise,
       initialPartial: () => 0,
@@ -101,10 +98,10 @@ export let ModuleBuilder = ({
       };
       text = (
         <text style={textStyle}
-            dominantBaseline="central"
-            textAnchor="middle"
-            x="50%"
-            y="50%">
+          dominantBaseline="central"
+          textAnchor="middle"
+          x="50%"
+          y="50%">
           {exercise.variant.toUpperCase()} {exercise.variant}
         </text>
       );
@@ -113,9 +110,9 @@ export let ModuleBuilder = ({
     }
     return (
       <STTModule doSuccess={handleSuccess}
-          doFailure={handleFailure}
-          score={score}
-          maxScore={maxScore}>
+        doFailure={handleFailure}
+        score={score}
+        maxScore={maxScore}>
         {text}
       </STTModule>
     );

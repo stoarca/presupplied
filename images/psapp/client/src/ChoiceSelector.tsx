@@ -11,7 +11,7 @@ interface ChoiceSelectorProps<T extends ChoiceType> {
   onSelected: (index: number) => void,
 }
 
-export let ChoiceSelector = <T extends ChoiceType,>(
+export let ChoiceSelector = <T extends ChoiceType, >(
   props: React.PropsWithChildren<ChoiceSelectorProps<T>>
 ) => {
   let handleClick = React.useCallback((e: M) => {
@@ -39,20 +39,20 @@ export let ChoiceSelector = <T extends ChoiceType,>(
     choices.push(
       <g key={`answer_${i}`} transform={`translate(${x}, ${-SQLEN / 2})`}>
         <rect data-choice-index={i}
-            x="0"
-            y={y}
-            width={SQLEN}
-            height={SQLEN}
-            rx={10}
-            fill={fill}
-            stroke="black"
-            strokeWidth="5px"
-            onClick={handleClick}/>
+          x="0"
+          y={y}
+          width={SQLEN}
+          height={SQLEN}
+          rx={10}
+          fill={fill}
+          stroke="black"
+          strokeWidth="5px"
+          onClick={handleClick}/>
         <text style={textStyle}
-            dominantBaseline="central"
-            textAnchor="middle"
-            transform={`translate(${SQLEN / 2}, ${SQLEN / 2})`}
-            y={y}>
+          dominantBaseline="central"
+          textAnchor="middle"
+          transform={`translate(${SQLEN / 2}, ${SQLEN / 2})`}
+          y={y}>
           {props.choices[i]}
         </text>
       </g>

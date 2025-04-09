@@ -9,7 +9,7 @@ import {LETTER_SOUNDS} from '@src/modules/common/READING/util';
 
 import whichLetter from './which_letter.wav';
 
-let soundToLetters: {[key in keyof typeof LETTER_SOUNDS]: string[]} = {
+let soundToLetters: {[key in keyof typeof LETTER_SOUNDS]: string[]} = { // eslint-disable-line no-unused-vars
   aShortAt: ['a'],
   aShortAre: ['a', 'o'],
   aShortAnd: ['a'],
@@ -127,10 +127,10 @@ export default (props: void) => {
   return (
     <Module type="svg" score={score} maxScore={maxScore}>
       <ChoiceSelector
-          choices={displayArray}
-          howManyPerRow={displayArray.length}
-          getFill={getFill}
-          onSelected={handleSelected}/>
+        choices={displayArray}
+        howManyPerRow={displayArray.length}
+        getFill={getFill}
+        onSelected={handleSelected}/>
 
     </Module>
   );
