@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Module, useExercise, Ex} from '@src/Module';
+import {useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
 import {VariantList} from '@src/util';
 
@@ -29,11 +29,9 @@ export default (props: void) => {
   }, [moduleContext]);
   let {
     exercise,
-    partial,
     score,
     maxScore,
     doSuccess,
-    doPartialSuccess,
     doFailure,
   } = useExercise({
     onGenExercise: generateExercise,
@@ -49,19 +47,19 @@ export default (props: void) => {
   };
   let text = (
     <text style={textStyle}
-        dominantBaseline="central"
-        textAnchor="middle"
-        y="200"
-        x="50%">
+      dominantBaseline="central"
+      textAnchor="middle"
+      y="200"
+      x="50%">
       {exercise.variant}
     </text>
   );
 
   return (
     <STTModule doSuccess={doSuccess}
-        doFailure={doFailure}
-        score={score}
-        maxScore={maxScore}>
+      doFailure={doFailure}
+      score={score}
+      maxScore={maxScore}>
       {text}
     </STTModule>
   );

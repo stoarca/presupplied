@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {Module, useExercise, Ex} from '@src/Module';
+import {useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-import {VariantList, PRONUNCIATIONS} from '@src/util';
+import {VariantList} from '@src/util';
 import {STTModule} from '@src/modules/common/SPEECH_TO_TEXT_SHIM/ModuleBuilder';
 
 export type Variant = () => string;
@@ -41,11 +41,9 @@ export let ModuleBuilder = ({
     }, [moduleContext]);
     let {
       exercise,
-      partial,
       score,
       maxScore,
       doSuccess,
-      doPartialSuccess,
       doFailure,
     } = useExercise({
       onGenExercise: generateExercise,
@@ -61,14 +59,14 @@ export let ModuleBuilder = ({
     };
     return (
       <STTModule doSuccess={doSuccess}
-          doFailure={doFailure}
-          score={score}
-          maxScore={maxScore}>
+        doFailure={doFailure}
+        score={score}
+        maxScore={maxScore}>
         <text style={style}
-            dominantBaseline="central"
-            textAnchor="middle"
-            y="200"
-            x="50%">
+          dominantBaseline="central"
+          textAnchor="middle"
+          y="200"
+          x="50%">
           {exercise.displayText}
         </text>
       </STTModule>

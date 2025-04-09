@@ -1,13 +1,13 @@
 import React from 'react';
 
-import {Module, useExercise, Ex} from '@src/Module';
-import {ModuleContext} from '@src/ModuleContext';
+import { Module, useExercise, Ex } from '@src/Module';
+import { ModuleContext } from '@src/ModuleContext';
 import {
   SIMPLE_OBJECTS, pickFromBag, genRandPoints, VariantList,
 } from '@src/util';
 
 import {
-  waitPlease, youAlreadyDidThatOne, badBuzzer, goodDing, goodJob
+  youAlreadyDidThatOne
 } from '@modules/common/sounds';
 
 type M = React.MouseEvent<SVGGElement>;
@@ -38,7 +38,7 @@ export let ModuleBuilder = ({
         paddingFromEdge: 200,
         paddingFromEachOther: 400,
       });
-      let objects = pickFromBag(SIMPLE_OBJECTS, 2, {withReplacement: false});
+      let objects = pickFromBag(SIMPLE_OBJECTS, 2, { withReplacement: false });
       return {
         variant: vlist.pickVariant(),
         targets: objects.map((x, i) => ({
@@ -100,20 +100,20 @@ export let ModuleBuilder = ({
         let padding = 5;
         highlight = (
           <rect rx={15}
-              x={x.x - IMAGE_SIZE / 2 - padding}
-              y={x.y - IMAGE_SIZE / 2 - padding}
-              width={IMAGE_SIZE + padding * 2}
-              height={IMAGE_SIZE + padding * 2}
-              fill="#ff000033"/>
+            x={x.x - IMAGE_SIZE / 2 - padding}
+            y={x.y - IMAGE_SIZE / 2 - padding}
+            width={IMAGE_SIZE + padding * 2}
+            height={IMAGE_SIZE + padding * 2}
+            fill="#ff000033" />
         );
       }
       return (
         <g key={x.name} onClick={handleClick} data-index={i}>
           <image href={x.image}
-              x={x.x - IMAGE_SIZE / 2}
-              y={x.y - IMAGE_SIZE / 2}
-              width={IMAGE_SIZE}
-              height={IMAGE_SIZE}/>
+            x={x.x - IMAGE_SIZE / 2}
+            y={x.y - IMAGE_SIZE / 2}
+            width={IMAGE_SIZE}
+            height={IMAGE_SIZE} />
           {highlight}
         </g>
       );

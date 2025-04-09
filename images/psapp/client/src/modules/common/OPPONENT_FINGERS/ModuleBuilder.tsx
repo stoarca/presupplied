@@ -8,8 +8,6 @@ import {VariantList} from '@src/util';
 import {tooSlow} from '@modules/common/sounds';
 import howManyFingers from './how_many_fingers.wav';
 
-type M = React.MouseEvent<SVGRectElement>;
-
 interface Variant {
   left: number;
   right: number;
@@ -100,19 +98,19 @@ export let ModuleBuilder = ({
     let hands = (
       <g opacity={opacity}>
         <image href={rhref}
-            style={imageStyle}
-            x={`calc(50% - ${IMAGE_SIZE}px - 10px)`}
-            y={`calc(50% - ${IMAGE_SIZE/2}px`}
-            width={IMAGE_SIZE}
-            height={IMAGE_SIZE}/>
+          style={imageStyle}
+          x={`calc(50% - ${IMAGE_SIZE}px - 10px)`}
+          y={`calc(50% - ${IMAGE_SIZE/2}px`}
+          width={IMAGE_SIZE}
+          height={IMAGE_SIZE}/>
         <image href={lhref}
-            style={imageStyle}
-            transform-origin="50% 50%"
-            transform="scale(-1, 1)"
-            x={`calc(50% - ${IMAGE_SIZE}px - 10px)`}
-            y={`calc(50% - ${IMAGE_SIZE/2}px`}
-            width={IMAGE_SIZE}
-            height={IMAGE_SIZE}/>
+          style={imageStyle}
+          transform-origin="50% 50%"
+          transform="scale(-1, 1)"
+          x={`calc(50% - ${IMAGE_SIZE}px - 10px)`}
+          y={`calc(50% - ${IMAGE_SIZE/2}px`}
+          width={IMAGE_SIZE}
+          height={IMAGE_SIZE}/>
       </g>
     );
 
@@ -136,10 +134,10 @@ export let ModuleBuilder = ({
     let choicesArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     let choices = (
       <ChoiceSelector
-          choices={choicesArr}
-          howManyPerRow={10}
-          getFill={getFill}
-          onSelected={handleSelected}/>
+        choices={choicesArr}
+        howManyPerRow={10}
+        getFill={getFill}
+        onSelected={handleSelected}/>
     );
 
     return (

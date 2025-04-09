@@ -50,7 +50,7 @@ export class TechTree extends DepGraph<GraphNode> {
     let leaves = this.overallOrder(true);
     leaves.forEach(x => {
       if (!reached.has(x)) {
-        reachable.add(x)
+        reachable.add(x);
       }
     });
     reached.forEach(x => {

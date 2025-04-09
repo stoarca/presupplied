@@ -1,6 +1,5 @@
 let fs = require('fs');
 let path = require('path');
-let webpack = require('webpack');
 let TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 class AutoGenPlugin {
@@ -74,15 +73,15 @@ module.exports = {
           options: {
             svgoConfig: {
               plugins: [{
-                  name: 'preset-default',
-                  params: {
-                    overrides: {
-                      cleanupIDs: {
-                        remove: false,
-                      },
+                name: 'preset-default',
+                params: {
+                  overrides: {
+                    cleanupIDs: {
+                      remove: false,
                     },
                   },
                 },
+              },
               ],
             }
           }

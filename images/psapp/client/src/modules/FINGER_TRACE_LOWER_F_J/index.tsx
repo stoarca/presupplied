@@ -89,8 +89,6 @@ let VARIANTS = [
     })[0];
     point.x -= 150;
     point.y -= 150;
-    let radius = 75;
-    let angle = 40 * Math.PI / 180;
     return [
       {type: 'moveto', point: {x: point.x, y: point.y}},
       {

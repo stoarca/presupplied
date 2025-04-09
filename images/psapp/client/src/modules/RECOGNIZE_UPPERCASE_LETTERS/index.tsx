@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {
   Variant, ModuleBuilder
 } from '@modules/common/RECOGNIZE_LETTERS/ModuleBuilder';

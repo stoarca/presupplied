@@ -2,7 +2,7 @@ import {
   ModuleBuilder, Shape
 } from '@src/modules/common/TRACING/ModuleBuilder';
 import {
-  genRandPoints, Point
+  genRandPoints
 } from '@src/util';
 
 let VARIANTS = [
@@ -10,7 +10,7 @@ let VARIANTS = [
     let points = genRandPoints(4, {
       paddingFromEdge: 100,
       paddingFromEachOther: 400,
-    })
+    });
     return [
       {type: 'moveto', point: points[0]},
       {

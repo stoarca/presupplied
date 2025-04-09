@@ -1,4 +1,4 @@
-import {ProgressStatus, StudentProgressDTO, StudentProgressVideoDTO} from '../../common/types';
+import {StudentProgressDTO, StudentProgressVideoDTO} from '../../common/types';
 
 type LocalStorageSchema = {
   progress: StudentProgressDTO,

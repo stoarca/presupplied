@@ -1,9 +1,8 @@
 import React from 'react';
 import YouTube, { YouTubeProps, YouTubeEvent } from 'react-youtube';
 
-import {Module, useWin} from '@src/Module';
-import {ModuleContext} from '@src/ModuleContext';
-import {ChoiceSelector} from '@src/ChoiceSelector2';
+import { Module, useWin } from '@src/Module';
+import { ChoiceSelector } from '@src/ChoiceSelector2';
 
 export interface Video {
   youtubeId: string,
@@ -37,7 +36,7 @@ interface ModuleBuilderProps {
 }
 
 // First element's choice is never used
-type ExercisePath = {choice: string, index: number}[];
+type ExercisePath = { choice: string, index: number }[];
 
 let getExerciseFromLecture = (
   lecture: VideoLecture, path: ExercisePath
@@ -71,18 +70,17 @@ let getNextExercisePath = (
   return null;
 };
 
-export let ModuleBuilder = ({lecture}: ModuleBuilderProps) => {
-  let moduleContext = React.useContext(ModuleContext);
+export let ModuleBuilder = ({ lecture }: ModuleBuilderProps) => {
 
   let [exercisePath, setExercisePath] = React.useState<ExercisePath>(
-    [{choice: '', index: 0}]
+    [{ choice: '', index: 0 }]
   );
   let exercise = React.useMemo(() => {
     return getExerciseFromLecture(lecture, exercisePath);
   }, [lecture, exercisePath]);
   let [sawVideo, setSawVideo] = React.useState(false);
 
-  let {win, doWin} = useWin();
+  let { win, doWin } = useWin();
 
   let handleVideoStateChange = React.useCallback((event: YouTubeEvent) => {
     if (event.data === 0) { // data === 0 means video finished playing
@@ -117,7 +115,7 @@ export let ModuleBuilder = ({lecture}: ModuleBuilderProps) => {
         window.location.href = '/';
       }
     } else {
-      setExercisePath([...exercisePath, {choice: choice, index: 0}]);
+      setExercisePath([...exercisePath, { choice: choice, index: 0 }]);
       setSawVideo(false);
     }
   }, [exercisePath, exercise, advance]);
@@ -140,22 +138,22 @@ export let ModuleBuilder = ({lecture}: ModuleBuilderProps) => {
     };
     return (
       <YouTube
-          className="youtube100"
-          videoId={embedId}
-          opts={opts}
-          onStateChange={handleVideoStateChange}/>
+        className="youtube100"
+        videoId={embedId}
+        opts={opts}
+        onStateChange={handleVideoStateChange} />
     );
   } else {
     let choices = Object.keys(exercise.choices);
     return (
       <Module type="div" score={0} maxScore={1} hideScore={true}>
         <ChoiceSelector question={exercise.question}
-            howManyPerRow={2}
-            choices={choices}
-            choiceWidth={300}
-            getFill={getFill}
-            onSelected={handleSelected}
-            />
+          howManyPerRow={2}
+          choices={choices}
+          choiceWidth={300}
+          getFill={getFill}
+          onSelected={handleSelected}
+        />
       </Module>
     );
   }

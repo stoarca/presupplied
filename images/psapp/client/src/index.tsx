@@ -23,7 +23,7 @@ interface AppProps {
 const defaultTheme = createTheme();
 let App = (props: AppProps) => {
   let moduleRoutes = Object.keys(moduleComponents).map(x => {
-    return <Route key={x} path={x} element={moduleComponents[x]}/>
+    return <Route key={x} path={x} element={moduleComponents[x]}/>;
   });
 
   return (
@@ -31,7 +31,7 @@ let App = (props: AppProps) => {
       <CssBaseline/>
       <ThemeProvider theme={defaultTheme}>
         <Router>
-          <React.Suspense fallback={"loading..."}>
+          <React.Suspense fallback={'loading...'}>
             <Routes>
               <Route path="/">
                 <Route index element={<List/>}/>

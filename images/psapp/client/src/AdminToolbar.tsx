@@ -1,10 +1,10 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import {Cell} from './types';
-import {TechTree} from './dependency-graph';
+import { Cell } from './types';
+import { TechTree } from './dependency-graph';
 import {
-  GraphJson, KNOWLEDGE_MAP, VideoInfo, GraphNodeInfo
+  KNOWLEDGE_MAP, VideoInfo, GraphNodeInfo
 } from '../../common/types';
 
 export let TOOLBAR_WIDTH = '550px';
@@ -14,7 +14,7 @@ type CT = React.ChangeEvent<HTMLTextAreaElement>;
 type M = React.MouseEvent<HTMLButtonElement>;
 
 let mapToMdLinks = (videoInfos: VideoInfo[]): string => {
-  return videoInfos.map(({id, title, url}) => {
+  return videoInfos.map(({ id, title, url }) => {
     return `${id}: [${title}](${url})`; // markdown format
   }).join('\n');
 };
@@ -23,7 +23,7 @@ let mapFromMdLinks = (str: string): VideoInfo[] => {
   let ret: VideoInfo[] = [];
   let lines = str.split('\n').map(x => x.trim()).filter(x => !!x);
   for (let line of lines) {
-    let match = line.match(/^([a-zA-Z0-9_]+):\s*\[([^\[\]]+)\]\(([^\(\)]+)\)$/);
+    let match = line.match(/^([a-zA-Z0-9_]+):\s*\[([^[\]]+)\]\(([^()]+)\)$/);
     if (!match) {
       throw new Error('md links not valid');
     }
@@ -102,7 +102,7 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
       if (!(e instanceof Error && e.message.includes('md links not valid'))) {
         throw e;
       }
-      alert('Student video links were not valid');
+      alert('Student video links were not valid'); // eslint-disable-line no-alert
       return;
     }
 
@@ -113,7 +113,7 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
       if (!(e instanceof Error && e.message.includes('md links not valid'))) {
         throw e;
       }
-      alert('Teacher video links were not valid');
+      alert('Teacher video links were not valid'); // eslint-disable-line no-alert
       return;
     }
 
@@ -157,48 +157,48 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
       <form onSubmit={handleSubmit}>
         <div>
           <input type="text"
-              style={{width: '100%'}}
-              ref={ref}
-              value={tempId}
-              placeholder="id"
-              onChange={handleChangeId}/>
+            style={{ width: '100%' }}
+            ref={ref}
+            value={tempId}
+            placeholder="id"
+            onChange={handleChangeId} />
         </div>
         <div>
           <input type="text"
-              style={{width: '100%'}}
-              value={tempTitle}
-              placeholder="title"
-              onChange={handleChangeTitle}/>
+            style={{ width: '100%' }}
+            value={tempTitle}
+            placeholder="title"
+            onChange={handleChangeTitle} />
         </div>
         <div>
           <textarea
-              style={{width: '100%'}}
-              value={tempDesc}
-              placeholder="description"
-              onChange={handleChangeDesc}/>
+            style={{ width: '100%' }}
+            value={tempDesc}
+            placeholder="description"
+            onChange={handleChangeDesc} />
         </div>
         Learning videos:
         <div>
           <textarea
-              style={{width: '100%'}}
-              value={tempStudentVids}
-              placeholder="videos for learning"
-              onChange={handleChangeStudentVids}/>
+            style={{ width: '100%' }}
+            value={tempStudentVids}
+            placeholder="videos for learning"
+            onChange={handleChangeStudentVids} />
         </div>
         Teaching videos:
         <div>
           <textarea
-              style={{width: '100%'}}
-              value={tempTeacherVids}
-              placeholder="videos for teaching"
-              onChange={handleChangeTeacherVids}/>
+            style={{ width: '100%' }}
+            value={tempTeacherVids}
+            placeholder="videos for teaching"
+            onChange={handleChangeTeacherVids} />
         </div>
         <div>
           <label>
             This module is only for teachers/parents
             <input type="checkbox"
-                onChange={handleChangeForTeachers}
-                checked={tempForTeachers}/>
+              onChange={handleChangeForTeachers}
+              checked={tempForTeachers} />
           </label>
         </div>
         <div>
@@ -250,14 +250,14 @@ export let AdminToolbar = (props: ToolbarProps) => {
   if (props.selectedCells.length === 1) {
     forOne = (
       <ToolbarForOne
-          selectedCell={props.selectedCells[0]}
-          knowledgeGraph={props.knowledgeGraph}
-          grid={props.grid}
-          onChangeNode={props.onChangeNode}
-          onMoveTreeLeft={props.onMoveTreeLeft}
-          onMoveTreeRight={props.onMoveTreeRight}
-          onMoveTreeUp={props.onMoveTreeUp}
-          onMoveTreeDown={props.onMoveTreeDown}/>
+        selectedCell={props.selectedCells[0]}
+        knowledgeGraph={props.knowledgeGraph}
+        grid={props.grid}
+        onChangeNode={props.onChangeNode}
+        onMoveTreeLeft={props.onMoveTreeLeft}
+        onMoveTreeRight={props.onMoveTreeRight}
+        onMoveTreeUp={props.onMoveTreeUp}
+        onMoveTreeDown={props.onMoveTreeDown} />
     );
   }
 
@@ -280,7 +280,7 @@ export let AdminToolbar = (props: ToolbarProps) => {
   let downloadJson = React.useCallback((data: any, filename: string) => {
     let blob = new Blob(
       [JSON.stringify(data, undefined, 2)],
-      {type: 'text/json'}
+      { type: 'text/json' }
     );
     let a = document.createElement('a');
     //a.style = 'display: none';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Module, useExercise, Ex, DoSuccessProps} from '@src/Module';
+import {Module, DoSuccessProps} from '@src/Module';
 
 import {goodDing} from '@modules/common/sounds';
 
@@ -16,7 +16,7 @@ export let STTModule: React.FC<ModuleProps> = ({
   doSuccess, doFailure, score, maxScore, children,
 }) => {
   React.useEffect(() => {
-    let listener = async (e: KeyboardEvent) => {
+    let listener = (e: KeyboardEvent) => {
       if (e.key === 'y') {
         doSuccess({sound: goodDing});
       } else if (e.key === 'n') {
@@ -37,10 +37,10 @@ export let STTModule: React.FC<ModuleProps> = ({
     <Module type="svg" score={score} maxScore={maxScore}>
       {children}
       <text style={textStyle}
-          dominantBaseline="central"
-          textAnchor="middle"
-          y="98%"
-          x="50%">
+        dominantBaseline="central"
+        textAnchor="middle"
+        y="98%"
+        x="50%">
         Teacher: Press y to accept and n to reject
       </text>
     </Module>

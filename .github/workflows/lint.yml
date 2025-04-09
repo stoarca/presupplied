@@ -1,0 +1,40 @@
+name: Lint and Build
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+jobs:
+  lint-client:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # make sure this matches your local version
+
+      - name: Navigate to client and install dependencies
+        working-directory: images/psapp/client
+        run: npm install
+
+      - name: Run ESLint
+        working-directory: images/psapp/client
+        run: npm run lint
+        
+      - name: Client server
+        working-directory: images/psapp/client
+        run: npm run build
+      
+      - name: Install server dependencies
+        working-directory: images/psapp/server
+        run: npm install
+
+      - name: Build server
+        working-directory: images/psapp/server
+        run: npm run build

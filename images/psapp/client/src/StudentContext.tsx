@@ -8,9 +8,9 @@ import {
   ProgressVideoStatus,
   StudentProgressDTO
 } from '../../common/types';
-import {typedFetch, API_HOST} from './typedFetch';
-import {typedLocalStorage} from './typedLocalStorage';
-import {mapObject} from './util';
+import { typedFetch, API_HOST } from './typedFetch';
+import { typedLocalStorage } from './typedLocalStorage';
+import { mapObject } from './util';
 
 export class Student {
   dto: StudentDTO | null;
@@ -67,7 +67,7 @@ export class Student {
 
   async markReached(modules: Record<KMId, ProgressStatus>) {
     if (this.dto) {
-      let resp = await typedFetch({
+      await typedFetch({
         host: API_HOST,
         endpoint: '/api/learning/events',
         method: 'post',
@@ -110,7 +110,7 @@ export class Student {
     moduleVideos: Record<KMId, Record<string, ProgressVideoStatus>>
   ) {
     if (this.dto) {
-      let resp = await typedFetch({
+      await typedFetch({
         host: API_HOST,
         endpoint: '/api/learning/events',
         method: 'post',
@@ -158,7 +158,7 @@ export class Student {
     if ('success' in resp) {
       typedLocalStorage.removeJson('progress');
     } else {
-      alert('An error has occurred ' + JSON.stringify(resp));
+      alert('An error has occurred ' + JSON.stringify(resp)); // eslint-disable-line no-alert
       return;
     }
 
@@ -175,7 +175,7 @@ export class Student {
     if ('success' in resp) {
       typedLocalStorage.removeJson('progressVideo');
     } else {
-      alert('An error has occurred ' + JSON.stringify(resp));
+      alert('An error has occurred ' + JSON.stringify(resp));// eslint-disable-line no-alert
       return;
     }
   }

@@ -34,7 +34,7 @@ interface DoFailureProps {
   goToNewExercise?: boolean,
 }
 
-let blobToBase64 = async (blob: Blob): Promise<string> =>{
+let blobToBase64 = (blob: Blob): Promise<string> =>{
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader();
     fileReader.onerror = (e) => reject(fileReader.error);
@@ -46,7 +46,7 @@ let blobToBase64 = async (blob: Blob): Promise<string> =>{
     };
     fileReader.readAsDataURL(blob);
   });
-}
+};
 
 export let useTrainingDataRecorder = () => {
   let recorder = React.useRef<{
@@ -364,9 +364,9 @@ export let Module: React.FC<ModuleProps> = (props) => {
     };
     return (
       <div style={containerStyle}
-          ref={ref}
-          onContextMenu={handleContextMenu}
-          {...rest}>
+        ref={ref}
+        onContextMenu={handleContextMenu}
+        {...rest}>
         <svg xmlns="<http://www.w3.org/2000/svg>" style={svgStyle}>
           {children}
         </svg>
@@ -380,9 +380,9 @@ export let Module: React.FC<ModuleProps> = (props) => {
     };
     return (
       <div style={containerStyle}
-          ref={ref}
-          onContextMenu={handleContextMenu}
-          {...rest}>
+        ref={ref}
+        onContextMenu={handleContextMenu}
+        {...rest}>
         <div style={divStyle}>
           {children}
         </div>

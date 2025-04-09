@@ -6,7 +6,9 @@
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix"
   },
   "author": "",
   "license": "MIT",
@@ -26,15 +28,30 @@
     "react-youtube": "^10.1.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.27.0",
+    "@babel/preset-react": "^7.26.3",
+    "@eslint/js": "^9.23.0",
     "@svgr/webpack": "^6.5.1",
     "@tsconfig/node18": "^1.0.1",
     "@types/bezier-js": "^4.1.0",
+    "@types/eslint": "^9.6.1",
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@types/react-router-dom": "^5.3.3",
     "@types/webpack-env": "^1.18.0",
+    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "@typescript-eslint/parser": "^8.29.0",
+    "babel-eslint": "^10.1.0",
     "css-loader": "^6.7.3",
+    "eslint": "^9.23.0",
+    "eslint-plugin-ban": "^2.0.0",
+    "eslint-plugin-jest": "^28.11.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-mocha": "^10.5.0",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.0.0",
     "null-loader": "^4.0.1",
     "sass-loader": "^13.2.0",
     "style-loader": "^3.3.1",
@@ -42,6 +59,7 @@
     "ts-node": "^10.9.1",
     "tsconfig-paths-webpack-plugin": "^4.0.0",
     "typescript": "^4.9.5",
+    "typescript-eslint": "^8.29.0",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
   }

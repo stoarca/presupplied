@@ -51,11 +51,8 @@ export let ModuleBuilder = ({
     }, [moduleContext]);
     let {
       exercise,
-      partial,
       score,
-      maxScore,
       doSuccess,
-      doPartialSuccess,
       doFailure,
     } = useExercise({
       onGenExercise: generateExercise,
@@ -123,15 +120,15 @@ export let ModuleBuilder = ({
     fill += Math.round(255 * opacity).toString(16).padStart(2, '0');
     return (
       <Module type="svg"
-          score={score}
-          maxScore={vlist.maxScore()}
-          onPointerDown={handleDown}
-          onPointerUp={handleUp}
-          extraSvgStyles={{cursor: showCursor ? 'default' : 'none'}}>
+        score={score}
+        maxScore={vlist.maxScore()}
+        onPointerDown={handleDown}
+        onPointerUp={handleUp}
+        extraSvgStyles={{cursor: showCursor ? 'default' : 'none'}}>
         <circle cx={exercise.target.x}
-            cy={exercise.target.y}
-            r={targetRadius}
-            fill={fill}/>
+          cy={exercise.target.y}
+          r={targetRadius}
+          fill={fill}/>
       </Module>
     );
   };

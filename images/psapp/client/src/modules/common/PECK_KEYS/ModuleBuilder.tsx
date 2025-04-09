@@ -36,11 +36,9 @@ export let ModuleBuilder = ({
     }, [moduleContext]);
     let {
       exercise,
-      partial,
       score,
       maxScore,
       doSuccess,
-      doPartialSuccess,
       doFailure,
       alreadyFailed,
     } = useExercise({
@@ -75,7 +73,7 @@ export let ModuleBuilder = ({
     }, [alreadyFailed, doFailure]);
 
     React.useEffect(() => {
-      let listener = async (e: KeyboardEvent) => {
+      let listener = (e: KeyboardEvent) => {
         if (e.key === exercise.variant) {
           doSuccess({sound: goodDing});
         } else {
@@ -92,11 +90,11 @@ export let ModuleBuilder = ({
     };
     let text = (
       <text style={textStyle}
-          dominantBaseline="central"
-          textAnchor="middle"
-          opacity={opacity}
-          y="200"
-          x="50%">
+        dominantBaseline="central"
+        textAnchor="middle"
+        opacity={opacity}
+        y="200"
+        x="50%">
         {exercise.variant}
       </text>
     );
@@ -124,5 +122,5 @@ export let ModuleBuilder = ({
         {keyboard}
       </Module>
     );
-  }
+  };
 };

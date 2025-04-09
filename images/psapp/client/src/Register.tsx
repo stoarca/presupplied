@@ -1,9 +1,7 @@
 import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -60,7 +58,7 @@ export let Register = (props: RegisterProps) => {
           email: {error: true, helperText: narrow.message}
         }));
       } else {
-        let check: never = resp;
+        let check: never = resp;  // eslint-disable-line no-unused-vars
       }
     } finally {
       setLoading(false);
@@ -129,4 +127,4 @@ export let Register = (props: RegisterProps) => {
       </Box>
     </Container>
   );
-}
+};
