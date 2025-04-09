@@ -82,10 +82,10 @@ export let ModuleBuilder = ({variants}: ModuleBuilderProps) => {
 
     let choices = (
       <ChoiceSelector
-          choices={exercise.choices}
-          howManyPerRow={6}
-          getFill={getFill}
-          onSelected={handleSelected}/>
+        choices={exercise.choices}
+        howManyPerRow={6}
+        getFill={getFill}
+        onSelected={handleSelected}/>
     );
 
     return (

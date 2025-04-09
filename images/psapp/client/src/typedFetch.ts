@@ -100,7 +100,7 @@ let buildUrl = (
   }
 
   return host + url;
-}
+};
 
 export async function typedFetch<K extends keyof Endpoints, M extends keyof Endpoints[K]>(
   request: TypedFetchRequest<K, M>

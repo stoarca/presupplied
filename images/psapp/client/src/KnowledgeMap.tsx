@@ -7,15 +7,13 @@ import Drawer from '@mui/material/Drawer';
 import MuiLink from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 
 import {moduleComponents} from './ModuleContext';
 import {useStudentContext} from './StudentContext';
 import {PanZoomSvg, PanZoomSvgProps} from './PanZoomSvg';
 import {buildGraph, TechTree} from './dependency-graph';
-import {AdminToolbar, TOOLBAR_WIDTH} from './AdminToolbar';
+import {AdminToolbar} from './AdminToolbar';
 import {Cell} from './types';
 import {
   GraphJson, ProgressStatus, KNOWLEDGE_MAP, GraphNodeInfo, VideoInfo
@@ -87,12 +85,12 @@ let KnowledgeNode = ({
     );
     dependantLines.push(
       <line key={'dep-' + kmid + '-' + dependant.id}
-          x1={CELL_WIDTH}
-          y1={CELL_HEIGHT / 2}
-          x2={dependantPos.x - pos.x}
-          y2={dependantPos.y - pos.y + CELL_HEIGHT / 2}
-          strokeWidth={isSelectedDep || isSelectedMe ? 5 : 2}
-          stroke={isSelectedDep || isSelectedMe ? "blue" : "black"}/>
+        x1={CELL_WIDTH}
+        y1={CELL_HEIGHT / 2}
+        x2={dependantPos.x - pos.x}
+        y2={dependantPos.y - pos.y + CELL_HEIGHT / 2}
+        strokeWidth={isSelectedDep || isSelectedMe ? 5 : 2}
+        stroke={isSelectedDep || isSelectedMe ? 'blue' : 'black'}/>
     );
     if (isSelectedDep) {
       selectedDependants.push(
@@ -273,13 +271,13 @@ export let BaseKnowledgeMap = ({
     let dependants = knowledgeGraph.directDependantsOf(node);
     nodes.push(
       <KnowledgeNode key={node}
-          kmid={node}
-          knowledgeGraph={knowledgeGraph}
-          reached={reached}
-          reachable={reachable}
-          dependants={dependants}
-          selectedCells={selectedCells}
-          admin={admin}/>
+        kmid={node}
+        knowledgeGraph={knowledgeGraph}
+        reached={reached}
+        reachable={reachable}
+        dependants={dependants}
+        selectedCells={selectedCells}
+        admin={admin}/>
     );
   }
 
@@ -287,12 +285,12 @@ export let BaseKnowledgeMap = ({
     let pos = nodePos(x);
     return (
       <rect key={x.i + '_' + x.j}
-          x={pos.x}
-          y={pos.y}
-          width={CELL_WIDTH}
-          height={CELL_HEIGHT}
-          fill="#00ccee66"/>
-    )
+        x={pos.x}
+        y={pos.y}
+        width={CELL_WIDTH}
+        height={CELL_HEIGHT}
+        fill="#00ccee66"/>
+    );
   });
 
   let hoverRect = null;
@@ -300,11 +298,11 @@ export let BaseKnowledgeMap = ({
     let pos = nodePos(hoverCell);
     hoverRect = (
       <rect
-          x={pos.x}
-          y={pos.y}
-          width={CELL_WIDTH}
-          height={CELL_HEIGHT}
-          fill="#00ccee33"/>
+        x={pos.x}
+        y={pos.y}
+        width={CELL_WIDTH}
+        height={CELL_HEIGHT}
+        fill="#00ccee33"/>
     );
   }
 
@@ -312,10 +310,10 @@ export let BaseKnowledgeMap = ({
   if (admin) {
     originMarker = (
       <circle
-          cx={0}
-          cy={0}
-          r={CELL_HEIGHT / 3}
-          fill="red"/>
+        cx={0}
+        cy={0}
+        r={CELL_HEIGHT / 3}
+        fill="red"/>
     );
   }
 
@@ -328,18 +326,18 @@ export let BaseKnowledgeMap = ({
   }, []);
   return (
     <PanZoomSvg
-        xmlns="<http://www.w3.org/2000/svg>"
-        ref={svgRef}
-        viewBox={viewBox}
-        viewLimitBox={viewLimitBox}
-        minZoomWidth={1000}
-        maxZoomWidth={20000}
-        onUpdateViewBox={setViewBox}
-        onMouseDown={onMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={onMouseUp}
-        onClick={onClick}
-        style={svgStyle}>
+      xmlns="<http://www.w3.org/2000/svg>"
+      ref={svgRef}
+      viewBox={viewBox}
+      viewLimitBox={viewLimitBox}
+      minZoomWidth={1000}
+      maxZoomWidth={20000}
+      onUpdateViewBox={setViewBox}
+      onMouseDown={onMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={onMouseUp}
+      onClick={onClick}
+      style={svgStyle}>
       {nodes}
       {selectRects}
       {hoverRect}
@@ -490,7 +488,7 @@ let AdminKnowledgeMap = ({
       } else { // in selection, need to remove
         let newSelectedCells = [
           ...selectedCells
-        ]
+        ];
         newSelectedCells.splice(indexInSelection, 1);
         setSelectedCells(newSelectedCells);
       }
@@ -677,7 +675,6 @@ let AdminKnowledgeMap = ({
     while (bfs.length > 0) {
       let curId = bfs.shift()!;
       if (lockedCells.includes(curId)) {
-        alert('Attempted to move locked cell. Should never happen!');
         throw new Error('Attempted to move locked cell. Should never happen!');
       }
       if (updatedCells[curId]) {
@@ -699,7 +696,7 @@ let AdminKnowledgeMap = ({
       for (let j = oldCell.j; j < cols; ++j) {
         // if we intersect a horizontal dependency, push both ends of those down
         if (grid[nextI][j]) {
-          let deps = knowledgeGraph.directDependenciesOf(grid[nextI][j])
+          let deps = knowledgeGraph.directDependenciesOf(grid[nextI][j]);
           let sameRowDep = deps.find(
             x => knowledgeGraph.getNodeData(x).cell.i === nextI
           );
@@ -791,26 +788,26 @@ let AdminKnowledgeMap = ({
   return (
     <div>
       <BaseKnowledgeMap
-          knowledgeGraph={knowledgeGraph}
-          grid={grid}
-          selectedCells={selectedCells}
-          admin={true}
-          onHoverCellUpdated={setHoverCell}
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}/>
+        knowledgeGraph={knowledgeGraph}
+        grid={grid}
+        selectedCells={selectedCells}
+        admin={true}
+        onHoverCellUpdated={setHoverCell}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}/>
       <AdminToolbar selectedCells={selectedCells}
-          knowledgeGraph={knowledgeGraph}
-          grid={grid}
-          rows={rows}
-          cols={cols}
-          knowledgeMap={knowledgeMap}
-          onChangeNode={handleChangeNode}
-          onMoveTreeLeft={handleMoveTreeLeft}
-          onMoveTreeRight={handleMoveTreeRight}
-          onMoveTreeUp={handleMoveTreeUp}
-          onMoveTreeDown={handleMoveTreeDown}
-          onSelectIds={handleSelectIds}
-          onDeleteIds={handleDeleteIds}/>
+        knowledgeGraph={knowledgeGraph}
+        grid={grid}
+        rows={rows}
+        cols={cols}
+        knowledgeMap={knowledgeMap}
+        onChangeNode={handleChangeNode}
+        onMoveTreeLeft={handleMoveTreeLeft}
+        onMoveTreeRight={handleMoveTreeRight}
+        onMoveTreeUp={handleMoveTreeUp}
+        onMoveTreeDown={handleMoveTreeDown}
+        onSelectIds={handleSelectIds}
+        onDeleteIds={handleDeleteIds}/>
     </div>
   );
 };
@@ -855,8 +852,6 @@ interface StudentKnowledgeMapProps {
 let StudentKnowledgeMap = ({
   knowledgeGraph,
   grid,
-  rows,
-  cols,
   selectedCells,
   setSelectedCells,
 }: StudentKnowledgeMapProps) => {
@@ -884,8 +879,8 @@ let StudentKnowledgeMap = ({
       let kmid = grid[hoverCell.i][hoverCell.j];
       await student.markReached({
         [kmid]: reached.has(kmid) ?
-            ProgressStatus.NOT_ATTEMPTED :
-            ProgressStatus.PASSED
+          ProgressStatus.NOT_ATTEMPTED :
+          ProgressStatus.PASSED
       });
       let newReached = new Set(reached);
       if (reached.has(kmid)) {
@@ -910,7 +905,7 @@ let StudentKnowledgeMap = ({
     if (node.studentVideos) {
       studentVideos = (
         <VideoList title="Videos for the student"
-            videoList={node.studentVideos}/>
+          videoList={node.studentVideos}/>
       );
     }
 
@@ -918,12 +913,12 @@ let StudentKnowledgeMap = ({
     if (node.teacherVideos) {
       teacherVideos = (
         <VideoList title="Videos for the teacher"
-            videoList={node.teacherVideos}/>
+          videoList={node.teacherVideos}/>
       );
     }
 
     let mastery;
-    if (!!moduleComponents[kmid]) {
+    if (moduleComponents[kmid]) {
       mastery = (
         <Button component={Link} to={`/modules/${kmid}`}>
           Go to mastery
@@ -951,17 +946,17 @@ let StudentKnowledgeMap = ({
   return (
     <React.Fragment>
       <BaseKnowledgeMap
-          knowledgeGraph={knowledgeGraph}
-          grid={grid}
-          reached={reached}
-          reachable={reachable}
-          selectedCells={selectedCells}
-          admin={false}
-          onHoverCellUpdated={setHoverCell}
-          onClick={handleClick}/>
+        knowledgeGraph={knowledgeGraph}
+        grid={grid}
+        reached={reached}
+        reachable={reachable}
+        selectedCells={selectedCells}
+        admin={false}
+        onHoverCellUpdated={setHoverCell}
+        onClick={handleClick}/>
       <Drawer anchor="right"
-          open={selectedCells.length > 0}
-          onClose={handleCloseDrawer}>
+        open={selectedCells.length > 0}
+        onClose={handleCloseDrawer}>
         {box}
       </Drawer>
     </React.Fragment>
@@ -969,7 +964,6 @@ let StudentKnowledgeMap = ({
 };
 
 export let KnowledgeMap = () => {
-  let student = useStudentContext();
 
   let url = new URL(window.location.href);
   let admin = url.searchParams.get('admin') === '1';
@@ -1006,24 +1000,24 @@ export let KnowledgeMap = () => {
   if (admin) {
     ret = (
       <AdminKnowledgeMap
-          knowledgeMap={knowledgeMap}
-          setKnowledgeMap={setKnowledgeMap}
-          knowledgeGraph={knowledgeGraph}
-          grid={grid}
-          rows={rows}
-          cols={cols}
-          selectedCells={selectedCells}
-          setSelectedCells={setSelectedCells}/>
+        knowledgeMap={knowledgeMap}
+        setKnowledgeMap={setKnowledgeMap}
+        knowledgeGraph={knowledgeGraph}
+        grid={grid}
+        rows={rows}
+        cols={cols}
+        selectedCells={selectedCells}
+        setSelectedCells={setSelectedCells}/>
     );
   } else {
     ret = (
       <StudentKnowledgeMap
-          knowledgeGraph={knowledgeGraph}
-          grid={grid}
-          rows={rows}
-          cols={cols}
-          selectedCells={selectedCells}
-          setSelectedCells={setSelectedCells}/>
+        knowledgeGraph={knowledgeGraph}
+        grid={grid}
+        rows={rows}
+        cols={cols}
+        selectedCells={selectedCells}
+        setSelectedCells={setSelectedCells}/>
     );
   }
   let containerStyle: React.CSSProperties = {
@@ -1039,5 +1033,5 @@ export let KnowledgeMap = () => {
       </div>
     </div>
   );
-}
+};
 

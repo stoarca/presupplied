@@ -127,10 +127,10 @@ export default (props: void) => {
   return (
     <Module type="svg" score={score} maxScore={maxScore}>
       <ChoiceSelector
-          choices={displayArray}
-          howManyPerRow={displayArray.length}
-          getFill={getFill}
-          onSelected={handleSelected}/>
+        choices={displayArray}
+        howManyPerRow={displayArray.length}
+        getFill={getFill}
+        onSelected={handleSelected}/>
 
     </Module>
   );

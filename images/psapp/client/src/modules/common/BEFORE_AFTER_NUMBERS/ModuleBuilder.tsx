@@ -30,10 +30,10 @@ let variantToSentence = (v: Variant, ex: MyEx) => {
   } else if (v[0] === 'next') {
     return `We're at ${ex.number}. Tap the next number.`;
   } else {
-    let exhaustiveCheck: never = v[0];
+    let exhaustiveCheck: never = v[0]; // eslint-disable-line
     throw new Error('variantToSentence unknown variant ' + v);
   }
-}
+};
 
 interface ModuleBuilderProps {
   variants: Variant[],
@@ -90,42 +90,34 @@ export let ModuleBuilder = ({
       if (['allbefore', 'onebefore', 'previous'].includes(exercise.variant[0])) {
         if (number >= exercise.number) {
           doFailure();
-        } else {
-          if (exercise.variant[0] === 'allbefore') {
-            let newPartial = [...partial, number];
-            if (newPartial.length === exercise.number) {
-              await doPartialSuccess(newPartial);
-              doSuccess();
-            } else {
-              doPartialSuccess(newPartial);
-            }
+        } else if (exercise.variant[0] === 'allbefore') {
+          let newPartial = [...partial, number];
+          if (newPartial.length === exercise.number) {
+            await doPartialSuccess(newPartial);
+            doSuccess();
           } else {
-            if (number === exercise.number - 1) {
-              await doPartialSuccess([number]);
-              doSuccess();
-            } else {
-              doFailure();
-            }
+            doPartialSuccess(newPartial);
           }
+        } else if (number === exercise.number - 1) {
+          await doPartialSuccess([number]);
+          doSuccess();
+        } else {
+          doFailure();
         }
       } else if (['allafter', 'oneafter', 'next'].includes(exercise.variant[0])) {
         if (number <= exercise.number) {
           doFailure();
-        } else {
-          if (exercise.variant[0] === 'allafter') {
-            let newPartial = [...partial, number];
-            await doPartialSuccess(newPartial);
-            if (newPartial.length === numNumbers - exercise.number - 1) {
-              doSuccess();
-            }
-          } else {
-            if (number === exercise.number + 1) {
-              await doPartialSuccess([number]);
-              doSuccess();
-            } else {
-              doFailure();
-            }
+        } else if (exercise.variant[0] === 'allafter') {
+          let newPartial = [...partial, number];
+          await doPartialSuccess(newPartial);
+          if (newPartial.length === numNumbers - exercise.number - 1) {
+            doSuccess();
           }
+        } else if (number === exercise.number + 1) {
+          await doPartialSuccess([number]);
+          doSuccess();
+        } else {
+          doFailure();
         }
       } else {
         throw new Error('Unknown variant id ' + exercise.variant);
@@ -147,10 +139,10 @@ export let ModuleBuilder = ({
     console.log(choicesArr);
     let choices = (
       <ChoiceSelector
-          choices={choicesArr}
-          howManyPerRow={Math.min(numNumbers, 10)}
-          getFill={getFill}
-          onSelected={handleSelected}/>
+        choices={choicesArr}
+        howManyPerRow={Math.min(numNumbers, 10)}
+        getFill={getFill}
+        onSelected={handleSelected}/>
     );
 
     return (
@@ -158,5 +150,5 @@ export let ModuleBuilder = ({
         {choices}
       </Module>
     );
-  }
+  };
 };

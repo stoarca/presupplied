@@ -422,9 +422,9 @@ export let PanZoomSvg = React.forwardRef(({
 
   return (
     <svg ref={innerRef}
-        viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
-        preserveAspectRatio="xMinYMin slice"
-        {...svgProps}/>
+      viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
+      preserveAspectRatio="xMinYMin slice"
+      {...svgProps}/>
   );
 });
 

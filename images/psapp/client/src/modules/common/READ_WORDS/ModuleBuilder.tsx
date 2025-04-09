@@ -78,13 +78,10 @@ export let ModuleBuilder = ({
   }, [moduleContext, isSingleSound]);
   let {
     exercise,
-    partial,
     score,
     maxScore,
     doSuccess,
-    doPartialSuccess,
     doFailure,
-    alreadyFailed,
   } = useExercise({
     onGenExercise: generateExercise,
     initialPartial: () => null,
@@ -147,7 +144,7 @@ export let ModuleBuilder = ({
   let pronounce = React.useCallback(async () => {
     pronounceAbortController.current.abort();
     pronounceAbortController.current = new AbortController();
-    await _pronounce(pronounceAbortController.current);
+    await _pronounce(pronounceAbortController.current.signal);
     setPronouncePosition([0, 0]);
   }, [_pronounce]);
 
@@ -179,10 +176,10 @@ export let ModuleBuilder = ({
   };
   let text = (
     <text style={textStyle}
-        dominantBaseline="central"
-        textAnchor="middle"
-        y="50%"
-        x="50%">
+      dominantBaseline="central"
+      textAnchor="middle"
+      y="50%"
+      x="50%">
       <tspan>
         {exercise.variant.word.substring(0, pronouncePosition[0])}
       </tspan>
@@ -197,9 +194,9 @@ export let ModuleBuilder = ({
 
   return (
     <STTModule doSuccess={handleSuccess}
-        doFailure={handleFailure}
-        score={score}
-        maxScore={maxScore}>
+      doFailure={handleFailure}
+      score={score}
+      maxScore={maxScore}>
       {text}
     </STTModule>
   );

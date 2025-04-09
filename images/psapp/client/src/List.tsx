@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import YouTube, { YouTubeProps, YouTubeEvent } from 'react-youtube';
 
 import Button from '@mui/material/Button';
@@ -8,10 +8,10 @@ import StarIcon from '@mui/icons-material/Star';
 import Grid from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
 
-import {buildGraph, TechTree} from './dependency-graph';
-import {moduleComponents} from './ModuleContext';
-import {NavBar} from './NavBar';
-import {useStudentContext, Student} from './StudentContext';
+import { buildGraph } from './dependency-graph';
+import { moduleComponents } from './ModuleContext';
+import { NavBar } from './NavBar';
+import { useStudentContext, Student } from './StudentContext';
 import {
   ProgressStatus, ProgressVideoStatus, KNOWLEDGE_MAP
 } from '../../common/types';
@@ -20,7 +20,7 @@ let knowledgeGraph = buildGraph(KNOWLEDGE_MAP);
 
 let extractYouTubeId = (url: string): string | null => {
   let regExp =
-      /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
   let match = url.match(regExp);
 
   if (match && match[2].length === 11) {
@@ -77,10 +77,10 @@ let VideoModal = ({
     <Modal open={open}>
       <div style={style}>
         <YouTube
-            className="youtube100"
-            videoId={videoId}
-            opts={opts}
-            onStateChange={handleVideoStateChange}/>
+          className="youtube100"
+          videoId={videoId}
+          opts={opts}
+          onStateChange={handleVideoStateChange} />
       </div>
     </Modal>
   );
@@ -91,7 +91,7 @@ interface CardProps {
   student: Student;
 };
 
-let Card = ({kmid, student}: CardProps) => {
+let Card = ({ kmid, student }: CardProps) => {
   let node = React.useMemo(() => knowledgeGraph.getNodeData(kmid), [kmid]);
   let navigate = useNavigate();
   let [showModal, setShowModal] = React.useState(false);
@@ -158,15 +158,15 @@ let Card = ({kmid, student}: CardProps) => {
   let videoButton;
   if (
     node.forTeachers && node.teacherVideos.length ||
-        !node.forTeachers && node.studentVideos.length
+    !node.forTeachers && node.studentVideos.length
   ) {
     videoButton = (
       <Grid item xs={6}>
         <Button variant="contained"
-            color="success"
-            style={buttonStyle}
-            onClick={showVideo}>
-          <MovieIcon sx={{fontSize: '40px'}}/>
+          color="success"
+          style={buttonStyle}
+          onClick={showVideo}>
+          <MovieIcon sx={{ fontSize: '40px' }} />
         </Button>
       </Grid>
     );
@@ -175,15 +175,15 @@ let Card = ({kmid, student}: CardProps) => {
   }
   return (
     <Grid item
-        key={kmid}
-        xs={12} sm={8} md={6} lg={5} xl={4}>
+      key={kmid}
+      xs={12} sm={8} md={6} lg={5} xl={4}>
       <VideoModal open={showModal}
-          youtubeUrl={youtubeUrl}
-          onDone={handleDoneVideo}/>
+        youtubeUrl={youtubeUrl}
+        onDone={handleDoneVideo} />
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <Link to="#" onClick={showVideoOrMasteryIfDone}
-              style={{textDecoration: 'none'}}>
+            style={{ textDecoration: 'none' }}>
             <div style={innerStyle}>
               <h1>
                 {node.title || node.id}
@@ -194,11 +194,11 @@ let Card = ({kmid, student}: CardProps) => {
         {videoButton}
         <Grid item xs={videoButton ? 6 : 12}>
           <Button variant="contained"
-              component={Link}
-              to={`/modules/${kmid}`}
-              color="success"
-              style={buttonStyle}>
-            <StarIcon sx={{fontSize: '40px'}}/>
+            component={Link}
+            to={`/modules/${kmid}`}
+            color="success"
+            style={buttonStyle}>
+            <StarIcon sx={{ fontSize: '40px' }} />
           </Button>
         </Grid>
       </Grid>
@@ -213,7 +213,7 @@ export let List = () => {
       ([k, v]) => v.status === ProgressStatus.PASSED
     ).map(([k, v]) => k)
   ));
-  let handleChangeReached = React.useCallback((newReached: Set<string>) => {
+  React.useCallback((newReached: Set<string>) => {
     setReached(newReached);
   }, []);
 
@@ -228,7 +228,7 @@ export let List = () => {
 
   let cards = Array.from(reachableAndImplemented).map(kmid => {
     return (
-      <Card key={kmid} kmid={kmid} student={student}/>
+      <Card key={kmid} kmid={kmid} student={student} />
     );
   });
 
@@ -240,14 +240,14 @@ export let List = () => {
     padding: '10px',
   };
   return (
-    <div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
-      <NavBar/>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <NavBar />
       <div style={containerStyle}>
         <Grid container
-            spacing={2}
-            alignItems="center"
-            justifyContent="center"
-            sx={{ minHeight: '100%' }}>
+          spacing={2}
+          alignItems="center"
+          justifyContent="center"
+          sx={{ minHeight: '100%' }}>
           {cards}
         </Grid>
       </div>

@@ -19,7 +19,7 @@ interface GenRandPointOptions {
   width?: number,
   height?: number,
   paddingFromEdge?: number,
-  farAwayFrom?: {point: Point, dist: number}[],
+  farAwayFrom?: { point: Point, dist: number }[],
 }
 
 export let genRandPoint = ({
@@ -41,7 +41,7 @@ export let genRandPoint = ({
     if (i === 1000) {
       break;
     }
-  } while (!farAwayFrom.every(x => dist(x.point, ret) > x.dist))
+  } while (!farAwayFrom.every(x => dist(x.point, ret) > x.dist));
   return ret;
 };
 
@@ -64,7 +64,7 @@ export let genRandPoints = (n: number, {
       width: width,
       height: height,
       paddingFromEdge: paddingFromEdge,
-      farAwayFrom: ret.map(x => ({point: x, dist: paddingFromEachOther})),
+      farAwayFrom: ret.map(x => ({ point: x, dist: paddingFromEachOther })),
     }));
   }
   return ret;
@@ -101,7 +101,7 @@ export let shuffle = <T>(arr: T[]) => {
 
 export class VariantList<T> {
   variants: readonly T[];
-  variantsMap: Map<T, {maxScore: number, score: number}>;
+  variantsMap: Map<T, { maxScore: number, score: number }>;
   constructor(variants: readonly T[], maxScore: number) {
     this.variants = variants;
     this.variantsMap = new Map();
@@ -118,7 +118,6 @@ export class VariantList<T> {
   }
   pickVariant(): T {
     let variants = this.variants;
-    let variantsMap = this.variantsMap;
     let total = sum(Array.from(this.variantsMap.keys()).map(
       x => this.remaining(x)
     ));
@@ -149,7 +148,7 @@ export class VariantList<T> {
 }
 
 let exerciseId = 0;
-export let buildExercise = <T>(exercise: T): T & {id: number} => {
+export let buildExercise = <T>(exercise: T): T & { id: number } => {
   return {
     id: exerciseId++,
     ...exercise,
@@ -176,17 +175,17 @@ export let projectPointToLine = (p: Point, l: [Point, Point]): Point => {
   if (colinear(p, l[0], l[1])) {
     return p;
   }
-  let v = {x: l[1].x - l[0].x, y: l[1].y - l[0].y};
-  let w = {x: p.x - l[0].x, y: p.y - l[0].y};
+  let v = { x: l[1].x - l[0].x, y: l[1].y - l[0].y };
+  let w = { x: p.x - l[0].x, y: p.y - l[0].y };
   let dotProduct = v.x * w.x + v.y * w.y;
   let vMagnitudeSquared = v.x * v.x + v.y * v.y;
   let projScalar = dotProduct / vMagnitudeSquared;
-  let projVector = {x: v.x * projScalar, y: v.y * projScalar};
-  return {x: l[0].x + projVector.x, y: l[0].y + projVector.y};
+  let projVector = { x: v.x * projScalar, y: v.y * projScalar };
+  return { x: l[0].x + projVector.x, y: l[0].y + projVector.y };
 };
 
 export let rotate = (p: Point, origin: Point, angle: number): Point => {
-  let op = {x: p.x - origin.x, y: p.y - origin.y};
+  let op = { x: p.x - origin.x, y: p.y - origin.y };
   let s = Math.sin(angle);
   let c = Math.cos(angle);
   return {
@@ -202,7 +201,7 @@ export let dist = (a: Point, b: Point): number => {
   return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 };
 export let diff = (a: Point, b: Point): Point => {
-  return {x: a.x - b.x, y: a.y - b.y};
+  return { x: a.x - b.x, y: a.y - b.y };
 };
 
 export let midpoint = (a: Point, b: Point) => {
@@ -235,7 +234,7 @@ export let getPointOnUnitSquare = (angle: number): Point => {
       y: y / Math.abs(y),
     };
   }
-}
+};
 
 interface MyDomRect {
   x: number;
@@ -257,17 +256,17 @@ export let visibleViewBoxSize = (viewBox: ViewBox, pixelBox: MyDomRect) => {
     w: w,
     h: h,
   };
-}
+};
 
 export let pixelToViewBoxDist = (
   pixelCoord: Point, viewBox: ViewBox, pixelBox: MyDomRect,
 ): Point => {
-  let {w, h} = visibleViewBoxSize(viewBox, pixelBox);
+  let { w, h } = visibleViewBoxSize(viewBox, pixelBox);
   return {
     x: (pixelCoord.x - pixelBox.x) / pixelBox.width * w,
     y: (pixelCoord.y - pixelBox.y) / pixelBox.height * h,
   };
-}
+};
 
 export let pixelToViewBoxPos = (
   pixelCoord: Point, viewBox: ViewBox, pixelBox: DOMRect
@@ -383,16 +382,12 @@ export let withAbort = async <T>(fn: () => Promise<T>, signal: AbortSignal): Pro
   if (signal.aborted) {
     return null;
   }
-  try {
-    const result = await fn();
-    if (signal.aborted) {
-      return null;
-    }
-    return result;
-  } catch (e) {
-    // Handle or rethrow the error
-    throw e;
+  const result = await fn();
+  if (signal.aborted) {
+    return null;
   }
+  return result;
+
 };
 
 export let mapObject = <T, U>(
@@ -400,4 +395,4 @@ export let mapObject = <T, U>(
   fn: (x: [string, T]) => [string, U]
 ): Record<string, U> => {
   return Object.fromEntries(Object.entries(obj).map(x => fn(x)));
-}
+};

@@ -11,8 +11,8 @@ export interface ModuleContextProps {
 }
 
 export let ModuleContext = React.createContext<ModuleContextProps>({
-  playAudio: () => {throw new Error('not implemented')},
-  playTTS: () => {throw new Error('not implemented')},
+  playAudio: () => {throw new Error('not implemented');},
+  playTTS: () => {throw new Error('not implemented');},
 });
 
 let channels: Array<HTMLAudioElement|null> = [null, null];

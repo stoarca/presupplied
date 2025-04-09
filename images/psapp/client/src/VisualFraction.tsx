@@ -41,19 +41,19 @@ export let VisualFraction: React.FC<VisualFractionProps> = (props) => {
     for (let i = 1; i < props.denominator; ++i) {
       lines.push(
         <line key={i}
-            x1={i * SIZE / props.denominator}
-            y1={0}
-            x2={i * SIZE / props.denominator}
-            y2={SIZE}
-            style={emptyStyle}/>
+          x1={i * SIZE / props.denominator}
+          y1={0}
+          x2={i * SIZE / props.denominator}
+          y2={SIZE}
+          style={emptyStyle}/>
       );
     }
     slice = (
       <rect x={0}
-          y={0}
-          width={props.numerator * SIZE / props.denominator}
-          height={SIZE}
-          style={filledStyle}/>
+        y={0}
+        width={props.numerator * SIZE / props.denominator}
+        height={SIZE}
+        style={filledStyle}/>
     );
   } else if (props.type === 'circle') {
     let X = SIZE / 2;
@@ -66,11 +66,11 @@ export let VisualFraction: React.FC<VisualFractionProps> = (props) => {
       let a = i * Math.PI * 2 / props.denominator;
       lines.push(
         <line key={i}
-            x1={X}
-            y1={Y}
-            x2={X + R * Math.cos(a)}
-            y2={Y - R * Math.sin(a)}
-            style={emptyStyle}/>
+          x1={X}
+          y1={Y}
+          x2={X + R * Math.cos(a)}
+          y2={Y - R * Math.sin(a)}
+          style={emptyStyle}/>
       );
     }
     if (props.numerator === props.denominator) {
@@ -100,11 +100,11 @@ export let VisualFraction: React.FC<VisualFractionProps> = (props) => {
     for (let i = 1; i < props.denominator; ++i) {
       lines.push(
         <line key={i}
-            x1={SIZE / 2}
-            y1={0}
-            x2={i * SIZE / props.denominator}
-            y2={SIZE}
-            style={emptyStyle}/>
+          x1={SIZE / 2}
+          y1={0}
+          x2={i * SIZE / props.denominator}
+          y2={SIZE}
+          style={emptyStyle}/>
       );
     }
     slice = (
@@ -129,11 +129,11 @@ export let VisualFraction: React.FC<VisualFractionProps> = (props) => {
     for (let i = 1; i < props.denominator; ++i) {
       lines.push(
         <line key={i}
-            x1={D + i * (SIZE - D) / props.denominator}
-            y1={0}
-            x2={i * (SIZE - D) / props.denominator}
-            y2={SIZE}
-            style={emptyStyle}/>
+          x1={D + i * (SIZE - D) / props.denominator}
+          y1={0}
+          x2={i * (SIZE - D) / props.denominator}
+          y2={SIZE}
+          style={emptyStyle}/>
       );
     }
     slice = (
@@ -159,11 +159,11 @@ export let VisualFraction: React.FC<VisualFractionProps> = (props) => {
     for (let i = 1; i < props.denominator; ++i) {
       lines.push(
         <line key={i}
-            x1={D + i * (SIZE - 2 * D) / props.denominator}
-            y1={0}
-            x2={i * SIZE / props.denominator}
-            y2={SIZE}
-            style={emptyStyle}/>
+          x1={D + i * (SIZE - 2 * D) / props.denominator}
+          y1={0}
+          x2={i * SIZE / props.denominator}
+          y2={SIZE}
+          style={emptyStyle}/>
       );
     }
     slice = (
@@ -186,9 +186,9 @@ export let VisualFraction: React.FC<VisualFractionProps> = (props) => {
       <path style={emptyStyle} d={`
             M ${SIZE} ${SIZE / 2}
             ${range(props.denominator - 1).map(x => {
-              let a = (x + 1) * Math.PI * 2 / props.denominator;
-              return 'L ' + (X + R * Math.cos(a)) + ' ' + (Y + R * Math.sin(a));
-            }).join(' ')}
+        let a = (x + 1) * Math.PI * 2 / props.denominator;
+        return 'L ' + (X + R * Math.cos(a)) + ' ' + (Y + R * Math.sin(a));
+      }).join(' ')}
             Z
           `}/>
     );
@@ -196,20 +196,20 @@ export let VisualFraction: React.FC<VisualFractionProps> = (props) => {
       let a = i * Math.PI * 2 / props.denominator;
       lines.push(
         <line key={i}
-            x1={X}
-            y1={Y}
-            x2={X + R * Math.cos(a)}
-            y2={Y + R * Math.sin(a)}
-            style={emptyStyle}/>
+          x1={X}
+          y1={Y}
+          x2={X + R * Math.cos(a)}
+          y2={Y + R * Math.sin(a)}
+          style={emptyStyle}/>
       );
     }
     slice = (
       <path style={filledStyle} d={`
             M ${SIZE} ${SIZE / 2}
             ${range(props.numerator).map(x => {
-              let a = (x + 1) * Math.PI * 2 / props.denominator;
-              return 'L ' + (X + R * Math.cos(a)) + ' ' + (Y + R * Math.sin(a));
-            }).join(' ')}
+        let a = (x + 1) * Math.PI * 2 / props.denominator;
+        return 'L ' + (X + R * Math.cos(a)) + ' ' + (Y + R * Math.sin(a));
+      }).join(' ')}
             L ${X} ${Y}
             Z
           `}/>

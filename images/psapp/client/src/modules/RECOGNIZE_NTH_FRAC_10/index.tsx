@@ -7,7 +7,7 @@ import {
   VisualFractionType, VisualFractionTypes, VisualFraction
 } from '@src/VisualFraction';
 import {
-  BadVisualFractionType, BadVisualFractionTypes, BadVisualFraction
+  BadVisualFractionTypes, BadVisualFraction
 } from '@src/BadVisualFraction';
 
 type M = React.MouseEvent<SVGElement>;
@@ -90,11 +90,9 @@ export default (props: void) => {
   }, [moduleContext]);
   let {
     exercise,
-    partial,
     score,
     maxScore,
     doSuccess,
-    doPartialSuccess,
     doFailure,
   } = useExercise({
     onGenExercise: generateExercise,
@@ -119,37 +117,37 @@ export default (props: void) => {
             ${exercise.positions[0].x - SIZE / 2},
             ${exercise.positions[0].y - SIZE / 2}
           )`}
-          onClick={handleSuccess}>
+      onClick={handleSuccess}>
         <VisualFraction
-            type={exercise.t}
-            size={SIZE}
-            color="#ff0000"
-            numerator={1}
-            denominator={exercise.variant}/>
+          type={exercise.t}
+          size={SIZE}
+          color="#ff0000"
+          numerator={1}
+          denominator={exercise.variant}/>
       </g>
       <g transform={`translate(
             ${exercise.positions[1].x - SIZE / 2},
             ${exercise.positions[1].y - SIZE / 2}
           )`}
-          onClick={handleFailure}>
+      onClick={handleFailure}>
         <VisualFraction
-            type={exercise.tw}
-            size={SIZE}
-            color="#ff0000"
-            numerator={1}
-            denominator={exercise.wrongDenom}/>
+          type={exercise.tw}
+          size={SIZE}
+          color="#ff0000"
+          numerator={1}
+          denominator={exercise.wrongDenom}/>
       </g>
       <g transform={`translate(
             ${exercise.positions[2].x - SIZE / 2},
             ${exercise.positions[2].y - SIZE / 2}
           )`}
-          onClick={handleFailure}>
+      onClick={handleFailure}>
         <BadVisualFraction
-            type={exercise.tb}
-            size={SIZE}
-            color="#ff0000"
-            numerator={1}
-            denominator={exercise.variant}/>
+          type={exercise.tb}
+          size={SIZE}
+          color="#ff0000"
+          numerator={1}
+          denominator={exercise.variant}/>
       </g>
     </Module>
   );

@@ -28,7 +28,7 @@ export let ChoiceSelector = <T extends ChoiceType>(
   if (props.question) {
     let qStyle: React.CSSProperties = {
       fontSize: '40px',
-    }
+    };
     question = (
       <div style={qStyle}>
         {props.question}
@@ -53,9 +53,9 @@ export let ChoiceSelector = <T extends ChoiceType>(
   for (let i = 0; i < props.choices.length; ++i) {
     choices.push(
       <div key={i}
-          data-choice-index={i}
-          style={choiceContainerStyle}
-          onClick={handleClick}>
+        data-choice-index={i}
+        style={choiceContainerStyle}
+        onClick={handleClick}>
         {props.choices[i]}
       </div>
     );

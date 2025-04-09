@@ -22,7 +22,7 @@ export let ModuleBuilder = (props: ReadWordsReviewProps) => {
       let allDeps = knowledgeGraph.directDependenciesOf(moduleName);
       let wordModuleDeps: Record<string, string> = {};
 
-      r.keys().forEach(async (moduleName) => {
+      r.keys().forEach((moduleName) => {
         let cleaned = moduleName.substring(2); // remove ./ from start
         if (allDeps.includes(cleaned)) {
           wordModuleDeps[cleaned] = moduleName;

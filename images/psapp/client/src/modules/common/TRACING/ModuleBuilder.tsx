@@ -5,7 +5,6 @@ import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
 import {SvgArrowhead} from '@src/SvgArrowhead';
 import {
-  genRandPoints,
   dist,
   clamp,
   projectPointToLine,
@@ -13,10 +12,6 @@ import {
   Point,
   VariantList,
 } from '@src/util';
-
-import {
-  goodDing, badBuzzer, goodJob,
-} from '@modules/common/sounds';
 
 type T = React.TouchEvent<HTMLElement>;
 type M = React.MouseEvent<HTMLElement>;
@@ -83,10 +78,10 @@ let shapeToPathPart = (shape: Shape, preShape: Shape | null): string => {
       ${shape.point.x} ${shape.point.y}
     `;
   } else {
-    let exhaustiveCheck: never = shape;
+    let exhaustiveCheck: never = shape; // eslint-disable-line
     return '';
   }
-}
+};
 
 interface ShapeArrowheadProps {
   preShape: Shape,
@@ -104,12 +99,12 @@ let ShapeArrowhead: React.FC<ShapeArrowheadProps> = (props) => {
   if (shape.type === 'lineto') {
     return (
       <SvgArrowhead {...rest}
-          chevronSize={chevronSize}
-          x1={preShape.point.x}
-          y1={preShape.point.y}
-          x2={shape.point.x}
-          y2={shape.point.y}
-          />
+        chevronSize={chevronSize}
+        x1={preShape.point.x}
+        y1={preShape.point.y}
+        x2={shape.point.x}
+        y2={shape.point.y}
+      />
     );
   } else if (shape.type === 'bezierto') {
     let b = new Bezier(
@@ -119,11 +114,11 @@ let ShapeArrowhead: React.FC<ShapeArrowheadProps> = (props) => {
     let d = b.derivative(1);
     return (
       <SvgArrowhead {...rest}
-          chevronSize={chevronSize}
-          x1={p.x - d.x}
-          y1={p.y - d.y}
-          x2={p.x}
-          y2={p.y}/>
+        chevronSize={chevronSize}
+        x1={p.x - d.x}
+        y1={p.y - d.y}
+        x2={p.x}
+        y2={p.y}/>
     );
   } else if (shape.type === 'arcto') {
     let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -135,40 +130,18 @@ let ShapeArrowhead: React.FC<ShapeArrowheadProps> = (props) => {
     let p = path.getPointAtLength(len - 0.1);
     return (
       <SvgArrowhead {...rest}
-          chevronSize={chevronSize}
-          x1={p.x}
-          y1={p.y}
-          x2={shape.point.x}
-          y2={shape.point.y}/>
+        chevronSize={chevronSize}
+        x1={p.x}
+        y1={p.y}
+        x2={shape.point.x}
+        y2={shape.point.y}/>
     );
   } else {
-    let exhaustiveCheck: never = shape;
+    let exhaustiveCheck: never = shape; // eslint-disable-line
     return null;
   }
 };
 
-let cleanShapes = (shapes: Shape[]): Shape[] => {
-  let ret: Shape[] = [];
-  for (let i = 0; i < shapes.length; ++i) {
-    const shape = shapes[i];
-    if (shape.type === 'bezierto') {
-      let bezier = new Bezier(
-        shapes[i - 1].point, shape.c1, shape.c2, shape.point
-      );
-      let simpleBeziers = bezier.reduce();
-      ret.push.apply(ret, simpleBeziers.map((x, i): BezierTo => ({
-        type: 'bezierto',
-        point: x.points[3],
-        c1: x.points[1],
-        c2: x.points[2],
-        showArrowhead: shape.showArrowhead && i === simpleBeziers.length - 1,
-      })));
-    } else {
-      ret.push(shapes[i]);
-    }
-  }
-  return ret;
-};
 
 interface ModuleBuilderProps {
   variants: Variant[];
@@ -259,7 +232,7 @@ export let ModuleBuilder = ({
           y: point.y,
         };
       } else {
-        let exhaustiveCheck: never = shape;
+        let exhaustiveCheck: never = shape; // eslint-disable-line
         throw new Error('unknown shape type');
       }
     }, [preShape, shape, percent]);
@@ -344,10 +317,8 @@ export let ModuleBuilder = ({
           let pStart = path.getPointAtLength(bounds[0] * len);
           let pEnd = path.getPointAtLength(bounds[1] * len);
           let mid = (bounds[0] + bounds[1]) / 2;
-          let pMid = path.getPointAtLength(mid * len);
 
           let distStart = dist(p, pStart);
-          let distMid = dist(p, pMid);
           let distEnd = dist(p, pEnd);
 
           if (distStart < distEnd) {
@@ -368,7 +339,7 @@ export let ModuleBuilder = ({
         bisect();
         newPercentMoved = (bounds[0] + bounds[1]) / 2;
       } else {
-        let exhaustiveCheck: never = shape;
+        let exhaustiveCheck: never = shape; // eslint-disable-line
         throw new Error('unknown shape type while project');
       }
 
@@ -422,18 +393,18 @@ export let ModuleBuilder = ({
     };
     let emptyPath = (
       <path style={emptyStyle}
-          d={shapes.map(
-              (x, i) => shapeToPathPart(x, shapes[i] || null)
-            ).join(' ')
-          }/>
+        d={shapes.map(
+          (x, i) => shapeToPathPart(x, shapes[i] || null)
+        ).join(' ')
+        }/>
     );
     let targetArrowheads = [];
     for (let i = 0; i < shapes.length; ++i) {
       targetArrowheads.push(
         <ShapeArrowhead key={i}
-            style={emptyStyle}
-            preShape={shapes[i - 1]}
-            shape={shapes[i]}/>
+          style={emptyStyle}
+          preShape={shapes[i - 1]}
+          shape={shapes[i]}/>
       );
     }
 
@@ -471,23 +442,23 @@ export let ModuleBuilder = ({
     }, [shapes, shapeIndex]);
     let emptyNext = (
       <path className="emptynext" style={nextStyle}
-          d={`
+        d={`
             M ${shapes[joinedArrowheadIndexes[0] - 1].point.x}
               ${shapes[joinedArrowheadIndexes[0] - 1].point.y}
             ${joinedArrowheadIndexes.map(i => {
-              return shapeToPathPart(shapes[i], shapes[i - 1]);
-            })}
+        return shapeToPathPart(shapes[i], shapes[i - 1]);
+      })}
           `}/>
     );
     let nextArrowhead = (
       <ShapeArrowhead
-          style={nextStyle}
-          preShape={
-            shapes[joinedArrowheadIndexes[joinedArrowheadIndexes.length - 1] - 1]
-          }
-          shape={
-            shapes[joinedArrowheadIndexes[joinedArrowheadIndexes.length - 1]]
-          }/>
+        style={nextStyle}
+        preShape={
+          shapes[joinedArrowheadIndexes[joinedArrowheadIndexes.length - 1] - 1]
+        }
+        shape={
+          shapes[joinedArrowheadIndexes[joinedArrowheadIndexes.length - 1]]
+        }/>
     );
 
 
@@ -500,61 +471,61 @@ export let ModuleBuilder = ({
     };
     let filledPath = (
       <path style={filledStyle}
-          d={shapes.map((x, i) => {
-            if (i > shapeIndex) {
-              return;
-            }
-            if (x.type === 'moveto') {
-              return `M ${x.point.x} ${x.point.y}`;
-            } else if (x.type === 'lineto') {
-              if (i === shapeIndex) {
-                return `
+        d={shapes.map((x, i) => {
+          if (i > shapeIndex) {
+            return;
+          }
+          if (x.type === 'moveto') {
+            return `M ${x.point.x} ${x.point.y}`;
+          } else if (x.type === 'lineto') {
+            if (i === shapeIndex) {
+              return `
                   L
                   ${shape.point.x * percent + preShape.point.x * (1 - percent)}
                   ${shape.point.y * percent + preShape.point.y * (1 - percent)}
                 `;
-              } else {
-                return `L ${x.point.x} ${x.point.y}`;
+            } else {
+              return `L ${x.point.x} ${x.point.y}`;
+            }
+          } else if (x.type === 'bezierto') {
+            if (i === shapeIndex) {
+              if (percent === 0) {
+                return '';
               }
-            } else if (x.type === 'bezierto') {
-              if (i === shapeIndex) {
-                if (percent === 0) {
-                  return '';
-                }
-                let b = new Bezier(
-                  preShape.point, x.c1, x.c2, x.point,
-                );
-                let sub = b.split(0, percent);
-                return `
+              let b = new Bezier(
+                preShape.point, x.c1, x.c2, x.point,
+              );
+              let sub = b.split(0, percent);
+              return `
                   C
                   ${sub.points[1].x} ${sub.points[1].y}
                   ${sub.points[2].x} ${sub.points[2].y}
                   ${sub.points[3].x} ${sub.points[3].y}
                 `;
-              } else {
-                return `C ${x.c1.x} ${x.c1.y} ${x.c2.x} ${x.c2.y} ${x.point.x} ${x.point.y}`;
-              }
-            } else if (x.type === 'arcto') {
-              if (i === shapeIndex) {
-                shape = shape as SmallArcTo;
-                let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                path.setAttribute('d', `
+            } else {
+              return `C ${x.c1.x} ${x.c1.y} ${x.c2.x} ${x.c2.y} ${x.point.x} ${x.point.y}`;
+            }
+          } else if (x.type === 'arcto') {
+            if (i === shapeIndex) {
+              shape = shape as SmallArcTo;
+              let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+              path.setAttribute('d', `
                   M ${preShape.point.x} ${preShape.point.y}
                   ${shapeToPathPart(shape, preShape)}
                 `);
-                let len = path.getTotalLength();
-                let percentPoint = path.getPointAtLength(len * percent);
-                return shapeToPathPart({
-                  ...shape,
-                  point: percentPoint,
-                }, preShape);
-              } else {
-                return shapeToPathPart(x, preShape);
-              }
+              let len = path.getTotalLength();
+              let percentPoint = path.getPointAtLength(len * percent);
+              return shapeToPathPart({
+                ...shape,
+                point: percentPoint,
+              }, preShape);
             } else {
-              let exhaustiveCheck: never = x;
+              return shapeToPathPart(x, preShape);
             }
-          }).join(' ')}/>
+          } else {
+              let exhaustiveCheck: never = x; // eslint-disable-line
+          }
+        }).join(' ')}/>
     );
 
     let targetCircle = (
@@ -570,18 +541,18 @@ export let ModuleBuilder = ({
 
     return (
       <Module type="svg"
-          score={score}
-          maxScore={maxScore}
-          onMouseDown={tool === 'mouse' ? handleStart : undefined}
-          onMouseMove={tool === 'mouse' ? handleMove : undefined}
-          onMouseUp={tool === 'mouse' ? handleEnd : undefined}
-          onTouchStart={tool === 'touch' ? handleStart : undefined}
-          onTouchMove={tool === 'touch' ? handleMove : undefined}
-          onTouchEnd={tool === 'touch'? handleEnd : undefined}
-          onPointerDown={tool === 'pen' ? handleStart : undefined}
-          onPointerMove={tool === 'pen' ? handleMove : undefined}
-          onPointerUp={tool === 'pen'? handleEnd : undefined}
-          extraSvgStyles={{cursor: showCursor ? 'default' : 'none'}}>
+        score={score}
+        maxScore={maxScore}
+        onMouseDown={tool === 'mouse' ? handleStart : undefined}
+        onMouseMove={tool === 'mouse' ? handleMove : undefined}
+        onMouseUp={tool === 'mouse' ? handleEnd : undefined}
+        onTouchStart={tool === 'touch' ? handleStart : undefined}
+        onTouchMove={tool === 'touch' ? handleMove : undefined}
+        onTouchEnd={tool === 'touch'? handleEnd : undefined}
+        onPointerDown={tool === 'pen' ? handleStart : undefined}
+        onPointerMove={tool === 'pen' ? handleMove : undefined}
+        onPointerUp={tool === 'pen'? handleEnd : undefined}
+        extraSvgStyles={{cursor: showCursor ? 'default' : 'none'}}>
         {emptyPath}
         {targetArrowheads}
         {emptyNext}
@@ -591,6 +562,6 @@ export let ModuleBuilder = ({
         {targetComplete}
       </Module>
     );
-  }
+  };
 };
 
