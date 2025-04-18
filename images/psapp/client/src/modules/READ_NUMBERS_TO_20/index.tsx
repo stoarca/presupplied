@@ -18,7 +18,7 @@ let VARIANTS = [
 export default (props: void) => {
   let moduleContext = React.useContext(ModuleContext);
 
-  let vlist = React.useMemo(() => new VariantList(VARIANTS, 3), []);
+  let vlist = React.useMemo(() => new VariantList(VARIANTS.map(v => ({ variant: v, millicards: 1000 })), 3), []);
   let generateExercise = React.useCallback(() => {
     return {
       variant: vlist.pickVariant(),

@@ -55,7 +55,7 @@ export let ModuleBuilder = ({
     });
   }, [variants]);
 
-  let vlist = React.useMemo(() => new VariantList(variants, maxScorePerVariant), []);
+  let vlist = React.useMemo(() => new VariantList(variants.map(v => ({ variant: v, millicards: 1000 })), maxScorePerVariant), []);
   let generateExercise = React.useCallback(() => {
     let variant = vlist.pickVariant();
     if (!admin) {

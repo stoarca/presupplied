@@ -37,7 +37,7 @@ export let ModuleBuilder = ({
   return (props: void) => {
     let moduleContext = React.useContext(ModuleContext);
 
-    let vlist = React.useMemo(() => new VariantList(VARIANTS, 2), []);
+    let vlist = React.useMemo(() => new VariantList(VARIANTS.map(v => ({ variant: v, millicards: 2000 })), 2), []);
     let generateExercise = React.useCallback(() => {
       let variant = vlist.pickVariant();
       return {

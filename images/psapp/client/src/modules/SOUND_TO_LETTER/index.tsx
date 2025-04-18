@@ -60,7 +60,7 @@ let VARIANTS: Variant[] = Object.keys(soundToLetters) as Variant[];
 export default (props: void) => {
   let moduleContext = React.useContext(ModuleContext);
 
-  let vlist = React.useMemo(() => new VariantList(VARIANTS, 2), []);
+  let vlist = React.useMemo(() => new VariantList(VARIANTS.map(v => ({ variant: v, millicards: 1000 })), 2), []);
   let generateExercise = React.useCallback(() => {
     return {
       variant: vlist.pickVariant(),

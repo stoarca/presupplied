@@ -1,13 +1,15 @@
 export interface Point {
-  x: number,
-  y: number,
+  x: number;
+  y: number;
 }
+
 export interface Rect {
-  x: number,
-  y: number,
-  w: number,
-  h: number,
+  x: number;
+  y: number;
+  w: number;
+  h: number;
 }
+
 export interface ViewBox {
   x: number;
   y: number;
@@ -16,10 +18,10 @@ export interface ViewBox {
 }
 
 interface GenRandPointOptions {
-  width?: number,
-  height?: number,
-  paddingFromEdge?: number,
-  farAwayFrom?: { point: Point, dist: number }[],
+  width?: number;
+  height?: number;
+  paddingFromEdge?: number;
+  farAwayFrom?: { point: Point; dist: number }[];
 }
 
 export let genRandPoint = ({
@@ -28,60 +30,63 @@ export let genRandPoint = ({
   paddingFromEdge = 0,
   farAwayFrom = [],
 }: GenRandPointOptions): Point => {
-  let p = paddingFromEdge;
+  const p = paddingFromEdge;
   let ret: Point;
   let i = 0;
   do {
-    i += 1;
-    // TODO: inefficient
+    i++;
     ret = {
       x: p + Math.random() * (width - 2 * p),
       y: p + Math.random() * (height - 2 * p),
     };
-    if (i === 1000) {
-      break;
-    }
+    if (i === 1000) { break; }
   } while (!farAwayFrom.every(x => dist(x.point, ret) > x.dist));
-  return ret;
+  return ret!;
 };
 
 interface GenRandPointsOptions {
-  width?: number,
-  height?: number,
-  paddingFromEdge?: number,
-  paddingFromEachOther?: number,
+  width?: number;
+  height?: number;
+  paddingFromEdge?: number;
+  paddingFromEachOther?: number;
 }
 
-export let genRandPoints = (n: number, {
-  width = window.innerWidth,
-  height = window.innerHeight,
-  paddingFromEdge = 0,
-  paddingFromEachOther = 0,
-}: GenRandPointsOptions): Point[] => {
-  let ret: Point[] = [];
-  for (let i = 0; i < n; ++i) {
-    ret.push(genRandPoint({
-      width: width,
-      height: height,
-      paddingFromEdge: paddingFromEdge,
-      farAwayFrom: ret.map(x => ({ point: x, dist: paddingFromEachOther })),
-    }));
+export let genRandPoints = (
+  n: number,
+  {
+    width = window.innerWidth,
+    height = window.innerHeight,
+    paddingFromEdge = 0,
+    paddingFromEachOther = 0,
+  }: GenRandPointsOptions
+): Point[] => {
+  const ret: Point[] = [];
+  for (let i = 0; i < n; i++) {
+    ret.push(
+      genRandPoint({
+        width,
+        height,
+        paddingFromEdge,
+        farAwayFrom: ret.map(x => ({ point: x, dist: paddingFromEachOther })),
+      })
+    );
   }
   return ret;
 };
 
 interface PickFromBagOptions {
-  withReplacement: boolean,
+  withReplacement: boolean;
 }
 
-export let pickFromBag = <T>(bag: readonly T[], n: number, {
-  withReplacement,
-}: PickFromBagOptions): T[] => {
-  let selected: T[] = [];
-  for (let i = 0; i < n; ++i) {
+export let pickFromBag = <T>(
+  bag: readonly T[],
+  n: number,
+  { withReplacement }: PickFromBagOptions
+): T[] => {
+  const selected: T[] = [];
+  for (let i = 0; i < n; i++) {
     let item = bag[Math.floor(Math.random() * bag.length)];
     if (!withReplacement) {
-      // TODO: inefficient
       while (selected.includes(item)) {
         item = bag[Math.floor(Math.random() * bag.length)];
       }
@@ -91,7 +96,7 @@ export let pickFromBag = <T>(bag: readonly T[], n: number, {
   return selected;
 };
 
-export let shuffle = <T>(arr: T[]) => {
+export let shuffle = <T>(arr: T[]): T[] => {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -99,62 +104,112 @@ export let shuffle = <T>(arr: T[]) => {
   return arr;
 };
 
-
 export class VariantList<T> {
-  variants: readonly T[];
-  variantsMap: Map<T, { maxScore: number, score: number }>;
-  constructor(variants: readonly T[], maxScore: number) {
+  variants: readonly { variant: T; millicards: number }[];
+  variantsMap: Map<T, { maxScore: number; score: number; millicards: number }>;
+  totalCards: number;
+
+  // the shuffled “deck” of exactly totalCards draws
+  private deck: T[] = [];
+  private deckPos = 0;
+
+  constructor(
+    variants: readonly { variant: T; millicards: number }[],
+    maxScore: number
+  ) {
     this.variants = variants;
+    // totalCards may be fractional
+    this.totalCards =
+      variants.reduce((sum, v) => sum + v.millicards, 0) / 1000;
+
     this.variantsMap = new Map();
-    for (let i = 0; i < variants.length; ++i) {
-      this.variantsMap.set(variants[i], {
-        maxScore: maxScore,
+    for (let { variant, millicards } of variants) {
+      // keep your old scoring semantics
+      const scaledMaxScore = Math.ceil((millicards / 1000) * maxScore);
+      this.variantsMap.set(variant, {
+        maxScore: scaledMaxScore,
         score: 0,
+        millicards,
       });
     }
+
+    // build and shuffle one deck-per-instance (trial)
+    this.buildDeck();
   }
-  remaining(variant: T) {
-    let v = this.variantsMap.get(variant)!;
-    return Math.max(v.maxScore - v.score, 0);
+
+  /** Build a deck of exactly totalCards “slots”:
+   *  • floor(millicards/1000) whole cards each
+   *  • exactly sum(remainders)/1000 fractional cards selected in proportion
+   *  • then shuffle end‑to‑end
+   */
+  private buildDeck() {
+    const deck: T[] = [];
+    const fracs: { variant: T; weight: number }[] = [];
+
+    // add whole cards and collect remainders
+    for (let { variant, millicards } of this.variants) {
+      const full = Math.floor(millicards / 1000);
+      for (let i = 0; i < full; i++) { deck.push(variant); };
+      const rem = millicards % 1000;
+      if (rem > 0) { fracs.push({ variant, weight: rem }); };
+    }
+
+    // how many fractional cards to draw
+    const totalFrac = fracs.reduce((s, f) => s + f.weight, 0) / 1000;
+    const pool = fracs.slice();
+
+    // draw each fractional card without replacement
+    for (let i = 0; i < totalFrac; i++) {
+      const wsum = pool.reduce((s, f) => s + f.weight, 0);
+      let r = Math.random() * wsum;
+      for (let j = 0; j < pool.length; j++) {
+        if (r < pool[j].weight) {
+          deck.push(pool[j].variant);
+          pool.splice(j, 1);
+          break;
+        }
+        r -= pool[j].weight;
+      }
+    }
+
+    this.deck = shuffle(deck);
+    this.deckPos = 0;
   }
+
   pickVariant(): T {
-    let variants = this.variants;
-    let total = sum(Array.from(this.variantsMap.keys()).map(
-      x => this.remaining(x)
-    ));
-    if (total === 0) {
-      return variants[0];
+    if (this.deckPos >= this.deck.length) {
+      throw new Error('No more variants available to pick from');
     }
-    let randIndex = Math.floor(Math.random() * total);
-    let variantIndex = 0;
-    while (randIndex >= this.remaining(variants[variantIndex])) {
-      randIndex -= this.remaining(variants[variantIndex]);
-      variantIndex += 1;
-    }
-    return variants[variantIndex];
+    return this.deck[this.deckPos++];
   }
+
   markSuccess(variant: T) {
     this.variantsMap.get(variant)!.score += 1;
   }
+
   markFailure(variant: T) {
-    let val = this.variantsMap.get(variant)!;
-    val.score = -1;
+    this.variantsMap.get(variant)!.score = -1;
   }
+
+  remaining(variant: T) {
+    const v = this.variantsMap.get(variant)!;
+    return Math.max(v.maxScore - v.score, 0);
+  }
+
   score() {
-    return sum(Array.from(this.variantsMap.values()).map(x => x.score));
+    return Array.from(this.variantsMap.values()).reduce(
+      (s, v) => s + v.score,
+      0
+    );
   }
+
   maxScore() {
-    return sum(Array.from(this.variantsMap.values()).map(x => x.maxScore));
+    return Array.from(this.variantsMap.values()).reduce(
+      (s, v) => s + v.maxScore,
+      0
+    );
   }
 }
-
-let exerciseId = 0;
-export let buildExercise = <T>(exercise: T): T & { id: number } => {
-  return {
-    id: exerciseId++,
-    ...exercise,
-  };
-};
 
 export let pointInRect = (p: Point, r: Rect) => {
   return p.x >= r.x && p.x < r.x + r.w && p.y >= r.y && p.y < r.y + r.h;
@@ -202,7 +257,7 @@ export let dist = (a: Point, b: Point): number => {
   return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 };
 export let diff = (a: Point, b: Point): Point => {
-  return { x: a.x - b.x, y: a.y - b.y };
+  return { x: a.x - b.x, y: b.y - a.y };
 };
 
 export let midpoint = (a: Point, b: Point) => {
@@ -270,7 +325,7 @@ export let pixelToViewBoxDist = (
 };
 
 export let pixelToViewBoxPos = (
-  pixelCoord: Point, viewBox: ViewBox, pixelBox: DOMRect
+  pixelCoord: Point, viewBox: ViewBox, pixelBox: MyDomRect
 ): Point => {
   let ret = pixelToViewBoxDist(pixelCoord, viewBox, pixelBox);
   return {
@@ -388,7 +443,6 @@ export let withAbort = async <T>(fn: () => Promise<T>, signal: AbortSignal): Pro
     return null;
   }
   return result;
-
 };
 
 export let mapObject = <T, U>(

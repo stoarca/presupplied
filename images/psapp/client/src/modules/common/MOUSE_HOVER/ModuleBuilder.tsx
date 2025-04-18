@@ -26,7 +26,7 @@ export let ModuleBuilder = ({
   return (props: void) => {
     let moduleContext = React.useContext(ModuleContext);
 
-    let vlist = React.useMemo(() => new VariantList([0], 10), []);
+    let vlist = React.useMemo(() => new VariantList([{ variant: 0, millicards: 1000 }], 10), []);
     let generateExercise = React.useCallback((previous?: MyEx) => {
       let farAwayFrom = [];
       if (previous) {

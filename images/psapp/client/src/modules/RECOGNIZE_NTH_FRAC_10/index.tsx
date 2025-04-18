@@ -39,7 +39,7 @@ let denomMap: {[key: Variant]: string} = {
 export default (props: void) => {
   let moduleContext = React.useContext(ModuleContext);
 
-  let vlist = React.useMemo(() => new VariantList(VARIANTS, 5), []);
+  let vlist = React.useMemo(() => new VariantList(VARIANTS.map(v => ({ variant: v, millicards: 1000 })), 5), []);
   let generateExercise = React.useCallback(() => {
     let positions = genRandPoints(3, {
       paddingFromEdge: 100,
