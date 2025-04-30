@@ -3,7 +3,7 @@ import React from 'react';
 import { Module, useExercise, Ex } from '@src/Module';
 import { ModuleContext } from '@src/ModuleContext';
 import {
-  SIMPLE_OBJECTS, pickFromBag, genRandPoints, VariantList,
+  SIMPLE_OBJECTS, pickFromBag, genRandPoints, ProbabilisticDeck,
 } from '@src/util';
 
 import {
@@ -31,7 +31,7 @@ export let ModuleBuilder = ({
     let moduleContext = React.useContext(ModuleContext);
 
     let vlist = React.useMemo(
-      () => new VariantList(variants, maxScorePerVariant), []
+      () => new ProbabilisticDeck(variants.map(v => ({ variant: v, millicards: maxScorePerVariant * 1000 })), maxScorePerVariant * 1000), []
     );
     let generateExercise = React.useCallback(() => {
       let positions = genRandPoints(2, {

@@ -131,6 +131,31 @@ When making changes to this codebase:
 3. Maintain TypeScript typing across the application
 4. Use the Docker-based development environment for testing
 
+## Testing
+
+### Running Tests
+The project uses Jest for testing client-side code. Tests are located in `images/psapp/client/src/__tests__/` directory.
+
+To run tests:
+1. Make sure the application containers are running (`./run.sh`)
+2. Execute tests in the Docker container:
+   ```bash
+   docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/client && npm test"
+   ```
+
+For running tests with coverage:
+```bash
+docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/client && npm test -- --coverage"
+```
+
+Test files should follow the naming pattern `*.test.ts` or `*.test.tsx`.
+
+### Linting
+The project uses ESLint for code quality checks:
+```bash
+docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/client && npm run lint"
+```
+
 ## Knowledge Map
 
 The curriculum is organized in a prerequisite graph (knowledge-map.json) where each module depends on previously completed modules. This allows for a flexible, non-age-based progression through the material.

@@ -3,7 +3,7 @@ import React from 'react';
 import {ChoiceSelector} from '@src/ChoiceSelector';
 import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-import {VariantList} from '@src/util';
+import {ProbabilisticDeck} from '@src/util';
 
 import {tooSlow} from '@modules/common/sounds';
 import howManyFingers from './how_many_fingers.wav';
@@ -37,7 +37,7 @@ export let ModuleBuilder = ({
   return (props: void) => {
     let moduleContext = React.useContext(ModuleContext);
 
-    let vlist = React.useMemo(() => new VariantList(VARIANTS, 2), []);
+    let vlist = React.useMemo(() => new ProbabilisticDeck(VARIANTS.map(v => ({ variant: v, millicards: 2000 })), 2000), []);
     let generateExercise = React.useCallback(() => {
       let variant = vlist.pickVariant();
       return {

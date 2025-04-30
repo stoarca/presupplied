@@ -3,7 +3,12 @@ import React from 'react';
 import {ChoiceSelector} from '@src/ChoiceSelector';
 import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-import {VariantList, pickFromBag, PRONUNCIATIONS, shuffle} from '@src/util';
+import {
+  ProbabilisticDeck,
+  pickFromBag,
+  shuffle,
+  PRONUNCIATIONS
+} from '@src/util';
 import {goodDing} from '@modules/common/sounds';
 
 const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] as const;
@@ -22,7 +27,7 @@ export let ModuleBuilder = ({variants}: ModuleBuilderProps) => {
   return (props: void) => {
     let moduleContext = React.useContext(ModuleContext);
 
-    let vlist = React.useMemo(() => new VariantList(variants, 2), []);
+    let vlist = React.useMemo(() => new ProbabilisticDeck(variants.map(v => ({ variant: v, millicards: 2000 })), 2000), []);
     let generateExercise = React.useCallback((): MyEx => {
       let variant = vlist.pickVariant();
       let choices = pickFromBag(variants.filter(x => x !== variant), 5, {

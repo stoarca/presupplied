@@ -2,7 +2,12 @@ import React from 'react';
 
 import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-import {genRandPoint, dist, Point, VariantList} from '@src/util';
+import {
+  ProbabilisticDeck,
+  Point,
+  genRandPoint,
+  dist
+} from '@src/util';
 
 import {tooSlow} from '@modules/common/sounds';
 import instructionsMouse from './instructions_mouse.wav';
@@ -28,7 +33,7 @@ export let ModuleBuilder = ({
   return (props: void) => {
     let moduleContext = React.useContext(ModuleContext);
 
-    let vlist = React.useMemo(() => new VariantList([0], 10), []);
+    let vlist = React.useMemo(() => new ProbabilisticDeck([{ variant: 0, millicards: 10000 }], 10000), []);
     let generateExercise = React.useCallback((previous?: MyEx) => {
       let farAwayFrom = [];
       if (previous) {
