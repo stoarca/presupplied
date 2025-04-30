@@ -130,6 +130,12 @@ When making changes to this codebase:
 2. Follow existing patterns for creating new educational modules
 3. Maintain TypeScript typing across the application
 4. Use the Docker-based development environment for testing
+5. Add comments only to explain **why** something is done, not **what** is being done - code should be self-explanatory
+   - Good comment: `// Prevent race condition by using a memoized callback`
+   - Avoid: `// Create a function to play instructions` or `// Play the audio`
+   - NEVER add annotations about changes made (like "Doubled from 60 to 120") - these belong in commit messages
+   - NEVER add TODOs without specific actionable information
+   - Code readability comes from clear variable names and function structure, not from explanatory comments
 
 ## Testing
 

@@ -193,9 +193,17 @@ export let BaseKnowledgeMap = ({
             enabledMinCell = nodeCell;
           }
         }
-      }
-      if (enabledMinCell.i < 1000) {
-        minCell = enabledMinCell;
+        if (enabledMinCell.i < 1000) {
+          minCell = enabledMinCell;
+        }
+      } else {
+        // For admin mode or any other case where reachable is not provided,
+        // use a real node from the graph instead of defaulting to {i: 1000, j: 1000}
+        let nodes = knowledgeGraph.overallOrder();
+        if (nodes.length > 0) {
+          let firstNode = nodes[0];
+          minCell = knowledgeGraph.getNodeData(firstNode).cell;
+        }
       }
     }
     let pos = nodePos(minCell);
@@ -322,16 +330,16 @@ export let BaseKnowledgeMap = ({
     flex: '1 1 0',
   } as React.CSSProperties;
   let viewLimitBox = React.useMemo(() => {
-    return {x: -100, y: -100, w: 20000, h: 15000};
+    return {x: -100, y: -100, w: 40000, h: 40000};
   }, []);
   return (
     <PanZoomSvg
-      xmlns="<http://www.w3.org/2000/svg>"
+      xmlns="http://www.w3.org/2000/svg"
       ref={svgRef}
       viewBox={viewBox}
       viewLimitBox={viewLimitBox}
       minZoomWidth={1000}
-      maxZoomWidth={20000}
+      maxZoomWidth={40000}
       onUpdateViewBox={setViewBox}
       onMouseDown={onMouseDown}
       onMouseMove={handleMouseMove}
