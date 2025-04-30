@@ -1,4 +1,4 @@
-name: Lint and Build
+name: Lint, Build, and Test
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: ['**']
 
 jobs:
-  lint-client:
+  lint-build-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,11 +26,15 @@ jobs:
       - name: Run ESLint
         working-directory: images/psapp/client
         run: npm run lint
-        
-      - name: Client server
+
+      - name: Build client
         working-directory: images/psapp/client
         run: npm run build
-      
+
+      - name: Run Tests
+        working-directory: images/psapp/client
+        run: npm test
+
       - name: Install server dependencies
         working-directory: images/psapp/server
         run: npm install
