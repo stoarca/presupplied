@@ -109,6 +109,7 @@ module.exports = [
       'space-in-parens': ['error', 'never'],
       'switch-colon-spacing': ['error'],
       'yoda': ['error'],
+      'multiline-comment-style': ['error', 'separate-lines'],
     }
   }
 ];

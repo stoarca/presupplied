@@ -10,7 +10,7 @@ import {
   projectPointToLine,
   angleBetweenVectors,
   Point,
-  VariantList,
+  ProbabilisticDeck,
 } from '@src/util';
 
 type T = React.TouchEvent<HTMLElement>;
@@ -162,7 +162,7 @@ export let ModuleBuilder = ({
     let moduleContext = React.useContext(ModuleContext);
 
     let vlist = React.useMemo(
-      () => new VariantList(variants, maxScorePerVariant), []
+      () => new ProbabilisticDeck(variants.map(v => ({ variant: v, millicards: maxScorePerVariant * 1000 })), maxScorePerVariant * 1000), []
     );
     let generateExercise = React.useCallback(() => {
       let variant = vlist.pickVariant();

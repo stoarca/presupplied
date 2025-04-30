@@ -1,13 +1,15 @@
 export interface Point {
-  x: number,
-  y: number,
+  x: number;
+  y: number;
 }
+
 export interface Rect {
-  x: number,
-  y: number,
-  w: number,
-  h: number,
+  x: number;
+  y: number;
+  w: number;
+  h: number;
 }
+
 export interface ViewBox {
   x: number;
   y: number;
@@ -16,10 +18,10 @@ export interface ViewBox {
 }
 
 interface GenRandPointOptions {
-  width?: number,
-  height?: number,
-  paddingFromEdge?: number,
-  farAwayFrom?: { point: Point, dist: number }[],
+  width?: number;
+  height?: number;
+  paddingFromEdge?: number;
+  farAwayFrom?: { point: Point; dist: number }[];
 }
 
 export let genRandPoint = ({
@@ -28,60 +30,63 @@ export let genRandPoint = ({
   paddingFromEdge = 0,
   farAwayFrom = [],
 }: GenRandPointOptions): Point => {
-  let p = paddingFromEdge;
+  const p = paddingFromEdge;
   let ret: Point;
   let i = 0;
   do {
-    i += 1;
-    // TODO: inefficient
+    i++;
     ret = {
       x: p + Math.random() * (width - 2 * p),
       y: p + Math.random() * (height - 2 * p),
     };
-    if (i === 1000) {
-      break;
-    }
+    if (i === 1000) { break; }
   } while (!farAwayFrom.every(x => dist(x.point, ret) > x.dist));
-  return ret;
+  return ret!;
 };
 
 interface GenRandPointsOptions {
-  width?: number,
-  height?: number,
-  paddingFromEdge?: number,
-  paddingFromEachOther?: number,
+  width?: number;
+  height?: number;
+  paddingFromEdge?: number;
+  paddingFromEachOther?: number;
 }
 
-export let genRandPoints = (n: number, {
-  width = window.innerWidth,
-  height = window.innerHeight,
-  paddingFromEdge = 0,
-  paddingFromEachOther = 0,
-}: GenRandPointsOptions): Point[] => {
-  let ret: Point[] = [];
-  for (let i = 0; i < n; ++i) {
-    ret.push(genRandPoint({
-      width: width,
-      height: height,
-      paddingFromEdge: paddingFromEdge,
-      farAwayFrom: ret.map(x => ({ point: x, dist: paddingFromEachOther })),
-    }));
+export let genRandPoints = (
+  n: number,
+  {
+    width = window.innerWidth,
+    height = window.innerHeight,
+    paddingFromEdge = 0,
+    paddingFromEachOther = 0,
+  }: GenRandPointsOptions
+): Point[] => {
+  const ret: Point[] = [];
+  for (let i = 0; i < n; i++) {
+    ret.push(
+      genRandPoint({
+        width,
+        height,
+        paddingFromEdge,
+        farAwayFrom: ret.map(x => ({ point: x, dist: paddingFromEachOther })),
+      })
+    );
   }
   return ret;
 };
 
 interface PickFromBagOptions {
-  withReplacement: boolean,
+  withReplacement: boolean;
 }
 
-export let pickFromBag = <T>(bag: readonly T[], n: number, {
-  withReplacement,
-}: PickFromBagOptions): T[] => {
-  let selected: T[] = [];
-  for (let i = 0; i < n; ++i) {
+export let pickFromBag = <T>(
+  bag: readonly T[],
+  n: number,
+  { withReplacement }: PickFromBagOptions
+): T[] => {
+  const selected: T[] = [];
+  for (let i = 0; i < n; i++) {
     let item = bag[Math.floor(Math.random() * bag.length)];
     if (!withReplacement) {
-      // TODO: inefficient
       while (selected.includes(item)) {
         item = bag[Math.floor(Math.random() * bag.length)];
       }
@@ -91,7 +96,7 @@ export let pickFromBag = <T>(bag: readonly T[], n: number, {
   return selected;
 };
 
-export let shuffle = <T>(arr: T[]) => {
+export let shuffle = <T>(arr: T[]): T[] => {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -99,62 +104,208 @@ export let shuffle = <T>(arr: T[]) => {
   return arr;
 };
 
+/**
+ * ProbabilisticDeck handles selection of variant cards based on their millicards weighting.
+ *
+ * Key concepts and nuances:
+ *
+ * 1. Millicards:
+ *    - 1000 millicards = 1 full card
+ *    - <1000 millicards = partial/probabilistic card
+ *    - ≥1000 millicards = guaranteed card(s)
+ *    - Millicards can be negative (after drawing a partial card)
+ *
+ * 2. Total cards in deck:
+ *    - Calculated as Math.floor(totalMillicards / 1000)
+ *    - Includes both positive and negative millicards in the calculation
+ *
+ * 3. Selection logic:
+ *    - When total guaranteed cards equals total cards in deck, only guaranteed cards are selected
+ *      Example: If there's 1 card in deck and 1 variant with ≥1000 millicards, it must be chosen
+ *    - Otherwise, variants are selected based on their positive millicards weighting
+ *    - Variants with negative millicards are never selected
+ *
+ * 4. Marking success:
+ *    - Always removes exactly 1000 millicards from the selected variant
+ *    - Can result in negative millicards for that variant
+ */
+export class ProbabilisticDeck<T> {
+  variants: readonly { variant: T; millicards: number }[];
+  variantsMap: Map<T, { maxMillicards: number; millicards: number }>;
 
-export class VariantList<T> {
-  variants: readonly T[];
-  variantsMap: Map<T, { maxScore: number, score: number }>;
-  constructor(variants: readonly T[], maxScore: number) {
+  constructor(
+    variants: readonly { variant: T; millicards: number }[],
+    maxMillicardsPerVariant: number
+  ) {
     this.variants = variants;
     this.variantsMap = new Map();
-    for (let i = 0; i < variants.length; ++i) {
-      this.variantsMap.set(variants[i], {
-        maxScore: maxScore,
-        score: 0,
+
+    for (let { variant, millicards } of variants) {
+      const maxMillicards = millicards;
+      this.variantsMap.set(variant, {
+        maxMillicards,
+        millicards,
       });
     }
+
+    this.validateState();
   }
-  remaining(variant: T) {
-    let v = this.variantsMap.get(variant)!;
-    return Math.max(v.maxScore - v.score, 0);
+
+  private getTotalMillicards(): number {
+    return Array.from(this.variantsMap.values()).reduce(
+      (sum, v) => sum + v.millicards,
+      0
+    );
   }
+
+  private validateState(): void {
+    // Calculate totalMillicards first since we need it for both cases
+    const totalMillicards = this.getTotalMillicards();
+    const totalCards = Math.max(0, Math.floor(totalMillicards / 1000));
+    let guaranteedCards = 0;
+
+    for (const data of this.variantsMap.values()) {
+      if (data.millicards >= 1000) {
+        guaranteedCards += Math.floor(data.millicards / 1000);
+      }
+    }
+
+    if (guaranteedCards > totalCards) {
+      throw new Error('Invalid deck state: more guaranteed cards than total cards');
+    }
+  }
+
+  /**
+   * Selects a variant from the deck based on millicards weighting.
+   *
+   * The algorithm works as follows:
+   * 1. Calculate total millicards in the deck (including negative millicards)
+   * 2. If total millicards ≤ 0, there are no cards left to draw
+   * 3. Calculate the total number of whole cards in the deck (totalMillicards / 1000)
+   * 4. Count guaranteed cards (variants with ≥1000 millicards)
+   * 5. If guaranteed cards equals total cards, only select from guaranteed variants
+   *    - This handles cases where there are exactly enough guaranteed cards to account for
+   *      all the whole cards in the deck
+   * 6. Otherwise, select based on proportional positive millicards
+   *    - Only variants with positive millicards are considered
+   *    - Probability is proportional to millicards value
+   *
+   * Examples:
+   * - Deck with -500, 500, 500, 500 millicards:
+   *   - Total millicards = 1000 (1 card)
+   *   - No guaranteed cards
+   *   - Each positive variant has 1/3 chance of selection
+   *
+   * - Deck with -999, 1000, 999 millicards:
+   *   - Total millicards = 1000 (1 card)
+   *   - 1 guaranteed card
+   *   - Must select the variant with 1000 millicards
+   *
+   * @returns The selected variant
+   * @throws Error if no variants are available to pick from
+   */
   pickVariant(): T {
-    let variants = this.variants;
-    let total = sum(Array.from(this.variantsMap.keys()).map(
-      x => this.remaining(x)
-    ));
-    if (total === 0) {
-      return variants[0];
+    const totalMillicards = this.getTotalMillicards();
+    if (totalMillicards <= 0) {
+      throw new Error('No more variants available to pick from');
     }
-    let randIndex = Math.floor(Math.random() * total);
-    let variantIndex = 0;
-    while (randIndex >= this.remaining(variants[variantIndex])) {
-      randIndex -= this.remaining(variants[variantIndex]);
-      variantIndex += 1;
+
+    // Get the total number of whole cards in the deck (round down)
+    const totalCards = Math.floor(totalMillicards / 1000);
+
+    // Identify all guaranteed variant cards (with ≥1000 millicards)
+    const guaranteedVariants: T[] = [];
+    let totalGuaranteedCards = 0;
+
+    for (const [variant, data] of this.variantsMap.entries()) {
+      if (data.millicards >= 1000) {
+        // Count how many whole cards this variant has
+        const wholeCards = Math.floor(data.millicards / 1000);
+        totalGuaranteedCards += wholeCards;
+
+        // Add the variant to our guaranteed list (multiple times if it has multiple cards)
+        for (let i = 0; i < wholeCards; i++) {
+          guaranteedVariants.push(variant);
+        }
+      }
     }
-    return variants[variantIndex];
+
+    // If the number of guaranteed cards equals the total number of cards in the deck,
+    // then we must select one of those guaranteed cards
+    if (totalGuaranteedCards === totalCards && totalCards > 0) {
+      // Randomly select one of the guaranteed variants
+      const randomIndex = Math.floor(Math.random() * guaranteedVariants.length);
+      return guaranteedVariants[randomIndex];
+    }
+
+    // Otherwise, select variants based on their positive millicards weighting
+    let totalPositiveMillicards = 0;
+    for (const data of this.variantsMap.values()) {
+      if (data.millicards > 0) {
+        totalPositiveMillicards += data.millicards;
+      }
+    }
+
+    // The probability of drawing any variant is proportional to its positive millicards
+    let r = Math.random() * totalPositiveMillicards;
+    for (const [variant, data] of this.variantsMap.entries()) {
+      if (data.millicards > 0) {
+        r -= data.millicards;
+        if (r <= 0) {
+          return variant;
+        }
+      }
+    }
+
+    // If we get here, something went wrong with our calculation
+    throw new Error('No more variants available to pick from');
   }
+
   markSuccess(variant: T) {
-    this.variantsMap.get(variant)!.score += 1;
+    const variantData = this.variantsMap.get(variant)!;
+
+    if (variantData.millicards <= 0) {
+      throw new Error('Cannot mark success on a variant with 0 or negative millicards');
+    }
+
+    variantData.millicards -= 1000;
+
+    this.validateState();
   }
+
   markFailure(variant: T) {
-    let val = this.variantsMap.get(variant)!;
-    val.score = -1;
+    const variantData = this.variantsMap.get(variant)!;
+    variantData.millicards = variantData.maxMillicards;
+    this.validateState();
   }
-  score() {
-    return sum(Array.from(this.variantsMap.values()).map(x => x.score));
+
+  remaining(variant: T): number {
+    // If total deck millicards is 0 or negative, everything is empty
+    if (this.getTotalMillicards() <= 0) {
+      return 0;
+    }
+
+    const v = this.variantsMap.get(variant)!;
+    return Math.max(0, v.millicards);
   }
-  maxScore() {
-    return sum(Array.from(this.variantsMap.values()).map(x => x.maxScore));
+
+  // Calculate total millicards removed from the deck
+  score(): number {
+    // Sum of all millicards removed
+    const removed = Array.from(this.variantsMap.values()).reduce(
+      (sum, v) => sum + (v.maxMillicards - v.millicards),
+      0
+    );
+    return removed;
+  }
+
+  maxScore(): number {
+    return Array.from(this.variantsMap.values()).reduce(
+      (sum, v) => sum + v.maxMillicards,
+      0
+    );
   }
 }
-
-let exerciseId = 0;
-export let buildExercise = <T>(exercise: T): T & { id: number } => {
-  return {
-    id: exerciseId++,
-    ...exercise,
-  };
-};
 
 export let pointInRect = (p: Point, r: Rect) => {
   return p.x >= r.x && p.x < r.x + r.w && p.y >= r.y && p.y < r.y + r.h;
@@ -202,7 +353,7 @@ export let dist = (a: Point, b: Point): number => {
   return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 };
 export let diff = (a: Point, b: Point): Point => {
-  return { x: a.x - b.x, y: a.y - b.y };
+  return { x: a.x - b.x, y: b.y - a.y };
 };
 
 export let midpoint = (a: Point, b: Point) => {
@@ -270,7 +421,7 @@ export let pixelToViewBoxDist = (
 };
 
 export let pixelToViewBoxPos = (
-  pixelCoord: Point, viewBox: ViewBox, pixelBox: DOMRect
+  pixelCoord: Point, viewBox: ViewBox, pixelBox: MyDomRect
 ): Point => {
   let ret = pixelToViewBoxDist(pixelCoord, viewBox, pixelBox);
   return {
@@ -388,7 +539,6 @@ export let withAbort = async <T>(fn: () => Promise<T>, signal: AbortSignal): Pro
     return null;
   }
   return result;
-
 };
 
 export let mapObject = <T, U>(

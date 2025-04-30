@@ -2,7 +2,7 @@ import React from 'react';
 
 import {useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-import {VariantList} from '@src/util';
+import {ProbabilisticDeck} from '@src/util';
 import {STTModule} from '@src/modules/common/SPEECH_TO_TEXT_SHIM/ModuleBuilder';
 
 export type Variant = () => string;
@@ -26,7 +26,7 @@ export let ModuleBuilder = ({
     let moduleContext = React.useContext(ModuleContext);
 
     let vlist = React.useMemo(
-      () => new VariantList(variants, maxScorePerVariant), []
+      () => new ProbabilisticDeck(variants.map(v => ({ variant: v, millicards: maxScorePerVariant * 1000 })), maxScorePerVariant * 1000), []
     );
     let generateExercise = React.useCallback(() => {
       let variant = vlist.pickVariant();

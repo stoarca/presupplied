@@ -2,7 +2,7 @@ import React from 'react';
 
 import {useExercise, useTrainingDataRecorder, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-import {VariantList, withAbort} from '@src/util';
+import {ProbabilisticDeck, withAbort} from '@src/util';
 import {STTModule} from '@src/modules/common/SPEECH_TO_TEXT_SHIM/ModuleBuilder';
 import {LETTER_SOUNDS, BIGRAM_SOUNDS} from '@src/modules/common/READING/util';
 
@@ -55,7 +55,7 @@ export let ModuleBuilder = ({
     });
   }, [variants]);
 
-  let vlist = React.useMemo(() => new VariantList(variants, maxScorePerVariant), []);
+  let vlist = React.useMemo(() => new ProbabilisticDeck(variants.map(v => ({ variant: v, millicards: maxScorePerVariant * 1000 })), maxScorePerVariant * 1000), []);
   let generateExercise = React.useCallback(() => {
     let variant = vlist.pickVariant();
     if (!admin) {

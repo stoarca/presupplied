@@ -3,7 +3,7 @@ import React from 'react';
 import {ChoiceSelector} from '@src/ChoiceSelector';
 import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-import {VariantList} from '@src/util';
+import {ProbabilisticDeck} from '@src/util';
 
 import {youAlreadyDidThatOne} from '@modules/common/sounds';
 
@@ -50,7 +50,7 @@ export let ModuleBuilder = ({
     let moduleContext = React.useContext(ModuleContext);
 
     let vlist = React.useMemo(
-      () => new VariantList(variants, maxScorePerVariant), []
+      () => new ProbabilisticDeck(variants.map(v => ({ variant: v, millicards: maxScorePerVariant * 1000 })), maxScorePerVariant * 1000), []
     );
     let generateExercise = React.useCallback(() => {
       let variant = vlist.pickVariant();

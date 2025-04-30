@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-import {VariantList, PRONUNCIATIONS} from '@src/util';
+import {ProbabilisticDeck, PRONUNCIATIONS} from '@src/util';
 
 import {goodDing, tooSlow} from '@modules/common/sounds';
 
@@ -25,7 +25,7 @@ export let ModuleBuilder = ({
   return (props: void) => {
     let moduleContext = React.useContext(ModuleContext);
 
-    let vlist = React.useMemo(() => new VariantList(variants, 3), []);
+    let vlist = React.useMemo(() => new ProbabilisticDeck(variants.map(v => ({ variant: v, millicards: 3000 })), 3000), []);
     let generateExercise = React.useCallback(() => {
       return {
         variant: vlist.pickVariant(),

@@ -2,7 +2,12 @@ import React from 'react';
 
 import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-import {VariantList, Point, genRandPoints, pickFromBag} from '@src/util';
+import {
+  ProbabilisticDeck,
+  Point,
+  genRandPoints,
+  pickFromBag
+} from '@src/util';
 import {
   VisualFractionType, VisualFractionTypes, VisualFraction
 } from '@src/VisualFraction';
@@ -39,7 +44,7 @@ let denomMap: {[key: Variant]: string} = {
 export default (props: void) => {
   let moduleContext = React.useContext(ModuleContext);
 
-  let vlist = React.useMemo(() => new VariantList(VARIANTS, 5), []);
+  let vlist = React.useMemo(() => new ProbabilisticDeck(VARIANTS.map(v => ({ variant: v, millicards: 5000 })), 5000), []);
   let generateExercise = React.useCallback(() => {
     let positions = genRandPoints(3, {
       paddingFromEdge: 100,

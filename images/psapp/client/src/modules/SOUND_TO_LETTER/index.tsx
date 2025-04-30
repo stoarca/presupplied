@@ -4,7 +4,7 @@ import React from 'react';
 import {ChoiceSelector} from '@src/ChoiceSelector';
 import {Module, useExercise, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-import {VariantList} from '@src/util';
+import {ProbabilisticDeck} from '@src/util';
 import {LETTER_SOUNDS} from '@src/modules/common/READING/util';
 
 import whichLetter from './which_letter.wav';
@@ -60,7 +60,7 @@ let VARIANTS: Variant[] = Object.keys(soundToLetters) as Variant[];
 export default (props: void) => {
   let moduleContext = React.useContext(ModuleContext);
 
-  let vlist = React.useMemo(() => new VariantList(VARIANTS, 2), []);
+  let vlist = React.useMemo(() => new ProbabilisticDeck(VARIANTS.map(v => ({ variant: v, millicards: 2000 })), 2000), []);
   let generateExercise = React.useCallback(() => {
     return {
       variant: vlist.pickVariant(),

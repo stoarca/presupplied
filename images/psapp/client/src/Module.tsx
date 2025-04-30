@@ -2,7 +2,7 @@ import React from 'react';
 
 import {ModuleContext} from '@src/ModuleContext';
 import {useStudentContext} from '@src/StudentContext';
-import {VariantList} from '@src/util';
+import {ProbabilisticDeck} from '@src/util';
 import {
   ProgressStatus, InputTrainingEvent, TrainingEvent
 } from '../../common/types';
@@ -21,7 +21,7 @@ interface UseExerciseOptions<E extends Ex<V>, V, P> {
   initialPartial: () => P,
   onPlayInstructions: (exercise: E) => Promise<void> | void,
   playOnEveryExercise: boolean,
-  vlist: VariantList<V>,
+  vlist: ProbabilisticDeck<V>,
 }
 
 export interface DoSuccessProps {
@@ -317,7 +317,8 @@ export let Module: React.FC<ModuleProps> = (props) => {
 
   let {win, doWin} = useWin();
   React.useEffect(() => {
-    if (score === maxScore) {
+    // Using >= instead of === to account for potential small discrepancies in millicards
+    if (score >= maxScore) {
       doWin();
     }
   }, [score, maxScore, doWin]);
@@ -344,7 +345,7 @@ export let Module: React.FC<ModuleProps> = (props) => {
   } else {
     scoreEl = (
       <div style={scoreStyle}>
-        Score: {score} / {maxScore}
+        Score: {Math.floor(score / 1000)} / {Math.floor(maxScore / 1000)}
       </div>
     );
   }
