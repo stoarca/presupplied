@@ -14,31 +14,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: '20' # make sure this matches your local version
+          bun-version: latest
 
       - name: Navigate to client and install dependencies
         working-directory: images/psapp/client
-        run: npm install
+        run: bun install --frozen-lockfile
 
       - name: Run ESLint
         working-directory: images/psapp/client
-        run: npm run lint
+        run: bun run lint
 
       - name: Build client
         working-directory: images/psapp/client
-        run: npm run build
+        run: bun run build
 
       - name: Run Tests
         working-directory: images/psapp/client
-        run: npm test
+        run: bun test
 
       - name: Install server dependencies
         working-directory: images/psapp/server
-        run: npm install
+        run: bun install --frozen-lockfile
 
-      - name: Build server
+      - name: Verify server build
         working-directory: images/psapp/server
-        run: npm run build
+        run: bun run verifyBuild

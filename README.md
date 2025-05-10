@@ -41,6 +41,12 @@ git clone https://github.com/stoarca/presupplied.git
 cd presupplied
 ```
 
+Make sure you have Bun installed. If not, install it:
+
+```
+curl -fsSL https://bun.sh/install | bash
+```
+
 Then, generate some self-signed certs to enable https:
 
 ```

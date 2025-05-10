@@ -10,7 +10,8 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 
-import { Student } from './Student';
+// Import type only to avoid circular dependency
+import type { Student } from './Student';
 import { Module } from './Module';
 import { StudentProgressVideo } from './StudentProgressVideo';
 import { ProgressStatus } from '../../../common/types';
@@ -33,7 +34,7 @@ export class StudentProgress {
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  @ManyToOne(() => Student, (student) => student.progress)
+  @ManyToOne('Student', 'progress')
   student: Student;
 
   @ManyToOne(() => Module)

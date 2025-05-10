@@ -29,7 +29,7 @@ This document provides a high-level overview of the presupplied.com codebase, wh
 The core application using a client-server architecture:
 
 ##### Client (`/images/psapp/client`)
-- React-based frontend using TypeScript
+- React-based frontend using TypeScript and Bun
 - Uses Material-UI for styling
 - Main index.tsx provides the application routes
 - Module system for different educational components
@@ -53,7 +53,7 @@ The core application using a client-server architecture:
   - **util.ts**: Utility functions
 
 ##### Server (`/images/psapp/server`)
-- Express-based backend using TypeScript and TypeORM
+- Express-based backend using TypeScript, Bun, and TypeORM
 - Handles API requests, authentication, and database access
 - Serves static files and proxies TTS service
 
@@ -140,18 +140,18 @@ When making changes to this codebase:
 ## Testing
 
 ### Running Tests
-The project uses Jest for testing client-side code. Tests are located in `images/psapp/client/src/__tests__/` directory.
+The project uses Bun's test runner for testing client-side code. Tests are located in `images/psapp/client/src/__tests__/` directory.
 
 To run tests:
 1. Make sure the application containers are running (`./run.sh`)
 2. Execute tests in the Docker container:
    ```bash
-   docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/client && npm test"
+   docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/client && bun test"
    ```
 
 For running tests with coverage:
 ```bash
-docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/client && npm test -- --coverage"
+docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/client && bun test --coverage"
 ```
 
 Test files should follow the naming pattern `*.test.ts` or `*.test.tsx`.
@@ -159,7 +159,7 @@ Test files should follow the naming pattern `*.test.ts` or `*.test.tsx`.
 ### Linting
 The project uses ESLint for code quality checks:
 ```bash
-docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/client && npm run lint"
+docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/client && bun run lint"
 ```
 
 ## Knowledge Map
