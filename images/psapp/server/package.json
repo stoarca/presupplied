@@ -6,7 +6,7 @@
   "scripts": {
     "start": "bun src/index.ts",
     "dev": "bun --watch src/index.ts",
-    "build": "bun build --target=bun ./src/index.ts --outdir ./dist",
+    "verifyBuild": "tsc --noEmit",
     "migration:generate": "cd src/migration && bun typeorm migration:generate -d ../data-source.ts",
     "migration:run": "bun typeorm migration:run -d src/data-source.ts --transaction each",
     "migration:revert": "bun typeorm migration:revert -d src/data-source.ts --transaction each",
@@ -16,11 +16,14 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.1533.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "express": "^4.18.2",
     "express-http-proxy": "^1.6.3",
     "jsonwebtoken": "^9.0.2",
+    "mock-aws-s3": "^4.0.2",
+    "nock": "^13.5.0",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.3.17",

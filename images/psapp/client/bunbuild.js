@@ -11,8 +11,8 @@ const generateModulesList = () => {
   const modulesDir = join(import.meta.dir, 'src/modules');
   const files = readdirSync(modulesDir);
   const moduleNames = files
-    .map(f => basename(f))
-    .filter(f => f !== 'common');
+      .map(f => basename(f))
+      .filter(f => f !== 'common');
 
   const json = JSON.stringify(moduleNames);
   writeFileSync(
