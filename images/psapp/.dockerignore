@@ -1,0 +1,30 @@
+# Node modules and Bun dependencies
+node_modules
+**/node_modules
+.bun
+
+# Development and build artifacts
+**/*.log
+**/.DS_Store
+**/dist
+**/build
+**/coverage
+
+# Git-related files
+.git
+.gitignore
+.github
+
+# Editor-specific files
+.idea
+.vscode
+**/*.swp
+**/*.swo
+
+# Docker-related files
+Dockerfile
+.dockerignore
+
+# Temporary files
+**/temp
+**/tmp

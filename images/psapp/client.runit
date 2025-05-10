@@ -4,5 +4,5 @@ set -eu -o pipefail
 
 cd /presupplied/images/psapp/client
 if [ "$NODE_ENV" == "development" ]; then
-  exec npm run dev
+  exec bun run dev
 fi

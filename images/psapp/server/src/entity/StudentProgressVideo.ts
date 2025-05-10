@@ -8,7 +8,8 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 
-import { StudentProgress } from './StudentProgress';
+// Import for type only
+import type { StudentProgress } from './StudentProgress';
 import { ProgressVideoStatus } from '../../../common/types';
 
 interface StudentProgressVideoParams {
@@ -29,7 +30,8 @@ export class StudentProgressVideo {
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  @ManyToOne(() => StudentProgress, (studentProgress) => studentProgress.videos)
+  // Use string literal to avoid circular dependency in runtime
+  @ManyToOne('StudentProgress', 'videos')
   studentProgress: StudentProgress;
 
   @Column()

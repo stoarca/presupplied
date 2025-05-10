@@ -1,26 +1,26 @@
 FROM phusion/baseimage:jammy-1.0.1
 
-RUN apt-get update && apt-get install -yq ca-certificates curl gnupg
-RUN mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-    apt-get update && \
-    apt-get install -yq nodejs
+RUN apt-get update && apt-get install -yq ca-certificates curl gnupg unzip
+RUN curl -fsSL https://bun.sh/install | bash && \
+    ln -s /root/.bun/bin/bun /usr/local/bin/bun
 
-COPY ./client/package.json ./client/package-lock.json /presupplied/images/psapp/client/
-RUN cd /presupplied/images/psapp/client && npm ci
+# Fix for Git dependencies in Bun
+ENV GIT_DISCOVERY_ACROSS_FILESYSTEM=1
 
-COPY ./server/package.json ./server/package-lock.json /presupplied/images/psapp/server/
-RUN cd /presupplied/images/psapp/server && npm ci
+COPY ./client/package.json ./client/bun.lock /presupplied/images/psapp/client/
+RUN cd /presupplied/images/psapp/client && bun install --frozen-lockfile
+
+COPY ./server/package.json ./server/bun.lock /presupplied/images/psapp/server/
+RUN cd /presupplied/images/psapp/server && bun install --frozen-lockfile
 
 COPY . /presupplied/images/psapp
-RUN cd /presupplied/images/psapp/client/ && npm run build
+RUN cd /presupplied/images/psapp/client/ && bun run build
 
-COPY ./client_npm_ci.sh /etc/my_init.d/50_client_npm_ci.sh
-RUN chmod 755 /etc/my_init.d/50_client_npm_ci.sh
+COPY ./client_bun_install.sh /etc/my_init.d/50_client_bun_install.sh
+RUN chmod 755 /etc/my_init.d/50_client_bun_install.sh
 
-COPY ./server_npm_ci.sh /etc/my_init.d/51_server_npm_ci.sh
-RUN chmod 755 /etc/my_init.d/51_server_npm_ci.sh
+COPY ./server_bun_install.sh /etc/my_init.d/51_server_bun_install.sh
+RUN chmod 755 /etc/my_init.d/51_server_bun_install.sh
 
 COPY ./client.runit /etc/service/client/run
 RUN chmod 755 /etc/service/client/run

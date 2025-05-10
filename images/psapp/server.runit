@@ -3,9 +3,9 @@
 set -eu -o pipefail
 
 cd /presupplied/images/psapp/server
-npm run migration:run
+bun run migration:run
 if [ "$NODE_ENV" == "development" ]; then
-  exec npm run dev
+  exec bun run dev
 else
-  exec npm start
+  exec bun start
 fi

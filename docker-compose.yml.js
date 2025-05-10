@@ -1,5 +1,5 @@
-let fs = require('fs');
-let path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 if (process.argv.length < 3) {
   console.error('Must provide argument of either "dev" or "prod"');
@@ -63,6 +63,7 @@ let config = {
       ] : []),
       environment: {
         NODE_ENV: DEV ? 'development' : 'production',
+        BUN_ENV: DEV ? 'development' : 'production',
         POSTGRES_CONNECTION_HOST: 'pspostgres',
         POSTGRES_CONNECTION_DB: 'presupplied',
         POSTGRES_CONNECTION_USER: 'presupplied',

@@ -8,7 +8,8 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 
-import { StudentProgress } from './StudentProgress';
+// Use type import to avoid circular dependency
+import type { StudentProgress } from './StudentProgress';
 
 interface StudentParams {
   name: string;
@@ -38,8 +39,8 @@ export class Student {
   hashed: string;
 
   @OneToMany(
-    () => StudentProgress,
-    (studentProgress) => studentProgress.student
+    'StudentProgress',
+    'student'
   )
   progress!: StudentProgress[];
 
