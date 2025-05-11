@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {ModuleContext} from '@src/ModuleContext';
-import {useStudentContext} from '@src/StudentContext';
+import {useUserContext} from '@src/UserContext';
 import {ProbabilisticDeck} from '@src/util';
 import {
   ProgressStatus, InputTrainingEvent, TrainingEvent
@@ -252,7 +252,7 @@ export let useExercise = <E extends Ex<V>, V, P>({
 };
 
 export let useWin = () => {
-  let student = useStudentContext();
+  let user = useUserContext();
 
   let [win, setWin] = React.useState(false);
 
@@ -260,11 +260,11 @@ export let useWin = () => {
     setWin(true);
     (async () => {
       let kmid = window.location.href.match(/modules\/(.*)/)![1];
-      await student.markReached({[kmid]: ProgressStatus.PASSED});
+      await user.markReached({[kmid]: ProgressStatus.PASSED});
       await new Promise(r => setTimeout(r, 2000));
       window.location.href = '/?scroll=' + kmid;
     })();
-  }, [student]);
+  }, [user]);
 
   let element;
   if (win) {

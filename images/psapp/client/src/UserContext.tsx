@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  StudentDTO,
+  UserDTO,
   KNOWLEDGE_MAP,
   KMId,
   ProgressStatus,
@@ -12,9 +12,9 @@ import { typedFetch, API_HOST } from './typedFetch';
 import { typedLocalStorage } from './typedLocalStorage';
 import { mapObject } from './util';
 
-export class Student {
-  dto: StudentDTO | null;
-  constructor(dto: StudentDTO | null) {
+export class User {
+  dto: UserDTO | null;
+  constructor(dto: UserDTO | null) {
     this.dto = dto;
   }
 
@@ -65,7 +65,7 @@ export class Student {
     }
   }
 
-  async markReached(modules: Record<KMId, ProgressStatus>) {
+  async markReached(modules: Record<KMId, ProgressStatus>, onBehalfOfStudentId?: number) {
     if (this.dto) {
       await typedFetch({
         host: API_HOST,
@@ -81,6 +81,7 @@ export class Student {
               }],
             }];
           }),
+          onBehalfOfStudentId
         },
       });
     } else {
@@ -107,7 +108,8 @@ export class Student {
   }
 
   async markWatched(
-    moduleVideos: Record<KMId, Record<string, ProgressVideoStatus>>
+    moduleVideos: Record<KMId, Record<string, ProgressVideoStatus>>,
+    onBehalfOfStudentId?: number
   ) {
     if (this.dto) {
       await typedFetch({
@@ -117,6 +119,7 @@ export class Student {
         body: {
           type: 'video',
           moduleVideos: moduleVideos,
+          onBehalfOfStudentId
         },
       });
     } else {
@@ -181,12 +184,12 @@ export class Student {
   }
 }
 
-export let StudentContext = React.createContext<Student | null>(null);
+export let UserContext = React.createContext<User | null>(null);
 
-export let useStudentContext = () => {
-  let studentContext = React.useContext(StudentContext);
-  if (!studentContext) {
-    throw new Error('Module needs to be inside a StudentContextProvider');
+export let useUserContext = () => {
+  let userContext = React.useContext(UserContext);
+  if (!userContext) {
+    throw new Error('Component needs to be inside a UserContextProvider');
   }
-  return studentContext;
+  return userContext;
 };

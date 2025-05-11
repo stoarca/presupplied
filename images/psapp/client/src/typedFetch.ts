@@ -114,9 +114,5 @@ export async function typedFetch<K extends keyof Endpoints, M extends keyof Endp
     body: request.body ? JSON.stringify(request.body) : undefined,
   });
 
-  if (!response.ok) {
-    throw new Error(`Request failed with status: ${response.status}`);
-  }
-
   return response.json() as Promise<Response<K, M>>;
 }

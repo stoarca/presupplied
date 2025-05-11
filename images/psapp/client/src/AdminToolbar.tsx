@@ -59,12 +59,16 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
   let [tempForTeachers, setTempForTeachers] = React.useState(
     Boolean(node.forTeachers)
   );
+  let [tempOnBehalfOfStudent, setTempOnBehalfOfStudent] = React.useState(
+    Boolean(node.onBehalfOfStudent)
+  );
   React.useEffect(() => {
     setTempTitle(node.title);
     setTempDesc(node.description);
     setTempStudentVids(mapToMdLinks(node.studentVideos));
     setTempTeacherVids(mapToMdLinks(node.teacherVideos));
     setTempForTeachers(Boolean(node.forTeachers));
+    setTempOnBehalfOfStudent(Boolean(node.onBehalfOfStudent));
   }, [node]);
   React.useEffect(() => {
     setTempId(kmid);
@@ -90,6 +94,10 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
   }, []);
   let handleChangeForTeachers = React.useCallback((e: CI) => {
     setTempForTeachers(e.target.checked);
+  }, []);
+
+  let handleChangeOnBehalfOfStudent = React.useCallback((e: CI) => {
+    setTempOnBehalfOfStudent(e.target.checked);
   }, []);
 
   let handleSubmit = React.useCallback((e: React.MouseEvent<HTMLFormElement>) => {
@@ -124,6 +132,7 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
       studentVideos: newStudentVids,
       teacherVideos: newTeacherVids,
       forTeachers: tempForTeachers,
+      onBehalfOfStudent: tempOnBehalfOfStudent,
     });
   }, [
     kmid,
@@ -133,6 +142,7 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
     tempStudentVids,
     tempTeacherVids,
     tempForTeachers,
+    tempOnBehalfOfStudent,
     props.onChangeNode,
   ]);
 
@@ -201,6 +211,16 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
               checked={tempForTeachers} />
           </label>
         </div>
+        {tempForTeachers && (
+          <div>
+            <label>
+              This module is completed by the teacher/parent on behalf of the student (progress is tracked in student's account).
+              <input type="checkbox"
+                onChange={handleChangeOnBehalfOfStudent}
+                checked={tempOnBehalfOfStudent} />
+            </label>
+          </div>
+        )}
         <div>
           <button type="submit">Apply</button>
         </div>

@@ -10,7 +10,7 @@ import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
 
 import {moduleComponents} from './ModuleContext';
-import {useStudentContext} from './StudentContext';
+import {useUserContext} from './UserContext';
 import {PanZoomSvg, PanZoomSvgProps} from './PanZoomSvg';
 import {buildGraph, TechTree} from './dependency-graph';
 import {AdminToolbar} from './AdminToolbar';
@@ -863,7 +863,7 @@ let StudentKnowledgeMap = ({
   selectedCells,
   setSelectedCells,
 }: StudentKnowledgeMapProps) => {
-  let student = useStudentContext();
+  let student = useUserContext();
 
   let [reached, setReached] = React.useState(new Set<string>(
     Object.entries(student.progress()).filter(

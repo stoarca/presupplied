@@ -13,13 +13,14 @@ import {moduleComponents} from './ModuleContext';
 import {KnowledgeMap} from './KnowledgeMap';
 import {Login} from './pages/Login';
 import {Register} from './pages/Register';
-import {Student, StudentContext} from './StudentContext';
+import {User, UserContext} from './UserContext';
 import {typedFetch, API_HOST} from './typedFetch';
-import { ParentHomePage } from './pages/ParentHomePage';
-import { ChildHomePage } from './pages/ChildHomePage';
+import { HomePage } from './pages/HomePage';
+import { Debug } from './pages/Debug';
+import { OnboardingManager } from './components/OnboardingManager';
 
 interface AppProps {
-  student: Student;
+  user: User;
 };
 const defaultTheme = createTheme();
 let App = (props: AppProps) => {
@@ -28,39 +29,42 @@ let App = (props: AppProps) => {
   });
 
   return (
-    <StudentContext.Provider value={props.student}>
+    <UserContext.Provider value={props.user}>
       <CssBaseline/>
       <ThemeProvider theme={defaultTheme}>
         <Router>
           <React.Suspense fallback={'loading...'}>
-            <Routes>
-              <Route path="/">
-                <Route index element={<ParentHomePage/>}/>
-                <Route path="child" element={<ChildHomePage/>}/>
-                <Route path="map" element={<KnowledgeMap/>}/>
-                <Route path="login" element={<Login/>}/>
-                <Route path="register" element={<Register/>}/>
-                <Route path="modules">
-                  {moduleRoutes}
-                  <Route path="*" element={<div>module not found</div>}/>
+            <OnboardingManager>
+              <Routes>
+                <Route path="/">
+                  <Route index element={<HomePage/>}/>
+                  <Route path="map" element={<KnowledgeMap/>}/>
+                  <Route path="login" element={<Login/>}/>
+                  <Route path="register" element={<Register/>}/>
+                  <Route path="debug" element={<Debug/>}/>
+                  <Route path="modules">
+                    {moduleRoutes}
+                    <Route path="*" element={<div>module not found</div>}/>
+                  </Route>
+                  <Route path="*" element={<div>page not found</div>}/>
                 </Route>
-                <Route path="*" element={<div>page not found</div>}/>
-              </Route>
-            </Routes>
+              </Routes>
+            </OnboardingManager>
           </React.Suspense>
         </Router>
       </ThemeProvider>
-    </StudentContext.Provider>
+    </UserContext.Provider>
   );
 };
+
 
 (async () => {
   let resp = await typedFetch({
     host: API_HOST,
-    endpoint: '/api/student',
+    endpoint: '/api/user',
     method: 'get',
   });
-  let student = new Student(resp.student);
+  let user = new User(resp.user);
   let root = createRoot(document.getElementById('content')!);
-  root.render(<App student={student}/>);
+  root.render(<App user={user}/>);
 })();

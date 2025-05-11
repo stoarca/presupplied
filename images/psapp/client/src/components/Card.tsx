@@ -3,7 +3,7 @@ import { Button, Grid, Modal } from '@mui/material';
 import React, { CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { KNOWLEDGE_MAP, ProgressVideoStatus } from '../../../common/types';
-import { Student } from '../StudentContext';
+import { User } from '../UserContext';
 import { LiveTv as MovieIcon } from '@mui/icons-material';
 import { buildGraph } from '@src/dependency-graph';
 import YouTube, { YouTubeEvent, YouTubeProps } from 'react-youtube';
@@ -80,11 +80,11 @@ let VideoModal = ({
 
 interface CardProps {
     kmid: string;
-    student: Student;
+    user: User;
     style?: CSSProperties;
 };
 
-export let Card = ({ kmid, student, style }: CardProps) => {
+export let Card = ({ kmid, user, style }: CardProps) => {
   let node = React.useMemo(() => knowledgeGraph.getNodeData(kmid), [kmid]);
   let navigate = useNavigate();
   let [showModal, setShowModal] = React.useState(false);
@@ -92,7 +92,7 @@ export let Card = ({ kmid, student, style }: CardProps) => {
   let [youtubeUrl, setYoutubeUrl] = React.useState('');
   let _showVideo = React.useCallback(async (masteryIfAllWatched: boolean) => {
     let videos = node.forTeachers ? node.teacherVideos : node.studentVideos;
-    let watchedVideos = await student.videos(kmid);
+    let watchedVideos = await user.videos(kmid);
     setShowModal(true);
     console.log('in here');
     console.log(videos);
@@ -111,7 +111,7 @@ export let Card = ({ kmid, student, style }: CardProps) => {
       setYoutubeUrl(videos[0].url);
       setVideoVanityId(videos[0].id);
     }
-  }, [kmid, node, student, navigate]);
+  }, [kmid, node, user, navigate]);
   let showVideo = React.useCallback(() => {
     return _showVideo(false);
   }, [_showVideo]);
@@ -119,13 +119,13 @@ export let Card = ({ kmid, student, style }: CardProps) => {
     return _showVideo(true);
   }, [_showVideo]);
   let handleDoneVideo = React.useCallback(async () => {
-    await student.markWatched({
+    await user.markWatched({
       [kmid]: {
         [videoVanityId]: ProgressVideoStatus.WATCHED,
       },
     });
     setShowModal(false);
-  }, [kmid, student, videoVanityId]);
+  }, [kmid, user, videoVanityId]);
   const innerStyle: CSSProperties = {
 
     display: 'flex',

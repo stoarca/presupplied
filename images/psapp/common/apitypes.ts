@@ -6,7 +6,10 @@ import {
   ProgressVideoStatus,
   KMId,
   Omit,
-  TrainingEvent
+  TrainingEvent,
+  UserType,
+  UserDTO,
+  RelationshipType
 } from './types';
 
 type AudioResponse = any; // TODO figure out what type this is
@@ -30,6 +33,7 @@ export type Endpoints = {
         email: string,
         name: string,
         password: string,
+        type: UserType,
       },
       Response: {
         errorCode: 'auth.register.email.invalid',
@@ -60,6 +64,9 @@ export type Endpoints = {
         errorCode: 'auth.login.password.invalid',
         message: string,
       } | {
+        errorCode: 'auth.login.password.notset',
+        message: string,
+      } | {
         success: true,
       },
     },
@@ -74,13 +81,69 @@ export type Endpoints = {
       },
     },
   },
-  '/api/student': {
+  '/api/user': {
     'get': {
       Params: never,
       Query: never,
       Body: never,
       Response: {
-        student: StudentDTO | null,
+        user: UserDTO | null,
+      },
+    },
+  },
+  '/api/user/switch': {
+    'post': {
+      Params: never,
+      Query: never,
+      Body: {
+        targetId: string,
+        pin?: string,
+      },
+      Response: {
+        success: true,
+      } | {
+        errorCode: 'user.switch.notLoggedIn',
+        message: string,
+      } | {
+        errorCode: 'user.switch.invalidUser',
+        message: string,
+      } | {
+        errorCode: 'user.switch.invalidPin',
+        message: string,
+      } | {
+        errorCode: 'user.switch.notRelated',
+        message: string,
+      } | {
+        errorCode: 'user.switch.notParentOrTeacher',
+        message: string,
+      },
+    },
+  },
+  '/api/user/children': {
+    'post': {
+      Params: never,
+      Query: never,
+      Body: {
+        name: string,
+        pinRequired?: boolean,
+        pin?: string,
+        profilePicture?: {
+          image: string,
+          background: string
+        },
+      },
+      Response: {
+        success: true,
+        childId: number,
+      } | {
+        errorCode: 'user.children.notLoggedIn',
+        message: string,
+      } | {
+        errorCode: 'user.children.notParentOrTeacher',
+        message: string,
+      } | {
+        errorCode: 'user.children.creationFailed',
+        message: string,
       },
     },
   },
@@ -117,9 +180,11 @@ export type Endpoints = {
         modules: {
           [K in KMId]: Omit<StudentProgressDTOEntry, 'status'>
         },
+        onBehalfOfStudentId?: number,
       } | {
         type: 'video',
         moduleVideos: StudentProgressVideoDTO,
+        onBehalfOfStudentId?: number,
       },
       Response: {
         errorCode: 'learning.event.noLogin',
@@ -131,6 +196,16 @@ export type Endpoints = {
       } | {
         errorCode: 'learning.event.noStudent',
         email: string,
+        message: string,
+      } | {
+        errorCode: 'learning.event.missingStudentId',
+        message: string,
+        moduleId: string,
+      } | {
+        errorCode: 'learning.event.noUser',
+        message: string,
+      } | {
+        errorCode: 'learning.event.unauthorized',
         message: string,
       } | {
         success: true,
@@ -152,6 +227,43 @@ export type Endpoints = {
         message: string,
       } | {
         success: true,
+      },
+    },
+  },
+  '/api/test/get-user-info': {
+    'post': {
+      Params: never,
+      Query: never,
+      Body: {
+        email: string,
+      },
+      Response: {
+        errorCode: 'test.notTestAccount',
+        message: string,
+      } | {
+        errorCode: 'test.userNotFound', 
+        message: string,
+      } | {
+        success: true,
+        user: UserDTO,
+        children?: Array<{
+          id: number,
+          name: string,
+          email: string,
+          type: UserType,
+          pinRequired: boolean,
+        }>,
+      },
+    },
+  },
+  '/api/test/delete-test-accounts': {
+    'post': {
+      Params: never,
+      Query: never,
+      Body: {},
+      Response: {
+        success: true,
+        deletedCount: number,
       },
     },
   },
@@ -190,4 +302,3 @@ type Test = CheckExtends<Endpoints, {
 }>;
 
 export let verifyApiTypes: Test;
-

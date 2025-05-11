@@ -28,14 +28,14 @@ export class Student {
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  @Column()
+  @Column({ type: 'varchar' })
   name: string;
 
   @Index({unique: true})
-  @Column()
+  @Column({ type: 'varchar' })
   email: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   hashed: string;
 
   @OneToMany(
@@ -50,4 +50,3 @@ export class Student {
     this.hashed = params.hashed;
   }
 }
-

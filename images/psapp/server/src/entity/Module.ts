@@ -23,7 +23,7 @@ export class Module {
   updatedAt!: Date;
 
   @Index({unique: true})
-  @Column()
+  @Column({ type: 'varchar' })
   vanityId: string;
 
   constructor(params: ModuleParams) {

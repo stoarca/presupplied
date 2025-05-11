@@ -9,18 +9,18 @@ import {
 } from "typeorm"
 
 // Import for type only
-import type { StudentProgress } from './StudentProgress';
+import type { UserProgress } from './UserProgress';
 import { ProgressVideoStatus } from '../../../common/types';
 
-interface StudentProgressVideoParams {
-  studentProgress: StudentProgress;
+interface UserProgressVideoParams {
+  userProgress: UserProgress;
   videoVanityId: string;
   status: ProgressVideoStatus;
 }
 
 @Entity()
-@Index(['studentProgress', 'videoVanityId'], {unique: true})
-export class StudentProgressVideo {
+@Index(['userProgress', 'videoVanityId'], {unique: true})
+export class UserProgressVideo {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -31,8 +31,8 @@ export class StudentProgressVideo {
   updatedAt!: Date;
 
   // Use string literal to avoid circular dependency in runtime
-  @ManyToOne('StudentProgress', 'videos')
-  studentProgress: StudentProgress;
+  @ManyToOne('UserProgress', 'videos')
+  userProgress: UserProgress;
 
   @Column({ type: 'varchar' })
   videoVanityId: string;
@@ -44,8 +44,8 @@ export class StudentProgressVideo {
   })
   status: ProgressVideoStatus;
 
-  constructor(params: StudentProgressVideoParams) {
-    this.studentProgress = params.studentProgress;
+  constructor(params: UserProgressVideoParams) {
+    this.userProgress = params.userProgress;
     this.videoVanityId = params.videoVanityId;
     this.status = params.status;
   }

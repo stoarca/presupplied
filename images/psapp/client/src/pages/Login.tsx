@@ -11,7 +11,7 @@ import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
 
 import {typedFetch, API_HOST} from '../typedFetch';
-import { useStudentContext } from '../StudentContext';
+import { useUserContext } from '../UserContext';
 
 interface LoginProps {
   [K: string]: never
@@ -20,7 +20,7 @@ interface LoginProps {
 type E = React.FormEvent<HTMLFormElement>;
 
 export let Login = (props: LoginProps) => {
-  let student = useStudentContext();
+  let user = useUserContext();
   let [loading, setLoading] = React.useState(false);
   let [fields, setFields] = React.useState({
     email: {error: false, helperText: ''},
@@ -52,7 +52,7 @@ export let Login = (props: LoginProps) => {
         },
       });
       if ('success' in resp) {
-        await student.mergeToServer();
+        await user.mergeToServer();
         window.location.href = '/';
         return;
       }
@@ -62,7 +62,10 @@ export let Login = (props: LoginProps) => {
           ...fields,
           email: {error: true, helperText: narrow.message}
         }));
-      } else if (resp.errorCode === 'auth.login.password.invalid') {
+      } else if (
+        resp.errorCode === 'auth.login.password.invalid' ||
+        resp.errorCode === 'auth.login.password.notset'
+      ) {
         let narrow = resp;
         setFields(fields => ({
           ...fields,
@@ -74,7 +77,7 @@ export let Login = (props: LoginProps) => {
     } finally {
       setLoading(false);
     }
-  }, [loading, student]);
+  }, [loading, user]);
 
   return (
     <Container component="main" maxWidth="xs">

@@ -1,0 +1,18 @@
+{
+  "name": "presupplied-e2e-tests",
+  "version": "1.0.0",
+  "description": "End-to-end tests for Presupplied application",
+  "type": "module",
+  "scripts": {
+    "test": "bun run typecheck && bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/selenium-webdriver": "^4.1.28",
+    "bun-types": "latest",
+    "longjohn": "^0.2.12",
+    "selenium-webdriver": "^4.12.0",
+    "typescript": "^5.2.2",
+    "xdotoolify": "2.0.8"
+  }
+}

@@ -1,0 +1,393 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { useUserContext } from '../UserContext';
+import { typedFetch, API_HOST } from '../typedFetch';
+import { UserType, RelationshipType, ProfilePicture } from '../../../common/types';
+import { Avatar } from './Avatar';
+
+// MUI imports
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+
+interface RelatedAccount {
+  id: number;
+  name: string;
+  type: UserType;
+  profilePicture?: ProfilePicture;
+  pinRequired: boolean;
+  relationshipType: RelationshipType;
+}
+
+interface AccountSwitcherProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+export const AccountSwitcher = (props: AccountSwitcherProps) => {
+  const [pinDialogOpen, setPinDialogOpen] = useState(false);
+  const [pin, setPin] = useState('');
+  const [selectedAccount, setSelectedAccount] = useState<RelatedAccount | null>(null);
+  const [relationships, setRelationships] = useState<{
+    children?: RelatedAccount[],
+    parents?: RelatedAccount[],
+    classmates?: RelatedAccount[]
+  }>({});
+  const [error, setError] = useState<string | null>(null);
+  const user = useUserContext();
+
+  const switchAccount = useCallback(async (userId: number, pin?: string) => {
+    try {
+      const response = await typedFetch({
+        host: API_HOST,
+        endpoint: '/api/user/switch',
+        method: 'post',
+        body: {
+          targetId: userId.toString(),
+          pin: pin
+        }
+      });
+
+      if ('success' in response && response.success) {
+        window.location.reload();
+      } else if ('errorCode' in response) {
+        setError(response.message);
+      }
+    } catch (error) {
+      console.error('Error switching account:', error);
+      setError('Failed to switch account');
+    }
+  }, [setError]);
+
+  const handleClose = () => {
+    props.onClose();
+  };
+
+  const handleAccountSelect = async (account: RelatedAccount & {isSelected?: boolean}) => {
+    if (account.isSelected) {
+      return;
+    }
+
+    const needsPin = account.pinRequired ||
+      account.type === UserType.PARENT ||
+      account.type === UserType.TEACHER;
+
+    if (needsPin) {
+      setSelectedAccount(account);
+      setPinDialogOpen(true);
+    } else {
+      await switchAccount(account.id);
+    }
+  };
+
+  const handlePinSubmit = useCallback(async () => {
+    if (selectedAccount && pin) {
+      await switchAccount(selectedAccount.id, pin);
+      setPinDialogOpen(false);
+      setPin('');
+    }
+  }, [selectedAccount, pin, switchAccount]);
+
+  const handlePinDialogClose = () => {
+    setPinDialogOpen(false);
+    setPin('');
+    setSelectedAccount(null);
+  };
+
+  useEffect(() => {
+    if (props.open && user.dto) {
+      const updatedRelationships: {
+        children?: RelatedAccount[],
+        parents?: RelatedAccount[],
+        classmates?: RelatedAccount[]
+      } = {};
+
+      if ((user.dto.type === UserType.PARENT || user.dto.type === UserType.TEACHER) && user.dto.children) {
+        updatedRelationships.children = user.dto.children.map(child => ({
+          id: child.id,
+          name: child.name,
+          type: UserType.STUDENT,
+          profilePicture: child.profilePicture,
+          relationshipType: RelationshipType.PRIMARY,
+          pinRequired: child.pinRequired || false
+        }));
+      }
+
+      if (user.dto.type === UserType.STUDENT && user.dto.parents) {
+        updatedRelationships.parents = user.dto.parents.map(parent => ({
+          id: parent.id,
+          name: parent.name,
+          type: parent.type,
+          profilePicture: parent.profilePicture,
+          relationshipType: parent.relationshipType,
+          pinRequired: true
+        }));
+      }
+
+      if (user.dto.type === UserType.STUDENT && user.dto.classmates) {
+        updatedRelationships.classmates = user.dto.classmates.map(classmate => ({
+          id: classmate.id,
+          name: classmate.name,
+          type: UserType.STUDENT,
+          profilePicture: classmate.profilePicture,
+          relationshipType: RelationshipType.PRIMARY,
+          pinRequired: classmate.pinRequired || false
+        }));
+      }
+
+      setRelationships(updatedRelationships);
+      setError(null);
+    }
+  }, [props.open, user.dto]);
+
+  // Handle keyboard events for PIN entry when dialog is open
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (pinDialogOpen) {
+        if (e.key === 'Enter' && pin) {
+          handlePinSubmit();
+          return;
+        }
+        
+        if (e.key === 'Backspace') {
+          setPin(prev => prev.slice(0, -1));
+          return;
+        }
+        
+        const digit = /^[0-9]$/.test(e.key) ? e.key : null;
+        if (digit && pin.length < 6) {
+          setPin(prev => prev + digit);
+        }
+      }
+    };
+    
+    document.addEventListener('keydown', handleGlobalKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleGlobalKeyDown);
+    };
+  }, [pinDialogOpen, pin, handlePinSubmit]);
+
+  // If the user is not logged in, don't render the component
+  if (!user.dto) {
+    return null;
+  }
+
+  const allAccounts = [
+    {
+      id: user.dto?.id || 0,
+      name: user.dto?.name || '',
+      type: user.dto?.type || UserType.STUDENT,
+      profilePicture: user.dto?.profilePicture,
+      relationshipType: RelationshipType.PRIMARY,
+      pinRequired: false,
+      isSelected: true,
+    },
+    ...(relationships.children || []),
+    ...(relationships.parents || []),
+    ...(relationships.classmates || []),
+  ];
+
+  return (
+    <>
+      <Dialog
+        open={props.open}
+        onClose={handleClose}
+        aria-labelledby="account-switcher-dialog-title"
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle id="account-switcher-dialog-title" sx={{ textAlign: 'center', pb: 0 }}>
+          Switch Account
+        </DialogTitle>
+        <DialogContent>
+          {error && (
+            <Typography color="error" variant="body2" sx={{ mb: 2 }}>
+              {error}
+            </Typography>
+          )}
+
+          <Box sx={{ minWidth: 275, maxWidth: 600, mx: 'auto' }}>
+            <Box sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: 4,
+              my: 4
+            }}>
+              {allAccounts.map((account) => (
+                <Box
+                  key={account.id}
+                  data-test={`account-avatar-${account.id}`}
+                  onClick={() => handleAccountSelect(account)}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    cursor: !account.isSelected ? 'pointer' : 'default',
+                    padding: 2,
+                    minWidth: 140,
+                  }}
+                >
+                  <Avatar
+                    userType={account.type}
+                    profilePicture={account.profilePicture}
+                    size={100}
+                    selected={account.isSelected}
+                    onClick={() => handleAccountSelect(account)}
+                  />
+                  <Typography
+                    variant="h6"
+                    align="center"
+                    sx={{ mt: 1, fontWeight: 'bold' }}
+                  >
+                    {account.name}
+                  </Typography>
+                  {account.type === UserType.STUDENT && account.pinRequired && (
+                    <Typography variant="caption" color="text.secondary">
+                      PIN required
+                    </Typography>
+                  )}
+                  {(account.type === UserType.PARENT || account.type === UserType.TEACHER) && (
+                    <Typography variant="body2" color="text.secondary">
+                      {account.type === UserType.TEACHER ? 'Teacher' : 'Parent'}
+                    </Typography>
+                  )}
+                </Box>
+              ))}
+            </Box>
+
+            {allAccounts.length <= 1 && (
+              <Box sx={{ textAlign: 'center', my: 4 }}>
+                <Typography variant="body1" color="text.secondary">
+                  No related accounts found.
+                </Typography>
+              </Box>
+            )}
+          </Box>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={pinDialogOpen} onClose={handlePinDialogClose} data-test="pin-dialog">
+        <DialogTitle>Enter PIN</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please enter the PIN for {selectedAccount?.name}'s account:
+          </DialogContentText>
+
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              mt: 2
+            }}
+          >
+            <TextField
+              margin="dense"
+              id="pin"
+              label="PIN"
+              type="password"
+              variant="outlined"
+              value={pin}
+              inputProps={{ 
+                maxLength: 6,
+                inputMode: 'none', // Prevents mobile keyboard
+                readOnly: true, // Prevents keyboard but allows selection/focus
+                "aria-label": "PIN code entry field"
+              }}
+              sx={{ mb: 2, width: '100%' }}
+              InputProps={{
+                sx: {
+                  letterSpacing: '8px',
+                  fontSize: '1.5rem',
+                  textAlign: 'center'
+                }
+              }}
+            />
+
+            <Box 
+              sx={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(3, 1fr)', 
+                gap: 1,
+                width: '100%',
+                maxWidth: 300
+              }}
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                <Button
+                  key={num}
+                  variant="outlined"
+                  data-test={`pin-digit-${num}`}
+                  onClick={() => setPin(prev => prev.length < 6 ? prev + num : prev)}
+                  sx={{ 
+                    minWidth: 60, 
+                    height: 60,
+                    fontSize: '1.5rem'
+                  }}
+                >
+                  {num}
+                </Button>
+              ))}
+              <Button
+                variant="outlined"
+                onClick={() => setPin(prev => prev.slice(0, -1))}
+                data-test="pin-backspace"
+                sx={{ 
+                  minWidth: 60, 
+                  height: 60,
+                  fontSize: '1.2rem',
+                  gridColumn: '1 / 2'
+                }}
+              >
+                ←
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => setPin(prev => prev.length < 6 ? prev + '0' : prev)}
+                data-test="pin-digit-0"
+                sx={{ 
+                  minWidth: 60, 
+                  height: 60,
+                  fontSize: '1.5rem',
+                  gridColumn: '2 / 3'
+                }}
+              >
+                0
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handlePinSubmit}
+                disabled={!pin}
+                data-test="pin-submit"
+                sx={{ 
+                  minWidth: 60, 
+                  height: 60,
+                  fontSize: '1.2rem',
+                  gridColumn: '3 / 4'
+                }}
+              >
+                ✓
+              </Button>
+            </Box>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handlePinDialogClose}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+};

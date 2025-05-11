@@ -9,9 +9,15 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
 
 import {typedFetch, API_HOST} from '../typedFetch';
-import { useStudentContext } from '../StudentContext';
+import { useUserContext } from '../UserContext';
+import { UserType } from '../../../common/types';
 
 interface RegisterProps {
   [K: string]: never
@@ -20,11 +26,17 @@ interface RegisterProps {
 type E = React.FormEvent<HTMLFormElement>;
 
 export let Register = (props: RegisterProps) => {
-  let student = useStudentContext();
+  let user = useUserContext();
+
   let [loading, setLoading] = React.useState(false);
+  let [userType, setUserType] = React.useState<UserType>(UserType.STUDENT);
   let [fields, setFields] = React.useState({
     email: {error: false, helperText: ''},
   });
+
+  const handleUserTypeChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserType(event.target.value as UserType);
+  }, []);
 
   const handleSubmit = React.useCallback(async (event: E) => {
     event.preventDefault();
@@ -39,19 +51,24 @@ export let Register = (props: RegisterProps) => {
 
     const data = new FormData(event.currentTarget);
     try {
+      console.log('submitting');
+      const email = data.get('email') as string;
+      const name = data.get('name') as string;
+      const password = data.get('password') as string;
       let resp = await typedFetch({
         host: API_HOST,
         endpoint: '/api/auth/register',
         method: 'post',
         body: {
-          name: data.get('name') as string,
-          email: data.get('email') as string,
-          password: data.get('password') as string,
+          name,
+          email,
+          password,
+          type: userType,
         },
       });
+      console.log(resp);
       if ('success' in resp) {
-        // Sync local progress with the server
-        await student.mergeToServer();
+        await user.mergeToServer();
         window.location.href = '/';
         return;
       }
@@ -70,7 +87,10 @@ export let Register = (props: RegisterProps) => {
     } finally {
       setLoading(false);
     }
-  }, [loading, student]);
+  }, [loading, user, userType]);
+
+  console.log('fields');
+  console.log(fields);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -88,7 +108,36 @@ export let Register = (props: RegisterProps) => {
         <Typography component="h1" variant="h5">
           Register
         </Typography>
+      </Box>
+      <Box>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <FormControl component="fieldset" sx={{ mb: 2, width: '100%' }}>
+            <FormLabel component="legend">I am registering as a:</FormLabel>
+            <RadioGroup
+              row
+              aria-label="user type"
+              name="user-type"
+              value={userType}
+              onChange={handleUserTypeChange}
+            >
+              <FormControlLabel
+                value={UserType.STUDENT}
+                control={<Radio />}
+                label="Student"
+              />
+              <FormControlLabel
+                value={UserType.PARENT}
+                control={<Radio />}
+                label="Parent"
+              />
+              <FormControlLabel
+                value={UserType.TEACHER}
+                control={<Radio />}
+                label="Teacher"
+              />
+            </RadioGroup>
+          </FormControl>
+
           <TextField
             margin="normal"
             required
@@ -120,6 +169,13 @@ export let Register = (props: RegisterProps) => {
             id="password"
             autoComplete="new-password"
           />
+
+          {userType !== UserType.STUDENT && (
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+              After registration, you'll be able to add children that you manage.
+            </Typography>
+          )}
+
           <LoadingButton
             type="submit"
             fullWidth

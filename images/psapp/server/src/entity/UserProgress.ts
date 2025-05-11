@@ -11,20 +11,20 @@ import {
 } from "typeorm"
 
 // Import type only to avoid circular dependency
-import type { Student } from './Student';
+import type { User } from './User';
 import { Module } from './Module';
-import { StudentProgressVideo } from './StudentProgressVideo';
+import { UserProgressVideo } from './UserProgressVideo';
 import { ProgressStatus } from '../../../common/types';
 
-interface StudentProgressParams {
-  student: Student;
+interface UserProgressParams {
+  user: User;
   module: Module;
   status: ProgressStatus;
 }
 
 @Entity()
-@Index(['student', 'module'], {unique: true})
-export class StudentProgress {
+@Index(['user', 'module'], {unique: true})
+export class UserProgress {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -34,8 +34,8 @@ export class StudentProgress {
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  @ManyToOne('Student', 'progress')
-  student: Student;
+  @ManyToOne('User', 'progress', { onDelete: 'CASCADE' })
+  user: User;
 
   @ManyToOne(() => Module)
   module: Module;
@@ -48,13 +48,13 @@ export class StudentProgress {
   status: ProgressStatus;
 
   @OneToMany(
-    () => StudentProgressVideo,
-    (studentProgressVideo) => studentProgressVideo.studentProgress
+    () => UserProgressVideo,
+    (userProgressVideo) => userProgressVideo.userProgress
   )
-  videos!: StudentProgressVideo[];
+  videos!: UserProgressVideo[];
 
-  constructor(params: StudentProgressParams) {
-    this.student = params.student;
+  constructor(params: UserProgressParams) {
+    this.user = params.user;
     this.module = params.module;
     this.status = params.status;
   }

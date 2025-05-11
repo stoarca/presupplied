@@ -47,15 +47,26 @@ The goal is to dramatically reduce the cost of quality education.
    ./run.sh
    ```
 
-## Key Build Commands
+## Development Environment
 
-### Client (Frontend)
+### Live Development
+
+The development environment uses Docker with live mounting and hot reloading:
+- **Client (Frontend)**: Files are live-mounted and changes are automatically rebuilt (hot module replacement)
+- **Server (Backend)**: Files are live-mounted with automatic restart on changes
+- **No manual rebuild needed**: When you modify source files, they're automatically picked up
+
+### Key Build Commands
+
+Note: In development mode, you typically don't need to manually rebuild after making changes.
+
+#### Client (Frontend)
 
 ```bash
-# Build the frontend
+# Build the frontend (usually not needed in development)
 docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/client && bun run build"
 
-# Development mode (watch files)
+# Development mode (watch files) - automatically rebuilds on changes
 docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/client && bun run dev" 
 
 # Run linting
@@ -78,7 +89,7 @@ docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/server && 
 docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/server && bun run dev"
 
 # Verify TypeScript build
-docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/server && bun run verifyBuild"
+docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/server && bun run typecheck"
 
 # Database migrations
 docker exec presupplied-psapp-1 bash -c "cd /presupplied/images/psapp/server && bun run migration:generate <name>"
@@ -200,20 +211,25 @@ The curriculum is organized as a graph of modules with prerequisites (knowledge 
 ## Developer Guidelines
 
 1. **Code Style**
-   - Follow TypeScript typing conventions
-   - Use ESLint for code quality
-   - Add comments to explain **why** something is done, not what is being done
+  - Follow TypeScript typing conventions
+  - Use ESLint for code quality
+  - NEVER add comments unless explicitly asked for
+  - NEVER use if without {}
+  - NEVER import \*, always import specific objects
+  - ALWAYS use 2 spaces for indentation
+  - before making changes, ALWAYS review the eslint config to understand the style
 
 2. **Adding New Modules**
-   - Follow existing patterns in the `/modules` directory
-   - Update the knowledge map to include prerequisites
-   - Generate appropriate audio assets if needed
+  - Follow existing patterns in the `/modules` directory
+  - Update the knowledge map to include prerequisites
+  - Generate appropriate audio assets if needed
 
 3. **Database Changes**
-   - Use TypeORM migration system
-   - Test migrations thoroughly before deployment
+  - Use TypeORM migration system
+  - Test migrations thoroughly before deployment
 
 4. **Build System**
-   - Uses esbuild for frontend bundling
-   - The build.ts file handles bundling configuration 
-   - Automatically generates available modules list during build
+  - Uses esbuild for frontend bundling
+  - The build.ts file handles bundling configuration 
+  - Automatically generates available modules list during build
+

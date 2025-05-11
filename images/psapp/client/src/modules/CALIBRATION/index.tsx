@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {KMId, ProgressStatus, KNOWLEDGE_MAP} from '@src/../../common/types';
-import {useStudentContext} from '@src/StudentContext';
+import {useUserContext} from '@src/UserContext';
 import {
   ModuleBuilder, VideoLecture
 } from '@src/modules/common/TEACHER_VIDEO/ModuleBuilder';
@@ -10,14 +10,14 @@ import {buildGraph} from '@src/dependency-graph';
 let knowledgeGraph = buildGraph(KNOWLEDGE_MAP);
 
 export default (props: never) => {
-  let student = useStudentContext();
+  let user = useUserContext();
   let bulkMarkReached = React.useCallback((modules: KMId[]) => {
     let acc: Record<KMId, ProgressStatus> = {};
     modules.forEach((kmid) => {
       acc[kmid] = ProgressStatus.PASSED;
     });
-    return student.markReached(acc);
-  }, [student]);
+    return user.markReached(acc);
+  }, [user]);
   let lecture: VideoLecture = {
     exercises: [{
       preVideo: {
