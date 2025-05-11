@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "build": "bun run bunbuild.js",
-    "dev": "bun --watch run bunbuild.js",
+    "dev": "bun --watch run bunbuild.js --watch",
     "test": "bun test",
     "lint": "eslint . --ext .ts,.tsx && ./scripts/no-js-files.sh",
     "lint:fix": "eslint . --ext .ts,.tsx --fix"
