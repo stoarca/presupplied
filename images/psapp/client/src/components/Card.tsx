@@ -4,7 +4,7 @@ import React, { CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { KNOWLEDGE_MAP, ProgressVideoStatus } from '../../../common/types';
 import { Student } from '../StudentContext';
-import MovieIcon from '@mui/icons-material/LiveTv';
+import { LiveTv as MovieIcon } from '@mui/icons-material';
 import { buildGraph } from '@src/dependency-graph';
 import YouTube, { YouTubeEvent, YouTubeProps } from 'react-youtube';
 

@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "build": "bun run bunbuild.js",
-    "dev": "bun --watch run bunbuild.js",
+    "build": "bun run build.ts",
+    "dev": "bun --watch run build.ts --watch",
     "test": "bun test",
     "lint": "eslint . --ext .ts,.tsx && ./scripts/no-js-files.sh",
     "lint:fix": "eslint . --ext .ts,.tsx --fix"
@@ -44,6 +44,7 @@
     "@typescript-eslint/eslint-plugin": "^8.29.0",
     "@typescript-eslint/parser": "^8.29.0",
     "babel-eslint": "^10.1.0",
+    "esbuild": "^0.25.4",
     "eslint": "^9.23.0",
     "eslint-plugin-ban": "^2.0.0",
     "eslint-plugin-jest": "^28.11.0",

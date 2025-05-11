@@ -5,7 +5,7 @@ import Alert from '@mui/material/Alert';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { ExpandMore } from '@mui/icons-material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
@@ -80,7 +80,7 @@ export let NavBar = (props: NavBarProps) => {
           <Button ref={userMenuRef}
             onClick={handleToggleUserMenu}
             sx={{ p: 0, color: '#023D54' }}
-            endIcon={<ExpandMoreIcon />}>
+            endIcon={<ExpandMore />}>
             {student.dto.email}
           </Button>
         </Tooltip>

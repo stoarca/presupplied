@@ -60,12 +60,7 @@ let buildModuleContext = (moduleName: string): ModuleContextProps => {
 export let moduleComponents: {[id: string]: React.ReactElement} = {};
 
 availableModules.forEach(moduleName => {
-  let Lesson = React.lazy(() => import(
-    /* webpackChunkName: 'modules/[request]' */
-    /* webpackInclude: /index\.tsx$/ */
-    /* webpackExclude: /\/common\// */
-    './modules/' + moduleName
-  ));
+  let Lesson = React.lazy(() => import(`/static/dist/modules/${moduleName}/index.js`));
 
   moduleComponents[moduleName] = (
     <ModuleContext.Provider value={buildModuleContext(moduleName)}>

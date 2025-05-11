@@ -2,7 +2,7 @@ import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { LockOutlined } from '@mui/icons-material';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -83,7 +83,7 @@ export let Register = (props: RegisterProps) => {
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
+          <LockOutlined />
         </Avatar>
         <Typography component="h1" variant="h5">
           Register

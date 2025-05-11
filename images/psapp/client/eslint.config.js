@@ -44,7 +44,8 @@ module.exports = [
         expect: 'readonly',
         jest: 'readonly',
         wrapInRouter: 'readonly',
-        wrapInProvider: 'readonly'
+        wrapInProvider: 'readonly',
+        Bun: 'readonly'
       }
     },
     plugins: {
