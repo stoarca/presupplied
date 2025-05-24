@@ -214,22 +214,63 @@ The curriculum is organized as a graph of modules with prerequisites (knowledge 
   - Follow TypeScript typing conventions
   - Use ESLint for code quality
   - NEVER add comments unless explicitly asked for
+  - NEVER add comments in code, not even for clarity or explanation
   - NEVER use if without {}
   - NEVER import \*, always import specific objects
   - ALWAYS use 2 spaces for indentation
   - before making changes, ALWAYS review the eslint config to understand the style
 
-2. **Adding New Modules**
+2. **API Conventions**
+  - ONLY use GET, POST, and DELETE HTTP methods
+  - NEVER use PUT, PATCH, or other HTTP methods
+  - Use POST for both creating and updating resources
+  - Structure endpoints clearly with RESTful patterns where possible
+  - Getting a list of objects: GET /api/{plural} (e.g., GET /api/invitations)
+  - Getting a specific object: GET /api/{plural}/:id (e.g., GET /api/invitations/:id)
+  - Creating an object: POST /api/{plural} (e.g., POST /api/invitations)
+  - Updating an object: POST /api/{plural}/:id (e.g., POST /api/invitations/:id)
+  - Deleting an object: DELETE /api/{plural}/:id (e.g., DELETE /api/invitations/:id)
+  - **Namespace Collision Avoidance**: Endpoints that have the potential to be called with an id should never have sub-endpoints. For example, /api/user/children is problematic because it conflicts with potential /api/user/:id endpoints. Instead, use /api/children directly.
+
+3. **Adding New Modules**
   - Follow existing patterns in the `/modules` directory
   - Update the knowledge map to include prerequisites
   - Generate appropriate audio assets if needed
 
-3. **Database Changes**
+4. **Database Changes**
   - Use TypeORM migration system
   - Test migrations thoroughly before deployment
 
-4. **Build System**
+5. **Build System**
   - Uses esbuild for frontend bundling
   - The build.ts file handles bundling configuration 
   - Automatically generates available modules list during build
+
+6. **E2E Testing Conventions**
+  - Always define selectors as constants at the top of the file
+  - Never use inline string selectors in test functions
+  - When using XC.evaluate, always prefix parameter names with underscore
+  - When passing variables to XC.evaluate, name parameters consistently
+  
+  Good example:
+  ```typescript
+  export const moduleCardSelector = '[data-test="module-card"]';
+  
+  export const checkForModuleCards = Xdotoolify.setupWithPage(async (page) => {
+    return XC.evaluate(page, (_moduleCardSelector: string) => {
+      const cards = document.querySelectorAll(_moduleCardSelector);
+      return cards.length;
+    }, moduleCardSelector);
+  });
+  ```
+  
+  Bad example:
+  ```typescript
+  export const checkForModuleCards = Xdotoolify.setupWithPage(async (page) => {
+    return XC.evaluate(page, (cardSelector: string) => {
+      const cards = document.querySelectorAll(cardSelector);
+      return cards.length;
+    }, '[data-test="module-card"]');
+  });
+  ```
 

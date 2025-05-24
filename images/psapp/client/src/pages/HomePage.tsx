@@ -240,7 +240,7 @@ export let HomePage = () => {
       <NavBar />
       <div style={containerStyle} onWheel={handleScroll}>
         {moduleCount === 0 && (
-          <h1 style={{ position: 'absolute', transform: 'translate(-50%, -50%)', top: '50%', left: '50%', color: '#fff', maxWidth: '50vw', textAlign: 'center', justifyContent: 'center' }}>
+          <h1 data-test="no-modules-message" style={{ position: 'absolute', transform: 'translate(-50%, -50%)', top: '50%', left: '50%', color: '#fff', maxWidth: '50vw', textAlign: 'center', justifyContent: 'center' }}>
             {isStudent
               ? 'No modules available for you at this time. Check back soon!'
               : 'No modules available yet. Complete student modules to unlock teacher content.'}

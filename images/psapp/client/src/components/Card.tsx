@@ -231,6 +231,7 @@ export let Card = ({ kmid, user, style }: CardProps) => {
       <Grid container spacing={1}>
         <Grid item xs={12} sx={{ padding: '0 !important' }}>
           <div
+            data-test="module-card"
             onClick={showVideoOrMasteryIfDone}
             style={{
               ...innerStyle,

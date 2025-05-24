@@ -1,7 +1,6 @@
 import {
-  StudentDTO,
-  StudentProgressDTOEntry,
-  StudentProgressVideoDTO,
+  UserProgressDTOEntry,
+  UserProgressVideoDTO,
   ProgressStatus,
   ProgressVideoStatus,
   KMId,
@@ -9,7 +8,11 @@ import {
   TrainingEvent,
   UserType,
   UserDTO,
-  RelationshipType
+  RelationshipType,
+  ProfilePicture,
+  ChildInfo,
+  InvitationDTO,
+  AdultInfo
 } from './types';
 
 type AudioResponse = any; // TODO figure out what type this is
@@ -91,7 +94,7 @@ export type Endpoints = {
       },
     },
   },
-  '/api/user/switch': {
+  '/api/auth/switch': {
     'post': {
       Params: never,
       Query: never,
@@ -102,24 +105,42 @@ export type Endpoints = {
       Response: {
         success: true,
       } | {
-        errorCode: 'user.switch.notLoggedIn',
+        errorCode: 'auth.switch.notLoggedIn',
         message: string,
       } | {
-        errorCode: 'user.switch.invalidUser',
+        errorCode: 'auth.switch.invalidUser',
         message: string,
       } | {
-        errorCode: 'user.switch.invalidPin',
+        errorCode: 'auth.switch.invalidPin',
         message: string,
       } | {
-        errorCode: 'user.switch.notRelated',
+        errorCode: 'auth.switch.notRelated',
         message: string,
       } | {
-        errorCode: 'user.switch.notParentOrTeacher',
+        errorCode: 'auth.switch.notParentOrTeacher',
         message: string,
       },
     },
   },
-  '/api/user/children': {
+  '/api/children': {
+    'get': {
+      Params: never,
+      Query: never,
+      Body: never,
+      Response: {
+        success: true,
+        children: Array<ChildInfo & { relationshipType: RelationshipType }>,
+      } | {
+        errorCode: 'children.list.notLoggedIn',
+        message: string,
+      } | {
+        errorCode: 'children.list.userNotFound',
+        message: string,
+      } | {
+        errorCode: 'children.list.notParentOrTeacher',
+        message: string,
+      },
+    },
     'post': {
       Params: never,
       Query: never,
@@ -127,22 +148,200 @@ export type Endpoints = {
         name: string,
         pinRequired?: boolean,
         pin?: string,
-        profilePicture?: {
-          image: string,
-          background: string
-        },
+        profilePicture?: ProfilePicture,
       },
       Response: {
         success: true,
         childId: number,
       } | {
-        errorCode: 'user.children.notLoggedIn',
+        errorCode: 'children.create.notLoggedIn',
         message: string,
       } | {
-        errorCode: 'user.children.notParentOrTeacher',
+        errorCode: 'children.create.notParentOrTeacher',
         message: string,
       } | {
-        errorCode: 'user.children.creationFailed',
+        errorCode: 'children.create.creationFailed',
+        message: string,
+      },
+    },
+  },
+  '/api/users/:id': {
+    'get': {
+      Params: {
+        id: string,
+      },
+      Query: never,
+      Body: never,
+      Response: {
+        user: UserDTO,
+      } | {
+        errorCode: 'users.get.notLoggedIn',
+        message: string,
+      } | {
+        errorCode: 'users.get.invalidId',
+        message: string,
+      } | {
+        errorCode: 'users.get.userNotFound',
+        message: string,
+      } | {
+        errorCode: 'users.get.noPermission',
+        message: string,
+      },
+    },
+    'post': {
+      Params: {
+        id: string,
+      },
+      Query: never,
+      Body: {
+        name?: string,
+        profilePicture?: ProfilePicture,
+      },
+      Response: {
+        success: true,
+      } | {
+        errorCode: 'users.update.notLoggedIn',
+        message: string,
+      } | {
+        errorCode: 'users.update.userNotFound',
+        message: string,
+      } | {
+        errorCode: 'users.update.invalidId',
+        message: string,
+      } | {
+        errorCode: 'users.update.unauthorized',
+        message: string,
+      },
+    },
+  },
+  '/api/invitations': {
+    'get': {
+      Params: never,
+      Query: never,
+      Body: never,
+      Response: {
+        success: true,
+        invitations: Array<{
+          id: number,
+          inviterUser: {
+            id: number,
+            name: string,
+            email: string,
+            type: UserType,
+          },
+          childUser: {
+            id: number,
+            name: string,
+            profilePicture?: ProfilePicture,
+          },
+          inviteeEmail: string,
+          relationshipType: RelationshipType,
+          status: string,
+          createdAt: Date,
+          expiresAt?: Date,
+          token: string,
+          adults: Array<{
+            id: number,
+            name: string,
+            email: string,
+            type: UserType,
+            relationshipType: RelationshipType,
+          }>,
+        }>,
+      } | {
+        errorCode: 'invitations.list.notLoggedIn',
+        message: string,
+      } | {
+        errorCode: 'invitations.list.userNotFound',
+        message: string,
+      } | {
+        errorCode: 'invitations.list.unauthorized',
+        message: string,
+      },
+    },
+    'post': {
+      Params: never,
+      Query: never,
+      Body: {
+        childId: number,
+        inviteeEmail: string,
+        relationshipType: RelationshipType,
+      },
+      Response: {
+        success: true,
+        invitationId: number,
+        token: string,
+      } | {
+        errorCode: 'invitations.create.notLoggedIn',
+        message: string,
+      } | {
+        errorCode: 'invitations.create.invalidEmail',
+        message: string,
+      } | {
+        errorCode: 'invitations.create.userNotFound',
+        message: string,
+      } | {
+        errorCode: 'invitations.create.notParentOrTeacher',
+        message: string,
+      } | {
+        errorCode: 'invitations.create.invalidChildId',
+        message: string,
+      } | {
+        errorCode: 'invitations.create.noRelationship',
+        message: string,
+      } | {
+        errorCode: 'invitations.create.notPrimary',
+        message: string,
+      } | {
+        errorCode: 'invitations.create.selfInvite',
+        message: string,
+      } | {
+        errorCode: 'invitations.create.relationshipExists',
+        message: string,
+      } | {
+        errorCode: 'invitations.create.pendingExists',
+        message: string,
+      } | {
+        errorCode: 'invitations.create.failed',
+        message: string,
+      },
+    },
+  },
+  '/api/invitations/:id': {
+    'post': {
+      Params: {
+        id: string,
+      },
+      Query: never,
+      Body: {
+        action: 'accept' | 'reject',
+      },
+      Response: {
+        success: true,
+        action: 'accepted' | 'rejected',
+      } | {
+        errorCode: 'invitations.update.notLoggedIn',
+        message: string,
+      } | {
+        errorCode: 'invitations.update.invalidId',
+        message: string,
+      } | {
+        errorCode: 'invitations.update.invalidAction',
+        message: string,
+      } | {
+        errorCode: 'invitations.update.userNotFound',
+        message: string,
+      } | {
+        errorCode: 'invitations.update.notFound',
+        message: string,
+      } | {
+        errorCode: 'invitations.update.expired',
+        message: string,
+      } | {
+        errorCode: 'invitations.update.relationshipExists',
+        message: string,
+      } | {
+        errorCode: 'invitations.update.failed',
         message: string,
       },
     },
@@ -178,12 +377,12 @@ export type Endpoints = {
       Body: {
         type: 'module',
         modules: {
-          [K in KMId]: Omit<StudentProgressDTOEntry, 'status'>
+          [K in KMId]: Omit<UserProgressDTOEntry, 'status'>
         },
         onBehalfOfStudentId?: number,
       } | {
         type: 'video',
-        moduleVideos: StudentProgressVideoDTO,
+        moduleVideos: UserProgressVideoDTO,
         onBehalfOfStudentId?: number,
       },
       Response: {
@@ -246,24 +445,64 @@ export type Endpoints = {
       } | {
         success: true,
         user: UserDTO,
-        children?: Array<{
-          id: number,
-          name: string,
-          email: string,
-          type: UserType,
-          pinRequired: boolean,
-        }>,
       },
     },
   },
-  '/api/test/delete-test-accounts': {
+  '/api/test/enable': {
     'post': {
       Params: never,
       Query: never,
       Body: {},
       Response: {
         success: true,
+        message: string,
         deletedCount: number,
+      },
+    },
+  },
+  '/api/test/disable': {
+    'post': {
+      Params: never,
+      Query: never,
+      Body: {},
+      Response: {
+        success: true,
+        message: string,
+      },
+    },
+  },
+  '/api/test/weblog': {
+    'post': {
+      Params: never,
+      Query: never,
+      Body: {
+        message: string,
+        type: 'log' | 'error',
+      },
+      Response: {
+        success: true,
+      },
+    },
+  },
+  '/api/test/weblogdump': {
+    'get': {
+      Params: never,
+      Query: never,
+      Body: never,
+      Response: {
+        success: true,
+        logs: string[],
+      },
+    },
+  },
+  '/api/test/weberrordump': {
+    'get': {
+      Params: never,
+      Query: never,
+      Body: never,
+      Response: {
+        success: true,
+        errors: string[],
       },
     },
   },

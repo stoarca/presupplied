@@ -6,7 +6,7 @@ import {
   KMId,
   ProgressStatus,
   ProgressVideoStatus,
-  StudentProgressDTO
+  UserProgressDTO
 } from '../../common/types';
 import { typedFetch, API_HOST } from './typedFetch';
 import { typedLocalStorage } from './typedLocalStorage';
@@ -14,8 +14,34 @@ import { mapObject } from './util';
 
 export class User {
   dto: UserDTO | null;
+  onUpdate: ((dto: UserDTO | null) => void) | null = null;
+
   constructor(dto: UserDTO | null) {
     this.dto = dto;
+  }
+
+  async refreshUser() {
+    if (!this.dto) {
+      return;
+    }
+
+    try {
+      const response = await typedFetch({
+        host: API_HOST,
+        endpoint: '/api/users/:id',
+        method: 'get',
+        params: { id: String(this.dto.id) }
+      });
+
+      if ('user' in response) {
+        this.dto = response.user;
+        if (this.onUpdate) {
+          this.onUpdate(this.dto);
+        }
+      }
+    } catch (error) {
+      console.error('Error refreshing user data:', error);
+    }
   }
 
   _progress() {
@@ -33,7 +59,7 @@ export class User {
   progress() {
     let raw = this._progress();
     let modulesThatExistToday = new Set(KNOWLEDGE_MAP.nodes.map(x => x.id));
-    let ret: StudentProgressDTO = {};
+    let ret: UserProgressDTO = {};
     for (let k in raw) {
       if (modulesThatExistToday.has(k)) {
         ret[k] = raw[k];
@@ -155,7 +181,7 @@ export class User {
             acc[kmid] = entry;
           }
           return acc;
-        }, {} as StudentProgressDTO),
+        }, {} as UserProgressDTO),
       },
     });
     if ('success' in resp) {

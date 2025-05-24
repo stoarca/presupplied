@@ -29,7 +29,7 @@ export class UserRelationship {
   @JoinColumn({ name: "adult_id" })
   adult!: User;
 
-  @ManyToOne(() => User, user => user.parentRelationships, { eager: true, onDelete: 'CASCADE' })
+  @ManyToOne(() => User, user => user.adultRelationships, { eager: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: "child_id" })
   child!: User;
 

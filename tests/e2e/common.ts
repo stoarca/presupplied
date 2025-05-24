@@ -3,9 +3,80 @@ longjohn.async_trace_limit = -1;
 
 import { Builder, By, until, WebDriver, WebElement, Capabilities } from 'selenium-webdriver';
 import Xdotoolify, { XWebDriver } from 'xdotoolify';
+import * as XC from 'xdotoolify/dist/common';
+import { typedFetch } from '/presupplied/images/psapp/client/src/typedFetch';
 
 export const url = 'https://applocal.presupplied.com';
 export const defaultCheckUntilTimeout = 10000; // 10 seconds
+
+// Selectors
+export const errorAlertSelector = '.MuiAlert-root';
+
+export const enableTestMode = Xdotoolify.setupWithoutPage(async () => {
+  const response = await typedFetch({
+    host: 'https://applocal.presupplied.com',
+    endpoint: '/api/test/enable',
+    method: 'post',
+    body: {}
+  });
+  
+  if (!response.success) {
+    throw new Error(`Failed to enable test mode: ${JSON.stringify(response)}`);
+  }
+  
+  return true;
+});
+
+export const disableTestMode = Xdotoolify.setupWithoutPage(async () => {
+  const response = await typedFetch({
+    host: 'https://applocal.presupplied.com',
+    endpoint: '/api/test/disable',
+    method: 'post',
+    body: {}
+  });
+  
+  if (!response.success) {
+    throw new Error(`Failed to disable test mode: ${JSON.stringify(response)}`);
+  }
+  
+  return true;
+});
+
+export const fetchWebLogs = Xdotoolify.setupWithoutPage(async () => {
+  const response = await typedFetch({
+    host: 'https://applocal.presupplied.com',
+    endpoint: '/api/test/weblogdump',
+    method: 'get'
+  });
+  
+  if (!response.success) {
+    throw new Error(`Failed to fetch web logs: ${JSON.stringify(response)}`);
+  }
+  
+  if (!Array.isArray(response.logs)) {
+    throw new Error(`Invalid logs response: ${JSON.stringify(response)}`);
+  }
+  
+  return response.logs;
+});
+
+export const fetchWebErrors = Xdotoolify.setupWithoutPage(async () => {
+  const response = await typedFetch({
+    host: 'https://applocal.presupplied.com',
+    endpoint: '/api/test/weberrordump',
+    method: 'get'
+  });
+  
+  if (!response.success) {
+    throw new Error(`Failed to fetch web errors: ${JSON.stringify(response)}`);
+  }
+  
+  if (!Array.isArray(response.errors)) {
+    throw new Error(`Invalid errors response: ${JSON.stringify(response)}`);
+  }
+  
+  return response.errors;
+});
 
 export const setupBrowser = async () => {
   const { execSync } = require('child_process');
@@ -75,4 +146,27 @@ export const openWithHelpers = Xdotoolify.setupWithPage(async function(page, _ur
   const handle = await page.getWindowHandle();
   await page.switchTo().window(handle);
   await page.get(_url);
+});
+
+export const navigateToRoute = Xdotoolify.setupWithPage(async (page, route: string) => {
+  await page.X
+    .run(XC.evaluate, (path: string) => {
+      window.location.href = path;
+    }, route)
+    .checkUntil(XC.evaluate, (path: string) => {
+      return window.location.pathname === path;
+    }, route, true)
+    .do();
+});
+
+export const getLocation = Xdotoolify.setupWithPage(async (page) => {
+  return XC.evaluate(page, () => {
+    return {
+      href: window.location.href,
+      pathname: window.location.pathname,
+      hostname: window.location.hostname,
+      search: window.location.search,
+      hash: window.location.hash
+    };
+  });
 });

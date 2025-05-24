@@ -29,29 +29,31 @@ export enum ProgressVideoStatus {
   WATCHED = 'watched',
 }
 
+export enum InvitationStatus {
+  PENDING = 'pending',
+  ACCEPTED = 'accepted',
+  REJECTED = 'rejected',
+  EXPIRED = 'expired'
+}
+
 type KMType = typeof _KNOWLEDGE_MAP;
 export type KMId = KMType['nodes'][number]['id'];
 
-export interface StudentProgressDTOEntry {
+export interface UserProgressDTOEntry {
   status: ProgressStatus,
   events: {
     time: number,
     status: ProgressStatus,
   }[],
 }
-export interface StudentProgressDTO {
-  [K: KMId]: StudentProgressDTOEntry
+export interface UserProgressDTO {
+  [K: KMId]: UserProgressDTOEntry
 }
 
-export interface StudentProgressVideoDTO {
+export interface UserProgressVideoDTO {
   [K: KMId]: Record<string, ProgressVideoStatus>
 }
 
-export interface StudentDTO {
-  name: string;
-  email: string;
-  progress: StudentProgressDTO;
-}
 
 export interface ProfilePicture {
   image: string;
@@ -61,11 +63,12 @@ export interface ProfilePicture {
 export interface ChildInfo {
   id: number;
   name: string;
-  profilePicture?: ProfilePicture;
-  pinRequired?: boolean;
+  profilePicture: ProfilePicture;
+  pinRequired: boolean;
+  relationshipType: RelationshipType;
 }
 
-export interface ParentInfo {
+export interface AdultInfo {
   id: number;
   name: string;
   type: UserType;
@@ -74,13 +77,18 @@ export interface ParentInfo {
   loggedIn?: boolean;
 }
 
-export interface UserDTO extends StudentDTO {
+export interface UserDTO {
   id: number;
+  name: string;
+  email: string;
   type: UserType;
   profilePicture?: ProfilePicture;
+  pinRequired: boolean;
+  progress: UserProgressDTO;
   children?: ChildInfo[];
-  parents?: ParentInfo[];
+  adults?: AdultInfo[];
   classmates?: ChildInfo[];
+  pendingInvites: InvitationDTO[];
 }
 
 export interface VideoInfo {
@@ -115,6 +123,27 @@ export interface UserRelationshipDTO {
   adult: UserDTO;
   child: UserDTO;
   type: RelationshipType;
+}
+
+export interface InvitationDTO {
+  id: number;
+  inviterUser: {
+    id: number;
+    name: string;
+    email: string;
+    type: UserType;
+  };
+  childUser: {
+    id: number;
+    name: string;
+    profilePicture?: ProfilePicture;
+  };
+  inviteeEmail: string;
+  relationshipType: RelationshipType;
+  status: InvitationStatus;
+  createdAt: Date;
+  expiresAt?: Date;
+  token: string;
 }
 
 interface MicrophoneStartTrainingEvent {

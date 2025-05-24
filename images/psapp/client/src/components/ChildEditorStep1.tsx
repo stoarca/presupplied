@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { UserType } from '../../../common/types';
 
-interface ChildCreatorStep1Props {
+interface ChildEditorStep1Props {
   childData: {
     name: string;
     pinRequired: boolean;
@@ -20,14 +20,16 @@ interface ChildCreatorStep1Props {
   onNext: () => void;
   error: string | null;
   userType: UserType;
+  editMode: boolean;
 }
 
-export const ChildCreatorStep1: React.FC<ChildCreatorStep1Props> = ({
+export const ChildEditorStep1: React.FC<ChildEditorStep1Props> = ({
   childData,
   onDataChange,
   onNext,
   error,
   userType,
+  editMode,
 }) => {
   const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = field === 'pinRequired' ? event.target.checked : event.target.value;
@@ -54,10 +56,10 @@ export const ChildCreatorStep1: React.FC<ChildCreatorStep1Props> = ({
   return (
     <Box sx={{ mt: 2, mb: 4 }}>
       <Typography component="h1" variant="h5" align="center" gutterBottom>
-        Create Your Child's Account
+        {editMode ? 'Edit Child\'s Profile' : 'Create Your Child\'s Account'}
       </Typography>
       <Typography variant="body1" align="center" color="text.secondary" sx={{ mb: 4 }}>
-        As a {userType === UserType.PARENT ? 'parent' : 'teacher'}, please provide a name and optional PIN for your child.
+        {editMode ? 'Update your child\'s name and PIN settings.' : 'Please provide a name and optional PIN for your child.'}
       </Typography>
 
       {error && (
@@ -116,7 +118,7 @@ export const ChildCreatorStep1: React.FC<ChildCreatorStep1Props> = ({
           color="primary"
           disabled={!canProceed}
           onClick={onNext}
-          data-test="next-button"
+          data-test="create-child-next-button"
         >
           Next
         </Button>

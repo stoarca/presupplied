@@ -82,7 +82,7 @@ export class User {
     'child',
     { cascade: true }
   )
-  parentRelationships!: UserRelationship[];
+  adultRelationships!: UserRelationship[];
 
   // Virtual property to get children through relationships
   get children(): User[] {
@@ -92,12 +92,12 @@ export class User {
     return this.childRelationships.map(rel => rel.child).filter(child => child);
   }
 
-  // Virtual property to get parents through relationships  
-  get parents(): User[] {
-    if (!this.parentRelationships) {
+  // Virtual property to get adults through relationships  
+  get adults(): User[] {
+    if (!this.adultRelationships) {
       return [];
     }
-    return this.parentRelationships.map(rel => rel.adult).filter(adult => adult);
+    return this.adultRelationships.map(rel => rel.adult).filter(adult => adult);
   }
 
   constructor(params: UserParams) {
