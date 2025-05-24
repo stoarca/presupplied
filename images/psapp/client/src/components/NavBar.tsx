@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import Alert from '@mui/material/Alert';
 import AppBar from '@mui/material/AppBar';
@@ -14,17 +14,14 @@ import Typography from '@mui/material/Typography';
 
 import { useUserContext } from '../UserContext';
 import { typedFetch, API_HOST } from '../typedFetch';
-import { ChildCreator } from './ChildCreator';
 import { UserType } from '../../../common/types';
 import { AccountSwitcher } from './AccountSwitcher';
 import { Avatar } from './Avatar';
 
 type NavBarProps = Record<string, never>
 export let NavBar = (props: NavBarProps) => {
-  let navigate = useNavigate();
   let user = useUserContext();
   let location = window.location.pathname;
-  let [showAddChildDialog, setShowAddChildDialog] = React.useState(false);
   let [showAccountSwitcher, setShowAccountSwitcher] = React.useState(false);
 
   let navLinks;
@@ -47,12 +44,8 @@ export let NavBar = (props: NavBarProps) => {
     setShowSaveWarning(false);
   }, []);
 
-  let handleOpenSettings = React.useCallback((e: React.SyntheticEvent) => {
-    setShowSaveWarning(false);
-  }, []);
 
-  let handleOpenAddChild = React.useCallback(() => {
-    setShowAddChildDialog(true);
+  let handleCloseUserMenu = React.useCallback(() => {
     setShowUserMenu(false);
   }, []);
 
@@ -61,16 +54,6 @@ export let NavBar = (props: NavBarProps) => {
     setShowUserMenu(false);
   }, []);
 
-  let handleToggleMapView = React.useCallback(() => {
-    navigate(location === '/map' ? '/' : '/map');
-    setShowUserMenu(false);
-  }, [location, navigate]);
-
-  let handleChildCreationComplete = React.useCallback(() => {
-    setShowAddChildDialog(false);
-    // Reload the page to show the new child
-    window.location.reload();
-  }, []);
 
   let buttonStyle = {
     backgroundColor: '#023D54',
@@ -100,9 +83,9 @@ export let NavBar = (props: NavBarProps) => {
     );
   }
   if (user.dto) {
-    const isStudentWithParents = user.dto.type === UserType.STUDENT && user.dto.parents && user.dto.parents.length > 0;
+    const isStudentWithAdults = user.dto.type === UserType.STUDENT && user.dto.adults && user.dto.adults.length > 0;
 
-    if (!isStudentWithParents) {
+    if (!isStudentWithAdults) {
       navLinks = (
         <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}>
           <Tooltip title="Account">
@@ -123,31 +106,47 @@ export let NavBar = (props: NavBarProps) => {
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             open={showUserMenu}
             onClose={handleToggleUserMenu}>
-            {!(user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) ||
-             (user.dto?.children && user.dto?.children.length > 0) && (
-               <>
-                 {(user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) && (
-                   <MenuItem onClick={handleOpenAddChild} data-test="add-child-button">
-                     <Typography textAlign="center">Add Child</Typography>
-                   </MenuItem>
-                 )}
-                 {(user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) &&
+            {(!(user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) ||
+             (user.dto?.children && user.dto?.children.length > 0)) && [
+              (user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) && (
+                <MenuItem
+                  key="add-child"
+                  component={Link}
+                  to="/create-child"
+                  onClick={handleCloseUserMenu}
+                  data-test="menu-item-add-child"
+                >
+                  <Typography textAlign="center">Add Child</Typography>
+                </MenuItem>
+              ),
+              (user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) &&
                  user.dto?.children && user.dto?.children.length > 0 && (
-                   <MenuItem onClick={handleOpenAccountSwitcher} data-test="child-mode-button">
-                     <Typography textAlign="center">Child Mode</Typography>
-                   </MenuItem>
-                 )}
-                 <MenuItem onClick={handleToggleMapView}>
-                   <Typography textAlign="center">
-                     {location === '/map' ? 'Home View' : 'Map View'}
-                   </Typography>
-                 </MenuItem>
-                 <MenuItem onClick={handleOpenSettings}>
-                   <Typography textAlign="center">Settings</Typography>
-                 </MenuItem>
-               </>
-             )}
-            <MenuItem onClick={handleLogout}>
+                <MenuItem key="child-mode" onClick={handleOpenAccountSwitcher} data-test="menu-item-child-mode">
+                  <Typography textAlign="center">Child Mode</Typography>
+                </MenuItem>
+              ),
+              <MenuItem
+                key="map-view"
+                component={Link}
+                to={location === '/map' ? '/' : '/map'}
+                onClick={handleCloseUserMenu}
+                data-test="menu-item-map-view"
+              >
+                <Typography textAlign="center">
+                  {location === '/map' ? 'Home View' : 'Map View'}
+                </Typography>
+              </MenuItem>,
+              <MenuItem
+                key="settings"
+                component={Link}
+                to="/settings/general"
+                onClick={handleCloseUserMenu}
+                data-test="menu-item-settings"
+              >
+                <Typography textAlign="center">Settings</Typography>
+              </MenuItem>
+            ].filter(Boolean)}
+            <MenuItem onClick={handleLogout} data-test="menu-item-logout">
               <Typography textAlign="center">Logout</Typography>
             </MenuItem>
           </Menu>
@@ -221,30 +220,6 @@ export let NavBar = (props: NavBarProps) => {
           {navLinks}
         </Toolbar>
       </AppBar>
-      {showAddChildDialog && (
-        <Box
-          sx={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'white',
-            zIndex: 1300,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            overflow: 'auto'
-          }}
-        >
-          <ChildCreator
-            onComplete={handleChildCreationComplete}
-            showCloseButton={true}
-            onClose={() => setShowAddChildDialog(false)}
-          />
-        </Box>
-      )}
 
       <AccountSwitcher
         open={showAccountSwitcher}

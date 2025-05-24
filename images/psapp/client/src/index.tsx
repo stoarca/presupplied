@@ -8,6 +8,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import { setupTestMode } from './testMode';
 
 import {moduleComponents} from './ModuleContext';
 import {KnowledgeMap} from './KnowledgeMap';
@@ -17,6 +18,13 @@ import {User, UserContext} from './UserContext';
 import {typedFetch, API_HOST} from './typedFetch';
 import { HomePage } from './pages/HomePage';
 import { Debug } from './pages/Debug';
+import { Settings } from './pages/Settings';
+import { GeneralSettingsPage } from './pages/GeneralSettingsPage';
+import { ManageChildrenPage } from './pages/ManageChildrenPage';
+import { CreateChildPage } from './pages/CreateChildPage';
+import { ChildProfile } from './pages/ChildProfile';
+import { EditChildPage } from './pages/EditChildPage';
+import { PendingInvitations } from './pages/PendingInvitations';
 import { OnboardingManager } from './components/OnboardingManager';
 
 interface AppProps {
@@ -42,6 +50,13 @@ let App = (props: AppProps) => {
                   <Route path="login" element={<Login/>}/>
                   <Route path="register" element={<Register/>}/>
                   <Route path="debug" element={<Debug/>}/>
+                  <Route path="settings" element={<Settings/>}/>
+                  <Route path="settings/general" element={<GeneralSettingsPage/>}/>
+                  <Route path="settings/children" element={<ManageChildrenPage/>}/>
+                  <Route path="create-child" element={<CreateChildPage/>}/>
+                  <Route path="invitations" element={<PendingInvitations/>}/>
+                  <Route path="settings/child/:childId" element={<ChildProfile/>}/>
+                  <Route path="settings/child/:childId/edit" element={<EditChildPage/>}/>
                   <Route path="modules">
                     {moduleRoutes}
                     <Route path="*" element={<div>module not found</div>}/>
@@ -57,6 +72,9 @@ let App = (props: AppProps) => {
   );
 };
 
+
+// Initialize test mode instrumentation
+setupTestMode();
 
 (async () => {
   let resp = await typedFetch({

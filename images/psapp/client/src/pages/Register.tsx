@@ -51,7 +51,6 @@ export let Register = (props: RegisterProps) => {
 
     const data = new FormData(event.currentTarget);
     try {
-      console.log('submitting');
       const email = data.get('email') as string;
       const name = data.get('name') as string;
       const password = data.get('password') as string;
@@ -66,7 +65,6 @@ export let Register = (props: RegisterProps) => {
           type: userType,
         },
       });
-      console.log(resp);
       if ('success' in resp) {
         await user.mergeToServer();
         window.location.href = '/';
@@ -88,9 +86,6 @@ export let Register = (props: RegisterProps) => {
       setLoading(false);
     }
   }, [loading, user, userType]);
-
-  console.log('fields');
-  console.log(fields);
 
   return (
     <Container component="main" maxWidth="xs">

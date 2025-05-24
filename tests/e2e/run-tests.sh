@@ -7,7 +7,6 @@ cleanup() {
   # Kill Xvfb and fluxbox
   pkill Xvfb || true
   pkill fluxbox || true
-  exit 0
 }
 
 # Set up signal handler for Ctrl+C and other termination signals

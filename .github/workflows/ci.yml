@@ -36,7 +36,7 @@ jobs:
         working-directory: images/psapp/client
         run: bun run typecheck
 
-      - name: Run Tests
+      - name: Run Unit Tests
         working-directory: images/psapp/client
         run: bun test
 

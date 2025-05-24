@@ -16,23 +16,74 @@ interface LoginCredentials {
   password: string;
 }
 
-interface ChildDetails {
+interface ChildStep1Details {
   name: string;
   pinRequired?: boolean;
   pin?: string;
 }
 
-// Selectors
-const registerLink = 'a[href="/register"]';
-const loginLink = 'a[href="/login"]';
-const nameInput = 'input[name="name"]';
-const emailInput = 'input[name="email"]';
-const passwordInput = 'input[name="password"]';
-const userTypeRadioGroup = 'input[name="user-type"]';
-const submitButton = 'button[type="submit"]';
-const addChildButton = '[data-test="add-child-button"]';
-const accountSwitcher = 'div[data-test="account-switcher"]';
-const errorMessage = '.MuiFormHelperText-root.Mui-error';
+interface ChildStep2Details {
+  avatarId?: string;
+}
+
+interface ChildDetails extends ChildStep1Details, ChildStep2Details {}
+
+// Base selectors for navigation and forms
+export const registerLink = 'a[href="/register"]';
+export const loginLink = 'a[href="/login"]';
+export const nameInput = 'input[name="name"]';
+export const emailInput = 'input[name="email"]';
+export const passwordInput = 'input[name="password"]';
+export const userTypeRadioGroup = 'input[name="user-type"]';
+export const submitButton = 'button[type="submit"]';
+export const errorMessage = '.MuiFormHelperText-root.Mui-error';
+export const moduleCardSelector = '[data-test="module-card"]';
+export const noModulesMessageSelector = '[data-test="no-modules-message"]';
+export const getUserTypeRadioSelector = (type: string) => `input[name="user-type"][value="${type}"]`;
+
+// User menu and account selectors
+export const userMenuButton = 'button[data-test="user-display-email"]';
+export const userDisplayName = '[data-test="user-display-name"]';
+export const userAvatar = '[data-test="user-avatar"]';
+export const logoutButton = '[data-test="menu-item-logout"]';
+export const childModeButton = '[data-test="menu-item-child-mode"]';
+export const settingsMenuItem = '[data-test="menu-item-settings"]';
+export const mapViewMenuItem = '[data-test="menu-item-map-view"]';
+export const addChildMenuItem = '[data-test="menu-item-add-child"]';
+export const accountSwitcher = 'div[data-test="account-switcher"]';
+export const accountAvatarBase = '[data-test^="account-avatar-"]';
+export const accountSwitcherDialogTitle = '#account-switcher-dialog-title';
+export const getAccountAvatarSelector = (accountId: number) => `[data-test="account-avatar-${accountId}"]`;
+
+// Child creation selectors
+export const addChildButton = '[data-test="menu-item-add-child"]';
+export const childNameInput = 'input[data-test="child-name-input"]';
+export const pinRequiredCheckbox = 'input[data-test="pin-required-checkbox"]';
+export const pinInput = 'input[data-test="pin-input"]';
+export const createChildNextButton = 'button[data-test="create-child-next-button"]';
+export const createChildButton = 'button[data-test="create-child-button"]';
+export const childCreatorDialog = 'div[data-test="child-creator"]';
+export const getAvatarSelector = (avatarId: string) => `[data-test="avatar-option-${avatarId}"]`;
+export const getSelectedAvatarSelector = (avatarId: string) => `${getAvatarSelector(avatarId)} .avatar-selected`;
+
+// PIN entry selectors
+export const pinDialogSelector = '[data-test="pin-dialog"]';
+export const pinInputSelector = '#pin';
+export const pinSubmitButton = 'button[data-test="pin-submit"]';
+export const getPinDigitButtonSelector = (digit: string) => `button[data-test="pin-digit-${digit}"]`;
+
+// Invitation selectors
+export const inviteAdultButton = '[data-test="invite-adult-button"]';
+export const inviteEmailInput = '[data-test="invite-email-input"]';
+export const relationshipTypeSelect = '[data-test="relationship-type-select"]';
+export const sendInvitationButton = '[data-test="send-invitation-button"]';
+export const invitationCard = '[data-test="invitation-card"]';
+export const acceptInvitationButton = '[data-test="accept-invitation-button"]';
+export const declineInvitationButton = '[data-test="decline-invitation-button"]';
+export const childNameSelector = '[data-test="child-name"]';
+export const relationshipRoleSelector = '[data-test="relationship-role"]';
+export const inviteDialogSelector = '[data-test="invite-dialog"]';
+export const getRelationshipOptionSelector = (type: string) => `[data-test="relationship-option-${type.toLowerCase()}"]`;
 
 export const getUserInfo = Xdotoolify.setupWithoutPage(async (email: string) => {
   return await typedFetch({
@@ -43,20 +94,11 @@ export const getUserInfo = Xdotoolify.setupWithoutPage(async (email: string) => 
   });
 });
 
-export const deleteTestAccounts = Xdotoolify.setupWithoutPage(async () => {
-  return await typedFetch({
-    host: 'https://applocal.presupplied.com',
-    endpoint: '/api/test/delete-test-accounts',
-    method: 'post',
-    body: {},
-  });
-});
-
 export const getCurrentUserName = Xdotoolify.setupWithPage(async (page) => {
-  return await XC.evaluate(page, () => {
-    const nameElement = document.querySelector('[data-test="user-display-name"]');
+  return await XC.evaluate(page, (_userDisplayName: string) => {
+    const nameElement = document.querySelector(_userDisplayName);
     return nameElement ? nameElement.textContent : null;
-  });
+  }, userDisplayName);
 });
 
 // Navigation functions
@@ -81,8 +123,8 @@ export const enterRegistrationDetails = Xdotoolify.setupWithPage(async (
   page, 
   { name, email, password, type }: RegistrationDetails
 ) => {
-  let typeSelector = `input[name="user-type"][value="${type}"]`;
-  let asdf = Xdotoolify.setupWithPage((page, x) => console.log(x));
+  const typeSelector = getUserTypeRadioSelector(type);
+  
   await page.X
     .checkUntil(XC.visibleElementCount, nameInput, 1)
     .run(XC.autoType, nameInput, name, { overwrite: true })
@@ -110,7 +152,7 @@ export const submitRegistration = Xdotoolify.setupWithPage(async (page, expectSu
 
   if (expectSuccess) {
     await ret
-      .checkUntil(XC.visibleElementCount, 'button[data-test="user-display-email"]', 1)
+      .checkUntil(XC.visibleElementCount, userMenuButton, 1)
       .do();
   } else {
     await ret
@@ -153,21 +195,16 @@ export const submitLogin = Xdotoolify.setupWithPage(async (page, expectSuccess =
 
 // Child account management
 export const openChildCreator = Xdotoolify.setupWithPage(async (page) => {
-  const userMenuButton = 'button[data-test="user-display-email"]';
   await page.X
     .checkUntil(XC.visibleElementCount, userMenuButton, 1)
     .run(XC.autoClick, userMenuButton)
     .checkUntil(XC.visibleElementCount, addChildButton, 1)
     .run(XC.autoClick, addChildButton)
-    .checkUntil(XC.visibleElementCount, 'input[data-test="child-name-input"]', 1)
+    .checkUntil(XC.visibleElementCount, childNameInput, 1)
     .do();
 });
 
-export const enterChildDetails = Xdotoolify.setupWithPage(async (page, { name, pinRequired = false, pin = "" }: ChildDetails) => {
-  const childNameInput = 'input[data-test="child-name-input"]';
-  const pinRequiredCheckbox = 'input[data-test="pin-required-checkbox"]';
-  const pinInput = 'input[data-test="pin-input"]';
-
+export const enterChildDetails = Xdotoolify.setupWithPage(async (page, { name, pinRequired = false, pin = "" }: ChildStep1Details) => {
   await page.X
     .checkUntil(XC.visibleElementCount, childNameInput, 1)
     .run(XC.autoType, childNameInput, name)
@@ -186,8 +223,8 @@ export const enterChildDetails = Xdotoolify.setupWithPage(async (page, { name, p
 });
 
 export const selectChildAvatar = Xdotoolify.setupWithPage(async (page, avatarId = 'bear') => {
-  const avatarSelector = `[data-test="avatar-option-${avatarId}"]`;
-  const selectedAvatarSelector = `${avatarSelector} .avatar-selected`;
+  const avatarSelector = getAvatarSelector(avatarId);
+  const selectedAvatarSelector = getSelectedAvatarSelector(avatarId);
 
   await page.X
     .checkUntil(XC.visibleElementCount, avatarSelector, 1)
@@ -197,37 +234,45 @@ export const selectChildAvatar = Xdotoolify.setupWithPage(async (page, avatarId 
 });
 
 export const submitChildCreation = Xdotoolify.setupWithPage(async (page) => {
-  const createButton = 'button[data-test="create-child-button"]';
-
   await page.X
-    .checkUntil(XC.visibleElementCount, createButton, 1)
-    .run(XC.autoClick, createButton)
-    .checkUntil(XC.visibleElementCount, 'div[data-test="child-creator"]', 0)
+    .checkUntil(XC.visibleElementCount, createChildButton, 1)
+    .run(XC.autoClick, createChildButton)
+    .checkUntil(XC.visibleElementCount, childCreatorDialog, 0)
+    .do();
+});
+
+export const createChildComplete = Xdotoolify.setupWithPage(async (page, childDetails: ChildDetails) => {
+  const { avatarId = 'bear', ...step1Details } = childDetails;
+  
+  await page.X
+    .checkUntil(XC.visibleElementCount, childNameInput, 1)
+    .run(enterChildDetails, step1Details)
+    .checkUntil(XC.visibleElementCount, createChildNextButton, 1)
+    .run(XC.autoClick, createChildNextButton)
+    .checkUntil(XC.visibleElementCount, createChildButton, 1)
+    .run(selectChildAvatar, avatarId)
+    .run(submitChildCreation)
     .do();
 });
 
 // Account switching
 export const openAccountSwitcher = Xdotoolify.setupWithPage(async (page, isChild = false) => {
   if (isChild) {
-    const userAvatar = '[data-test="user-avatar"]';
     await page.X
       .checkUntil(XC.visibleElementCount, userAvatar, 1)
       .run(XC.autoClick, userAvatar)
       .checkUntil(
-        XC.visibleElementCount, '[data-test^="account-avatar-"]', (x) => x >= 1
+        XC.visibleElementCount, accountAvatarBase, (x) => x >= 1
       )
       .do();
   } else {
-    const userMenuButton = 'button[data-test="user-display-email"]';
-    const childModeButton = '[data-test="child-mode-button"]';
-    
     await page.X
       .checkUntil(XC.visibleElementCount, userMenuButton, 1)
       .run(XC.autoClick, userMenuButton)
       .checkUntil(XC.visibleElementCount, childModeButton, 1)
       .run(XC.autoClick, childModeButton)
       .checkUntil(
-        XC.visibleElementCount, '[data-test^="account-avatar-"]', (x) => x >= 1
+        XC.visibleElementCount, accountAvatarBase, (x) => x >= 1
       )
       .do();
   }
@@ -235,8 +280,7 @@ export const openAccountSwitcher = Xdotoolify.setupWithPage(async (page, isChild
 
 
 export const selectAccount = Xdotoolify.setupWithPage(async (page, accountId: number, pin?: string) => {
-  const accountSelector = `[data-test="account-avatar-${accountId}"]`;
-  const accountSwitcherDialog = `#account-switcher-dialog-title`;
+  const accountSelector = getAccountAvatarSelector(accountId);
 
   let chain = page.X
     .checkUntil(XC.visibleElementCount, accountSelector, 1)
@@ -244,38 +288,36 @@ export const selectAccount = Xdotoolify.setupWithPage(async (page, accountId: nu
 
   if (pin) {
     chain = chain
-      .checkUntil(XC.visibleElementCount, '[data-test="pin-dialog"]', 1)
+      .checkUntil(XC.visibleElementCount, pinDialogSelector, 1)
       .run(enterPIN, pin);
   }
 
-  chain = chain.checkUntil(XC.visibleElementCount, accountSwitcherDialog, 0);
+  chain = chain.checkUntil(XC.visibleElementCount, accountSwitcherDialogTitle, 0);
 
   await chain.do();
 });
 
 export const enterPIN = Xdotoolify.setupWithPage(async (page, pin: string) => {
-  const pinInput = '#pin';
   let displayedPin = '';
   
   for (const digit of pin) {
-    const digitButton = `button[data-test="pin-digit-${digit}"]`;
+    const digitButton = getPinDigitButtonSelector(digit);
     displayedPin += digit;
     
     await page.X
       .checkUntil(XC.visibleElementCount, digitButton, 1)
       .run(XC.autoClick, digitButton)
-      .checkUntil(XC.evaluate, () => {
-        const input = document.querySelector('#pin') as HTMLInputElement;
+      .checkUntil(XC.evaluate, (_pinInputSelector: string) => {
+        const input = document.querySelector(_pinInputSelector) as HTMLInputElement;
         return input ? input.value.length : 0;
-      }, displayedPin.length)
+      }, pinInputSelector, displayedPin.length)
       .do();
   }
 
-  const submitPinButton = 'button[data-test="pin-submit"]';
   await page.X
-    .checkUntil(XC.visibleElementCount, submitPinButton, 1)
-    .run(XC.autoClick, submitPinButton)
-    .checkUntil(XC.visibleElementCount, '[data-test="pin-dialog"]', 0)
+    .checkUntil(XC.visibleElementCount, pinSubmitButton, 1)
+    .run(XC.autoClick, pinSubmitButton)
+    .checkUntil(XC.visibleElementCount, pinDialogSelector, 0)
     .do();
 });
 
@@ -284,15 +326,144 @@ export const getErrorMessage = Xdotoolify.setupWithPage(async (page) => {
   return XC.elementText(page, errorMessage) as Promise<string | null>;
 });
 
+// Invitation workflow functions
+export const navigateToChildProfile = Xdotoolify.setupWithPage(
+  async (page, childId: number, options?: { mode: 'quick' | 'slow' }) => {
+    const mode = options?.mode || 'quick';
+    
+    if (mode === 'quick') {
+      await page.X
+        .run(XC.evaluate, (id: number) => {
+          window.location.href = `/settings/child/${id}`;
+        }, childId)
+        .checkUntil(XC.evaluate, () => {
+          return window.location.pathname.includes('/settings/child/');
+        }, true)
+        .do();
+    } else {
+      await page.X
+        .checkUntil(XC.visibleElementCount, userMenuButton, 1)
+        .run(XC.autoClick, userMenuButton)
+        .checkUntil(XC.visibleElementCount, settingsMenuItem, 1)
+        .run(XC.autoClick, settingsMenuItem)
+        .checkUntil(XC.visibleElementCount, 'a[href="/settings/children"]', 1)
+        .run(XC.autoClick, 'a[href="/settings/children"]')
+        .checkUntil(XC.visibleElementCount, `a[href="/settings/child/${childId}"]`, 1)
+        .run(XC.autoClick, `a[href="/settings/child/${childId}"]`)
+        .checkUntil(XC.evaluate, (id: number) => {
+          return window.location.pathname === `/settings/child/${id}`;
+        }, childId, true)
+        .do();
+    }
+  }
+);
+
+export const openInviteAdultDialog = Xdotoolify.setupWithPage(async (page) => {
+  await page.X
+    .checkUntil(XC.visibleElementCount, inviteAdultButton, 1)
+    .run(XC.autoClick, inviteAdultButton)
+    .checkUntil(XC.visibleElementCount, inviteDialogSelector, 1)
+    .do();
+});
+
+export const sendInvitation = Xdotoolify.setupWithPage(async (page, email: string, relationshipType: string) => {
+  const relationshipOptionSelector = getRelationshipOptionSelector(relationshipType);
+  
+  await page.X
+    .checkUntil(XC.visibleElementCount, inviteEmailInput, 1)
+    .run(XC.autoType, inviteEmailInput, email)
+    .checkUntil(XC.getInputValue, inviteEmailInput, email)
+    .checkUntil(XC.visibleElementCount, relationshipTypeSelect, { allowZeroOpacity: true}, 1)
+    .run(XC.autoClick, relationshipTypeSelect, { unsafeIgnoreUnmatchedClick: true })
+    .checkUntil(XC.visibleElementCount, relationshipOptionSelector, 1)
+    .run(XC.autoClick, relationshipOptionSelector)
+    .checkUntil(XC.visibleElementCount, sendInvitationButton, 1)
+    .run(XC.autoClick, sendInvitationButton)
+    .checkUntil(XC.visibleElementCount, inviteDialogSelector, 0)
+    .do();
+});
+
+
+export const acceptInvitation = Xdotoolify.setupWithPage(async (page, invitationIndex = 0) => {
+  await page.X
+    .checkUntil(XC.visibleElementCount, acceptInvitationButton, (count: number) => count > invitationIndex)
+    .run(XC.autoClick, [acceptInvitationButton, invitationIndex])
+    .do();
+});
+
+export const rejectInvitation = Xdotoolify.setupWithPage(async (page, invitationIndex = 0) => {
+  await page.X
+    .checkUntil(XC.visibleElementCount, declineInvitationButton, (count: number) => count > invitationIndex)
+    .run(XC.autoClick, [declineInvitationButton, invitationIndex])
+    .do();
+});
+
+export const getInvitationCount = Xdotoolify.setupWithPage(async (page) => {
+  return XC.evaluate(page, (_invitationCard: string) => {
+    const invitations = document.querySelectorAll(_invitationCard);
+    return invitations.length;
+  }, invitationCard);
+});
+
+export const verifyInvitationDetails = Xdotoolify.setupWithPage(async (page, expectedChildName: string, expectedRole: string, shouldExist = true) => {
+  return XC.evaluate(page, (_invitationCard: string, _childNameSelector: string, _relationshipRoleSelector: string, childName: string, role: string) => {
+    const invitations = document.querySelectorAll(_invitationCard);
+    
+    for (const invitation of invitations) {
+      const childNameEl = invitation.querySelector(_childNameSelector);
+      const roleEl = invitation.querySelector(_relationshipRoleSelector);
+      
+      const childNameText = childNameEl?.textContent || '';
+      const roleText = roleEl?.textContent || '';
+      
+      // Case-insensitive comparison for role
+      if (childNameText.includes(childName) && 
+          roleText.toLowerCase().includes(role.toLowerCase())) {
+        return true;
+      }
+    }
+    return false;
+  }, invitationCard, childNameSelector, relationshipRoleSelector, expectedChildName, expectedRole);
+});
+
+export const logout = Xdotoolify.setupWithPage(async (page) => {
+  
+  await page.X
+    .checkUntil(XC.visibleElementCount, userMenuButton, 1)
+    .run(XC.autoClick, userMenuButton)
+    .checkUntil(XC.visibleElementCount, logoutButton, 1)
+    .run(XC.autoClick, logoutButton)
+    .checkUntil(XC.evaluate, () => {
+      return window.location.pathname === '/login' || window.location.pathname === '/';
+    }, true)
+    .do();
+});
+
+export const registerUser = Xdotoolify.setupWithPage(async (page, { name, email, password, type }: RegistrationDetails) => {
+  await page.X
+    .run(navigateToRegister)
+    .run(enterRegistrationDetails, {
+      name,
+      email,
+      password,
+      type
+    })
+    .run(submitRegistration)
+    .checkUntil(XC.elementText, userMenuButton, (x: string | null) => 
+      x?.toLowerCase() === email.toLowerCase())
+    .do();
+});
+
 // Verification functions
 export const getUserDisplayName = Xdotoolify.setupWithPage(async (page) => {
-  return XC.elementText(page, 'div[data-test="user-display-name"]') as Promise<string | null>;
+  return XC.elementText(page, userDisplayName) as Promise<string | null>;
 });
 
 export const getUserType = Xdotoolify.setupWithPage(async (page) => {
-  return XC.evaluate(page, () => {
+  const userTypeAttr = '[data-user-type]';
+  return XC.evaluate(page, (_userTypeAttr: string) => {
     // This assumes your app stores the user type somewhere in the window object
     // or that there's an element on the page that contains this information
-    return (window as any).__USER_TYPE__ || document.querySelector<HTMLElement>('[data-user-type]')?.getAttribute('data-user-type');
-  }) as Promise<string | null>;
+    return (window as any).__USER_TYPE__ || document.querySelector<HTMLElement>(_userTypeAttr)?.getAttribute('data-user-type');
+  }, userTypeAttr) as Promise<string | null>;
 });

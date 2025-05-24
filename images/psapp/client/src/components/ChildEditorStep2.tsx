@@ -11,7 +11,6 @@ import {
 import { Avatar } from './Avatar';
 import { ColorSelector } from './ColorSelector';
 
-// Animal avatar options
 const AVATAR_OPTIONS = [
   { id: 'bear', path: '/static/images/avatars/bear.png' },
   { id: 'cat', path: '/static/images/avatars/cat.png' },
@@ -27,7 +26,7 @@ const AVATAR_OPTIONS = [
   { id: 'zebra', path: '/static/images/avatars/zebra.png' }
 ];
 
-interface ChildCreatorStep2Props {
+interface ChildEditorStep2Props {
   childData: {
     avatarPath: string;
     avatarColor: string;
@@ -37,15 +36,17 @@ interface ChildCreatorStep2Props {
   onSubmit: () => void;
   loading: boolean;
   error: string | null;
+  editMode: boolean;
 }
 
-export const ChildCreatorStep2: React.FC<ChildCreatorStep2Props> = ({
+export const ChildEditorStep2: React.FC<ChildEditorStep2Props> = ({
   childData,
   onDataChange,
   onBack,
   onSubmit,
   loading,
   error,
+  editMode,
 }) => {
   const handleSelectAvatar = (avatarPath: string) => {
     onDataChange('avatarPath', avatarPath);
@@ -60,10 +61,10 @@ export const ChildCreatorStep2: React.FC<ChildCreatorStep2Props> = ({
   return (
     <Box sx={{ mt: 2, mb: 4 }}>
       <Typography component="h1" variant="h5" align="center" gutterBottom>
-        Choose an Avatar
+        {editMode ? 'Update Avatar' : 'Choose an Avatar'}
       </Typography>
       <Typography variant="body1" align="center" color="text.secondary" sx={{ mb: 4 }}>
-        Personalize your child's account by selecting an avatar and background color.
+        {editMode ? 'Change your child\'s avatar and background color.' : 'Personalize your child\'s account by selecting an avatar and background color.'}
       </Typography>
 
       {error && (
@@ -132,7 +133,10 @@ export const ChildCreatorStep2: React.FC<ChildCreatorStep2Props> = ({
           startIcon={loading ? <CircularProgress size={20} /> : undefined}
           data-test="create-child-button"
         >
-          {loading ? 'Creating...' : 'Create Account'}
+          {loading
+            ? (editMode ? 'Updating...' : 'Creating...')
+            : (editMode ? 'Update Profile' : 'Create Profile')
+          }
         </Button>
       </Box>
     </Box>

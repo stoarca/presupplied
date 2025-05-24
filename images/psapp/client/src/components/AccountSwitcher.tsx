@@ -48,7 +48,7 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
   const [selectedAccount, setSelectedAccount] = useState<RelatedAccount | null>(null);
   const [relationships, setRelationships] = useState<{
     children?: RelatedAccount[],
-    parents?: RelatedAccount[],
+    adults?: RelatedAccount[],
     classmates?: RelatedAccount[]
   }>({});
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +58,7 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
     try {
       const response = await typedFetch({
         host: API_HOST,
-        endpoint: '/api/user/switch',
+        endpoint: '/api/auth/switch',
         method: 'post',
         body: {
           targetId: userId.toString(),
@@ -67,7 +67,9 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
       });
 
       if ('success' in response && response.success) {
-        window.location.reload();
+        // HACK: if we don't delay this it causes a network error in the fetch
+        // above
+        setTimeout(() => window.location.href = '/', 50);
       } else if ('errorCode' in response) {
         setError(response.message);
       }
@@ -116,7 +118,7 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
     if (props.open && user.dto) {
       const updatedRelationships: {
         children?: RelatedAccount[],
-        parents?: RelatedAccount[],
+        adults?: RelatedAccount[],
         classmates?: RelatedAccount[]
       } = {};
 
@@ -132,13 +134,13 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
         }));
       }
 
-      if (user.dto.type === UserType.STUDENT && user.dto.parents) {
-        updatedRelationships.parents = user.dto.parents.map(parent => ({
-          id: parent.id,
-          name: parent.name,
-          type: parent.type,
-          profilePicture: parent.profilePicture,
-          relationshipType: parent.relationshipType,
+      if (user.dto.type === UserType.STUDENT && user.dto.adults) {
+        updatedRelationships.adults = user.dto.adults.map(adult => ({
+          id: adult.id,
+          name: adult.name,
+          type: adult.type,
+          profilePicture: adult.profilePicture,
+          relationshipType: adult.relationshipType,
           pinRequired: true,
           isSelected: false
         }));
@@ -204,7 +206,7 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
       isSelected: true,
     },
     ...(relationships.children || []),
-    ...(relationships.parents || []),
+    ...(relationships.adults || []),
     ...(relationships.classmates || []),
   ];
 
