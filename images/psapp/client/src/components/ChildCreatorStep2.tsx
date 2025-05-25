@@ -92,7 +92,7 @@ export const ChildCreatorStep2: React.FC<ChildCreatorStep2Props> = ({
               <Avatar
                 profilePicture={{
                   image: avatar.path,
-                  background: "white"
+                  background: 'white'
                 }}
                 size={65}
                 selected={childData.avatarPath === avatar.path}

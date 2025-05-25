@@ -6,7 +6,7 @@ import {
 
 export default (props: never) => {
   return (
-    <ModuleBuilder reviewModule__dirname={__dirname}/>
+    <ModuleBuilder />
   );
 };
 

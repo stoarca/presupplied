@@ -12,15 +12,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 
 interface RelatedAccount {
   id: number;
@@ -29,7 +22,20 @@ interface RelatedAccount {
   profilePicture?: ProfilePicture;
   pinRequired: boolean;
   relationshipType: RelationshipType;
+  isSelected: false;
 }
+
+interface CurrentUserAccount {
+  id: number;
+  name: string;
+  type: UserType;
+  profilePicture?: ProfilePicture;
+  pinRequired: false;
+  relationshipType: RelationshipType;
+  isSelected: true;
+}
+
+type Account = RelatedAccount | CurrentUserAccount;
 
 interface AccountSwitcherProps {
   open: boolean;
@@ -75,7 +81,7 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
     props.onClose();
   };
 
-  const handleAccountSelect = async (account: RelatedAccount & {isSelected?: boolean}) => {
+  const handleAccountSelect = async (account: Account) => {
     if (account.isSelected) {
       return;
     }
@@ -121,7 +127,8 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
           type: UserType.STUDENT,
           profilePicture: child.profilePicture,
           relationshipType: RelationshipType.PRIMARY,
-          pinRequired: child.pinRequired || false
+          pinRequired: child.pinRequired || false,
+          isSelected: false
         }));
       }
 
@@ -132,7 +139,8 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
           type: parent.type,
           profilePicture: parent.profilePicture,
           relationshipType: parent.relationshipType,
-          pinRequired: true
+          pinRequired: true,
+          isSelected: false
         }));
       }
 
@@ -143,7 +151,8 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
           type: UserType.STUDENT,
           profilePicture: classmate.profilePicture,
           relationshipType: RelationshipType.PRIMARY,
-          pinRequired: classmate.pinRequired || false
+          pinRequired: classmate.pinRequired || false,
+          isSelected: false
         }));
       }
 
@@ -160,19 +169,19 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
           handlePinSubmit();
           return;
         }
-        
+
         if (e.key === 'Backspace') {
           setPin(prev => prev.slice(0, -1));
           return;
         }
-        
+
         const digit = /^[0-9]$/.test(e.key) ? e.key : null;
         if (digit && pin.length < 6) {
           setPin(prev => prev + digit);
         }
       }
     };
-    
+
     document.addEventListener('keydown', handleGlobalKeyDown);
     return () => {
       document.removeEventListener('keydown', handleGlobalKeyDown);
@@ -184,7 +193,7 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
     return null;
   }
 
-  const allAccounts = [
+  const allAccounts: Account[] = [
     {
       id: user.dto?.id || 0,
       name: user.dto?.name || '',
@@ -301,11 +310,11 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
               type="password"
               variant="outlined"
               value={pin}
-              inputProps={{ 
+              inputProps={{
                 maxLength: 6,
                 inputMode: 'none', // Prevents mobile keyboard
                 readOnly: true, // Prevents keyboard but allows selection/focus
-                "aria-label": "PIN code entry field"
+                'aria-label': 'PIN code entry field'
               }}
               sx={{ mb: 2, width: '100%' }}
               InputProps={{
@@ -317,10 +326,10 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
               }}
             />
 
-            <Box 
-              sx={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(3, 1fr)', 
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
                 gap: 1,
                 width: '100%',
                 maxWidth: 300
@@ -332,8 +341,8 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
                   variant="outlined"
                   data-test={`pin-digit-${num}`}
                   onClick={() => setPin(prev => prev.length < 6 ? prev + num : prev)}
-                  sx={{ 
-                    minWidth: 60, 
+                  sx={{
+                    minWidth: 60,
                     height: 60,
                     fontSize: '1.5rem'
                   }}
@@ -345,8 +354,8 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
                 variant="outlined"
                 onClick={() => setPin(prev => prev.slice(0, -1))}
                 data-test="pin-backspace"
-                sx={{ 
-                  minWidth: 60, 
+                sx={{
+                  minWidth: 60,
                   height: 60,
                   fontSize: '1.2rem',
                   gridColumn: '1 / 2'
@@ -358,8 +367,8 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
                 variant="outlined"
                 onClick={() => setPin(prev => prev.length < 6 ? prev + '0' : prev)}
                 data-test="pin-digit-0"
-                sx={{ 
-                  minWidth: 60, 
+                sx={{
+                  minWidth: 60,
                   height: 60,
                   fontSize: '1.5rem',
                   gridColumn: '2 / 3'
@@ -372,8 +381,8 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
                 onClick={handlePinSubmit}
                 disabled={!pin}
                 data-test="pin-submit"
-                sx={{ 
-                  minWidth: 60, 
+                sx={{
+                  minWidth: 60,
                   height: 60,
                   fontSize: '1.2rem',
                   gridColumn: '3 / 4'

@@ -291,11 +291,10 @@ AppDataSource.initialize().then(async () => {
       const savedChildUser = await userRepo.save(childUser);
 
       const relationshipRepo = AppDataSource.getRepository(UserRelationship);
-      const relationship = new UserRelationship({
-        adult: parentUser,
-        child: savedChildUser,
-        type: RelationshipType.PRIMARY
-      });
+      const relationship = new UserRelationship();
+      relationship.adultId = parentUser.id;
+      relationship.childId = savedChildUser.id;
+      relationship.type = RelationshipType.PRIMARY;
 
       await relationshipRepo.save(relationship);
 
@@ -339,8 +338,8 @@ AppDataSource.initialize().then(async () => {
         const relationshipRepo = AppDataSource.getRepository(UserRelationship);
         const relationship = await relationshipRepo.findOne({
           where: {
-            adult: { id: parentUser.id },
-            child: { id: childId }
+            adultId: parentUser.id,
+            childId: childId
           }
         });
 
@@ -386,7 +385,7 @@ AppDataSource.initialize().then(async () => {
       const relationshipRepo = AppDataSource.getRepository(UserRelationship);
       const childRelationships = await relationshipRepo.find({
         where: {
-          adult: { id: selectedUser.id }
+          adultId: selectedUser.id
         },
         relations: ['child']
       });
@@ -406,7 +405,7 @@ AppDataSource.initialize().then(async () => {
       const relationshipRepo = AppDataSource.getRepository(UserRelationship);
       const parentRelationships = await relationshipRepo.find({
         where: {
-          child: { id: selectedUser.id }
+          childId: selectedUser.id
         },
         relations: ['adult']
       });
@@ -435,8 +434,8 @@ AppDataSource.initialize().then(async () => {
           if (loggedInParent) {
             const classmateRelationships = await relationshipRepo.find({
               where: {
-                adult: { id: loggedInParent.adult.id },
-                child: { id: Not(selectedUser.id) }
+                adultId: loggedInParent.adult.id,
+                childId: Not(selectedUser.id)
               },
               relations: ['child']
             });
@@ -513,8 +512,8 @@ AppDataSource.initialize().then(async () => {
       const relationshipRepo = AppDataSource.getRepository(UserRelationship);
       const relationship = await relationshipRepo.findOne({
         where: {
-          adult: { id: parentUser.id },
-          child: { id: targetUser.id }
+          adultId: parentUser.id,
+          childId: targetUser.id
         }
       });
 
@@ -698,8 +697,8 @@ AppDataSource.initialize().then(async () => {
       const relationshipRepo = AppDataSource.getRepository(UserRelationship);
       const relationship = await relationshipRepo.findOne({
         where: {
-          adult: { id: baseUser.id },
-          child: { id: req.jwtUser.selectedUserId }
+          adultId: baseUser.id,
+          childId: req.jwtUser.selectedUserId
         },
         relations: ['child']
       });
@@ -718,8 +717,8 @@ AppDataSource.initialize().then(async () => {
       const relationshipRepo = AppDataSource.getRepository(UserRelationship);
       const relationship = await relationshipRepo.findOne({
         where: {
-          adult: { id: baseUser.id },
-          child: { id: req.body.onBehalfOfStudentId }
+          adultId: baseUser.id,
+          childId: req.body.onBehalfOfStudentId
         },
         relations: ['child']
       });
@@ -845,7 +844,7 @@ AppDataSource.initialize().then(async () => {
     const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.findOne({
       where: { email },
-      relations: ['children'],
+      relations: ['childRelationships', 'childRelationships.child'],
     });
 
     if (!user) {

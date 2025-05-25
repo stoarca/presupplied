@@ -37,10 +37,10 @@ console.log(`Output directory will be: ${outdir}`);
 
 const entryPoints = ['src/index.tsx'];
 readdirSync(modulesDir)
-  .filter(f => f !== 'common')
-  .forEach(moduleName => {
-    entryPoints.push(`src/modules/${moduleName}/index.tsx`);
-  });
+    .filter(f => f !== 'common')
+    .forEach(moduleName => {
+      entryPoints.push(`src/modules/${moduleName}/index.tsx`);
+    });
 
 const isWatchMode = process.argv.includes('--watch');
 

@@ -77,7 +77,7 @@ export const ChildCreatorStep1: React.FC<ChildCreatorStep1Props> = ({
         value={childData.name}
         onChange={handleChange('name')}
         error={childData.name !== '' && !isNameValid}
-        helperText={childData.name !== '' && !isNameValid ? "Name must be at least 2 characters" : ""}
+        helperText={childData.name !== '' && !isNameValid ? 'Name must be at least 2 characters' : ''}
         inputProps={{ 'data-test': 'child-name-input' }}
       />
 
@@ -87,7 +87,7 @@ export const ChildCreatorStep1: React.FC<ChildCreatorStep1Props> = ({
             checked={childData.pinRequired}
             onChange={handleChange('pinRequired')}
             name="pinRequired"
-            inputProps={{ 'data-test': 'pin-required-checkbox' }}
+            inputProps={{ 'data-test': 'pin-required-checkbox' } as any}
           />
         }
         label="Require PIN for access"
@@ -105,7 +105,7 @@ export const ChildCreatorStep1: React.FC<ChildCreatorStep1Props> = ({
           value={childData.pin}
           onChange={handleChange('pin')}
           error={childData.pin !== '' && !isPinValid}
-          helperText={childData.pin !== '' && !isPinValid ? "PIN must be at least 4 digits (numbers only)" : ""}
+          helperText={childData.pin !== '' && !isPinValid ? 'PIN must be at least 4 digits (numbers only)' : ''}
           inputProps={{ maxLength: 6, inputMode: 'numeric', pattern: '[0-9]*', 'data-test': 'pin-input' }}
         />
       )}

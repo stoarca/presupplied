@@ -38,9 +38,9 @@ export const Avatar: React.FC<AvatarProps> = ({
 
   const bgColor = profilePicture?.background ||
     (userType === UserType.STUDENT ? '#4caf50' :
-     userType === UserType.TEACHER ? '#2196f3' :
-     userType === UserType.PARENT ? '#ff9800' :
-     'primary.light');
+      userType === UserType.TEACHER ? '#2196f3' :
+        userType === UserType.PARENT ? '#ff9800' :
+          'primary.light');
 
   return (
     <MuiAvatar

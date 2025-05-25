@@ -1,5 +1,5 @@
 import React, { CSSProperties, useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -28,7 +28,6 @@ export let HomePage = () => {
   ));
   let [showUserMenu, setShowUserMenu] = React.useState(false);
   let userMenuRef = React.useRef<HTMLButtonElement | null>(null);
-  let navigate = useNavigate();
 
   let handleToggleUserMenu = React.useCallback(() => {
     setShowUserMenu((old) => !old);
@@ -102,23 +101,6 @@ export let HomePage = () => {
     }
   };
 
-  let pillButtonStyle = {
-    position: 'fixed',
-    bottom: '20px',
-    right: '20px',
-    background: 'rgba(148, 222, 165, 0.72)',
-    border: '2px solid #023D54',
-    borderRadius: '50px',
-    padding: '10px 20px',
-    cursor: 'pointer',
-    zIndex: 1000,
-    color: '#023D54',
-    gap: '10px',
-    display: 'flex',
-    ':hover': {
-      background: '#94DEA5',
-    }
-  };
 
   let buttonStyle = {
     padding: '5px 15px',
@@ -260,8 +242,8 @@ export let HomePage = () => {
         {moduleCount === 0 && (
           <h1 style={{ position: 'absolute', transform: 'translate(-50%, -50%)', top: '50%', left: '50%', color: '#fff', maxWidth: '50vw', textAlign: 'center', justifyContent: 'center' }}>
             {isStudent
-              ? "No modules available for you at this time. Check back soon!"
-              : "No modules available yet. Complete student modules to unlock teacher content."}
+              ? 'No modules available for you at this time. Check back soon!'
+              : 'No modules available yet. Complete student modules to unlock teacher content.'}
           </h1>
         )}
 
@@ -290,12 +272,12 @@ export let HomePage = () => {
       </div>
 
       <Typography variant="h6" component="div" sx={{
-          position: 'absolute',
-          bottom: '10px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          textAlign: 'center'
-        }}>
+        position: 'absolute',
+        bottom: '10px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        textAlign: 'center'
+      }}>
         <img src="/static/images/logodark.svg" style={{ height: '30px' }} />
       </Typography>
     </div>

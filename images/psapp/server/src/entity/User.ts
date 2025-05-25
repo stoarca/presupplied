@@ -4,8 +4,6 @@ import {
   Column,
   Index,
   OneToMany,
-  ManyToMany,
-  JoinTable,
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm"
@@ -71,22 +69,6 @@ export class User {
   )
   progress!: UserProgress[];
 
-  @ManyToMany(() => User, user => user.parents)
-  @JoinTable({
-    name: 'user_relationship',
-    joinColumn: {
-      name: 'adult_id',
-      referencedColumnName: 'id'
-    },
-    inverseJoinColumn: {
-      name: 'child_id',
-      referencedColumnName: 'id'
-    }
-  })
-  children!: User[];
-
-  @ManyToMany(() => User, user => user.children)
-  parents!: User[];
   
   @OneToMany(
     'UserRelationship',
@@ -101,6 +83,22 @@ export class User {
     { cascade: true }
   )
   parentRelationships!: UserRelationship[];
+
+  // Virtual property to get children through relationships
+  get children(): User[] {
+    if (!this.childRelationships) {
+      return [];
+    }
+    return this.childRelationships.map(rel => rel.child).filter(child => child);
+  }
+
+  // Virtual property to get parents through relationships  
+  get parents(): User[] {
+    if (!this.parentRelationships) {
+      return [];
+    }
+    return this.parentRelationships.map(rel => rel.adult).filter(adult => adult);
+  }
 
   constructor(params: UserParams) {
     this.name = params.name;

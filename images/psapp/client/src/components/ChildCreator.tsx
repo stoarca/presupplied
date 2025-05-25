@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   Paper,
@@ -47,7 +47,7 @@ export const ChildCreator = ({ onComplete, showCloseButton = false, onClose }: C
   };
 
   const handleCreateChild = async () => {
-    if (!user.dto) return;
+    if (!user.dto) {return;}
 
     setLoading(true);
     setError(null);

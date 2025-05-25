@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../UserContext';
 import { UserType } from '../../../common/types';
-import { typedFetch, API_HOST } from '../typedFetch';
 import { ChildCreator } from './ChildCreator';
 import { NavBar } from './NavBar';
 
@@ -62,5 +61,5 @@ export const OnboardingManager = ({ children }: OnboardingManagerProps) => {
     );
   }
 
-  return children;
+  return <>{children}</>;
 };

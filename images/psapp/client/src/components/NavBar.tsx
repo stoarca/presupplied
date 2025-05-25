@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState, useEffect } from 'react';
+import React, { CSSProperties } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import Alert from '@mui/material/Alert';
@@ -14,7 +14,6 @@ import Typography from '@mui/material/Typography';
 
 import { useUserContext } from '../UserContext';
 import { typedFetch, API_HOST } from '../typedFetch';
-import { AccountTreeTwoTone, Close as CloseIcon, ChildCare } from '@mui/icons-material';
 import { ChildCreator } from './ChildCreator';
 import { UserType } from '../../../common/types';
 import { AccountSwitcher } from './AccountSwitcher';
@@ -126,28 +125,28 @@ export let NavBar = (props: NavBarProps) => {
             onClose={handleToggleUserMenu}>
             {!(user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) ||
              (user.dto?.children && user.dto?.children.length > 0) && (
-              <>
-                {(user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) && (
-                  <MenuItem onClick={handleOpenAddChild} data-test="add-child-button">
-                    <Typography textAlign="center">Add Child</Typography>
-                  </MenuItem>
-                )}
-                {(user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) &&
+               <>
+                 {(user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) && (
+                   <MenuItem onClick={handleOpenAddChild} data-test="add-child-button">
+                     <Typography textAlign="center">Add Child</Typography>
+                   </MenuItem>
+                 )}
+                 {(user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) &&
                  user.dto?.children && user.dto?.children.length > 0 && (
-                  <MenuItem onClick={handleOpenAccountSwitcher} data-test="child-mode-button">
-                    <Typography textAlign="center">Child Mode</Typography>
-                  </MenuItem>
-                )}
-                <MenuItem onClick={handleToggleMapView}>
-                  <Typography textAlign="center">
-                    {location === '/map' ? 'Home View' : 'Map View'}
-                  </Typography>
-                </MenuItem>
-                <MenuItem onClick={handleOpenSettings}>
-                  <Typography textAlign="center">Settings</Typography>
-                </MenuItem>
-              </>
-            )}
+                   <MenuItem onClick={handleOpenAccountSwitcher} data-test="child-mode-button">
+                     <Typography textAlign="center">Child Mode</Typography>
+                   </MenuItem>
+                 )}
+                 <MenuItem onClick={handleToggleMapView}>
+                   <Typography textAlign="center">
+                     {location === '/map' ? 'Home View' : 'Map View'}
+                   </Typography>
+                 </MenuItem>
+                 <MenuItem onClick={handleOpenSettings}>
+                   <Typography textAlign="center">Settings</Typography>
+                 </MenuItem>
+               </>
+             )}
             <MenuItem onClick={handleLogout}>
               <Typography textAlign="center">Logout</Typography>
             </MenuItem>
@@ -173,7 +172,7 @@ export let NavBar = (props: NavBarProps) => {
             onClick={handleOpenAccountSwitcher}
             data-test="user-avatar"
           />
-          <Typography 
+          <Typography
             data-test="user-display-name"
             sx={{
               color: '#023D54',

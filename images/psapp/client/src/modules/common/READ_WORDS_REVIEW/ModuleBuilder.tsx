@@ -5,39 +5,44 @@ import {
 } from '@src/modules/common/READ_WORDS/ModuleBuilder';
 import {KNOWLEDGE_MAP} from '@src/../../common/types';
 import {buildGraph} from '@src/dependency-graph';
-
-let r = require.context('../../', true, /^\.\/READ_WORDS_(?!REVIEW)[^/]+$/);
+import {useModuleName} from '@src/hooks/useModuleName';
 
 let knowledgeGraph = buildGraph(KNOWLEDGE_MAP);
-interface ReadWordsReviewProps {
-  reviewModule__dirname: string,
-}
-export let ModuleBuilder = (props: ReadWordsReviewProps) => {
+
+export let ModuleBuilder = () => {
   let url = new URL(window.location.href);
   let admin = url.searchParams.get('admin') === '1';
   let [allWords, setAllWords] = React.useState<Variant[]>([]);
+  let moduleName = useModuleName();
+
   React.useEffect(() => {
-    let moduleName = props.reviewModule__dirname.split('/').at(-1) as string;
     (async () => {
       let allDeps = knowledgeGraph.directDependenciesOf(moduleName);
-      let wordModuleDeps: Record<string, string> = {};
 
-      r.keys().forEach((moduleName) => {
-        let cleaned = moduleName.substring(2); // remove ./ from start
-        if (allDeps.includes(cleaned)) {
-          wordModuleDeps[cleaned] = moduleName;
-        }
-      });
+      // Filter to only READ_WORDS modules (excluding REVIEW modules)
+      let wordModuleDeps = allDeps.filter((dep: string) =>
+        dep.startsWith('READ_WORDS_') && !dep.includes('REVIEW')
+      );
 
       let arrayOfArrays = [];
-      for (let k in wordModuleDeps) {
-        arrayOfArrays.push((await r(wordModuleDeps[k])).words);
+      for (let dep of wordModuleDeps) {
+        try {
+          // Use dynamic import instead of require.context
+          const module = await import(`../../${dep}/index.tsx`);
+          if (module.words) {
+            arrayOfArrays.push(module.words);
+          }
+        } catch (error) {
+          console.warn(`Failed to load module ${dep}:`, error);
+        }
       }
       setAllWords(arrayOfArrays.flat());
     })();
-  }, [props.reviewModule__dirname]);
+  }, [moduleName]);
+
   if (allWords.length === 0) {
     return <div>loading</div>;
   }
+
   return <InnerModuleBuilder variants={allWords} maxScorePerVariant={1} pronounceOnSuccess={admin}/>;
 };
