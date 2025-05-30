@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useUserContext } from '../UserContext';
 import { typedFetch, API_HOST } from '../typedFetch';
 import { UserType, RelationshipType, ProfilePicture } from '../../../common/types';
-import { Avatar } from './Avatar';
+import { UserSelector, UserOption } from './UserSelector';
 
 // MUI imports
 import Box from '@mui/material/Box';
@@ -135,15 +135,17 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
       }
 
       if (user.dto.type === UserType.STUDENT && user.dto.adults) {
-        updatedRelationships.adults = user.dto.adults.map(adult => ({
-          id: adult.id,
-          name: adult.name,
-          type: adult.type,
-          profilePicture: adult.profilePicture,
-          relationshipType: adult.relationshipType,
-          pinRequired: true,
-          isSelected: false
-        }));
+        updatedRelationships.adults = user.dto.adults
+            .filter(adult => adult.loggedIn)
+            .map(adult => ({
+              id: adult.id,
+              name: adult.name,
+              type: adult.type,
+              profilePicture: adult.profilePicture,
+              relationshipType: adult.relationshipType,
+              pinRequired: true,
+              isSelected: false
+            }));
       }
 
       if (user.dto.type === UserType.STUDENT && user.dto.classmates) {
@@ -210,85 +212,47 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
     ...(relationships.classmates || []),
   ];
 
+  const userOptions: UserOption[] = allAccounts.map(account => ({
+    id: account.id,
+    name: account.name,
+    userType: account.type,
+    profilePicture: account.profilePicture,
+    isSelected: account.isSelected,
+    caption: account.type === UserType.STUDENT && account.pinRequired ? 'PIN required' : undefined,
+    subtitle: (account.type === UserType.PARENT || account.type === UserType.TEACHER)
+      ? (account.type === UserType.TEACHER ? 'Teacher' : 'Parent')
+      : undefined
+  }));
+
+  const handleUserSelect = (userId: number) => {
+    const account = allAccounts.find(a => a.id === userId);
+    if (account) {
+      handleAccountSelect(account);
+    }
+  };
+
   return (
     <>
-      <Dialog
-        open={props.open}
-        onClose={handleClose}
-        aria-labelledby="account-switcher-dialog-title"
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogTitle id="account-switcher-dialog-title" sx={{ textAlign: 'center', pb: 0 }}>
-          Switch Account
-        </DialogTitle>
-        <DialogContent>
-          {error && (
-            <Typography color="error" variant="body2" sx={{ mb: 2 }}>
+      {error && (
+        <Dialog open={props.open && !!error} onClose={() => setError(null)}>
+          <DialogContent>
+            <Typography color="error" variant="body2">
               {error}
             </Typography>
-          )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setError(null)}>OK</Button>
+          </DialogActions>
+        </Dialog>
+      )}
 
-          <Box sx={{ minWidth: 275, maxWidth: 600, mx: 'auto' }}>
-            <Box sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              gap: 4,
-              my: 4
-            }}>
-              {allAccounts.map((account) => (
-                <Box
-                  key={account.id}
-                  data-test={`account-avatar-${account.id}`}
-                  onClick={() => handleAccountSelect(account)}
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    cursor: !account.isSelected ? 'pointer' : 'default',
-                    padding: 2,
-                    minWidth: 140,
-                  }}
-                >
-                  <Avatar
-                    userType={account.type}
-                    profilePicture={account.profilePicture}
-                    size={100}
-                    selected={account.isSelected}
-                    onClick={() => handleAccountSelect(account)}
-                  />
-                  <Typography
-                    variant="h6"
-                    align="center"
-                    sx={{ mt: 1, fontWeight: 'bold' }}
-                  >
-                    {account.name}
-                  </Typography>
-                  {account.type === UserType.STUDENT && account.pinRequired && (
-                    <Typography variant="caption" color="text.secondary">
-                      PIN required
-                    </Typography>
-                  )}
-                  {(account.type === UserType.PARENT || account.type === UserType.TEACHER) && (
-                    <Typography variant="body2" color="text.secondary">
-                      {account.type === UserType.TEACHER ? 'Teacher' : 'Parent'}
-                    </Typography>
-                  )}
-                </Box>
-              ))}
-            </Box>
-
-            {allAccounts.length <= 1 && (
-              <Box sx={{ textAlign: 'center', my: 4 }}>
-                <Typography variant="body1" color="text.secondary">
-                  No related accounts found.
-                </Typography>
-              </Box>
-            )}
-          </Box>
-        </DialogContent>
-      </Dialog>
+      <UserSelector
+        open={props.open && !error}
+        onClose={handleClose}
+        onSelect={handleUserSelect}
+        title="Switch Account"
+        users={userOptions}
+      />
 
       <Dialog open={pinDialogOpen} onClose={handlePinDialogClose} data-test="pin-dialog">
         <DialogTitle>Enter PIN</DialogTitle>

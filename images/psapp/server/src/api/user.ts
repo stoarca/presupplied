@@ -92,7 +92,7 @@ export const setupUserRoutes = (router: express.Router) => {
         where: {
           adultId: selectedUser.id
         },
-        relations: ['child']
+        relations: ['child', 'child.progress', 'child.progress.module', 'child.progress.completedBy']
       });
 
       if (childRelationships.length > 0) {
@@ -101,7 +101,15 @@ export const setupUserRoutes = (router: express.Router) => {
           name: rel.child.name,
           profilePicture: rel.child.profilePicture!,
           pinRequired: rel.child.pinRequired,
-          relationshipType: rel.type
+          relationshipType: rel.type,
+          progress: rel.child.progress.reduce((acc, x) => {
+            acc[x.module.vanityId] = {
+              status: x.status,
+              completedById: x.completedBy?.id,
+              events: [],
+            };
+            return acc;
+          }, {} as UserProgressDTO)
         }));
       }
 
@@ -154,6 +162,7 @@ export const setupUserRoutes = (router: express.Router) => {
           return {
             id: rel.adult.id,
             name: rel.adult.name,
+            email: rel.adult.email!,
             type: rel.adult.type,
             profilePicture: rel.adult.profilePicture,
             relationshipType: rel.type,
@@ -309,7 +318,8 @@ export const setupUserRoutes = (router: express.Router) => {
     }
 
     const targetUser = await userRepo.findOne({
-      where: { id: userId }
+      where: { id: userId },
+      relations: ['adultRelationships', 'adultRelationships.adult']
     });
 
     if (!targetUser) {
@@ -352,21 +362,6 @@ export const setupUserRoutes = (router: express.Router) => {
         });
       }
 
-      const allRelationships = await relationshipRepo.find({
-        where: {
-          childId: userId
-        },
-        relations: ['adult']
-      });
-
-      const adults = allRelationships.map(rel => ({
-        id: rel.adult.id,
-        name: rel.adult.name,
-        email: rel.adult.email!,
-        type: rel.adult.type,
-        profilePicture: rel.adult.profilePicture,
-        relationshipType: rel.type
-      }));
 
       const invitationRepo = AppDataSource.getRepository(UserInvitation);
       const pendingInvites = await invitationRepo.find({
@@ -406,13 +401,14 @@ export const setupUserRoutes = (router: express.Router) => {
         profilePicture: targetUser.profilePicture,
         pinRequired: targetUser.pinRequired,
         progress: {},
-        adults: adults.map(adult => ({
-          id: adult.id,
-          name: adult.name,
-          type: adult.type,
-          profilePicture: adult.profilePicture,
-          relationshipType: adult.relationshipType,
-          loggedIn: adult.id === currentUser.id
+        adults: targetUser.adultRelationships.map(rel => ({
+          id: rel.adult.id,
+          name: rel.adult.name,
+          email: rel.adult.email!,
+          type: rel.adult.type,
+          profilePicture: rel.adult.profilePicture,
+          relationshipType: rel.type,
+          loggedIn: rel.adult.id === currentUser.id
         })),
         pendingInvites: invites
       };

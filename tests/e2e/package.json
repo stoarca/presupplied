@@ -13,6 +13,6 @@
     "longjohn": "^0.2.12",
     "selenium-webdriver": "^4.12.0",
     "typescript": "^5.2.2",
-    "xdotoolify": "2.0.15"
+    "xdotoolify": "2.0.16"
   }
 }

@@ -6,8 +6,11 @@ import {
   KMId,
   ProgressStatus,
   ProgressVideoStatus,
-  UserProgressDTO
+  UserProgressDTO,
+  ModuleType,
+  UserType
 } from '../../common/types';
+import { TechTree } from './dependency-graph';
 import { typedFetch, API_HOST } from './typedFetch';
 import { typedLocalStorage } from './typedLocalStorage';
 import { mapObject } from './util';
@@ -22,25 +25,27 @@ export class User {
 
   async refreshUser() {
     if (!this.dto) {
+      // For anonymous users, just trigger update to re-render components
+      if (this.onUpdate) {
+        this.onUpdate(null);
+      }
       return;
     }
 
     try {
       const response = await typedFetch({
         host: API_HOST,
-        endpoint: '/api/users/:id',
-        method: 'get',
-        params: { id: String(this.dto.id) }
+        endpoint: '/api/user',
+        method: 'get'
       });
 
-      if ('user' in response) {
-        this.dto = response.user;
-        if (this.onUpdate) {
-          this.onUpdate(this.dto);
-        }
+      this.dto = response.user;
+      if (this.onUpdate) {
+        this.onUpdate(this.dto);
       }
     } catch (error) {
       console.error('Error refreshing user data:', error);
+      throw error;
     }
   }
 
@@ -93,7 +98,7 @@ export class User {
 
   async markReached(modules: Record<KMId, ProgressStatus>, onBehalfOfStudentId?: number) {
     if (this.dto) {
-      await typedFetch({
+      const response = await typedFetch({
         host: API_HOST,
         endpoint: '/api/learning/events',
         method: 'post',
@@ -110,6 +115,10 @@ export class User {
           onBehalfOfStudentId
         },
       });
+
+      if ('errorCode' in response) {
+        throw new Error(response.message || 'Failed to mark progress');
+      }
     } else {
       let progress = typedLocalStorage.getJson('progress');
       if (!progress) {
@@ -138,7 +147,7 @@ export class User {
     onBehalfOfStudentId?: number
   ) {
     if (this.dto) {
-      await typedFetch({
+      const response = await typedFetch({
         host: API_HOST,
         endpoint: '/api/learning/events',
         method: 'post',
@@ -148,6 +157,10 @@ export class User {
           onBehalfOfStudentId
         },
       });
+
+      if ('errorCode' in response) {
+        throw new Error(response.message || 'Failed to mark video as watched');
+      }
     } else {
       let progressVideo = typedLocalStorage.getJson('progressVideo');
       if (!progressVideo) {
@@ -168,45 +181,147 @@ export class User {
     }
   }
 
-  async mergeToServer() {
-    let progress = typedLocalStorage.getJson('progress') || {};
-    let resp = await typedFetch({
-      host: API_HOST,
-      endpoint: '/api/learning/events',
-      method: 'post',
-      body: {
-        type: 'module',
-        modules: Object.entries(progress).reduce((acc, [kmid, entry]) => {
-          if (entry.status === ProgressStatus.PASSED) {
-            acc[kmid] = entry;
-          }
-          return acc;
-        }, {} as UserProgressDTO),
-      },
-    });
-    if ('success' in resp) {
-      typedLocalStorage.removeJson('progress');
-    } else {
-      alert('An error has occurred ' + JSON.stringify(resp)); // eslint-disable-line no-alert
-      return;
+  hasLocalProgress(): boolean {
+    const progress = typedLocalStorage.getJson('progress');
+    const progressVideo = typedLocalStorage.getJson('progressVideo');
+    return (progress !== null && Object.keys(progress).length > 0) ||
+           (progressVideo !== null && Object.keys(progressVideo).length > 0);
+  }
+
+  isSelfManaged(): boolean {
+    return !this.dto || this.dto.type !== UserType.STUDENT || !this.dto.adults || this.dto.adults.length === 0;
+  }
+
+  separateProgressByModuleType(knowledgeGraph: TechTree, progress: UserProgressDTO): {
+    adultProgress: UserProgressDTO;
+    childProgress: UserProgressDTO;
+  } {
+    const adultProgress: UserProgressDTO = {};
+    const childProgress: UserProgressDTO = {};
+
+    for (const [kmid, entry] of Object.entries(progress)) {
+      try {
+        const module = knowledgeGraph.getNodeData(kmid);
+
+        if (module.moduleType === ModuleType.ADULT_OWNED) {
+          adultProgress[kmid] = entry;
+        } else {
+          childProgress[kmid] = entry;
+        }
+      } catch {
+        console.error(`Module ${kmid} not found in knowledge graph`);
+      }
     }
 
-    let progressVideo = typedLocalStorage.getJson('progressVideo') || {};
-    resp = await typedFetch({
-      host: API_HOST,
-      endpoint: '/api/learning/events',
-      method: 'post',
-      body: {
-        type: 'video',
-        moduleVideos: progressVideo,
-      },
-    });
-    if ('success' in resp) {
-      typedLocalStorage.removeJson('progressVideo');
-    } else {
-      alert('An error has occurred ' + JSON.stringify(resp));// eslint-disable-line no-alert
-      return;
+    return { adultProgress, childProgress };
+  }
+
+  separateProgressVideosByModuleType(knowledgeGraph: TechTree, progressVideos: Record<string, Record<string, ProgressVideoStatus>>): {
+    adultProgressVideos: Record<string, Record<string, ProgressVideoStatus>>;
+    childProgressVideos: Record<string, Record<string, ProgressVideoStatus>>;
+  } {
+    const adultProgressVideos: Record<string, Record<string, ProgressVideoStatus>> = {};
+    const childProgressVideos: Record<string, Record<string, ProgressVideoStatus>> = {};
+
+    for (const [kmid, videos] of Object.entries(progressVideos)) {
+      try {
+        const module = knowledgeGraph.getNodeData(kmid);
+
+        if (module.moduleType === ModuleType.ADULT_OWNED) {
+          adultProgressVideos[kmid] = videos;
+        } else {
+          childProgressVideos[kmid] = videos;
+        }
+      } catch {
+        console.error(`Module ${kmid} not found in knowledge graph`);
+      }
     }
+
+    return { adultProgressVideos, childProgressVideos };
+  }
+
+  private filterPassedProgress(progress: UserProgressDTO): UserProgressDTO {
+    return Object.entries(progress).reduce((acc, [kmid, entry]) => {
+      if (entry.status === ProgressStatus.PASSED) {
+        acc[kmid] = entry;
+      }
+      return acc;
+    }, {} as UserProgressDTO);
+  }
+
+  private async syncProgressBatch(
+    modules: UserProgressDTO,
+    videos: Record<string, Record<string, ProgressVideoStatus>>,
+    onBehalfOfStudentId?: number
+  ): Promise<void> {
+    const passedModules = this.filterPassedProgress(modules);
+
+
+    if (Object.keys(passedModules).length > 0) {
+      const resp = await typedFetch({
+        host: API_HOST,
+        endpoint: '/api/learning/events',
+        method: 'post',
+        body: {
+          type: 'module',
+          modules: passedModules,
+          onBehalfOfStudentId,
+        },
+      });
+
+      if (!('success' in resp)) {
+        throw new Error(resp.message);
+      }
+    }
+
+    if (Object.keys(videos).length > 0) {
+      const resp = await typedFetch({
+        host: API_HOST,
+        endpoint: '/api/learning/events',
+        method: 'post',
+        body: {
+          type: 'video',
+          moduleVideos: videos,
+          onBehalfOfStudentId,
+        },
+      });
+
+      if (!('success' in resp)) {
+        throw new Error(resp.message);
+      }
+    }
+  }
+
+  async mergeToServer(onBehalfOfStudentId?: number) {
+    const progress = typedLocalStorage.getJson('progress') || {};
+    const progressVideo = typedLocalStorage.getJson('progressVideo') || {};
+
+
+    await this.syncProgressBatch(progress, progressVideo, onBehalfOfStudentId);
+
+    typedLocalStorage.removeJson('progress');
+    typedLocalStorage.removeJson('progressVideo');
+  }
+
+  async mergeSplitToServer(knowledgeGraph: TechTree, childId?: number) {
+    const progress = typedLocalStorage.getJson('progress') || {};
+    const progressVideo = typedLocalStorage.getJson('progressVideo') || {};
+
+    const { adultProgress, childProgress } = this.separateProgressByModuleType(knowledgeGraph, progress);
+    const { adultProgressVideos, childProgressVideos } = this.separateProgressVideosByModuleType(knowledgeGraph, progressVideo);
+
+    // Sync adult progress to self
+    if (Object.keys(adultProgress).length > 0 || Object.keys(adultProgressVideos).length > 0) {
+      await this.syncProgressBatch(adultProgress, adultProgressVideos);
+    }
+
+    // Sync child progress to specified child
+    if (childId && (Object.keys(childProgress).length > 0 || Object.keys(childProgressVideos).length > 0)) {
+      await this.syncProgressBatch(childProgress, childProgressVideos, childId);
+    }
+
+    typedLocalStorage.removeJson('progress');
+    typedLocalStorage.removeJson('progressVideo');
   }
 }
 

@@ -77,15 +77,13 @@ export let NavBar = (props: NavBarProps) => {
       <AppBar position="static" color="default" style={{ flex: '0 0 auto', alignItems: 'center' }}>
         <Alert severity="warning" onClose={handleCloseWarning}>
           Your progress is saved locally in this browser.
-          {' '}<Link to="/login" style={{color: '#023D54'}}>Login</Link> to sync to other devices.
+          {' '}<Link to="/login" style={{color: '#023D54'}} data-test="login-link-warning">Login</Link> to sync to other devices.
         </Alert>
       </AppBar>
     );
   }
   if (user.dto) {
-    const isStudentWithAdults = user.dto.type === UserType.STUDENT && user.dto.adults && user.dto.adults.length > 0;
-
-    if (!isStudentWithAdults) {
+    if (user.isSelfManaged()) {
       navLinks = (
         <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}>
           <Tooltip title="Account">
@@ -194,6 +192,7 @@ export let NavBar = (props: NavBarProps) => {
             component={Link}
             to="/login"
             sx={{color: '#023D54'}}
+            data-test="login-button-navbar"
           // style={buttonStyle}
           >
             Login

@@ -240,7 +240,7 @@ export const ChildProfile = () => {
                       }
                       secondary={
                         <span style={{ fontSize: '0.875rem', color: 'rgba(0, 0, 0, 0.6)' }}>
-                          {adult.type.charAt(0).toUpperCase() + adult.type.slice(1)}
+                          {adult.type.charAt(0).toUpperCase() + adult.type.slice(1)} • {adult.email}
                         </span>
                       }
                     />

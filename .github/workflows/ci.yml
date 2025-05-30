@@ -3,8 +3,6 @@ name: CI - Lint, Build, Test, and E2E
 on:
   push:
     branches: ['**']
-  pull_request:
-    branches: ['**']
 
 jobs:
   lint-build-test:

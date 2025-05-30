@@ -274,3 +274,47 @@ The curriculum is organized as a graph of modules with prerequisites (knowledge 
   });
   ```
 
+  **Test Chaining Best Practices**
+  - Use method chaining instead of individual awaits - this ensures every action is verified and reduces flaky tests
+  - Use `checkUntil` to wait for and verify expected states instead of arbitrary `waitFor`
+  - Use `run(XC.autoClick, selector)` instead of `click` to move the mouse and click like a real user
+
+  Good example (chained approach):
+  ```typescript
+  await page.X
+    .run(Onboarding.navigateToRegister)
+    .run(Onboarding.enterRegistrationDetails, { name, email, password, type })
+    .run(Onboarding.submitRegistration)
+    .checkUntil(getModuleCardTitles, (cards) => {
+      expect(cards).toContain('Introduction to presupplied.com');
+      expect(cards.length).toBe(1);
+    })
+    .run(XC.autoClick, moduleCardSelector)
+    .checkUntil(XC.elementText, 'h1', (text) => {
+      expect(text).toBe('Module Started');
+    })
+    .do();
+  ```
+  
+  Bad example (individual awaits):
+  ```typescript
+  // Avoid this pattern - it's more prone to timing issues and doesn't verify each step
+  await Onboarding.navigateToRegister(page);
+  await Onboarding.enterRegistrationDetails(page, { name, email, password, type });
+  await Onboarding.submitRegistration(page);
+  await XC.waitFor(page, 2000); // Arbitrary wait
+  
+  const cards = await getModuleCardTitles(page);
+  expect(cards).toContain('Introduction to presupplied.com');
+  
+  await XC.click(page, moduleCardSelector); // Should use run(XC.autoClick, selector)
+  await XC.waitFor(page, 1000); // Another arbitrary wait
+  ```
+  
+  Key principles:
+  - **Chain all actions** in a single `.X` chain ending with `.do()`
+  - **Use `checkUntil`** after actions to verify the expected state was reached
+  - **No arbitrary waits** - let `checkUntil` handle timing by checking repeatedly until condition is met
+  - **Use `run(XC.autoClick, selector)`** for more realistic user interaction (moves mouse then clicks)
+  - **Define reusable functions** with `XC.setupWithPage` for common operations
+

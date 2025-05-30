@@ -6,11 +6,16 @@ import Xdotoolify, { XWebDriver } from 'xdotoolify';
 import * as XC from 'xdotoolify/dist/common';
 import { typedFetch } from '/presupplied/images/psapp/client/src/typedFetch';
 
+Xdotoolify.defaultCheckUntilTimeout = 20000;
+
 export const url = 'https://applocal.presupplied.com';
-export const defaultCheckUntilTimeout = 10000; // 10 seconds
 
 // Selectors
 export const errorAlertSelector = '.MuiAlert-root';
+export const moduleCardSelector = '[data-test="module-card"]';
+export const settingsLink = 'a[href="/settings"]';
+export const manageChildrenLink = 'a[href="/settings/children"]';
+export const childCardSelector = '[data-test="child-card"]';
 
 export const enableTestMode = Xdotoolify.setupWithoutPage(async () => {
   const response = await typedFetch({
@@ -169,4 +174,46 @@ export const getLocation = Xdotoolify.setupWithPage(async (page) => {
       hash: window.location.hash
     };
   });
+});
+
+let emailCounter = 0;
+export const getUniqueEmail = () => `ps-test-account-${emailCounter++}@example.com`;
+
+export const getModuleCardInfo = Xdotoolify.setupWithPage(async (page) => {
+  return XC.evaluate(page, (_moduleCardSelector: string) => {
+    const elements = document.querySelectorAll(_moduleCardSelector);
+    return Array.from(elements).map(el => {
+      const h1 = el.querySelector('h1');
+      const title = h1?.textContent || '';
+      
+      // Get all avatar images within this card
+      const avatars = el.querySelectorAll('[data-test^="child-avatar-"]');
+      const childIds = Array.from(avatars).map(avatar => {
+        const testAttr = avatar.getAttribute('data-test');
+        const match = testAttr?.match(/child-avatar-(\d+)/);
+        return match ? parseInt(match[1]) : null;
+      }).filter(id => id !== null) as number[];
+      
+      return { title, childIds };
+    });
+  }, moduleCardSelector);
+});
+
+export const shiftClickModuleCard = Xdotoolify.setupWithPage(async (page, title: string) => {
+  return XC.evaluate(page, (_moduleCardSelector: string, _title: string) => {
+    const cards = document.querySelectorAll(_moduleCardSelector);
+    for (const card of cards) {
+      const h1 = card.querySelector('h1');
+      if (h1?.textContent === _title) {
+        const event = new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          shiftKey: true
+        });
+        card.dispatchEvent(event);
+        return true;
+      }
+    }
+    return false;
+  }, moduleCardSelector, title);
 });

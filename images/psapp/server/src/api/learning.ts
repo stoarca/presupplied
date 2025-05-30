@@ -11,8 +11,10 @@ import {
   GraphNode,
   KNOWLEDGE_MAP,
   ProgressStatus,
-  ProgressVideoStatus
+  ProgressVideoStatus,
+  ModuleType
 } from '../../../common/types';
+import { isModuleForAdults } from '../../../common/utils';
 import { typedGet, typedPost } from '../typedRoutes';
 
 // Create an efficient lookup map for modules
@@ -92,11 +94,21 @@ export const setupLearningRoutes = (router: express.Router) => {
       req.body.type === 'module' ? req.body.modules : req.body.moduleVideos
     );
 
+    const userRepo = AppDataSource.getRepository(User);
+    const baseUser = await userRepo.findOneBy({ email: req.jwtUser.email });
+    if (!baseUser) {
+      return resp.status(401).json({
+        errorCode: 'learning.event.noUser',
+        message: 'Could not find the authenticated user',
+      });
+    }
+
     // Verify that onBehalfOfStudentId is set for modules that require it
-    if (req.body.type === 'module') {
+    // Skip this check for student accounts as they can submit child modules for themselves
+    if (req.body.type === 'module' && baseUser.type !== 'student') {
       for (const moduleId of moduleIds) {
         const moduleData = moduleMap.get(moduleId);
-        if (moduleData?.forTeachers && moduleData?.onBehalfOfStudent && !req.body.onBehalfOfStudentId) {
+        if (moduleData?.moduleType === ModuleType.CHILD_DELEGATED && !req.body.onBehalfOfStudentId) {
           return resp.status(400).json({
             errorCode: 'learning.event.missingStudentId',
             message: `Module ${moduleId} requires onBehalfOfStudentId parameter`,
@@ -105,6 +117,7 @@ export const setupLearningRoutes = (router: express.Router) => {
         }
       }
     }
+
     const moduleRepo = AppDataSource.getRepository(Module);
     const modules = await moduleRepo.findBy({
       vanityId: In(moduleIds),
@@ -119,15 +132,6 @@ export const setupLearningRoutes = (router: express.Router) => {
         errorCode: 'learning.event.invalidModules',
         moduleVanityIds: Array.from(requestedModuleIdSet),
         message: 'Could not find the requested learning modules',
-      });
-    }
-
-    const userRepo = AppDataSource.getRepository(User);
-    const baseUser = await userRepo.findOneBy({ email: req.jwtUser.email });
-    if (!baseUser) {
-      return resp.status(401).json({
-        errorCode: 'learning.event.noUser',
-        message: 'Could not find the authenticated user',
       });
     }
 
@@ -189,11 +193,22 @@ export const setupLearningRoutes = (router: express.Router) => {
       await userProgressRepo.upsert(modules.map(x => {
         const events = body.modules[x.vanityId].events;
         const mostRecentEvent = events.sort((a, b) => b.time - a.time)[0];
-        return {
+        const progressData: {
+          user: User;
+          module: Module;
+          status: ProgressStatus;
+          completedBy?: User;
+        } = {
           user: targetUser,
           module: x,
           status: mostRecentEvent.status,
         };
+        
+        if (req.body.onBehalfOfStudentId && targetUser.id !== baseUser.id) {
+          progressData.completedBy = baseUser;
+        }
+        
+        return progressData;
       }), ['user', 'module'])
     } else {
       try {

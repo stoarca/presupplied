@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Cell } from './types';
 import { TechTree } from './dependency-graph';
 import {
-  KNOWLEDGE_MAP, VideoInfo, GraphNodeInfo
+  KNOWLEDGE_MAP, VideoInfo, GraphNodeInfo, ModuleType
 } from '../../common/types';
 
 export let TOOLBAR_WIDTH = '550px';
@@ -56,19 +56,13 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
   let [tempDesc, setTempDesc] = React.useState(node.description);
   let [tempStudentVids, setTempStudentVids] = React.useState('');
   let [tempTeacherVids, setTempTeacherVids] = React.useState('');
-  let [tempForTeachers, setTempForTeachers] = React.useState(
-    Boolean(node.forTeachers)
-  );
-  let [tempOnBehalfOfStudent, setTempOnBehalfOfStudent] = React.useState(
-    Boolean(node.onBehalfOfStudent)
-  );
+  let [tempModuleType, setTempModuleType] = React.useState(node.moduleType);
   React.useEffect(() => {
     setTempTitle(node.title);
     setTempDesc(node.description);
     setTempStudentVids(mapToMdLinks(node.studentVideos));
     setTempTeacherVids(mapToMdLinks(node.teacherVideos));
-    setTempForTeachers(Boolean(node.forTeachers));
-    setTempOnBehalfOfStudent(Boolean(node.onBehalfOfStudent));
+    setTempModuleType(node.moduleType);
   }, [node]);
   React.useEffect(() => {
     setTempId(kmid);
@@ -92,13 +86,17 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
   let handleChangeTeacherVids = React.useCallback((e: CT) => {
     setTempTeacherVids(e.target.value);
   }, []);
-  let handleChangeForTeachers = React.useCallback((e: CI) => {
-    setTempForTeachers(e.target.checked);
+  let handleChangeModuleType = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    if (value === ModuleType.ADULT_OWNED ||
+        value === ModuleType.CHILD_DELEGATED ||
+        value === ModuleType.CHILD_OWNED) {
+      setTempModuleType(value);
+    } else {
+      throw new Error(`Invalid module type: ${value}`);
+    }
   }, []);
 
-  let handleChangeOnBehalfOfStudent = React.useCallback((e: CI) => {
-    setTempOnBehalfOfStudent(e.target.checked);
-  }, []);
 
   let handleSubmit = React.useCallback((e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -131,8 +129,7 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
       description: tempDesc,
       studentVideos: newStudentVids,
       teacherVideos: newTeacherVids,
-      forTeachers: tempForTeachers,
-      onBehalfOfStudent: tempOnBehalfOfStudent,
+      moduleType: tempModuleType,
     });
   }, [
     kmid,
@@ -141,8 +138,7 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
     tempDesc,
     tempStudentVids,
     tempTeacherVids,
-    tempForTeachers,
-    tempOnBehalfOfStudent,
+    tempModuleType,
     props.onChangeNode,
   ]);
 
@@ -205,22 +201,17 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
         </div>
         <div>
           <label>
-            This module is only for teachers/parents
-            <input type="checkbox"
-              onChange={handleChangeForTeachers}
-              checked={tempForTeachers} />
+            Module Type:
+            <select
+              value={tempModuleType}
+              onChange={handleChangeModuleType}
+              style={{ width: '100%' }}>
+              <option value={ModuleType.CHILD_OWNED}>Child Owned - Completed by child, tracked per child</option>
+              <option value={ModuleType.CHILD_DELEGATED}>Child Delegated - Completed by adult on behalf of child, tracked per child</option>
+              <option value={ModuleType.ADULT_OWNED}>Adult Owned - Completed by adult, tracked per adult</option>
+            </select>
           </label>
         </div>
-        {tempForTeachers && (
-          <div>
-            <label>
-              This module is completed by the teacher/parent on behalf of the student (progress is tracked in student's account).
-              <input type="checkbox"
-                onChange={handleChangeOnBehalfOfStudent}
-                checked={tempOnBehalfOfStudent} />
-            </label>
-          </div>
-        )}
         <div>
           <button type="submit">Apply</button>
         </div>

@@ -3,8 +3,9 @@ import { Like } from 'typeorm';
 
 import { AppDataSource } from '../data-source';
 import { User } from '../entity/User';
+import { UserRelationship } from '../entity/UserRelationship';
 import { typedPost, typedGet } from '../typedRoutes';
-import { RelationshipType } from '../../../common/types';
+import { RelationshipType, UserType, UserProgressDTO } from '../../../common/types';
 
 // Store logs and errors for testing purposes
 const testLogs: string[] = [];
@@ -12,6 +13,38 @@ const testErrors: string[] = [];
 
 // Flag to indicate if we're in test mode
 export let isTestModeEnabled = false;
+
+async function deleteAccount(user: User): Promise<number> {
+  const userRepository = AppDataSource.getRepository(User);
+  const relationshipRepository = AppDataSource.getRepository(UserRelationship);
+  
+  let deletedCount = 1;
+  
+  if (user.type === UserType.PARENT || user.type === UserType.TEACHER) {
+    const childRelationships = await relationshipRepository.find({
+      where: { adultId: user.id },
+      relations: ['child']
+    });
+    
+    for (const relationship of childRelationships) {
+      const otherParentRelationships = await relationshipRepository.find({
+        where: { 
+          childId: relationship.childId,
+          type: RelationshipType.PRIMARY
+        }
+      });
+      
+      if (otherParentRelationships.length === 1 && otherParentRelationships[0].adultId === user.id) {
+        await userRepository.remove(relationship.child);
+        deletedCount++;
+      }
+    }
+  }
+  
+  await userRepository.remove(user);
+  
+  return deletedCount;
+}
 
 export const setupTestRoutes = (router: express.Router) => {
   // Endpoint to log messages from the client
@@ -59,9 +92,8 @@ export const setupTestRoutes = (router: express.Router) => {
     });
     
     let deletedCount = 0;
-    if (testAccounts.length > 0) {
-      await userRepository.remove(testAccounts);
-      deletedCount = testAccounts.length;
+    for (const testAccount of testAccounts) {
+      deletedCount += await deleteAccount(testAccount);
     }
     
     return resp.json({
@@ -92,7 +124,7 @@ export const setupTestRoutes = (router: express.Router) => {
     const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.findOne({
       where: { email },
-      relations: ['childRelationships', 'childRelationships.child'],
+      relations: ['progress', 'progress.module', 'childRelationships', 'childRelationships.child', 'childRelationships.child.progress', 'childRelationships.child.progress.module', 'childRelationships.child.progress.completedBy'],
     });
 
     if (!user) {
@@ -109,7 +141,13 @@ export const setupTestRoutes = (router: express.Router) => {
       type: user.type,
       profilePicture: user.profilePicture,
       pinRequired: user.pinRequired,
-      progress: {},
+      progress: user.progress.reduce((acc, x) => {
+        acc[x.module.vanityId] = {
+          status: x.status,
+          events: [],
+        };
+        return acc;
+      }, {} as UserProgressDTO),
       pendingInvites: [],
       children: user.childRelationships.map(rel => ({
         id: rel.child.id,
@@ -117,6 +155,14 @@ export const setupTestRoutes = (router: express.Router) => {
         profilePicture: rel.child.profilePicture!,
         pinRequired: rel.child.pinRequired,
         relationshipType: rel.type,
+        progress: rel.child.progress.reduce((acc, x) => {
+          acc[x.module.vanityId] = {
+            status: x.status,
+            completedById: x.completedBy?.id,
+            events: [],
+          };
+          return acc;
+        }, {} as UserProgressDTO)
       })),
     };
     return resp.json({

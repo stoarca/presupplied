@@ -11,8 +11,9 @@ import { moduleComponents } from '../ModuleContext';
 import { NavBar } from '../components/NavBar';
 import { useUserContext } from '../UserContext';
 import {
-  ProgressStatus, KNOWLEDGE_MAP, UserType
+  ProgressStatus, KNOWLEDGE_MAP, UserType, ModuleType, ChildInfoWithProgress
 } from '../../../common/types';
+import { isModuleForAdults } from '../../../common/utils';
 import { ExpandMoreTwoTone } from '@mui/icons-material';
 import { API_HOST, typedFetch } from '../typedFetch';
 import { Card } from '../components/Card';
@@ -21,11 +22,6 @@ let knowledgeGraph = buildGraph(KNOWLEDGE_MAP);
 
 export let HomePage = () => {
   let user = useUserContext();
-  let [reached, setReached] = React.useState(new Set<string>( // eslint-disable-line
-    Object.entries(user.progress()).filter(
-      ([k, v]) => v.status === ProgressStatus.PASSED
-    ).map(([k, v]) => k)
-  ));
   let [showUserMenu, setShowUserMenu] = React.useState(false);
   let userMenuRef = React.useRef<HTMLButtonElement | null>(null);
 
@@ -41,10 +37,52 @@ export let HomePage = () => {
     window.location.href = '/';
   }, []);
 
-  let reachable = React.useMemo(() => {
-    let ret = knowledgeGraph.getReachable(reached);
-    return ret;
-  }, [reached]);
+  const { reachable, childrenReachableSets } = React.useMemo(() => {
+    if (!user.dto) {
+      const userPassed = new Set(
+        Object.entries(user.progress()).filter(
+          ([k, v]) => v.status === ProgressStatus.PASSED
+        ).map(([k, v]) => k)
+      );
+
+      const result = knowledgeGraph.getReachables('hybrid', userPassed, new Map());
+
+      return {
+        reachable: result.reachable,
+        childrenReachableSets: new Map<number, Set<string>>()
+      };
+    }
+
+    const userPassed = new Set(
+      Object.entries(user.progress()).filter(
+        ([k, v]) => v.status === ProgressStatus.PASSED
+      ).map(([k, v]) => k)
+    );
+
+    const childrenReachedSets = new Map<number, Set<string>>();
+    if (user.dto.children) {
+      user.dto.children.forEach(child => {
+        const childPassed = new Set(
+          Object.entries(child.progress).filter(
+            ([k, v]) => v.status === ProgressStatus.PASSED
+          ).map(([k, v]) => k)
+        );
+        childrenReachedSets.set(child.id, childPassed);
+      });
+    }
+
+    // Self-registered students (no adults) should use 'hybrid' mode to see all module types
+    const userType = user.dto.type === UserType.STUDENT && (!user.dto.adults || user.dto.adults.length === 0)
+      ? 'hybrid'
+      : user.dto.type;
+
+    const result = knowledgeGraph.getReachables(userType, userPassed, childrenReachedSets);
+
+    return {
+      reachable: result.reachable,
+      childrenReachableSets: result.childrenReachableSets
+    };
+  }, [user.dto, user, knowledgeGraph]);
 
   let reachableAndImplemented = React.useMemo(() => {
     return new Set(Array.from(reachable).filter(x => !!moduleComponents[x]));
@@ -62,21 +100,8 @@ export let HomePage = () => {
     };
   }, []);
 
-  // Count teacher and student modules
-  let teacherModuleCount = 0;
-  let studentModuleCount = 0;
-  Array.from(reachableAndImplemented).forEach(kmid => {
-    let node = knowledgeGraph.getNodeData(kmid);
-    if (node.forTeachers) {
-      teacherModuleCount++;
-    } else {
-      studentModuleCount++;
-    }
-  });
-
-  // Calculate total modules to display based on user type
   const isStudent = user.dto?.type === UserType.STUDENT;
-  const moduleCount = isStudent ? studentModuleCount : (teacherModuleCount + studentModuleCount);
+  const moduleCount = reachableAndImplemented.size;
 
   let containerStyle: React.CSSProperties = {
     display: 'flex',
@@ -182,61 +207,6 @@ export let HomePage = () => {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {(!isStudent || studentModuleCount > 0) && (
-        <>
-          <div style={{
-            position: 'absolute',
-            width: '200px',
-            height: '200px',
-            background: 'radial-gradient(circle, rgba(110, 241, 176, 0.66), rgba(0,255,128,0.1))',
-            borderRadius: '50%',
-            top: '10%',
-            left: '5%',
-            zIndex: 0,
-          }}></div>
-          <div style={{
-            position: 'absolute',
-            width: '300px',
-            height: '300px',
-            background: 'radial-gradient(circle, rgba(37, 226, 131, 0.5), rgba(0,255,128,0.1))',
-            borderRadius: '50%',
-            bottom: '15%',
-            right: '10%',
-            zIndex: 0,
-          }}></div>
-          <div style={{
-            position: 'absolute',
-            width: '150px',
-            height: '150px',
-            background: 'radial-gradient(circle, rgba(0, 255, 55, 0.4), rgba(137, 241, 189, 0.1))',
-            borderRadius: '50%',
-            bottom: '30%',
-            left: '40%',
-            zIndex: 0,
-          }}></div>
-          <div style={{
-            position: 'absolute',
-            width: '150px',
-            height: '150px',
-            background: 'radial-gradient(circle, rgba(135, 223, 179, 0.5), rgba(0,255,128,0.1))',
-            borderRadius: '50%',
-            bottom: '20%',
-            left: '80%',
-            zIndex: 0,
-          }}></div>
-          <div>
-            <img src="/static/images/cartoon/sword.svg" style={{
-              height: '20rem',
-              position: 'absolute',
-              bottom: '-5%',
-              left: '78%',
-              transform: 'translate(-50%, -50%)',
-              zIndex: 0,
-            }} />
-          </div>
-        </>
-      )}
-
       <NavBar />
       <div style={containerStyle} onWheel={handleScroll}>
         {moduleCount === 0 && (
@@ -250,8 +220,18 @@ export let HomePage = () => {
         {Array.from(reachableAndImplemented).map(kmid => {
           let node = knowledgeGraph.getNodeData(kmid);
 
-          if (isStudent && node.forTeachers) {
+          // Only filter modules for students who have adults managing them
+          const hasAdultManagement = user.dto && isStudent && user.dto.adults && user.dto.adults.length > 0;
+          if (hasAdultManagement && isModuleForAdults(node.moduleType)) {
             return null;
+          }
+
+          let relevantChildren: ChildInfoWithProgress[] = [];
+          if (node.moduleType === ModuleType.CHILD_DELEGATED && user.dto?.children) {
+            relevantChildren = user.dto.children.filter(child => {
+              const childReachable = childrenReachableSets.get(child.id);
+              return childReachable?.has(kmid) || false;
+            });
           }
 
           return (
@@ -265,7 +245,7 @@ export let HomePage = () => {
                 minWidth: `calc(${isSmallDevice ? '90vw' : window.innerWidth > 1000 ? '35vw' : '45vw'})`,
                 maxWidth: '90vw'
               }}>
-              <Card kmid={kmid} user={user} />
+              <Card kmid={kmid} user={user} relevantChildren={relevantChildren} />
             </div>
           );
         })}

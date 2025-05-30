@@ -66,7 +66,6 @@ export let Register = (props: RegisterProps) => {
         },
       });
       if ('success' in resp) {
-        await user.mergeToServer();
         window.location.href = '/';
         return;
       }
@@ -183,7 +182,7 @@ export let Register = (props: RegisterProps) => {
           </LoadingButton>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link component={RouterLink} to="/login" variant="body2">
+              <Link component={RouterLink} to="/login" variant="body2" data-test="login-link-register">
                 {'Already have an account? Sign in'}
               </Link>
             </Grid>
