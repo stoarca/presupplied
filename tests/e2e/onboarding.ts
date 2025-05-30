@@ -3,6 +3,8 @@ import { WebDriver } from 'selenium-webdriver';
 import * as XC from 'xdotoolify/dist/common';
 import { UserType } from '/presupplied/images/psapp/common/types';
 import { typedFetch } from '/presupplied/images/psapp/client/src/typedFetch';
+import * as C from './common';
+import { moduleCardSelector, settingsLink, manageChildrenLink, childCardSelector } from './common';
 
 interface RegistrationDetails {
   name: string;
@@ -30,14 +32,13 @@ interface ChildDetails extends ChildStep1Details, ChildStep2Details {}
 
 // Base selectors for navigation and forms
 export const registerLink = 'a[href="/register"]';
-export const loginLink = 'a[href="/login"]';
+export const loginLink = '[data-test="login-button-navbar"]';
 export const nameInput = 'input[name="name"]';
 export const emailInput = 'input[name="email"]';
 export const passwordInput = 'input[name="password"]';
 export const userTypeRadioGroup = 'input[name="user-type"]';
 export const submitButton = 'button[type="submit"]';
 export const errorMessage = '.MuiFormHelperText-root.Mui-error';
-export const moduleCardSelector = '[data-test="module-card"]';
 export const noModulesMessageSelector = '[data-test="no-modules-message"]';
 export const getUserTypeRadioSelector = (type: string) => `input[name="user-type"][value="${type}"]`;
 
@@ -54,6 +55,17 @@ export const accountSwitcher = 'div[data-test="account-switcher"]';
 export const accountAvatarBase = '[data-test^="account-avatar-"]';
 export const accountSwitcherDialogTitle = '#account-switcher-dialog-title';
 export const getAccountAvatarSelector = (accountId: number) => `[data-test="account-avatar-${accountId}"]`;
+
+export const getAccountSwitcherAccountIds = Xdotoolify.setupWithPage(async (page) => {
+  return XC.evaluate(page, (_accountAvatarBase: string) => {
+    const accountContainers = document.querySelectorAll(_accountAvatarBase);
+    return Array.from(accountContainers).map(container => {
+      const testAttr = container.getAttribute('data-test');
+      const match = testAttr?.match(/account-avatar-(\d+)/);
+      return match ? parseInt(match[1]) : null;
+    }).filter(id => id !== null) as number[];
+  }, accountAvatarBase);
+});
 
 // Child creation selectors
 export const addChildButton = '[data-test="menu-item-add-child"]';
@@ -92,6 +104,13 @@ export const getUserInfo = Xdotoolify.setupWithoutPage(async (email: string) => 
     method: 'post',
     body: { email },
   });
+});
+
+export const selectSyncChildCard = Xdotoolify.setupWithPage(async (page, childId: number) => {
+  await page.X
+    .run(XC.autoClick, `[data-test="sync-child-card-${childId}"]`)
+    .checkUntil(C.getLocation, (location) => location.pathname === '/')
+    .do();
 });
 
 export const getCurrentUserName = Xdotoolify.setupWithPage(async (page) => {
@@ -451,6 +470,14 @@ export const registerUser = Xdotoolify.setupWithPage(async (page, { name, email,
     .run(submitRegistration)
     .checkUntil(XC.elementText, userMenuButton, (x: string | null) => 
       x?.toLowerCase() === email.toLowerCase())
+    .do();
+});
+
+export const loginUser = Xdotoolify.setupWithPage(async (page, email: string, password: string) => {
+  await page.X
+    .run(navigateToLogin)
+    .run(enterLoginCredentials, { email, password })
+    .run(submitLogin)
     .do();
 });
 

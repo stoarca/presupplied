@@ -13,7 +13,7 @@
         "i": 71,
         "j": 5
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "REPEAT_SOUNDS",
@@ -35,8 +35,7 @@
         "i": 42,
         "j": 5
       },
-      "subNodes": [],
-      "forTeachers": true
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "SPEAK_SIMPLE_OBJECTS",
@@ -52,7 +51,7 @@
         "i": 71,
         "j": 6
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_SIMPLE_CONCEPTS",
@@ -68,7 +67,7 @@
         "i": 86,
         "j": 7
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SPEAK_SIMPLE_CONCEPTS",
@@ -84,7 +83,7 @@
         "i": 86,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_OPPOSITES",
@@ -99,7 +98,7 @@
         "i": 90,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SPEAK_OPPOSITES",
@@ -115,7 +114,7 @@
         "i": 85,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "REPEAT_A_TO_M",
@@ -130,8 +129,7 @@
         "i": 42,
         "j": 6
       },
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "REPEAT_N_TO_Z",
@@ -146,8 +144,7 @@
         "i": 43,
         "j": 6
       },
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "REPEAT_LETTERS",
@@ -163,7 +160,7 @@
         "i": 43,
         "j": 7
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SING_ALPHABET",
@@ -184,8 +181,7 @@
         "i": 43,
         "j": 9
       },
-      "subNodes": [],
-      "forTeachers": true
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_LOWERCASE_A_TO_M",
@@ -202,7 +198,7 @@
         "i": 37,
         "j": 7
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_LOWERCASE_N_TO_Z",
@@ -219,7 +215,7 @@
         "i": 38,
         "j": 7
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_UPPERCASE_N_TO_Z",
@@ -236,7 +232,7 @@
         "i": 40,
         "j": 7
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_LOWERCASE_LETTERS",
@@ -252,7 +248,7 @@
         "i": 38,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_UPPERCASE_A_TO_M",
@@ -269,7 +265,7 @@
         "i": 39,
         "j": 7
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_UPPERCASE_LETTERS",
@@ -285,7 +281,7 @@
         "i": 39,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_LETTERS",
@@ -301,7 +297,7 @@
         "i": 39,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_RIGHT",
@@ -318,7 +314,7 @@
         "i": 55,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_YES_NO",
@@ -333,7 +329,7 @@
         "i": 85,
         "j": 3
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_GOOD_BAD",
@@ -348,7 +344,7 @@
         "i": 86,
         "j": 3
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_COLORS",
@@ -363,7 +359,7 @@
         "i": 91,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SPEAK_COLORS",
@@ -379,7 +375,7 @@
         "i": 86,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_LOWERCASE_LETTERS",
@@ -395,7 +391,7 @@
         "i": 37,
         "j": 6
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_UPPERCASE_LETTERS",
@@ -411,7 +407,7 @@
         "i": 38,
         "j": 6
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_DIGITS",
@@ -426,7 +422,7 @@
         "i": 70,
         "j": 5
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SPEAK_SIMPLE_MAPPINGS",
@@ -441,7 +437,7 @@
         "i": 84,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "REPEAT_DIGITS",
@@ -457,7 +453,7 @@
         "i": 70,
         "j": 6
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_TO_5",
@@ -472,7 +468,7 @@
         "i": 72,
         "j": 7
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_TO_10",
@@ -487,7 +483,7 @@
         "i": 72,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_TO_20",
@@ -502,7 +498,7 @@
         "i": 72,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_DIGITS",
@@ -517,7 +513,7 @@
         "i": 70,
         "j": 7
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_TO_100",
@@ -532,7 +528,7 @@
         "i": 72,
         "j": 19
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_TO_1000",
@@ -548,7 +544,7 @@
         "i": 72,
         "j": 20
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_OBJECTS_TO_10",
@@ -565,7 +561,7 @@
         "i": 71,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_NUMBERS_TO_20",
@@ -581,7 +577,7 @@
         "i": 70,
         "j": 19
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_NUMBERS_UP_TO_100",
@@ -598,7 +594,7 @@
         "i": 70,
         "j": 20
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_NUMBERS_UP_TO_1000",
@@ -615,9 +611,9 @@
         "i": 70,
         "j": 33
       },
-      "subNodes": [],
       "i": 70,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_OBJECTS_TO_20",
@@ -633,7 +629,7 @@
         "i": 71,
         "j": 19
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_OBJECTS_TO_100",
@@ -649,7 +645,7 @@
         "i": 71,
         "j": 20
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_FAST",
@@ -666,7 +662,7 @@
         "i": 55,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_NUMBERS_UP_TO_MILLION",
@@ -681,9 +677,9 @@
         "i": 70,
         "j": 34
       },
-      "subNodes": [],
       "i": 70,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "CONSONANT_TO_SOUND_N_TO_Z",
@@ -699,7 +695,7 @@
         "i": 40,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SOUND_TO_LETTER",
@@ -716,7 +712,7 @@
         "i": 27,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SOUND_TO_BIGRAM",
@@ -732,7 +728,7 @@
         "i": 27,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_PUNCTUATION",
@@ -747,9 +743,9 @@
         "i": 44,
         "j": 39
       },
-      "subNodes": [],
       "i": 47,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_REVIEW_4",
@@ -772,9 +768,9 @@
         "i": 45,
         "j": 15
       },
-      "subNodes": [],
       "i": 48,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_REVIEW_11",
@@ -795,9 +791,9 @@
         "i": 45,
         "j": 40
       },
-      "subNodes": [],
       "i": 48,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_OBJECTS_MORE_LESS",
@@ -812,7 +808,7 @@
         "i": 74,
         "j": 20
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_MORE_LESS",
@@ -831,7 +827,7 @@
         "i": 73,
         "j": 23
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_ANY_NUMBER",
@@ -846,9 +842,9 @@
         "i": 70,
         "j": 35
       },
-      "subNodes": [],
       "i": 70,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "VISUAL_SIMPLE_FRACTIONS",
@@ -865,7 +861,7 @@
         "i": 69,
         "j": 20
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_SIMPLE_FRACTIONS",
@@ -882,9 +878,9 @@
         "i": 69,
         "j": 34
       },
-      "subNodes": [],
       "i": 69,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_ANY_FRACTION_UNDER_1",
@@ -900,9 +896,9 @@
         "i": 69,
         "j": 36
       },
-      "subNodes": [],
       "i": 69,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_1",
@@ -917,8 +913,7 @@
         "i": 77,
         "j": 11
       },
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "VISUAL_FRACTION_MORE_LESS",
@@ -934,7 +929,7 @@
         "i": 69,
         "j": 21
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "WRITTEN_FRACTION_MORE_LESS",
@@ -949,9 +944,9 @@
         "i": 69,
         "j": 35
       },
-      "subNodes": [],
       "i": 69,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_ADD_OPPONENT_FINGERS",
@@ -968,7 +963,7 @@
         "i": 81,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_ADD_DICE",
@@ -984,7 +979,7 @@
         "i": 83,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "VISUAL_FRACTION_OVER_1",
@@ -999,9 +994,9 @@
         "i": 69,
         "j": 37
       },
-      "subNodes": [],
       "i": 69,
-      "j": 17
+      "j": 17,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_ANY_FRACTION_OVER_1",
@@ -1016,9 +1011,9 @@
         "i": 69,
         "j": 39
       },
-      "subNodes": [],
       "i": 69,
-      "j": 18
+      "j": 18,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PECK_NUMBERS_ON_KEYBOARD",
@@ -1034,7 +1029,7 @@
         "i": 56,
         "j": 21
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PECK_WORDS_ON_KEYBOARD",
@@ -1051,7 +1046,7 @@
         "i": 53,
         "j": 22
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_ADD_OBJECTS",
@@ -1067,7 +1062,7 @@
         "i": 84,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_PARAGRAPHS",
@@ -1082,9 +1077,9 @@
         "i": 46,
         "j": 43
       },
-      "subNodes": [],
       "i": 49,
-      "j": 18
+      "j": 18,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_10",
@@ -1105,7 +1100,7 @@
         "i": 77,
         "j": 22
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_20",
@@ -1121,7 +1116,7 @@
         "i": 77,
         "j": 32
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_SHAPES",
@@ -1136,7 +1131,7 @@
         "i": 92,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SPEAK_SHAPES",
@@ -1152,7 +1147,7 @@
         "i": 87,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_TWO_POS_2_DIGIT_NUMBERS",
@@ -1168,9 +1163,9 @@
         "i": 77,
         "j": 34
       },
-      "subNodes": [],
       "i": 77,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_2_FRACTIONS_UNDER_1_SAME_DENOM",
@@ -1186,9 +1181,9 @@
         "i": 77,
         "j": 37
       },
-      "subNodes": [],
       "i": 77,
-      "j": 17
+      "j": 17,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_2_FRACTIONS_OVER_1_SAME_DENOM",
@@ -1205,7 +1200,7 @@
         "i": 77,
         "j": 40
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_ADD_SELF_FINGERS",
@@ -1222,7 +1217,7 @@
         "i": 82,
         "j": 21
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_HOVER",
@@ -1239,7 +1234,7 @@
         "i": 60,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SIMPLE_MULT_BY_COUNTING",
@@ -1254,7 +1249,7 @@
         "i": 81,
         "j": 33
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "MULT_UP_TO_5_X_5",
@@ -1270,9 +1265,9 @@
         "i": 81,
         "j": 35
       },
-      "subNodes": [],
       "i": 81,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "MULT_UP_TO_5_X_10",
@@ -1287,9 +1282,9 @@
         "i": 81,
         "j": 36
       },
-      "subNodes": [],
       "i": 81,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "MULT_UP_TO_10_X_10",
@@ -1304,9 +1299,9 @@
         "i": 82,
         "j": 37
       },
-      "subNodes": [],
       "i": 82,
-      "j": 17
+      "j": 17,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "LONG_ADDITION_3_DIGITS",
@@ -1321,7 +1316,7 @@
         "i": 78,
         "j": 36
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "LONG_ADDITION_ANY_DIGITS",
@@ -1336,7 +1331,7 @@
         "i": 78,
         "j": 37
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_PICTURE_BOOKS",
@@ -1351,9 +1346,9 @@
         "i": 46,
         "j": 44
       },
-      "subNodes": [],
       "i": 49,
-      "j": 19
+      "j": 19,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "GRAMMAR_NOUNS",
@@ -1368,9 +1363,9 @@
         "i": 43,
         "j": 41
       },
-      "subNodes": [],
       "i": 46,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "LONG_ADDITION_MULTIPLE_INTS",
@@ -1385,7 +1380,7 @@
         "i": 78,
         "j": 39
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "LONG_MULT_2_POS_INTS",
@@ -1401,7 +1396,7 @@
         "i": 82,
         "j": 39
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "LONG_MULT_MULTIPLE_POS_INTS",
@@ -1417,7 +1412,7 @@
         "i": 82,
         "j": 40
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_SUBTRACT_2_FRACTIONS_DIFF_DENOM",
@@ -1434,7 +1429,7 @@
         "i": 77,
         "j": 41
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "DIV_UP_TO_5_X_5",
@@ -1449,9 +1444,9 @@
         "i": 83,
         "j": 36
       },
-      "subNodes": [],
       "i": 83,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "DIV_UP_TO_5_X_10",
@@ -1467,9 +1462,9 @@
         "i": 83,
         "j": 37
       },
-      "subNodes": [],
       "i": 83,
-      "j": 17
+      "j": 17,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "DIV_UP_TO_10_X_10",
@@ -1485,7 +1480,7 @@
         "i": 83,
         "j": 39
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "REMAINDERS",
@@ -1500,7 +1495,7 @@
         "i": 84,
         "j": 39
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "LONG_DIV",
@@ -1517,7 +1512,7 @@
         "i": 83,
         "j": 40
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_1_DIGIT",
@@ -1533,7 +1528,7 @@
         "i": 79,
         "j": 34
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_2_DIGIT",
@@ -1550,7 +1545,7 @@
         "i": 79,
         "j": 36
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "LONG_SUBTRACT_3_DIGIT",
@@ -1566,7 +1561,7 @@
         "i": 79,
         "j": 37
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "LONG_SUBTRACT_POS_INTS",
@@ -1582,7 +1577,7 @@
         "i": 79,
         "j": 38
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "NEGATIVE_COUNTING",
@@ -1597,7 +1592,7 @@
         "i": 80,
         "j": 35
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_2_DIGIT_WITH_NEGATIVE",
@@ -1613,7 +1608,7 @@
         "i": 80,
         "j": 37
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "LONG_ADD_SUBTRACT_ANY_INTS",
@@ -1630,7 +1625,7 @@
         "i": 80,
         "j": 40
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "LONG_MULT_ANY_INTS",
@@ -1647,7 +1642,7 @@
         "i": 82,
         "j": 41
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "MULT_NEGATIVE",
@@ -1663,7 +1658,7 @@
         "i": 81,
         "j": 38
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "LONG_MULT_2_INTS",
@@ -1679,7 +1674,7 @@
         "i": 81,
         "j": 40
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_CLICK",
@@ -1694,7 +1689,7 @@
         "i": 62,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_DBLCLICK",
@@ -1709,7 +1704,7 @@
         "i": 61,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_HOME_ROW_LEFT",
@@ -1726,9 +1721,9 @@
         "i": 56,
         "j": 41
       },
-      "subNodes": [],
       "i": 56,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_INDEX_FINGER_LEFT",
@@ -1744,9 +1739,9 @@
         "i": 56,
         "j": 43
       },
-      "subNodes": [],
       "i": 56,
-      "j": 18
+      "j": 18,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_MIDDLE_FINGER_LEFT",
@@ -1761,9 +1756,9 @@
         "i": 56,
         "j": 44
       },
-      "subNodes": [],
       "i": 56,
-      "j": 19
+      "j": 19,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_RING_FINGER_LEFT",
@@ -1778,9 +1773,9 @@
         "i": 56,
         "j": 45
       },
-      "subNodes": [],
       "i": 56,
-      "j": 20
+      "j": 20,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_PINKY_FINGER_LEFT",
@@ -1795,9 +1790,9 @@
         "i": 56,
         "j": 46
       },
-      "subNodes": [],
       "i": 56,
-      "j": 21
+      "j": 21,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_NUMBERS_INDEX",
@@ -1813,9 +1808,9 @@
         "i": 56,
         "j": 48
       },
-      "subNodes": [],
       "i": 56,
-      "j": 23
+      "j": 23,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_SUBTRACT_MULTIPLE_FRACTIONS",
@@ -1830,7 +1825,7 @@
         "i": 77,
         "j": 42
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FILL_IN_BLANK_ADD_SMALL",
@@ -1843,7 +1838,7 @@
         "i": 88,
         "j": 35
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FILL_IN_BLANK_SUBTRACT_SMALL",
@@ -1859,9 +1854,9 @@
         "i": 88,
         "j": 36
       },
-      "subNodes": [],
       "i": 88,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FILL_IN_BLANK_MULT_SMALL",
@@ -1877,9 +1872,9 @@
         "i": 88,
         "j": 37
       },
-      "subNodes": [],
       "i": 88,
-      "j": 17
+      "j": 17,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "OPERATOR_ORDER",
@@ -1894,9 +1889,9 @@
         "i": 87,
         "j": 36
       },
-      "subNodes": [],
       "i": 87,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "OPERATOR_PRECEDENCE",
@@ -1912,9 +1907,9 @@
         "i": 87,
         "j": 38
       },
-      "subNodes": [],
       "i": 87,
-      "j": 18
+      "j": 18,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FILL_IN_BLANK_4_OPS_NEG_PAREN",
@@ -1930,9 +1925,9 @@
         "i": 88,
         "j": 42
       },
-      "subNodes": [],
       "i": 88,
-      "j": 22
+      "j": 22,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PARENTHESES",
@@ -1947,7 +1942,7 @@
         "i": 87,
         "j": 40
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FILL_IN_BLANK_DIV_SMALL",
@@ -1963,9 +1958,9 @@
         "i": 88,
         "j": 38
       },
-      "subNodes": [],
       "i": 88,
-      "j": 18
+      "j": 18,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FILL_IN_BLANK_ADD_SUBTRACT_NEG_SMALL",
@@ -1981,9 +1976,9 @@
         "i": 88,
         "j": 39
       },
-      "subNodes": [],
       "i": 88,
-      "j": 19
+      "j": 19,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FILL_IN_BLANK_4_OPS_NEG_SMALL",
@@ -1999,9 +1994,9 @@
         "i": 88,
         "j": 40
       },
-      "subNodes": [],
       "i": 88,
-      "j": 20
+      "j": 20,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FILL_IN_BLANK_4_OPS",
@@ -2017,9 +2012,9 @@
         "i": 88,
         "j": 41
       },
-      "subNodes": [],
       "i": 88,
-      "j": 21
+      "j": 21,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EXP_SMALL",
@@ -2035,7 +2030,7 @@
         "i": 85,
         "j": 39
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EXP_NEGATIVE_BASE_SMALL",
@@ -2050,7 +2045,7 @@
         "i": 85,
         "j": 40
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EXP_INTEGER",
@@ -2065,7 +2060,7 @@
         "i": 85,
         "j": 41
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FILL_IN_BLANK_5_OPS",
@@ -2081,9 +2076,9 @@
         "i": 88,
         "j": 43
       },
-      "subNodes": [],
       "i": 88,
-      "j": 23
+      "j": 23,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SQRT",
@@ -2099,7 +2094,7 @@
         "i": 85,
         "j": 42
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "CUBE_ROOT",
@@ -2115,7 +2110,7 @@
         "i": 85,
         "j": 43
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FILL_IN_BLANK_6_OPS",
@@ -2131,9 +2126,9 @@
         "i": 88,
         "j": 44
       },
-      "subNodes": [],
       "i": 88,
-      "j": 24
+      "j": 24,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EXP_NEG_POW",
@@ -2148,7 +2143,7 @@
         "i": 85,
         "j": 44
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EXP_FRAC_POW",
@@ -2163,7 +2158,7 @@
         "i": 84,
         "j": 44
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EXP_NEG_FRAC_POW",
@@ -2179,7 +2174,7 @@
         "i": 85,
         "j": 45
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_4_OPS_NEG_PAREN",
@@ -2195,9 +2190,9 @@
         "i": 89,
         "j": 43
       },
-      "subNodes": [],
       "i": 89,
-      "j": 23
+      "j": 23,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ARITHMETIC",
@@ -2213,7 +2208,7 @@
         "i": 85,
         "j": 46
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_5_OPS",
@@ -2229,9 +2224,9 @@
         "i": 89,
         "j": 44
       },
-      "subNodes": [],
       "i": 89,
-      "j": 24
+      "j": 24,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_ADD_SMALL",
@@ -2246,7 +2241,7 @@
         "i": 89,
         "j": 36
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_SUBTRACT_SMALL",
@@ -2262,9 +2257,9 @@
         "i": 89,
         "j": 37
       },
-      "subNodes": [],
       "i": 89,
-      "j": 17
+      "j": 17,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_MULT_SMALL",
@@ -2280,9 +2275,9 @@
         "i": 89,
         "j": 38
       },
-      "subNodes": [],
       "i": 89,
-      "j": 18
+      "j": 18,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_DIV_SMALL",
@@ -2298,9 +2293,9 @@
         "i": 89,
         "j": 39
       },
-      "subNodes": [],
       "i": 89,
-      "j": 19
+      "j": 19,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_ADD_SUB_NEG_SMALL",
@@ -2316,9 +2311,9 @@
         "i": 89,
         "j": 40
       },
-      "subNodes": [],
       "i": 89,
-      "j": 20
+      "j": 20,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "MULTI_OP_SUB_SMALL",
@@ -2334,9 +2329,9 @@
         "i": 86,
         "j": 35
       },
-      "subNodes": [],
       "i": 86,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "MULTI_OP_MULT_SMALL",
@@ -2352,9 +2347,9 @@
         "i": 86,
         "j": 36
       },
-      "subNodes": [],
       "i": 86,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "MULTI_OP_DIV_SMALL",
@@ -2370,9 +2365,9 @@
         "i": 86,
         "j": 37
       },
-      "subNodes": [],
       "i": 86,
-      "j": 17
+      "j": 17,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "MULTI_OP_ADD_SUB_NEG_SMALL",
@@ -2388,9 +2383,9 @@
         "i": 86,
         "j": 38
       },
-      "subNodes": [],
       "i": 86,
-      "j": 18
+      "j": 18,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "MULTI_OP_4_OPS_NEG_SMALL",
@@ -2408,9 +2403,9 @@
         "i": 86,
         "j": 39
       },
-      "subNodes": [],
       "i": 86,
-      "j": 19
+      "j": 19,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "MULTI_OP_4_OPS",
@@ -2426,9 +2421,9 @@
         "i": 86,
         "j": 40
       },
-      "subNodes": [],
       "i": 86,
-      "j": 20
+      "j": 20,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "MULTI_OP_4_OPS_NEG_PAREN",
@@ -2444,9 +2439,9 @@
         "i": 86,
         "j": 41
       },
-      "subNodes": [],
       "i": 86,
-      "j": 21
+      "j": 21,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "MULTI_OP_5_OPS",
@@ -2462,9 +2457,9 @@
         "i": 86,
         "j": 42
       },
-      "subNodes": [],
       "i": 86,
-      "j": 22
+      "j": 22,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "MULTI_OP_6_OPS",
@@ -2480,9 +2475,9 @@
         "i": 86,
         "j": 43
       },
-      "subNodes": [],
       "i": 86,
-      "j": 23
+      "j": 23,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_4_OPS_NEG_SMALL",
@@ -2498,9 +2493,9 @@
         "i": 89,
         "j": 41
       },
-      "subNodes": [],
       "i": 89,
-      "j": 21
+      "j": 21,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_4_OPS",
@@ -2516,9 +2511,9 @@
         "i": 89,
         "j": 42
       },
-      "subNodes": [],
       "i": 89,
-      "j": 22
+      "j": 22,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_6_OPS",
@@ -2534,7 +2529,7 @@
         "i": 89,
         "j": 46
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_2_UNKNOWNS_SMALL",
@@ -2549,9 +2544,9 @@
         "i": 90,
         "j": 43
       },
-      "subNodes": [],
       "i": 90,
-      "j": 23
+      "j": 23,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_2_UNKNOWNS",
@@ -2567,9 +2562,9 @@
         "i": 90,
         "j": 44
       },
-      "subNodes": [],
       "i": 90,
-      "j": 24
+      "j": 24,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_3_UNKNOWNS_SMALL",
@@ -2584,9 +2579,9 @@
         "i": 90,
         "j": 45
       },
-      "subNodes": [],
       "i": 90,
-      "j": 25
+      "j": 25,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_N_UNKNOWNS",
@@ -2602,9 +2597,9 @@
         "i": 90,
         "j": 47
       },
-      "subNodes": [],
       "i": 90,
-      "j": 27
+      "j": 27,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "EQUATIONS_3_UNKNOWNS",
@@ -2619,9 +2614,9 @@
         "i": 90,
         "j": 46
       },
-      "subNodes": [],
       "i": 90,
-      "j": 26
+      "j": 26,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ALGEBRA",
@@ -2637,9 +2632,9 @@
         "i": 90,
         "j": 48
       },
-      "subNodes": [],
       "i": 90,
-      "j": 28
+      "j": 28,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ACCOUNT_AND_PASSWORD",
@@ -2656,9 +2651,9 @@
         "i": 51,
         "j": 41
       },
-      "subNodes": [],
       "i": 51,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "OPEN_APPLICATION",
@@ -2674,7 +2669,7 @@
         "i": 53,
         "j": 41
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TERMINAL_COMMANDS_SIMPLE",
@@ -2690,9 +2685,9 @@
         "i": 52,
         "j": 41
       },
-      "subNodes": [],
       "i": 52,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TERMINAL_COMMANDS",
@@ -2710,9 +2705,9 @@
         "i": 53,
         "j": 43
       },
-      "subNodes": [],
       "i": 53,
-      "j": 18
+      "j": 18,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SKETCH_VARIABLE_SIMPLE",
@@ -2729,7 +2724,7 @@
         "i": 54,
         "j": 43
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SKETCH_IF_SIMPLE",
@@ -2744,7 +2739,7 @@
         "i": 54,
         "j": 44
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SKETCH_LOOP_SIMPLE",
@@ -2759,7 +2754,7 @@
         "i": 54,
         "j": 45
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "VECTORS",
@@ -2774,9 +2769,9 @@
         "i": 82,
         "j": 49
       },
-      "subNodes": [],
       "i": 82,
-      "j": 29
+      "j": 29,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "LINEAR_ALGEBRA",
@@ -2791,9 +2786,9 @@
         "i": 82,
         "j": 50
       },
-      "subNodes": [],
       "i": 82,
-      "j": 30
+      "j": 30,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TRIGONOMETRY",
@@ -2808,9 +2803,9 @@
         "i": 77,
         "j": 49
       },
-      "subNodes": [],
       "i": 77,
-      "j": 29
+      "j": 29,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_HOVER_FAST",
@@ -2825,7 +2820,7 @@
         "i": 60,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_HOVER_SMALL",
@@ -2840,7 +2835,7 @@
         "i": 61,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SPELL_50_SIMPLE_WORDS",
@@ -2855,9 +2850,9 @@
         "i": 27,
         "j": 21
       },
-      "subNodes": [],
       "i": 26,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SPELL_200_SIMPLE_WORDS",
@@ -2872,9 +2867,9 @@
         "i": 26,
         "j": 22
       },
-      "subNodes": [],
       "i": 26,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_SCROLL_VERT",
@@ -2889,7 +2884,7 @@
         "i": 57,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE",
@@ -2905,7 +2900,7 @@
         "i": 59,
         "j": 24
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_ORDER_2",
@@ -2926,7 +2921,7 @@
         "i": 91,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_ORDER_3",
@@ -2942,7 +2937,7 @@
         "i": 91,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_ORDER_4",
@@ -2957,7 +2952,7 @@
         "i": 91,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_ORDER_MANY",
@@ -2972,7 +2967,7 @@
         "i": 91,
         "j": 22
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "GEOMETRY",
@@ -2987,7 +2982,7 @@
         "i": 78,
         "j": 47
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "CALCULUS",
@@ -3002,9 +2997,9 @@
         "i": 79,
         "j": 49
       },
-      "subNodes": [],
       "i": 79,
-      "j": 29
+      "j": 29,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "NUMBER THEORY",
@@ -3019,9 +3014,9 @@
         "i": 80,
         "j": 49
       },
-      "subNodes": [],
       "i": 80,
-      "j": 29
+      "j": 29,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PROBABILITY",
@@ -3036,9 +3031,9 @@
         "i": 81,
         "j": 49
       },
-      "subNodes": [],
       "i": 81,
-      "j": 29
+      "j": 29,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_HOVER_SMALL_FAST",
@@ -3054,7 +3049,7 @@
         "i": 60,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FINGER_TRACE_LINE",
@@ -3070,7 +3065,7 @@
         "i": 23,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FINGER_TRACE_SHAPES",
@@ -3086,7 +3081,7 @@
         "i": 23,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PEN_TRACE_LINE",
@@ -3103,7 +3098,7 @@
         "i": 25,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FINGER_TRACE_SQUIGGLE",
@@ -3118,7 +3113,7 @@
         "i": 24,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_SHAPES",
@@ -3134,7 +3129,7 @@
         "i": 24,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_SQUIGGLE",
@@ -3150,7 +3145,7 @@
         "i": 25,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_CAPITAL_A_E",
@@ -3167,7 +3162,7 @@
         "i": 13,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FINGER_TRACE_CAPITAL_U_Z",
@@ -3184,7 +3179,7 @@
         "i": 21,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_WRITE_CAPITAL_A_E",
@@ -3199,7 +3194,7 @@
         "i": 13,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_DIGITS_MORE_LESS",
@@ -3214,7 +3209,7 @@
         "i": 73,
         "j": 20
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_CLICK_FAST_SMALL",
@@ -3231,7 +3226,7 @@
         "i": 62,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "HOLD_PEN",
@@ -3247,7 +3242,7 @@
         "i": 25,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PECK_CAPITALS_AND_PUNCTUTATION",
@@ -3262,9 +3257,9 @@
         "i": 54,
         "j": 24
       },
-      "subNodes": [],
       "i": 54,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "BEFORE_AFTER_10",
@@ -3281,7 +3276,7 @@
         "i": 73,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_NTH_ORDER_10",
@@ -3297,7 +3292,7 @@
         "i": 75,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_NTH_ORDER_ANY",
@@ -3313,7 +3308,7 @@
         "i": 75,
         "j": 22
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_OPPONENT_FINGERS",
@@ -3328,7 +3323,7 @@
         "i": 81,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_DICE",
@@ -3344,7 +3339,7 @@
         "i": 83,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PECK_DIGITS_ON_KEYBOARD",
@@ -3360,7 +3355,7 @@
         "i": 56,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_LEFT",
@@ -3377,7 +3372,7 @@
         "i": 54,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_HOME_ROW_RIGHT",
@@ -3394,9 +3389,9 @@
         "i": 57,
         "j": 41
       },
-      "subNodes": [],
       "i": 57,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_INDEX_FINGER_RIGHT",
@@ -3412,9 +3407,9 @@
         "i": 57,
         "j": 43
       },
-      "subNodes": [],
       "i": 57,
-      "j": 18
+      "j": 18,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_MIDDLE_FINGER_RIGHT",
@@ -3429,9 +3424,9 @@
         "i": 57,
         "j": 44
       },
-      "subNodes": [],
       "i": 57,
-      "j": 19
+      "j": 19,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_RING_FINGER_RIGHT",
@@ -3446,9 +3441,9 @@
         "i": 57,
         "j": 45
       },
-      "subNodes": [],
       "i": 57,
-      "j": 20
+      "j": 20,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_PINKY_FINGER_RIGHT",
@@ -3463,9 +3458,9 @@
         "i": 57,
         "j": 46
       },
-      "subNodes": [],
       "i": 57,
-      "j": 21
+      "j": 21,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_CAPITALS_LEFT_SHIFT",
@@ -3480,9 +3475,9 @@
         "i": 56,
         "j": 47
       },
-      "subNodes": [],
       "i": 56,
-      "j": 22
+      "j": 22,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_CAPITALS_RIGHT_SHIFT",
@@ -3497,9 +3492,9 @@
         "i": 57,
         "j": 47
       },
-      "subNodes": [],
       "i": 57,
-      "j": 22
+      "j": 22,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_NUMBERS_MIDDLE",
@@ -3514,9 +3509,9 @@
         "i": 56,
         "j": 49
       },
-      "subNodes": [],
       "i": 56,
-      "j": 24
+      "j": 24,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_NUMBERS_RING",
@@ -3531,9 +3526,9 @@
         "i": 56,
         "j": 50
       },
-      "subNodes": [],
       "i": 56,
-      "j": 25
+      "j": 25,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYING_NUMBERS_PINKY",
@@ -3548,9 +3543,9 @@
         "i": 56,
         "j": 51
       },
-      "subNodes": [],
       "i": 56,
-      "j": 26
+      "j": 26,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_PUNCTUATION_INDEX",
@@ -3565,9 +3560,9 @@
         "i": 57,
         "j": 49
       },
-      "subNodes": [],
       "i": 57,
-      "j": 24
+      "j": 24,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_PUNCTUATION_MIDDLE",
@@ -3583,9 +3578,9 @@
         "i": 57,
         "j": 50
       },
-      "subNodes": [],
       "i": 57,
-      "j": 25
+      "j": 25,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_PUNCTUATION_RING",
@@ -3601,9 +3596,9 @@
         "i": 57,
         "j": 51
       },
-      "subNodes": [],
       "i": 57,
-      "j": 26
+      "j": 26,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TYPING_PUNCTUATION_PINKY",
@@ -3619,9 +3614,9 @@
         "i": 57,
         "j": 52
       },
-      "subNodes": [],
       "i": 57,
-      "j": 27
+      "j": 27,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_ADD_OPPONENT_FINGERS_FAST",
@@ -3636,7 +3631,7 @@
         "i": 81,
         "j": 21
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_ADD_DICE_FAST",
@@ -3653,7 +3648,7 @@
         "i": 83,
         "j": 21
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_1",
@@ -3668,10 +3663,9 @@
         "i": 79,
         "j": 11
       },
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_NTH_FRAC_10",
@@ -3687,7 +3681,7 @@
         "i": 69,
         "j": 19
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_PITCH_HIGH_LOW_2",
@@ -3704,7 +3698,7 @@
         "i": 100,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_PITCH_HIGH_LOW_3",
@@ -3721,7 +3715,7 @@
         "i": 100,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_TIMBRE",
@@ -3736,7 +3730,7 @@
         "i": 100,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "COUNT_ADD_NUMBER_LINE",
@@ -3752,7 +3746,7 @@
         "i": 85,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FINGER_TRACE_DIGITS",
@@ -3769,7 +3763,7 @@
         "i": 67,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_DIGITS",
@@ -3786,7 +3780,7 @@
         "i": 67,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_WRITE_DIGITS",
@@ -3801,7 +3795,7 @@
         "i": 67,
         "j": 20
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_BEFORE",
@@ -3818,7 +3812,7 @@
         "i": 90,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_BEFORE_TEMPORAL",
@@ -3835,7 +3829,7 @@
         "i": 88,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_BEFORE_THAT",
@@ -3852,7 +3846,7 @@
         "i": 91,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_AFTER",
@@ -3869,7 +3863,7 @@
         "i": 92,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_AFTER_TEMPORAL",
@@ -3886,7 +3880,7 @@
         "i": 89,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_AFTER_THAT",
@@ -3903,7 +3897,7 @@
         "i": 93,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_FIRST",
@@ -3920,7 +3914,7 @@
         "i": 94,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_SECOND",
@@ -3937,7 +3931,7 @@
         "i": 95,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_NTH_FRAC_SIMPLE_5",
@@ -3954,7 +3948,7 @@
         "i": 69,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_LAST",
@@ -3971,7 +3965,7 @@
         "i": 96,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_CLOCK_HOURS",
@@ -3986,7 +3980,7 @@
         "i": 68,
         "j": 20
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_CLOCK_MINUTES",
@@ -4002,7 +3996,7 @@
         "i": 68,
         "j": 21
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_CLOCK",
@@ -4017,7 +4011,7 @@
         "i": 68,
         "j": 22
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_ORDER_TEMPORAL_2",
@@ -4033,7 +4027,7 @@
         "i": 89,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_ORDER_TEMPORAL_3",
@@ -4048,7 +4042,7 @@
         "i": 89,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_LEFT_FAST",
@@ -4063,7 +4057,7 @@
         "i": 54,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PECK_KEYS_ON_KEYBOARD_RIGHT_FAST",
@@ -4078,7 +4072,7 @@
         "i": 55,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PECK_DIGITS_ON_KEYBOARD_FAST",
@@ -4093,7 +4087,7 @@
         "i": 56,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "BEFORE_5",
@@ -4109,7 +4103,7 @@
         "i": 73,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "AFTER_5",
@@ -4125,7 +4119,7 @@
         "i": 74,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ALL_BEFORE_AFTER_10",
@@ -4141,7 +4135,7 @@
         "i": 73,
         "j": 19
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_DBLCLICK_FAST_SMALL",
@@ -4158,7 +4152,7 @@
         "i": 61,
         "j": 14
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_2_LETTER_WORDS",
@@ -4182,7 +4176,7 @@
         "i": 23,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_3_LETTER_WORDS",
@@ -4197,7 +4191,7 @@
         "i": 23,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_COPY_3_LETTER_WORDS",
@@ -4213,7 +4207,7 @@
         "i": 24,
         "j": 14
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_COPY_4_LETTER_WORDS",
@@ -4228,7 +4222,7 @@
         "i": 24,
         "j": 22
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_WRITE_3_LETTER_WORDS",
@@ -4245,9 +4239,9 @@
         "i": 25,
         "j": 22
       },
-      "subNodes": [],
       "i": 25,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_CLICK_FAST",
@@ -4263,7 +4257,7 @@
         "i": 62,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_CLICK_SMALL",
@@ -4279,7 +4273,7 @@
         "i": 63,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_SCROLL_HORZ",
@@ -4294,7 +4288,7 @@
         "i": 58,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_SCROLL_VERT_FAST",
@@ -4310,7 +4304,7 @@
         "i": 57,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_SCROLL_HORZ_FAST",
@@ -4326,7 +4320,7 @@
         "i": 58,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_DBLCLICK_FAST",
@@ -4342,7 +4336,7 @@
         "i": 60,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_DBLCLICK_SMALL",
@@ -4358,7 +4352,7 @@
         "i": 61,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_SCROLL",
@@ -4374,7 +4368,7 @@
         "i": 59,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_SCROLL_FAST",
@@ -4391,7 +4385,7 @@
         "i": 59,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_DRAG",
@@ -4406,7 +4400,7 @@
         "i": 64,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_DRAG_FAST",
@@ -4422,7 +4416,7 @@
         "i": 63,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_DRAG_SMALL",
@@ -4438,7 +4432,7 @@
         "i": 64,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_DRAG_FAST_SMALL",
@@ -4454,7 +4448,7 @@
         "i": 64,
         "j": 14
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_MOUSE_DBLCLICK_DRAG",
@@ -4470,7 +4464,7 @@
         "i": 61,
         "j": 15
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FINGER_TRACE_CAPITAL_A_E",
@@ -4487,7 +4481,7 @@
         "i": 13,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FINGER_TRACE_CAPITAL_F_J",
@@ -4504,7 +4498,7 @@
         "i": 15,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FINGER_TRACE_CAPITAL_K_O",
@@ -4521,7 +4515,7 @@
         "i": 17,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FINGER_TRACE_CAPITAL_P_T",
@@ -4538,7 +4532,7 @@
         "i": 19,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FINGER_TRACE_LOWER_A_E",
@@ -4555,7 +4549,7 @@
         "i": 14,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FINGER_TRACE_LOWER_F_J",
@@ -4572,7 +4566,7 @@
         "i": 16,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FINGER_TRACE_LOWER_K_O",
@@ -4589,7 +4583,7 @@
         "i": 18,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FINGER_TRACE_LOWER_P_T",
@@ -4606,7 +4600,7 @@
         "i": 20,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FINGER_TRACE_LOWER_U_Z",
@@ -4623,7 +4617,7 @@
         "i": 22,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_LOWER_A_E",
@@ -4640,7 +4634,7 @@
         "i": 14,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_CAPITAL_F_J",
@@ -4657,7 +4651,7 @@
         "i": 15,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_WRITE_LOWER_A_E",
@@ -4672,7 +4666,7 @@
         "i": 14,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_WRITE_CAPITAL_F_J",
@@ -4687,7 +4681,7 @@
         "i": 15,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_LOWER_F_J",
@@ -4704,7 +4698,7 @@
         "i": 16,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_WRITE_LOWER_F_J",
@@ -4719,7 +4713,7 @@
         "i": 16,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_CAPITAL_K_O",
@@ -4736,7 +4730,7 @@
         "i": 17,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_WRITE_CAPITAL_K_O",
@@ -4751,7 +4745,7 @@
         "i": 17,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_LOWER_K_O",
@@ -4768,7 +4762,7 @@
         "i": 18,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_WRITE_LOWER_K_O",
@@ -4783,7 +4777,7 @@
         "i": 18,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_CAPITAL_P_T",
@@ -4800,7 +4794,7 @@
         "i": 19,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_WRITE_CAPITAL_P_T",
@@ -4815,7 +4809,7 @@
         "i": 19,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_LOWER_P_T",
@@ -4832,7 +4826,7 @@
         "i": 20,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_WRITE_LOWER_P_T",
@@ -4847,7 +4841,7 @@
         "i": 20,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_CAPITAL_U_Z",
@@ -4864,7 +4858,7 @@
         "i": 21,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_WRITE_CAPITAL_U_Z",
@@ -4879,7 +4873,7 @@
         "i": 21,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_TRACE_LOWER_U_Z",
@@ -4896,7 +4890,7 @@
         "i": 22,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_WRITE_LOWER_U_Z",
@@ -4911,7 +4905,7 @@
         "i": 22,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_WRITE_4_LETTER_WORDS",
@@ -4928,9 +4922,9 @@
         "i": 25,
         "j": 23
       },
-      "subNodes": [],
       "i": 25,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SOUND_TO_LETTER_A_I",
@@ -4946,7 +4940,7 @@
         "i": 25,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SOUND_TO_LETTER_J_Q",
@@ -4962,7 +4956,7 @@
         "i": 26,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SOUND_TO_LETTER_R_Z",
@@ -4978,7 +4972,7 @@
         "i": 27,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_COPY_CAPITAL_A_E",
@@ -4993,7 +4987,7 @@
         "i": 13,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_COPY_LOWER_A_E",
@@ -5008,7 +5002,7 @@
         "i": 14,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_COPY_CAPITAL_F_J",
@@ -5023,7 +5017,7 @@
         "i": 15,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_COPY_LOWER_F_J",
@@ -5038,7 +5032,7 @@
         "i": 16,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_COPY_CAPITAL_K_O",
@@ -5053,7 +5047,7 @@
         "i": 17,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_COPY_LOWER_K_O",
@@ -5068,7 +5062,7 @@
         "i": 18,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_COPY_CAPITAL_P_T",
@@ -5083,7 +5077,7 @@
         "i": 19,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_COPY_LOWER_P_T",
@@ -5098,7 +5092,7 @@
         "i": 20,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_COPY_CAPITAL_U_Z",
@@ -5113,7 +5107,7 @@
         "i": 21,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_COPY_LOWER_U_Z",
@@ -5128,7 +5122,7 @@
         "i": 22,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_COPY_2_LETTER_WORDS",
@@ -5153,7 +5147,7 @@
         "i": 24,
         "j": 13
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PENCIL_WRITE_2_LETTER_WORDS",
@@ -5178,7 +5172,7 @@
         "i": 25,
         "j": 14
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_SHORT_U",
@@ -5195,7 +5189,7 @@
         "i": 37,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_EYES_FACES",
@@ -5216,8 +5210,7 @@
         "i": 39,
         "j": 2
       },
-      "subNodes": [],
-      "forTeachers": true
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "BABBLE",
@@ -5239,8 +5232,7 @@
         "i": 44,
         "j": 4
       },
-      "subNodes": [],
-      "forTeachers": true
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "SELF_SUPPORT_NECK",
@@ -5255,7 +5247,7 @@
         "i": 3,
         "j": 4
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TUMMY_LIFT_HEAD",
@@ -5276,8 +5268,7 @@
         "i": 3,
         "j": 3
       },
-      "subNodes": [],
-      "forTeachers": true
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "SOCIAL_SMILE",
@@ -5298,8 +5289,7 @@
         "i": 40,
         "j": 4
       },
-      "subNodes": [],
-      "forTeachers": true
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "TRACKING_FACE",
@@ -5320,8 +5310,7 @@
         "i": 4,
         "j": 3
       },
-      "subNodes": [],
-      "forTeachers": true
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "ROLL_OVER_BACK_TO_FRONT",
@@ -5336,7 +5325,7 @@
         "i": 2,
         "j": 4
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ROLL_OVER_FRONT_TO_BACK",
@@ -5351,7 +5340,7 @@
         "i": 1,
         "j": 4
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SIT_UNSUPPORTED",
@@ -5368,7 +5357,7 @@
         "i": 3,
         "j": 5
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SIT_UP_UNSUPPORTED",
@@ -5383,7 +5372,7 @@
         "i": 3,
         "j": 6
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "CRAWL",
@@ -5398,7 +5387,7 @@
         "i": 4,
         "j": 6
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "WALK_SUPPORTED",
@@ -5414,7 +5403,7 @@
         "i": 3,
         "j": 7
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "WALK_UNSUPPORTED",
@@ -5429,7 +5418,7 @@
         "i": 3,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RUN",
@@ -5444,7 +5433,7 @@
         "i": 3,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "JUMP",
@@ -5459,7 +5448,7 @@
         "i": 3,
         "j": 10
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "KICK_A_BALL",
@@ -5475,7 +5464,7 @@
         "i": 2,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "THROW",
@@ -5491,7 +5480,7 @@
         "i": 1,
         "j": 9
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RAKING_GRASP",
@@ -5509,7 +5498,7 @@
         "i": 5,
         "j": 5
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "PINCER_GRASP",
@@ -5525,7 +5514,7 @@
         "i": 5,
         "j": 7
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "OBJECT_MANIPULATION",
@@ -5540,7 +5529,7 @@
         "i": 5,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "STACKING",
@@ -5555,7 +5544,7 @@
         "i": 6,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "DRINKING_FROM_STRAW",
@@ -5570,7 +5559,7 @@
         "i": 10,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "DRINKING_FROM_CUP",
@@ -5585,7 +5574,7 @@
         "i": 11,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "JUMPING_JACK",
@@ -5600,7 +5589,7 @@
         "i": 3,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "FROG_JUMP",
@@ -5615,7 +5604,7 @@
         "i": 2,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SPORTS",
@@ -5631,7 +5620,7 @@
         "i": 3,
         "j": 14
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "MARTIAL_ARTS",
@@ -5647,7 +5636,7 @@
         "i": 2,
         "j": 14
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "CLAPPING",
@@ -5662,7 +5651,7 @@
         "i": 7,
         "j": 8
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_POTTY_PROMPTED",
@@ -5677,7 +5666,7 @@
         "i": 1,
         "j": 11
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_POTTY_UNPROMPTED",
@@ -5692,7 +5681,7 @@
         "i": 1,
         "j": 12
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TRACKING_SOUND",
@@ -5713,8 +5702,7 @@
         "i": 42,
         "j": 3
       },
-      "subNodes": [],
-      "forTeachers": true
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "TRACKING_OBJECTS",
@@ -5735,8 +5723,7 @@
         "i": 5,
         "j": 4
       },
-      "subNodes": [],
-      "forTeachers": true
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "ADD_UP_TO_15",
@@ -5752,7 +5739,7 @@
         "i": 77,
         "j": 27
       },
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_SHORT_A_LIKE_AT",
@@ -5769,7 +5756,7 @@
         "CONSONANT_TO_SOUND_A_TO_M",
         "VOWEL_TO_SOUND_SHORT"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_SHORT_E",
@@ -5786,7 +5773,7 @@
         "CONSONANT_TO_SOUND_A_TO_M",
         "VOWEL_TO_SOUND_SHORT"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_SHORT_I",
@@ -5803,7 +5790,7 @@
         "CONSONANT_TO_SOUND_A_TO_M",
         "VOWEL_TO_SOUND_SHORT"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_SHORT_O",
@@ -5820,7 +5807,7 @@
         "CONSONANT_TO_SOUND_A_TO_M",
         "VOWEL_TO_SOUND_SHORT"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_LONG_A",
@@ -5837,7 +5824,7 @@
         "READ_WORDS_SHORT_A_LIKE_AND",
         "READ_WORDS_SHORT_A_LIKE_ARE"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_LONG_E",
@@ -5852,7 +5839,7 @@
       "deps": [
         "READ_WORDS_SHORT_E"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_LONG_I",
@@ -5867,7 +5854,7 @@
       "deps": [
         "READ_WORDS_SHORT_I"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_LONG_O",
@@ -5882,7 +5869,7 @@
       "deps": [
         "READ_WORDS_SHORT_O"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_LONG_U",
@@ -5897,7 +5884,7 @@
       "deps": [
         "READ_WORDS_SHORT_U"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_CH",
@@ -5912,9 +5899,9 @@
       "deps": [
         "READ_WORDS_REVIEW_6"
       ],
-      "subNodes": [],
       "i": 43,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_OO",
@@ -5929,9 +5916,9 @@
       "deps": [
         "READ_WORDS_REVIEW_3"
       ],
-      "subNodes": [],
       "i": 35,
-      "j": 12
+      "j": 12,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_TH_LIKE_THIS",
@@ -5946,9 +5933,9 @@
       "deps": [
         "READ_WORDS_REVIEW_4"
       ],
-      "subNodes": [],
       "i": 31,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_SH",
@@ -5963,9 +5950,9 @@
       "deps": [
         "READ_WORDS_REVIEW_5"
       ],
-      "subNodes": [],
       "i": 42,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_EA",
@@ -5980,9 +5967,9 @@
       "deps": [
         "READ_WORDS_REVIEW_2"
       ],
-      "subNodes": [],
       "i": 31,
-      "j": 12
+      "j": 12,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_OA",
@@ -5997,9 +5984,9 @@
       "deps": [
         "READ_WORDS_REVIEW_3"
       ],
-      "subNodes": [],
       "i": 36,
-      "j": 12
+      "j": 12,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_GHT",
@@ -6014,9 +6001,9 @@
       "deps": [
         "READ_WORDS_REVIEW_6"
       ],
-      "subNodes": [],
       "i": 44,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_SILENT_K",
@@ -6031,9 +6018,9 @@
       "deps": [
         "READ_WORDS_REVIEW_5"
       ],
-      "subNodes": [],
       "i": 40,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_CK",
@@ -6048,9 +6035,9 @@
       "deps": [
         "READ_WORDS_REVIEW_3"
       ],
-      "subNodes": [],
       "i": 39,
-      "j": 12
+      "j": 12,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_QU",
@@ -6065,9 +6052,9 @@
       "deps": [
         "READ_WORDS_REVIEW_5"
       ],
-      "subNodes": [],
       "i": 39,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_PH",
@@ -6082,9 +6069,9 @@
       "deps": [
         "READ_WORDS_REVIEW_4"
       ],
-      "subNodes": [],
       "i": 32,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_HARD_G",
@@ -6101,7 +6088,7 @@
         "CONSONANT_TO_SOUND_N_TO_Z",
         "VOWEL_TO_SOUND_SHORT"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_SOFT_G",
@@ -6116,7 +6103,7 @@
       "deps": [
         "READ_WORDS_HARD_G"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_ST",
@@ -6131,9 +6118,9 @@
       "deps": [
         "READ_WORDS_REVIEW_3"
       ],
-      "subNodes": [],
       "i": 42,
-      "j": 12
+      "j": 12,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_TR",
@@ -6148,9 +6135,9 @@
       "deps": [
         "READ_WORDS_REVIEW_4"
       ],
-      "subNodes": [],
       "i": 33,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_LK",
@@ -6165,9 +6152,9 @@
       "deps": [
         "READ_WORDS_REVIEW_3"
       ],
-      "subNodes": [],
       "i": 40,
-      "j": 12
+      "j": 12,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_WR",
@@ -6182,9 +6169,9 @@
       "deps": [
         "READ_WORDS_REVIEW_5"
       ],
-      "subNodes": [],
       "i": 38,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_REVIEW_8",
@@ -6207,9 +6194,9 @@
         "READ_WORDS_REVIEW_7",
         "READ_SENTENCES_SHORT_3"
       ],
-      "subNodes": [],
       "i": 48,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_LL",
@@ -6224,9 +6211,9 @@
       "deps": [
         "READ_WORDS_REVIEW_3"
       ],
-      "subNodes": [],
       "i": 41,
-      "j": 12
+      "j": 12,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_WH",
@@ -6241,9 +6228,9 @@
       "deps": [
         "READ_WORDS_REVIEW_5"
       ],
-      "subNodes": [],
       "i": 41,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "CONSONANT_TO_SOUND_A_TO_M",
@@ -6259,7 +6246,7 @@
         "READ_LETTERS",
         "SING_ALPHABET"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_HARD_C",
@@ -6274,9 +6261,9 @@
       "deps": [
         "READ_WORDS_REVIEW_6"
       ],
-      "subNodes": [],
       "i": 45,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_SOFT_C",
@@ -6292,9 +6279,9 @@
         "READ_WORDS_HARD_C",
         "READ_WORDS_REVIEW_8"
       ],
-      "subNodes": [],
       "i": 45,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_HARD_Y",
@@ -6311,9 +6298,9 @@
         "CONSONANT_TO_SOUND_N_TO_Z",
         "VOWEL_TO_SOUND_SHORT"
       ],
-      "subNodes": [],
       "i": 40,
-      "j": 10
+      "j": 10,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_VOWEL_Y",
@@ -6328,9 +6315,9 @@
       "deps": [
         "READ_WORDS_HARD_Y"
       ],
-      "subNodes": [],
       "i": 40,
-      "j": 11
+      "j": 11,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_EE",
@@ -6345,9 +6332,9 @@
       "deps": [
         "READ_WORDS_REVIEW_2"
       ],
-      "subNodes": [],
       "i": 32,
-      "j": 12
+      "j": 12,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_CH_EXCEPTION",
@@ -6363,9 +6350,9 @@
         "READ_WORDS_CH",
         "READ_WORDS_REVIEW_8"
       ],
-      "subNodes": [],
       "i": 43,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_EI",
@@ -6380,9 +6367,9 @@
       "deps": [
         "READ_WORDS_REVIEW_2"
       ],
-      "subNodes": [],
       "i": 33,
-      "j": 12
+      "j": 12,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_GH_LIKE_LAUGH",
@@ -6398,9 +6385,9 @@
         "READ_WORDS_GHT",
         "READ_WORDS_REVIEW_8"
       ],
-      "subNodes": [],
       "i": 44,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_AU",
@@ -6415,9 +6402,9 @@
       "deps": [
         "READ_WORDS_REVIEW_4"
       ],
-      "subNodes": [],
       "i": 36,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_AW",
@@ -6432,9 +6419,9 @@
       "deps": [
         "READ_WORDS_REVIEW_4"
       ],
-      "subNodes": [],
       "i": 35,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_SILENT_B",
@@ -6449,9 +6436,9 @@
       "deps": [
         "READ_WORDS_REVIEW_5"
       ],
-      "subNodes": [],
       "i": 37,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_PROPER_NOUNS",
@@ -6466,9 +6453,9 @@
       "deps": [
         "READ_WORDS_REVIEW_11"
       ],
-      "subNodes": [],
       "i": 45,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "GRAMMAR_VERBS",
@@ -6483,9 +6470,9 @@
       "deps": [
         "READ_SENTENCES_LONG_1"
       ],
-      "subNodes": [],
       "i": 47,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "GRAMMAR_ADJECTIVES",
@@ -6500,9 +6487,9 @@
       "deps": [
         "GRAMMAR_NOUNS"
       ],
-      "subNodes": [],
       "i": 46,
-      "j": 17
+      "j": 17,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "GRAMMAR_ADVERBS",
@@ -6517,9 +6504,9 @@
       "deps": [
         "GRAMMAR_VERBS"
       ],
-      "subNodes": [],
       "i": 47,
-      "j": 17
+      "j": 17,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_REVIEW_1",
@@ -6541,9 +6528,9 @@
         "READ_WORDS_SHORT_A_LIKE_ARE",
         "BIGRAM_TO_SOUND_COMMON"
       ],
-      "subNodes": [],
       "i": 48,
-      "j": 11
+      "j": 11,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_REVIEW_3",
@@ -6561,9 +6548,9 @@
         "READ_WORDS_REVIEW_2",
         "READ_SENTENCES_VERY_SHORT_1"
       ],
-      "subNodes": [],
       "i": 48,
-      "j": 12
+      "j": 12,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_SENTENCES_VERY_SHORT_2",
@@ -6579,9 +6566,9 @@
         "READ_WORDS_REVIEW_2",
         "READ_SENTENCES_VERY_SHORT_1"
       ],
-      "subNodes": [],
       "i": 49,
-      "j": 12
+      "j": 12,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_SENTENCES_SHORT_1",
@@ -6598,9 +6585,9 @@
         "READ_WORDS_REVIEW_4",
         "READ_NUMBERS_UP_TO_1000"
       ],
-      "subNodes": [],
       "i": 49,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_SENTENCES_MEDIUM_1",
@@ -6616,9 +6603,9 @@
         "READ_WORDS_REVIEW_7",
         "READ_SENTENCES_SHORT_3"
       ],
-      "subNodes": [],
       "i": 49,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_SENTENCES_LONG_1",
@@ -6635,9 +6622,9 @@
         "READ_WORDS_REVIEW_10",
         "READ_PUNCTUATION"
       ],
-      "subNodes": [],
       "i": 49,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_COMMON_ANIMALS",
@@ -6652,9 +6639,9 @@
       "deps": [
         "READ_WORDS_REVIEW_6"
       ],
-      "subNodes": [],
       "i": 31,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_COLORS",
@@ -6669,9 +6656,9 @@
       "deps": [
         "READ_WORDS_REVIEW_7"
       ],
-      "subNodes": [],
       "i": 32,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_CARDINALS",
@@ -6686,9 +6673,9 @@
       "deps": [
         "READ_WORDS_REVIEW_5"
       ],
-      "subNodes": [],
       "i": 33,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_COMPUTERS",
@@ -6703,9 +6690,9 @@
       "deps": [
         "READ_WORDS_REVIEW_10"
       ],
-      "subNodes": [],
       "i": 39,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_BEDROOM",
@@ -6720,9 +6707,9 @@
       "deps": [
         "READ_WORDS_REVIEW_7"
       ],
-      "subNodes": [],
       "i": 35,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_BATHROOM",
@@ -6737,9 +6724,9 @@
       "deps": [
         "READ_WORDS_REVIEW_7"
       ],
-      "subNodes": [],
       "i": 36,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_GARDEN",
@@ -6754,9 +6741,9 @@
       "deps": [
         "READ_WORDS_REVIEW_10"
       ],
-      "subNodes": [],
       "i": 40,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_SCHOOL",
@@ -6771,9 +6758,9 @@
       "deps": [
         "READ_WORDS_REVIEW_8"
       ],
-      "subNodes": [],
       "i": 41,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_KITCHEN",
@@ -6788,9 +6775,9 @@
       "deps": [
         "READ_WORDS_REVIEW_7"
       ],
-      "subNodes": [],
       "i": 37,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_FOOD",
@@ -6805,9 +6792,9 @@
       "deps": [
         "READ_WORDS_REVIEW_7"
       ],
-      "subNodes": [],
       "i": 38,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_VEHICLES",
@@ -6822,9 +6809,9 @@
       "deps": [
         "READ_WORDS_REVIEW_10"
       ],
-      "subNodes": [],
       "i": 41,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_SENTENCES_LONG_2",
@@ -6840,9 +6827,9 @@
         "READ_WORDS_REVIEW_11",
         "READ_SENTENCES_LONG_1"
       ],
-      "subNodes": [],
       "i": 49,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_REVIEW_12",
@@ -6863,9 +6850,9 @@
         "READ_WORDS_GARDEN",
         "READ_WORDS_VEHICLES"
       ],
-      "subNodes": [],
       "i": 48,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_SENTENCES_LONG_3",
@@ -6882,9 +6869,9 @@
         "READ_SENTENCES_LONG_2",
         "READ_PROPER_NOUNS"
       ],
-      "subNodes": [],
       "i": 49,
-      "j": 17
+      "j": 17,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_FARM_ANIMALS",
@@ -6899,9 +6886,9 @@
       "deps": [
         "READ_WORDS_REVIEW_9"
       ],
-      "subNodes": [],
       "i": 31,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_JUNGLE_ANIMALS",
@@ -6916,9 +6903,9 @@
       "deps": [
         "READ_WORDS_REVIEW_8"
       ],
-      "subNodes": [],
       "i": 30,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_WATER_ANIMALS",
@@ -6933,9 +6920,9 @@
       "deps": [
         "READ_WORDS_REVIEW_9"
       ],
-      "subNodes": [],
       "i": 32,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_INSECTS",
@@ -6950,9 +6937,9 @@
       "deps": [
         "READ_WORDS_REVIEW_9"
       ],
-      "subNodes": [],
       "i": 33,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_OCCUPATIONS",
@@ -6967,9 +6954,9 @@
       "deps": [
         "READ_WORDS_REVIEW_6"
       ],
-      "subNodes": [],
       "i": 30,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_EMOTIONS",
@@ -6984,9 +6971,9 @@
       "deps": [
         "READ_WORDS_REVIEW_6"
       ],
-      "subNodes": [],
       "i": 29,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_FAMILY",
@@ -7001,9 +6988,9 @@
       "deps": [
         "READ_WORDS_REVIEW_8"
       ],
-      "subNodes": [],
       "i": 42,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_OFFICE",
@@ -7018,9 +7005,9 @@
       "deps": [
         "READ_WORDS_REVIEW_9"
       ],
-      "subNodes": [],
       "i": 34,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_CONSTRUCTION",
@@ -7035,9 +7022,9 @@
       "deps": [
         "READ_WORDS_REVIEW_9"
       ],
-      "subNodes": [],
       "i": 35,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_PLAYGROUND",
@@ -7052,9 +7039,9 @@
       "deps": [
         "READ_WORDS_REVIEW_9"
       ],
-      "subNodes": [],
       "i": 36,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_BODY_PARTS",
@@ -7069,9 +7056,9 @@
       "deps": [
         "READ_WORDS_REVIEW_10"
       ],
-      "subNodes": [],
       "i": 37,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_TOYS",
@@ -7086,9 +7073,9 @@
       "deps": [
         "READ_WORDS_REVIEW_10"
       ],
-      "subNodes": [],
       "i": 38,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_SHORT_A_LIKE_AND",
@@ -7105,7 +7092,7 @@
         "CONSONANT_TO_SOUND_N_TO_Z",
         "VOWEL_TO_SOUND_SHORT"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_SHORT_A_LIKE_ARE",
@@ -7122,7 +7109,7 @@
         "CONSONANT_TO_SOUND_N_TO_Z",
         "VOWEL_TO_SOUND_SHORT"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_AI",
@@ -7137,7 +7124,7 @@
       "deps": [
         "READ_WORDS_REVIEW_2"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_AY",
@@ -7153,9 +7140,9 @@
         "READ_WORDS_VOWEL_Y",
         "READ_WORDS_REVIEW_2"
       ],
-      "subNodes": [],
       "i": 29,
-      "j": 12
+      "j": 12,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_IE",
@@ -7170,7 +7157,7 @@
       "deps": [
         "READ_WORDS_REVIEW_2"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_DR",
@@ -7185,9 +7172,9 @@
       "deps": [
         "READ_WORDS_REVIEW_4"
       ],
-      "subNodes": [],
       "i": 34,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_UNVOICED_S",
@@ -7202,7 +7189,7 @@
       "deps": [
         "READ_WORDS_REVIEW_2"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_VOICED_S",
@@ -7218,9 +7205,9 @@
         "READ_WORDS_UNVOICED_S",
         "READ_WORDS_REVIEW_6"
       ],
-      "subNodes": [],
       "i": 46,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_OU",
@@ -7235,7 +7222,7 @@
       "deps": [
         "READ_WORDS_REVIEW_3"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "BIGRAM_TO_SOUND_COMMON",
@@ -7252,7 +7239,7 @@
         "CONSONANT_TO_SOUND_A_TO_M",
         "VOWEL_TO_SOUND_SHORT"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_TH_LIKE_THINK",
@@ -7267,9 +7254,9 @@
       "deps": [
         "READ_WORDS_REVIEW_4"
       ],
-      "subNodes": [],
       "i": 30,
-      "j": 13
+      "j": 13,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_COMPOUND_WORDS",
@@ -7284,9 +7271,9 @@
       "deps": [
         "READ_WORDS_REVIEW_10"
       ],
-      "subNodes": [],
       "i": 47,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_ORDINALS",
@@ -7301,9 +7288,9 @@
       "deps": [
         "READ_WORDS_REVIEW_7"
       ],
-      "subNodes": [],
       "i": 34,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_FRUITS",
@@ -7318,9 +7305,9 @@
       "deps": [
         "READ_WORDS_REVIEW_7"
       ],
-      "subNodes": [],
       "i": 39,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_VEGETABLES",
@@ -7335,9 +7322,9 @@
       "deps": [
         "READ_WORDS_REVIEW_8"
       ],
-      "subNodes": [],
       "i": 40,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "VOWEL_TO_SOUND_SHORT",
@@ -7353,7 +7340,7 @@
         "SING_ALPHABET",
         "READ_LETTERS"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_REVIEW_2",
@@ -7373,7 +7360,7 @@
         "READ_WORDS_LONG_E",
         "READ_WORDS_LONG_A"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_SENTENCES_VERY_SHORT_1",
@@ -7388,7 +7375,7 @@
       "deps": [
         "READ_WORDS_REVIEW_1"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_REVIEW_5",
@@ -7411,7 +7398,7 @@
         "READ_WORDS_ST",
         "READ_SENTENCES_VERY_SHORT_3"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_SENTENCES_VERY_SHORT_3",
@@ -7427,7 +7414,7 @@
         "READ_SENTENCES_VERY_SHORT_2",
         "READ_WORDS_REVIEW_3"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_REVIEW_6",
@@ -7450,7 +7437,7 @@
         "READ_WORDS_TH_LIKE_THINK",
         "READ_SENTENCES_SHORT_1"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_SENTENCES_SHORT_2",
@@ -7466,7 +7453,7 @@
         "READ_SENTENCES_SHORT_1",
         "READ_WORDS_REVIEW_5"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_REVIEW_7",
@@ -7489,7 +7476,7 @@
         "READ_WORDS_SILENT_B",
         "READ_SENTENCES_SHORT_2"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_SENTENCES_SHORT_3",
@@ -7504,7 +7491,7 @@
       "deps": [
         "READ_WORDS_REVIEW_6"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_REVIEW_9",
@@ -7527,7 +7514,7 @@
         "READ_WORDS_FRUITS",
         "READ_SENTENCES_MEDIUM_1"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_WORDS_REVIEW_10",
@@ -7549,7 +7536,7 @@
         "READ_WORDS_SOFT_C",
         "READ_WORDS_JUNGLE_ANIMALS"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_SENTENCES_MEDIUM_2",
@@ -7565,7 +7552,7 @@
         "READ_SENTENCES_MEDIUM_1",
         "READ_WORDS_REVIEW_8"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "READ_SENTENCES_MEDIUM_3",
@@ -7581,7 +7568,7 @@
         "READ_WORDS_REVIEW_9",
         "READ_SENTENCES_MEDIUM_2"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TODO_GRAMMAR",
@@ -7596,7 +7583,7 @@
       "deps": [
         "GRAMMAR_NOUNS"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TODO_READING_COMPREHENSION",
@@ -7611,7 +7598,7 @@
       "deps": [
         "READ_PICTURE_BOOKS"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TODO_WRITING",
@@ -7626,7 +7613,7 @@
       "deps": [
         "PENCIL_WRITE_4_LETTER_WORDS"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "USE_TOILET",
@@ -7641,7 +7628,7 @@
       "deps": [
         "USE_POTTY_UNPROMPTED"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "DON_PANTS",
@@ -7656,7 +7643,7 @@
       "deps": [
         "OBJECT_MANIPULATION"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "DON_SOCKS",
@@ -7671,7 +7658,7 @@
       "deps": [
         "OBJECT_MANIPULATION"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "DON_UNDERWEAR",
@@ -7686,7 +7673,7 @@
       "deps": [
         "OBJECT_MANIPULATION"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "DON_COAT",
@@ -7701,7 +7688,7 @@
       "deps": [
         "OBJECT_MANIPULATION"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "DON_TSHIRT",
@@ -7716,7 +7703,7 @@
       "deps": [
         "DON_COAT"
       ],
-      "subNodes": []
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "INTRODUCTION",
@@ -7729,8 +7716,7 @@
         "j": 0
       },
       "deps": [],
-      "subNodes": [],
-      "forTeachers": true
+      "moduleType": "ADULT_OWNED"
     },
     {
       "id": "CALIBRATION",
@@ -7745,8 +7731,7 @@
       "deps": [
         "INTRODUCTION"
       ],
-      "subNodes": [],
-      "forTeachers": true
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "RECOGNIZE_SAY",
@@ -7767,8 +7752,7 @@
       "deps": [
         "RECOGNIZE_EYES_FACES"
       ],
-      "subNodes": [],
-      "forTeachers": true
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "REPEAT_WORDS",
@@ -7783,8 +7767,7 @@
       "deps": [
         "BABBLE"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_2",
@@ -7800,8 +7783,7 @@
         "ADD_UP_TO_1",
         "SUBTRACT_UP_TO_1"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_3",
@@ -7817,8 +7799,7 @@
         "ADD_UP_TO_2",
         "SUBTRACT_UP_TO_2"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_4",
@@ -7834,8 +7815,7 @@
         "ADD_UP_TO_3",
         "SUBTRACT_UP_TO_3"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_5",
@@ -7851,8 +7831,7 @@
         "ADD_UP_TO_4",
         "SUBTRACT_UP_TO_4"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_6",
@@ -7868,8 +7847,7 @@
         "ADD_UP_TO_5",
         "SUBTRACT_UP_TO_5"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_7",
@@ -7885,8 +7863,7 @@
         "ADD_UP_TO_6",
         "SUBTRACT_UP_TO_6"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_8",
@@ -7902,8 +7879,7 @@
         "ADD_UP_TO_7",
         "SUBTRACT_UP_TO_7"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_9",
@@ -7919,8 +7895,7 @@
         "ADD_UP_TO_8",
         "SUBTRACT_UP_TO_8"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_11",
@@ -7936,8 +7911,7 @@
         "ADD_UP_TO_10",
         "SUBTRACT_UP_TO_10"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_12",
@@ -7953,8 +7927,7 @@
         "ADD_UP_TO_11",
         "SUBTRACT_UP_TO_11"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_13",
@@ -7970,8 +7943,7 @@
         "ADD_UP_TO_12",
         "SUBTRACT_UP_TO_12"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_14",
@@ -7987,8 +7959,7 @@
         "ADD_UP_TO_13",
         "SUBTRACT_UP_TO_13"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_16",
@@ -8004,8 +7975,7 @@
         "ADD_UP_TO_15",
         "SUBTRACT_UP_TO_15"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_17",
@@ -8021,8 +7991,7 @@
         "ADD_UP_TO_16",
         "SUBTRACT_UP_TO_16"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_18",
@@ -8038,8 +8007,7 @@
         "ADD_UP_TO_17",
         "SUBTRACT_UP_TO_17"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "ADD_UP_TO_19",
@@ -8055,8 +8023,7 @@
         "ADD_UP_TO_18",
         "SUBTRACT_UP_TO_18"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "RECOGNIZE_LATER_EARLIER",
@@ -8072,8 +8039,7 @@
         "RECOGNIZE_MORE_LESS",
         "READ_CLOCK"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_2",
@@ -8089,10 +8055,9 @@
         "SUBTRACT_UP_TO_1",
         "ADD_UP_TO_1"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 14
+      "j": 14,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_3",
@@ -8108,10 +8073,9 @@
         "SUBTRACT_UP_TO_2",
         "ADD_UP_TO_2"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 15
+      "j": 15,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_4",
@@ -8127,10 +8091,9 @@
         "SUBTRACT_UP_TO_3",
         "ADD_UP_TO_3"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 16
+      "j": 16,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_5",
@@ -8146,10 +8109,9 @@
         "SUBTRACT_UP_TO_4",
         "ADD_UP_TO_4"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 17
+      "j": 17,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_6",
@@ -8165,10 +8127,9 @@
         "SUBTRACT_UP_TO_5",
         "ADD_UP_TO_5"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 18
+      "j": 18,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_7",
@@ -8184,10 +8145,9 @@
         "SUBTRACT_UP_TO_6",
         "ADD_UP_TO_6"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 19
+      "j": 19,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_8",
@@ -8203,10 +8163,9 @@
         "SUBTRACT_UP_TO_7",
         "ADD_UP_TO_7"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 20
+      "j": 20,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_9",
@@ -8222,10 +8181,9 @@
         "SUBTRACT_UP_TO_8",
         "ADD_UP_TO_8"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 21
+      "j": 21,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_10",
@@ -8241,10 +8199,9 @@
         "SUBTRACT_UP_TO_9",
         "ADD_UP_TO_9"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 22
+      "j": 22,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_11",
@@ -8260,10 +8217,9 @@
         "SUBTRACT_UP_TO_10",
         "ADD_UP_TO_10"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 23
+      "j": 23,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_12",
@@ -8279,10 +8235,9 @@
         "SUBTRACT_UP_TO_11",
         "ADD_UP_TO_11"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 24
+      "j": 24,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_13",
@@ -8298,10 +8253,9 @@
         "SUBTRACT_UP_TO_12",
         "ADD_UP_TO_12"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 25
+      "j": 25,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBRACT_UP_TO_14",
@@ -8317,10 +8271,9 @@
         "SUBTRACT_UP_TO_13",
         "ADD_UP_TO_13"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 26
+      "j": 26,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_15",
@@ -8336,10 +8289,9 @@
         "SUBRACT_UP_TO_14",
         "ADD_UP_TO_14"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 27
+      "j": 27,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_16",
@@ -8355,10 +8307,9 @@
         "SUBTRACT_UP_TO_15",
         "ADD_UP_TO_15"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 28
+      "j": 28,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_17",
@@ -8374,10 +8325,9 @@
         "SUBTRACT_UP_TO_16",
         "ADD_UP_TO_16"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 29
+      "j": 29,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_18",
@@ -8393,10 +8343,9 @@
         "SUBTRACT_UP_TO_17",
         "ADD_UP_TO_17"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 30
+      "j": 30,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_19",
@@ -8412,10 +8361,9 @@
         "SUBTRACT_UP_TO_18",
         "ADD_UP_TO_18"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 31
+      "j": 31,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "SUBTRACT_UP_TO_20",
@@ -8431,10 +8379,9 @@
         "SUBTRACT_UP_TO_19",
         "ADD_UP_TO_19"
       ],
-      "subNodes": [],
-      "forTeachers": false,
       "i": 79,
-      "j": 32
+      "j": 32,
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_1",
@@ -8450,8 +8397,7 @@
         "SUBTRACT_UP_TO_1",
         "ADD_UP_TO_1"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_2",
@@ -8468,8 +8414,7 @@
         "SUBTRACT_UP_TO_2",
         "ADD_UP_TO_2"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_3",
@@ -8486,8 +8431,7 @@
         "SUBTRACT_UP_TO_3",
         "ADD_UP_TO_3"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_4",
@@ -8504,8 +8448,7 @@
         "SUBTRACT_UP_TO_4",
         "ADD_UP_TO_4"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_5",
@@ -8522,8 +8465,7 @@
         "SUBTRACT_UP_TO_5",
         "ADD_UP_TO_5"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_6",
@@ -8540,8 +8482,7 @@
         "SUBTRACT_UP_TO_6",
         "ADD_UP_TO_6"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_7",
@@ -8558,8 +8499,7 @@
         "SUBTRACT_UP_TO_7",
         "ADD_UP_TO_7"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_8",
@@ -8576,8 +8516,7 @@
         "SUBTRACT_UP_TO_8",
         "ADD_UP_TO_8"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_9",
@@ -8594,8 +8533,7 @@
         "SUBTRACT_UP_TO_9",
         "ADD_UP_TO_9"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_10",
@@ -8612,8 +8550,7 @@
         "SUBTRACT_UP_TO_10",
         "TWO_ADD_SUB_UP_TO_9"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_11",
@@ -8630,8 +8567,7 @@
         "SUBTRACT_UP_TO_11",
         "ADD_UP_TO_11"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_12",
@@ -8648,8 +8584,7 @@
         "SUBTRACT_UP_TO_12",
         "ADD_UP_TO_12"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_13",
@@ -8666,8 +8601,7 @@
         "SUBTRACT_UP_TO_13",
         "ADD_UP_TO_13"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_14",
@@ -8684,8 +8618,7 @@
         "SUBRACT_UP_TO_14",
         "ADD_UP_TO_14"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_15",
@@ -8702,8 +8635,7 @@
         "SUBTRACT_UP_TO_15",
         "ADD_UP_TO_15"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_16",
@@ -8720,8 +8652,7 @@
         "SUBTRACT_UP_TO_16",
         "ADD_UP_TO_16"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_17",
@@ -8738,8 +8669,7 @@
         "SUBTRACT_UP_TO_17",
         "ADD_UP_TO_17"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_18",
@@ -8756,8 +8686,7 @@
         "SUBTRACT_UP_TO_18",
         "ADD_UP_TO_18"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_19",
@@ -8774,8 +8703,7 @@
         "SUBTRACT_UP_TO_19",
         "ADD_UP_TO_19"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     },
     {
       "id": "TWO_ADD_SUB_UP_TO_20",
@@ -8792,8 +8720,7 @@
         "SUBTRACT_UP_TO_20",
         "ADD_UP_TO_20"
       ],
-      "subNodes": [],
-      "forTeachers": false
+      "moduleType": "CHILD_OWNED"
     }
   ]
 }

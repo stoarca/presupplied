@@ -20,6 +20,7 @@ interface UserProgressParams {
   user: User;
   module: Module;
   status: ProgressStatus;
+  completedBy?: User;
 }
 
 @Entity()
@@ -47,6 +48,10 @@ export class UserProgress {
   })
   status: ProgressStatus;
 
+  @ManyToOne('User', { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'completedById' })
+  completedBy?: User;
+
   @OneToMany(
     () => UserProgressVideo,
     (userProgressVideo) => userProgressVideo.userProgress
@@ -57,5 +62,8 @@ export class UserProgress {
     this.user = params.user;
     this.module = params.module;
     this.status = params.status;
+    if (params.completedBy) {
+      this.completedBy = params.completedBy;
+    }
   }
 }

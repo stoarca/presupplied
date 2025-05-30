@@ -16,7 +16,7 @@ import {buildGraph, TechTree} from './dependency-graph';
 import {AdminToolbar} from './AdminToolbar';
 import {Cell} from './types';
 import {
-  GraphJson, ProgressStatus, KNOWLEDGE_MAP, GraphNodeInfo, VideoInfo
+  GraphJson, ProgressStatus, KNOWLEDGE_MAP, GraphNodeInfo, VideoInfo, ModuleType
 } from '../../common/types';
 import {ViewBox, pixelToViewBoxPos, visibleViewBoxSize} from './util';
 import {NavBar} from './components/NavBar';
@@ -126,12 +126,60 @@ let KnowledgeNode = ({
   if (!moduleComponents[kmid]) {
     opacity=0.3;
   }
+
+  let avatarPath: string | null = null;
+  let avatarColor: string = '#2E7D32';
+  switch (node.moduleType) {
+    case ModuleType.CHILD_OWNED:
+      avatarPath = '/static/images/avatars/child.png';
+      avatarColor = '#2E7D32'; // Green
+      break;
+    case ModuleType.CHILD_DELEGATED:
+      avatarPath = '/static/images/avatars/teacher_child_together.png';
+      avatarColor = '#00ACC1'; // Turquoise
+      break;
+    case ModuleType.ADULT_OWNED:
+      avatarPath = '/static/images/avatars/teacher.png';
+      avatarColor = '#1976D2'; // Blue
+      break;
+  }
+
   return (
     <g transform={`translate(${pos.x}, ${pos.y})`} opacity={opacity}>
       <rect x="0" y="0" width={CELL_WIDTH} height={CELL_HEIGHT} fill={fill}/>
       <text dominantBaseline="central" y={CELL_HEIGHT / 2}>
         {title || kmid}
       </text>
+      {avatarPath && (
+        <g transform={`translate(${CELL_WIDTH - 30}, -5)`}>
+          <defs>
+            <clipPath id={`avatar-clip-${kmid}`}>
+              <circle cx="24" cy="24" r="21" />
+            </clipPath>
+            <filter id={`avatar-shadow-${kmid}`}>
+              <feDropShadow dx="0" dy="3" stdDeviation="3" floodOpacity="0.3"/>
+            </filter>
+          </defs>
+          <circle
+            cx="24"
+            cy="24"
+            r="24"
+            fill={avatarColor}
+            stroke="white"
+            strokeWidth="3"
+            filter={`url(#avatar-shadow-${kmid})`}
+          />
+          <image
+            href={avatarPath}
+            x="3"
+            y="3"
+            width="42"
+            height="42"
+            clipPath={`url(#avatar-clip-${kmid})`}
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </g>
+      )}
       {dependantLines}
       {selectedDependants}
     </g>
@@ -553,9 +601,9 @@ let AdminKnowledgeMap = ({
           description: '',
           studentVideos: [],
           teacherVideos: [],
+          moduleType: ModuleType.CHILD_OWNED,
           cell: hoverCell,
           deps: [],
-          subNodes: [],
         }],
       });
       setSelectedCells([hoverCell]);
@@ -848,7 +896,7 @@ let VideoList = (props: VideoListProps) => {
 
 };
 
-interface StudentKnowledgeMapProps {
+interface UserKnowledgeMapProps {
   knowledgeGraph: TechTree;
   grid: string[][],
   rows: number,
@@ -857,16 +905,16 @@ interface StudentKnowledgeMapProps {
   setSelectedCells: (cells: Cell[]) => void;
 }
 
-let StudentKnowledgeMap = ({
+let UserKnowledgeMap = ({
   knowledgeGraph,
   grid,
   selectedCells,
   setSelectedCells,
-}: StudentKnowledgeMapProps) => {
-  let student = useUserContext();
+}: UserKnowledgeMapProps) => {
+  let user = useUserContext();
 
   let [reached, setReached] = React.useState(new Set<string>(
-    Object.entries(student.progress()).filter(
+    Object.entries(user.progress()).filter(
       ([k, v]) => v.status === ProgressStatus.PASSED
     ).map(([k, v]) => k)
   ));
@@ -874,9 +922,9 @@ let StudentKnowledgeMap = ({
     setReached(newReached);
   }, []);
   let reachable = React.useMemo(() => {
-    let ret = knowledgeGraph.getReachable(reached);
-    return ret;
-  }, [knowledgeGraph, reached]);
+    let ret = knowledgeGraph.getReachables(user.dto!.type, reached);
+    return ret.reachable;
+  }, [knowledgeGraph, reached, user.dto]);
 
   let [hoverCell, setHoverCell] = React.useState<Cell | null>(null);
   let handleClick = React.useCallback(async (e: MouseEvent) => {
@@ -885,7 +933,7 @@ let StudentKnowledgeMap = ({
     }
     if (e.shiftKey) {
       let kmid = grid[hoverCell.i][hoverCell.j];
-      await student.markReached({
+      await user.markReached({
         [kmid]: reached.has(kmid) ?
           ProgressStatus.NOT_ATTEMPTED :
           ProgressStatus.PASSED
@@ -1019,7 +1067,7 @@ export let KnowledgeMap = () => {
     );
   } else {
     ret = (
-      <StudentKnowledgeMap
+      <UserKnowledgeMap
         knowledgeGraph={knowledgeGraph}
         grid={grid}
         rows={rows}

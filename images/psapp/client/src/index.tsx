@@ -14,8 +14,11 @@ import {moduleComponents} from './ModuleContext';
 import {KnowledgeMap} from './KnowledgeMap';
 import {Login} from './pages/Login';
 import {Register} from './pages/Register';
-import {User, UserContext} from './UserContext';
+import {User} from './UserContext';
 import {typedFetch, API_HOST} from './typedFetch';
+import { buildGraph } from './dependency-graph';
+import { KNOWLEDGE_MAP } from '../../common/types';
+import { KnowledgeGraphContext } from './KnowledgeGraphContext';
 import { HomePage } from './pages/HomePage';
 import { Debug } from './pages/Debug';
 import { Settings } from './pages/Settings';
@@ -25,50 +28,61 @@ import { CreateChildPage } from './pages/CreateChildPage';
 import { ChildProfile } from './pages/ChildProfile';
 import { EditChildPage } from './pages/EditChildPage';
 import { PendingInvitations } from './pages/PendingInvitations';
+import { SyncProgressPage } from './pages/SyncProgressPage';
 import { OnboardingManager } from './components/OnboardingManager';
+import { ErrorProvider } from './ErrorContext';
+import { UserProvider } from './UserProvider';
 
 interface AppProps {
   user: User;
 };
+
 const defaultTheme = createTheme();
+const knowledgeGraph = buildGraph(KNOWLEDGE_MAP);
+
 let App = (props: AppProps) => {
   let moduleRoutes = Object.keys(moduleComponents).map(x => {
     return <Route key={x} path={x} element={moduleComponents[x]}/>;
   });
 
   return (
-    <UserContext.Provider value={props.user}>
-      <CssBaseline/>
-      <ThemeProvider theme={defaultTheme}>
-        <Router>
-          <React.Suspense fallback={'loading...'}>
-            <OnboardingManager>
-              <Routes>
-                <Route path="/">
-                  <Route index element={<HomePage/>}/>
-                  <Route path="map" element={<KnowledgeMap/>}/>
-                  <Route path="login" element={<Login/>}/>
-                  <Route path="register" element={<Register/>}/>
-                  <Route path="debug" element={<Debug/>}/>
-                  <Route path="settings" element={<Settings/>}/>
-                  <Route path="settings/general" element={<GeneralSettingsPage/>}/>
-                  <Route path="settings/children" element={<ManageChildrenPage/>}/>
-                  <Route path="create-child" element={<CreateChildPage/>}/>
-                  <Route path="invitations" element={<PendingInvitations/>}/>
-                  <Route path="settings/child/:childId" element={<ChildProfile/>}/>
-                  <Route path="settings/child/:childId/edit" element={<EditChildPage/>}/>
-                  <Route path="modules">
-                    {moduleRoutes}
-                    <Route path="*" element={<div>module not found</div>}/>
-                  </Route>
-                  <Route path="*" element={<div>page not found</div>}/>
-                </Route>
-              </Routes>
-            </OnboardingManager>
-          </React.Suspense>
-        </Router>
-      </ThemeProvider>
-    </UserContext.Provider>
+    <ErrorProvider>
+      <UserProvider initialUser={props.user}>
+        <KnowledgeGraphContext.Provider value={knowledgeGraph}>
+          <CssBaseline/>
+          <ThemeProvider theme={defaultTheme}>
+            <Router>
+              <React.Suspense fallback={'loading...'}>
+                <OnboardingManager>
+                  <Routes>
+                    <Route path="/">
+                      <Route index element={<HomePage/>}/>
+                      <Route path="map" element={<KnowledgeMap/>}/>
+                      <Route path="login" element={<Login/>}/>
+                      <Route path="register" element={<Register/>}/>
+                      <Route path="debug" element={<Debug/>}/>
+                      <Route path="settings" element={<Settings/>}/>
+                      <Route path="settings/general" element={<GeneralSettingsPage/>}/>
+                      <Route path="settings/children" element={<ManageChildrenPage/>}/>
+                      <Route path="create-child" element={<CreateChildPage/>}/>
+                      <Route path="invitations" element={<PendingInvitations/>}/>
+                      <Route path="sync-progress" element={<SyncProgressPage/>}/>
+                      <Route path="settings/child/:childId" element={<ChildProfile/>}/>
+                      <Route path="settings/child/:childId/edit" element={<EditChildPage/>}/>
+                      <Route path="modules">
+                        {moduleRoutes}
+                        <Route path="*" element={<div>module not found</div>}/>
+                      </Route>
+                      <Route path="*" element={<div>page not found</div>}/>
+                    </Route>
+                  </Routes>
+                </OnboardingManager>
+              </React.Suspense>
+            </Router>
+          </ThemeProvider>
+        </KnowledgeGraphContext.Provider>
+      </UserProvider>
+    </ErrorProvider>
   );
 };
 

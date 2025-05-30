@@ -139,6 +139,7 @@ export const ManageChildren = () => {
               height: '100%',
               border: '2px dashed #ccc',
               backgroundColor: 'transparent',
+              boxShadow: 'none',
               '&:hover': {
                 borderColor: '#023D54',
                 backgroundColor: 'rgba(2, 61, 84, 0.05)',

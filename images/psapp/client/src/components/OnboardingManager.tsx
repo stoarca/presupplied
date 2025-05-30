@@ -14,17 +14,32 @@ export const OnboardingManager = ({ children }: OnboardingManagerProps) => {
   const location = useLocation();
 
   useEffect(() => {
-    if (user.dto && (user.dto.type === UserType.PARENT || user.dto.type === UserType.TEACHER)) {
-      if (user.dto.pendingInvites.length > 0) {
-        if (location.pathname !== '/invitations') {
-          navigate('/invitations', { replace: true });
+    if (user.dto) {
+      if (user.dto.type === UserType.PARENT || user.dto.type === UserType.TEACHER) {
+        if (user.dto.pendingInvites.length > 0) {
+          if (location.pathname !== '/invitations') {
+            navigate('/invitations', { replace: true });
+          } else {
+            setLoading(false);
+          }
+          return;
+        } else if (!user.dto.children || user.dto.children.length === 0) {
+          if (location.pathname !== '/create-child') {
+            navigate('/create-child', { replace: true });
+          } else {
+            setLoading(false);
+          }
           return;
         }
-      } else if (!user.dto.children || user.dto.children.length === 0) {
-        if (location.pathname !== '/create-child') {
-          navigate('/create-child', { replace: true });
-          return;
+      }
+
+      if (user.hasLocalProgress()) {
+        if (location.pathname !== '/sync-progress' && location.pathname !== '/create-child') {
+          navigate('/sync-progress', { replace: true });
+        } else {
+          setLoading(false);
         }
+        return;
       }
     }
     setLoading(false);

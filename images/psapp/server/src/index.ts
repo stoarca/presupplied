@@ -159,6 +159,7 @@ AppDataSource.initialize().then(async () => {
   app.get('/settings/children', serveHtmlWithTestMode);
   app.get('/create-child', serveHtmlWithTestMode);
   app.get('/invitations', serveHtmlWithTestMode);
+  app.get('/sync-progress', serveHtmlWithTestMode);
   app.get('/settings/*', serveHtmlWithTestMode);
   app.get('/modules/*', serveHtmlWithTestMode);
 

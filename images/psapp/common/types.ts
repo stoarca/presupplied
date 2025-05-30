@@ -36,14 +36,22 @@ export enum InvitationStatus {
   EXPIRED = 'expired'
 }
 
+export enum ModuleType {
+  ADULT_OWNED = 'ADULT_OWNED',
+  CHILD_DELEGATED = 'CHILD_DELEGATED',
+  CHILD_OWNED = 'CHILD_OWNED'
+}
+
 type KMType = typeof _KNOWLEDGE_MAP;
 export type KMId = KMType['nodes'][number]['id'];
 
 export interface UserProgressDTOEntry {
   status: ProgressStatus,
+  completedById?: number,
   events: {
     time: number,
     status: ProgressStatus,
+    completedById?: number,
   }[],
 }
 export interface UserProgressDTO {
@@ -68,9 +76,14 @@ export interface ChildInfo {
   relationshipType: RelationshipType;
 }
 
+export interface ChildInfoWithProgress extends ChildInfo {
+  progress: UserProgressDTO;
+}
+
 export interface AdultInfo {
   id: number;
   name: string;
+  email: string;
   type: UserType;
   profilePicture?: ProfilePicture;
   relationshipType: RelationshipType;
@@ -85,7 +98,7 @@ export interface UserDTO {
   profilePicture?: ProfilePicture;
   pinRequired: boolean;
   progress: UserProgressDTO;
-  children?: ChildInfo[];
+  children?: ChildInfoWithProgress[];
   adults?: AdultInfo[];
   classmates?: ChildInfo[];
   pendingInvites: InvitationDTO[];
@@ -103,8 +116,7 @@ export interface GraphNodeInfo {
   description: string,
   studentVideos: VideoInfo[],
   teacherVideos: VideoInfo[],
-  forTeachers?: boolean,
-  onBehalfOfStudent?: boolean,
+  moduleType: ModuleType,
 }
 export interface GraphNode extends GraphNodeInfo {
   cell: {
@@ -112,7 +124,6 @@ export interface GraphNode extends GraphNodeInfo {
     j: number,
   },
   deps: string[],
-  subNodes: GraphNodeInfo[],
 }
 
 export interface GraphJson {

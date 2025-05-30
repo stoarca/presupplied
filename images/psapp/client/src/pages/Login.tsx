@@ -52,7 +52,6 @@ export let Login = (props: LoginProps) => {
         },
       });
       if ('success' in resp) {
-        await user.mergeToServer();
         window.location.href = '/';
         return;
       }
