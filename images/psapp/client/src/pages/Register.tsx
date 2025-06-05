@@ -14,6 +14,9 @@ import FormLabel from '@mui/material/FormLabel';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
+import { Card } from '../components/Card';
+import { NavBar } from '../components/NavBar';
+import { Logo } from '../components/Logo';
 
 import {typedFetch, API_HOST} from '../typedFetch';
 import { useUserContext } from '../UserContext';
@@ -87,108 +90,124 @@ export let Register = (props: RegisterProps) => {
   }, [loading, user, userType]);
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlined />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Register
-        </Typography>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #bbfec4, #03dd74)',
+      position: 'relative',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1 }}>
+        <NavBar />
       </Box>
-      <Box>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <FormControl component="fieldset" sx={{ mb: 2, width: '100%' }}>
-            <FormLabel component="legend">I am registering as a:</FormLabel>
-            <RadioGroup
-              row
-              aria-label="user type"
-              name="user-type"
-              value={userType}
-              onChange={handleUserTypeChange}
-            >
-              <FormControlLabel
-                value={UserType.STUDENT}
-                control={<Radio />}
-                label="Student"
-              />
-              <FormControlLabel
-                value={UserType.PARENT}
-                control={<Radio />}
-                label="Parent"
-              />
-              <FormControlLabel
-                value={UserType.TEACHER}
-                control={<Radio />}
-                label="Teacher"
-              />
-            </RadioGroup>
-          </FormControl>
-
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="name"
-            label="Name"
-            name="name"
-            autoComplete="name"
-            autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email"
-            name="email"
-            autoComplete="email"
-            error={fields.email.error}
-            helperText={fields.email.helperText}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="new-password"
-          />
-
-          {userType !== UserType.STUDENT && (
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-              After registration, you'll be able to add children that you manage.
-            </Typography>
-          )}
-
-          <LoadingButton
-            type="submit"
-            fullWidth
-            variant="contained"
-            loading={loading}
-            loadingIndicator="Registering..."
-            sx={{ mt: 3, mb: 2 }}
+      <Container component="main" maxWidth="xs">
+        <Card>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
           >
-            Register
-          </LoadingButton>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link component={RouterLink} to="/login" variant="body2" data-test="login-link-register">
-                {'Already have an account? Sign in'}
-              </Link>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
-    </Container>
+            <Avatar sx={{ m: 1, bgcolor: 'text.primary' }}>
+              <LockOutlined />
+            </Avatar>
+            <Typography component="h1" variant="h5" sx={{ color: 'text.primary', mb: 3 }}>
+              Register
+            </Typography>
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: '100%' }}>
+              <FormControl component="fieldset" sx={{ mb: 2, width: '100%' }}>
+                <FormLabel component="legend">I am registering as a:</FormLabel>
+                <RadioGroup
+                  row
+                  aria-label="user type"
+                  name="user-type"
+                  value={userType}
+                  onChange={handleUserTypeChange}
+                >
+                  <FormControlLabel
+                    value={UserType.STUDENT}
+                    control={<Radio />}
+                    label="Student"
+                  />
+                  <FormControlLabel
+                    value={UserType.PARENT}
+                    control={<Radio />}
+                    label="Parent"
+                  />
+                  <FormControlLabel
+                    value={UserType.TEACHER}
+                    control={<Radio />}
+                    label="Teacher"
+                  />
+                </RadioGroup>
+              </FormControl>
+
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="name"
+                label="Name"
+                name="name"
+                autoComplete="name"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                name="email"
+                autoComplete="email"
+                error={fields.email.error}
+                helperText={fields.email.helperText}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+              />
+
+              {userType !== UserType.STUDENT && (
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                  After registration, you'll be able to add children that you manage.
+                </Typography>
+              )}
+
+              <LoadingButton
+                type="submit"
+                fullWidth
+                variant="contained"
+                loading={loading}
+                loadingIndicator="Registering..."
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Register
+              </LoadingButton>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Typography variant="body2" component="span">
+                    Already have an account?{' '}
+                  </Typography>
+                  <Link component={RouterLink} to="/login" variant="body2" data-test="login-link-register">
+                    Log in
+                  </Link>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        </Card>
+      </Container>
+      <Logo />
+    </div>
   );
 };

@@ -33,6 +33,7 @@ interface ChildDetails extends ChildStep1Details, ChildStep2Details {}
 // Base selectors for navigation and forms
 export const registerLink = 'a[href="/register"]';
 export const loginLink = '[data-test="login-button-navbar"]';
+export const navButtonChildren = '[data-test="nav-button-children"]';
 export const nameInput = 'input[name="name"]';
 export const emailInput = 'input[name="email"]';
 export const passwordInput = 'input[name="password"]';
@@ -55,6 +56,7 @@ export const accountSwitcher = 'div[data-test="account-switcher"]';
 export const accountAvatarBase = '[data-test^="account-avatar-"]';
 export const accountSwitcherDialogTitle = '#account-switcher-dialog-title';
 export const getAccountAvatarSelector = (accountId: number) => `[data-test="account-avatar-${accountId}"]`;
+export const getChildCardSelector = (childId: number) => `[data-test="child-card-${childId}"]`;
 
 export const getAccountSwitcherAccountIds = Xdotoolify.setupWithPage(async (page) => {
   return XC.evaluate(page, (_accountAvatarBase: string) => {
@@ -68,13 +70,13 @@ export const getAccountSwitcherAccountIds = Xdotoolify.setupWithPage(async (page
 });
 
 // Child creation selectors
-export const addChildButton = '[data-test="menu-item-add-child"]';
+export const addChildCard = '[data-test="add-child-card"]';
 export const childNameInput = 'input[data-test="child-name-input"]';
 export const pinRequiredCheckbox = 'input[data-test="pin-required-checkbox"]';
 export const pinInput = 'input[data-test="pin-input"]';
 export const createChildNextButton = 'button[data-test="create-child-next-button"]';
 export const createChildButton = 'button[data-test="create-child-button"]';
-export const childCreatorDialog = 'div[data-test="child-creator"]';
+export const switchToChildButton = '[data-test="switch-to-child-button"]';
 export const getAvatarSelector = (avatarId: string) => `[data-test="avatar-option-${avatarId}"]`;
 export const getSelectedAvatarSelector = (avatarId: string) => `${getAvatarSelector(avatarId)} .avatar-selected`;
 
@@ -212,13 +214,19 @@ export const submitLogin = Xdotoolify.setupWithPage(async (page, expectSuccess =
   }
 });
 
-// Child account management
+// Child account management  
 export const openChildCreator = Xdotoolify.setupWithPage(async (page) => {
   await page.X
-    .checkUntil(XC.visibleElementCount, userMenuButton, 1)
-    .run(XC.autoClick, userMenuButton)
-    .checkUntil(XC.visibleElementCount, addChildButton, 1)
-    .run(XC.autoClick, addChildButton)
+    .checkUntil(XC.visibleElementCount, navButtonChildren, 1)
+    .run(XC.autoClick, navButtonChildren)
+    .checkUntil(XC.evaluate, () => {
+      return window.location.pathname;
+    }, '/children')
+    .checkUntil(XC.visibleElementCount, addChildCard, 1)
+    .run(XC.autoClick, addChildCard)
+    .checkUntil(XC.evaluate, () => {
+      return window.location.pathname;
+    }, '/create-child')
     .checkUntil(XC.visibleElementCount, childNameInput, 1)
     .do();
 });
@@ -256,7 +264,6 @@ export const submitChildCreation = Xdotoolify.setupWithPage(async (page) => {
   await page.X
     .checkUntil(XC.visibleElementCount, createChildButton, 1)
     .run(XC.autoClick, createChildButton)
-    .checkUntil(XC.visibleElementCount, childCreatorDialog, 0)
     .do();
 });
 
@@ -274,29 +281,26 @@ export const createChildComplete = Xdotoolify.setupWithPage(async (page, childDe
     .do();
 });
 
-// Account switching
-export const openAccountSwitcher = Xdotoolify.setupWithPage(async (page, isChild = false) => {
-  if (isChild) {
-    await page.X
-      .checkUntil(XC.visibleElementCount, userAvatar, 1)
-      .run(XC.autoClick, userAvatar)
-      .checkUntil(
-        XC.visibleElementCount, accountAvatarBase, (x) => x >= 1
-      )
-      .do();
-  } else {
-    await page.X
-      .checkUntil(XC.visibleElementCount, userMenuButton, 1)
-      .run(XC.autoClick, userMenuButton)
-      .checkUntil(XC.visibleElementCount, childModeButton, 1)
-      .run(XC.autoClick, childModeButton)
-      .checkUntil(
-        XC.visibleElementCount, accountAvatarBase, (x) => x >= 1
-      )
-      .do();
-  }
+export const switchToChildAccount = Xdotoolify.setupWithPage(async (page, childId: number) => {
+  await page.X
+    .run(navigateToChildProfile, childId, { mode: 'slow' })
+    .checkUntil(XC.visibleElementCount, switchToChildButton, 1)
+    .run(XC.autoClick, switchToChildButton)
+    .checkUntil(XC.evaluate, () => {
+      return window.location.pathname;
+    }, '/')
+    .do();
 });
 
+export const openAccountSwitcher = Xdotoolify.setupWithPage(async (page) => {
+  await page.X
+    .checkUntil(XC.visibleElementCount, userAvatar, 1)
+    .run(XC.autoClick, userAvatar)
+    .checkUntil(
+      XC.visibleElementCount, accountAvatarBase, (x) => x >= 1
+    )
+    .do();
+});
 
 export const selectAccount = Xdotoolify.setupWithPage(async (page, accountId: number, pin?: string) => {
   const accountSelector = getAccountAvatarSelector(accountId);
@@ -360,18 +364,18 @@ export const navigateToChildProfile = Xdotoolify.setupWithPage(
         }, true)
         .do();
     } else {
+      const childCardSelector = getChildCardSelector(childId);
       await page.X
-        .checkUntil(XC.visibleElementCount, userMenuButton, 1)
-        .run(XC.autoClick, userMenuButton)
-        .checkUntil(XC.visibleElementCount, settingsMenuItem, 1)
-        .run(XC.autoClick, settingsMenuItem)
-        .checkUntil(XC.visibleElementCount, 'a[href="/settings/children"]', 1)
-        .run(XC.autoClick, 'a[href="/settings/children"]')
-        .checkUntil(XC.visibleElementCount, `a[href="/settings/child/${childId}"]`, 1)
-        .run(XC.autoClick, `a[href="/settings/child/${childId}"]`)
+        .checkUntil(XC.visibleElementCount, navButtonChildren, 1)
+        .run(XC.autoClick, navButtonChildren)
+        .checkUntil(XC.evaluate, () => {
+          return window.location.pathname;
+        }, '/children')
+        .checkUntil(XC.visibleElementCount, childCardSelector, 1)
+        .run(XC.autoClick, childCardSelector)
         .checkUntil(XC.evaluate, (id: number) => {
-          return window.location.pathname === `/settings/child/${id}`;
-        }, childId, true)
+          return window.location.pathname;
+        }, `/settings/child/${childId}`)
         .do();
     }
   }

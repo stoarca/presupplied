@@ -130,8 +130,8 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
           profilePicture: child.profilePicture,
           relationshipType: RelationshipType.PRIMARY,
           pinRequired: child.pinRequired || false,
-          isSelected: false
-        }));
+          isSelected: false as const
+        })).sort((a, b) => a.name.localeCompare(b.name));
       }
 
       if (user.dto.type === UserType.STUDENT && user.dto.adults) {
@@ -144,8 +144,9 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
               profilePicture: adult.profilePicture,
               relationshipType: adult.relationshipType,
               pinRequired: true,
-              isSelected: false
-            }));
+              isSelected: false as const
+            }))
+            .sort((a, b) => a.name.localeCompare(b.name));
       }
 
       if (user.dto.type === UserType.STUDENT && user.dto.classmates) {
@@ -156,8 +157,8 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
           profilePicture: classmate.profilePicture,
           relationshipType: RelationshipType.PRIMARY,
           pinRequired: classmate.pinRequired || false,
-          isSelected: false
-        }));
+          isSelected: false as const
+        })).sort((a, b) => a.name.localeCompare(b.name));
       }
 
       setRelationships(updatedRelationships);
@@ -197,20 +198,35 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
     return null;
   }
 
-  const allAccounts: Account[] = [
-    {
-      id: user.dto?.id || 0,
-      name: user.dto?.name || '',
-      type: user.dto?.type || UserType.STUDENT,
-      profilePicture: user.dto?.profilePicture,
-      relationshipType: RelationshipType.PRIMARY,
-      pinRequired: false,
-      isSelected: true,
-    },
-    ...(relationships.children || []),
-    ...(relationships.adults || []),
-    ...(relationships.classmates || []),
-  ];
+  const currentUserAccount: Account = {
+    id: user.dto?.id || 0,
+    name: user.dto?.name || '',
+    type: user.dto?.type || UserType.STUDENT,
+    profilePicture: user.dto?.profilePicture,
+    relationshipType: RelationshipType.PRIMARY,
+    pinRequired: false,
+    isSelected: true,
+  };
+
+  let allAccounts: Account[];
+
+  if (user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) {
+    allAccounts = [
+      currentUserAccount,
+      ...(relationships.children || []),
+    ];
+  } else {
+    const adults = relationships.adults || [];
+    const nonAdults = [
+      currentUserAccount,
+      ...(relationships.classmates || []),
+    ].sort((a, b) => a.name.localeCompare(b.name));
+
+    allAccounts = [
+      ...adults,
+      ...nonAdults,
+    ];
+  }
 
   const userOptions: UserOption[] = allAccounts.map(account => ({
     id: account.id,

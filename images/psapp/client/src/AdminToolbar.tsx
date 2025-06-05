@@ -304,7 +304,23 @@ export let AdminToolbar = (props: ToolbarProps) => {
   }, []);
 
   let handleExportGraph = React.useCallback((e: M) => {
-    downloadJson(props.knowledgeMap, 'knowledge-map.json');
+    // Filter out test modules and their dependencies/dependents
+    const filteredNodes = props.knowledgeMap.nodes.filter(node => {
+      return !node.id.startsWith('PS_TESTING_');
+    });
+
+    // Remove dependencies on test modules from remaining nodes
+    const cleanedNodes = filteredNodes.map(node => ({
+      ...node,
+      deps: node.deps.filter(dep => !dep.startsWith('PS_TESTING_'))
+    }));
+
+    const exportMap = {
+      ...props.knowledgeMap,
+      nodes: cleanedNodes
+    };
+
+    downloadJson(exportMap, 'knowledge-map.json');
   }, [props.knowledgeMap, downloadJson]);
 
   let toolbarStyle = {

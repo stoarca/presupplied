@@ -123,7 +123,7 @@ export const InviteAdult = ({ childId, childName, open, onClose, onSuccess }: In
       fullWidth
       data-test="invite-dialog"
     >
-      <DialogTitle sx={{ color: '#023D54' }}>
+      <DialogTitle sx={{ color: 'text.primary' }}>
         Invite Adult to Manage {childName}
       </DialogTitle>
 
@@ -186,12 +186,6 @@ export const InviteAdult = ({ childId, childName, open, onClose, onSuccess }: In
           variant="contained"
           disabled={isLoading || !email.trim()}
           data-test="send-invitation-button"
-          sx={{
-            backgroundColor: '#023D54',
-            '&:hover': {
-              backgroundColor: '#034a66',
-            },
-          }}
         >
           {isLoading ? (
             <>

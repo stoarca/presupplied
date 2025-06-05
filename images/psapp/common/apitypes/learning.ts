@@ -1,6 +1,8 @@
 import { 
   UserProgressDTOEntry,
-  UserProgressVideoDTO,
+  UserVideoProgressDTO,
+  VideoProgressDTO,
+  VideoProgressEntryDTO,
   ProgressVideoStatus,
   KMId,
   Omit
@@ -15,7 +17,7 @@ export type LearningEndpoints = {
       Query: never,
       Body: never,
       Response: {
-        videos: Record<string, ProgressVideoStatus>,
+        videos: VideoProgressDTO,
         success: true,
       } | {
         errorCode: 'learning.progressvideos.noLogin',
@@ -43,7 +45,7 @@ export type LearningEndpoints = {
         onBehalfOfStudentId?: number,
       } | {
         type: 'video',
-        moduleVideos: UserProgressVideoDTO,
+        moduleVideos: UserVideoProgressDTO,
         onBehalfOfStudentId?: number,
       },
       Response: {

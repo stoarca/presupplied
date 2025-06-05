@@ -9,6 +9,9 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
+import { Card } from '../components/Card';
+import { NavBar } from '../components/NavBar';
+import { Logo } from '../components/Logo';
 
 import {typedFetch, API_HOST} from '../typedFetch';
 import { useUserContext } from '../UserContext';
@@ -79,63 +82,81 @@ export let Login = (props: LoginProps) => {
   }, [loading, user]);
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlined />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            error={fields.email.error}
-            helperText={fields.email.helperText}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            error={fields.password.error}
-            helperText={fields.password.helperText}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign In
-          </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link component={RouterLink} to="/register" variant="body2">
-                {'Don\'t have an account? Register here'}
-              </Link>
-            </Grid>
-          </Grid>
-        </Box>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #bbfec4, #03dd74)',
+      position: 'relative',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1 }}>
+        <NavBar />
       </Box>
-    </Container>
+      <Container component="main" maxWidth="xs">
+        <Card>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'text.primary' }}>
+              <LockOutlined />
+            </Avatar>
+            <Typography component="h1" variant="h5" sx={{ color: 'text.primary', mb: 3 }}>
+              Login
+            </Typography>
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: '100%' }}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                error={fields.email.error}
+                helperText={fields.email.helperText}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                error={fields.password.error}
+                helperText={fields.password.helperText}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Log In
+              </Button>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Typography variant="body2" component="span">
+                    Don't have an account?{' '}
+                  </Typography>
+                  <Link component={RouterLink} to="/register" variant="body2">
+                    Register
+                  </Link>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        </Card>
+      </Container>
+      <Logo />
+    </div>
   );
 };

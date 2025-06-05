@@ -4,8 +4,6 @@ import {
   Box,
   Container,
   Typography,
-  Card,
-  CardContent,
   Button,
   Chip,
   Alert,
@@ -15,10 +13,11 @@ import {
   ListItemAvatar,
   Divider,
 } from '@mui/material';
-import { PersonAdd, Edit } from '@mui/icons-material';
+import { PersonAdd, Edit, SwitchAccount } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { NavBar } from '../components/NavBar';
 import { Avatar } from '../components/Avatar';
+import { Card } from '../components/Card';
 import { InviteAdult } from '../components/InviteAdult';
 import { useUserContext } from '../UserContext';
 import { typedFetch, API_HOST } from '../typedFetch';
@@ -69,6 +68,29 @@ export const ChildProfile = () => {
     setShowInviteDialog(false);
     // Refresh child data to show new pending invitations
     window.location.reload();
+  };
+
+  const handleSwitchToChild = async () => {
+    if (!childId) {
+      return;
+    }
+
+    try {
+      const response = await typedFetch({
+        host: API_HOST,
+        endpoint: '/api/auth/switch',
+        method: 'post',
+        body: { targetId: childId }
+      });
+
+      if ('success' in response && response.success) {
+        window.location.href = '/';
+      } else {
+        console.error('Failed to switch to child account');
+      }
+    } catch (error) {
+      console.error('Error switching to child account:', error);
+    }
   };
 
 
@@ -136,6 +158,8 @@ export const ChildProfile = () => {
 
   const currentUserRelationship = childData.adults?.find(adult => adult.id === user.dto?.id);
   const canManage = currentUserRelationship?.relationshipType === RelationshipType.PRIMARY;
+  const canSwitchToChild = currentUserRelationship?.relationshipType === RelationshipType.PRIMARY ||
+                          currentUserRelationship?.relationshipType === RelationshipType.SECONDARY;
 
   return (
     <div style={{
@@ -146,70 +170,99 @@ export const ChildProfile = () => {
     }}>
       <NavBar />
       <Container maxWidth="md" sx={{ py: 4 }}>
-
-        <Card sx={{ mb: 3 }}>
-          <CardContent sx={{ p: 4 }}>
-            <Box sx={{
-              display: 'flex',
-              alignItems: 'center',
-              mb: 3,
-              flexDirection: { xs: 'column', sm: 'row' },
-              textAlign: { xs: 'center', sm: 'left' }
-            }}>
-              <Avatar
-                userType={UserType.STUDENT}
-                profilePicture={childData.profilePicture}
-                size={100}
-              />
-              <Box sx={{ ml: { sm: 3 }, mt: { xs: 2, sm: 0 } }}>
-                <Typography variant="h4" sx={{ color: '#023D54', mb: 1 }}>
-                  {childData.name}
-                </Typography>
-                <Typography variant="subtitle1" color="text.secondary">
-                  Student Profile
-                </Typography>
-                {canManage && (
-                  <Button
-                    component={Link}
-                    to={`/settings/child/${childId}/edit`}
-                    startIcon={<Edit />}
-                    size="small"
-                    sx={{ mt: 1 }}
-                  >
-                    Edit Profile
-                  </Button>
-                )}
-              </Box>
-            </Box>
-          </CardContent>
-        </Card>
-
         <Card>
-          <CardContent>
+          <Box sx={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            mb: 4,
+            flexDirection: { xs: 'column', sm: 'row' },
+            textAlign: { xs: 'center', sm: 'left' }
+          }}>
+            <Avatar
+              userType={UserType.STUDENT}
+              profilePicture={childData.profilePicture}
+              size={100}
+            />
+            <Box sx={{ ml: { sm: 3 }, mt: { xs: 2, sm: 0 }, flex: 1 }}>
+              <Typography variant="h4" sx={{ color: 'text.primary', mb: 1 }}>
+                {childData.name}
+              </Typography>
+              <Typography variant="subtitle1" color="text.secondary">
+                Student Profile
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: { xs: 'center', sm: 'flex-end' }, mt: { xs: 2, sm: 0 } }}>
+              {canManage && (
+                <Button
+                  component={Link}
+                  to={`/settings/child/${childId}/edit`}
+                  startIcon={<Edit />}
+                  variant="outlined"
+                  sx={{
+                    borderColor: 'text.primary',
+                    color: 'text.primary',
+                    '&:hover': {
+                      backgroundColor: 'action.hover',
+                      borderColor: 'text.primary',
+                    },
+                  }}
+                >
+                  Edit Profile
+                </Button>
+              )}
+              {canSwitchToChild && (
+                <Button
+                  onClick={handleSwitchToChild}
+                  startIcon={<SwitchAccount />}
+                  variant="outlined"
+                  data-test="switch-to-child-button"
+                  sx={{
+                    borderColor: 'text.primary',
+                    color: 'text.primary',
+                    '&:hover': {
+                      backgroundColor: 'action.hover',
+                      borderColor: 'text.primary',
+                    },
+                  }}
+                >
+                  Switch to {childData.name}
+                </Button>
+              )}
+            </Box>
+          </Box>
+
+          <Box sx={{ borderTop: 1, borderColor: 'divider', pt: 3 }}>
             <Box sx={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               mb: 2
             }}>
-              <Typography variant="h6" sx={{ color: '#023D54' }}>
-                Managing Adults
+              <Typography variant="h6" sx={{ color: 'text.primary' }}>
+                Mentors
               </Typography>
               {canManage && (
                 <Button
-                  size="small"
                   startIcon={<PersonAdd />}
                   onClick={() => setShowInviteDialog(true)}
                   data-test="invite-adult-button"
-                  sx={{ color: '#023D54' }}
+                  variant="outlined"
+                  sx={{
+                    borderColor: 'text.primary',
+                    color: 'text.primary',
+                    '&:hover': {
+                      backgroundColor: 'action.hover',
+                      borderColor: 'text.primary',
+                    },
+                  }}
                 >
-                  Invite Adult
+                  Invite Mentor
                 </Button>
               )}
             </Box>
 
             <List>
-              {childData.adults?.map((adult, index) => (
+              {childData.adults?.sort((a, b) => a.name.localeCompare(b.name)).map((adult, index) => (
                 <React.Fragment key={`adult-${adult.id}`}>
                   <ListItem sx={{ px: 0 }}>
                     <ListItemAvatar>
@@ -249,7 +302,7 @@ export const ChildProfile = () => {
                 </React.Fragment>
               ))}
 
-              {childData.pendingInvites?.map((invite, index) => (
+              {childData.pendingInvites?.sort((a, b) => a.inviteeEmail.localeCompare(b.inviteeEmail)).map((invite, index) => (
                 <React.Fragment key={`invite-${invite.id}`}>
                   <ListItem sx={{ px: 0, opacity: 0.6 }}>
                     <ListItemAvatar>
@@ -287,7 +340,7 @@ export const ChildProfile = () => {
                 </React.Fragment>
               ))}
             </List>
-          </CardContent>
+          </Box>
         </Card>
       </Container>
 

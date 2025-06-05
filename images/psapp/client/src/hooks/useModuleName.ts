@@ -9,7 +9,7 @@ import React from 'react';
 export function useModuleName(): string {
   return React.useMemo(() => {
     const pathname = window.location.pathname;
-    const match = pathname.match(/\/modules\/([^/]+)/);
+    const match = pathname.match(/\/modules\/([^/?]+)/);
     return match ? match[1] : '';
   }, []);
 }

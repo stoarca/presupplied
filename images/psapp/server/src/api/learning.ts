@@ -12,7 +12,8 @@ import {
   KNOWLEDGE_MAP,
   ProgressStatus,
   ProgressVideoStatus,
-  ModuleType
+  ModuleType,
+  VideoProgressDTO
 } from '../../../common/types';
 import { isModuleForAdults } from '../../../common/utils';
 import { typedGet, typedPost } from '../typedRoutes';
@@ -72,9 +73,12 @@ export const setupLearningRoutes = (router: express.Router) => {
       userProgress: { id: userProgress.id },
     });
 
-    const videos: Record<string, ProgressVideoStatus> = {};
+    const videos: VideoProgressDTO = {};
     userProgressVideos.forEach(x => {
-      videos[x.videoVanityId] = x.status;
+      videos[x.videoVanityId] = {
+        status: x.status,
+        updatedAt: x.updatedAt.toISOString()
+      };
     });
     return resp.json({
       success: true,
@@ -244,11 +248,13 @@ export const setupLearningRoutes = (router: express.Router) => {
       const userProgressVideoRepo = AppDataSource.getRepository(UserProgressVideo);
       const inserts = [];
       for (const kmid in req.body.moduleVideos) {
-        for (const videoVanityId in req.body.moduleVideos[kmid]) {
+        for (const videoVanityId in req.body.moduleVideos[kmid]!) {
+          const videoData = req.body.moduleVideos[kmid]![videoVanityId];
           inserts.push({
             userProgress: userProgressMap[kmid],
             videoVanityId: videoVanityId,
-            status: req.body.moduleVideos[kmid][videoVanityId],
+            status: videoData.status,
+            updatedAt: new Date(videoData.updatedAt),
           });
         }
       }

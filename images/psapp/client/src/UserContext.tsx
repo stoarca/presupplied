@@ -7,6 +7,8 @@ import {
   ProgressStatus,
   ProgressVideoStatus,
   UserProgressDTO,
+  UserVideoProgressDTO,
+  VideoProgressDTO,
   ModuleType,
   UserType
 } from '../../common/types';
@@ -75,7 +77,7 @@ export class User {
     return ret;
   }
 
-  async videos(kmid: KMId): Promise<Record<string, ProgressVideoStatus>> {
+  async videos(kmid: KMId): Promise<VideoProgressDTO> {
     if (this.dto) {
       let resp = await typedFetch({
         host: API_HOST,
@@ -91,8 +93,7 @@ export class User {
       throw new Error(JSON.stringify(resp));
     } else {
       let progressVideo = typedLocalStorage.getJson('progressVideo');
-
-      return progressVideo && progressVideo[kmid] || {};
+      return progressVideo?.[kmid] || {};
     }
   }
 
@@ -117,7 +118,12 @@ export class User {
       });
 
       if ('errorCode' in response) {
-        throw new Error(response.message || 'Failed to mark progress');
+        if (response.errorCode === 'learning.event.invalidModules') {
+          throw new Error(
+            response.message + JSON.stringify(response.moduleVanityIds)
+          );
+        }
+        throw new Error(response.message);
       }
     } else {
       let progress = typedLocalStorage.getJson('progress');
@@ -140,6 +146,8 @@ export class User {
       }
       typedLocalStorage.setJson('progress', progress);
     }
+
+    await this.refreshUser();
   }
 
   async markWatched(
@@ -147,13 +155,24 @@ export class User {
     onBehalfOfStudentId?: number
   ) {
     if (this.dto) {
+      const moduleVideosDTO: UserVideoProgressDTO = {};
+      for (const kmid in moduleVideos) {
+        moduleVideosDTO[kmid] = {};
+        for (const videoId in moduleVideos[kmid]) {
+          moduleVideosDTO[kmid]![videoId] = {
+            status: moduleVideos[kmid][videoId],
+            updatedAt: new Date().toISOString()
+          };
+        }
+      }
+
       const response = await typedFetch({
         host: API_HOST,
         endpoint: '/api/learning/events',
         method: 'post',
         body: {
           type: 'video',
-          moduleVideos: moduleVideos,
+          moduleVideos: moduleVideosDTO,
           onBehalfOfStudentId
         },
       });
@@ -174,11 +193,16 @@ export class User {
 
         let videos = moduleVideos[kmid];
         for (let videoVanityId in videos) {
-          progressVideo[kmid][videoVanityId] = videos[videoVanityId];
+          progressVideo[kmid]![videoVanityId] = {
+            status: videos[videoVanityId],
+            updatedAt: new Date().toISOString()
+          };
         }
       }
       typedLocalStorage.setJson('progressVideo', progressVideo);
     }
+
+    await this.refreshUser();
   }
 
   hasLocalProgress(): boolean {
@@ -216,12 +240,12 @@ export class User {
     return { adultProgress, childProgress };
   }
 
-  separateProgressVideosByModuleType(knowledgeGraph: TechTree, progressVideos: Record<string, Record<string, ProgressVideoStatus>>): {
-    adultProgressVideos: Record<string, Record<string, ProgressVideoStatus>>;
-    childProgressVideos: Record<string, Record<string, ProgressVideoStatus>>;
+  separateProgressVideosByModuleType(knowledgeGraph: TechTree, progressVideos: UserVideoProgressDTO): {
+    adultProgressVideos: UserVideoProgressDTO;
+    childProgressVideos: UserVideoProgressDTO;
   } {
-    const adultProgressVideos: Record<string, Record<string, ProgressVideoStatus>> = {};
-    const childProgressVideos: Record<string, Record<string, ProgressVideoStatus>> = {};
+    const adultProgressVideos: UserVideoProgressDTO = {};
+    const childProgressVideos: UserVideoProgressDTO = {};
 
     for (const [kmid, videos] of Object.entries(progressVideos)) {
       try {
@@ -251,7 +275,7 @@ export class User {
 
   private async syncProgressBatch(
     modules: UserProgressDTO,
-    videos: Record<string, Record<string, ProgressVideoStatus>>,
+    videos: UserVideoProgressDTO,
     onBehalfOfStudentId?: number
   ): Promise<void> {
     const passedModules = this.filterPassedProgress(modules);

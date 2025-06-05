@@ -13,6 +13,11 @@ export const url = 'https://applocal.presupplied.com';
 // Selectors
 export const errorAlertSelector = '.MuiAlert-root';
 export const moduleCardSelector = '[data-test="module-card"]';
+export const moduleTitleSelector = '[data-test="module-title"]';
+export const moduleChoiceDialogSelector = '[data-test="module-choice-dialog"]';
+export const teachChoiceSelector = '[data-test="teach-choice"]';
+export const learnChoiceSelector = '[data-test="learn-choice"]';
+export const masteryChoiceSelector = '[data-test="mastery-choice"]';
 export const settingsLink = 'a[href="/settings"]';
 export const manageChildrenLink = 'a[href="/settings/children"]';
 export const childCardSelector = '[data-test="child-card"]';
@@ -180,13 +185,12 @@ let emailCounter = 0;
 export const getUniqueEmail = () => `ps-test-account-${emailCounter++}@example.com`;
 
 export const getModuleCardInfo = Xdotoolify.setupWithPage(async (page) => {
-  return XC.evaluate(page, (_moduleCardSelector: string) => {
+  return XC.evaluate(page, (_moduleCardSelector: string, _moduleTitleSelector: string) => {
     const elements = document.querySelectorAll(_moduleCardSelector);
     return Array.from(elements).map(el => {
-      const h1 = el.querySelector('h1');
-      const title = h1?.textContent || '';
+      const titleElement = el.querySelector(_moduleTitleSelector);
+      const title = titleElement?.textContent || '';
       
-      // Get all avatar images within this card
       const avatars = el.querySelectorAll('[data-test^="child-avatar-"]');
       const childIds = Array.from(avatars).map(avatar => {
         const testAttr = avatar.getAttribute('data-test');
@@ -196,15 +200,15 @@ export const getModuleCardInfo = Xdotoolify.setupWithPage(async (page) => {
       
       return { title, childIds };
     });
-  }, moduleCardSelector);
+  }, moduleCardSelector, moduleTitleSelector);
 });
 
 export const shiftClickModuleCard = Xdotoolify.setupWithPage(async (page, title: string) => {
-  return XC.evaluate(page, (_moduleCardSelector: string, _title: string) => {
+  return XC.evaluate(page, (_moduleCardSelector: string, _moduleTitleSelector: string, _title: string) => {
     const cards = document.querySelectorAll(_moduleCardSelector);
     for (const card of cards) {
-      const h1 = card.querySelector('h1');
-      if (h1?.textContent === _title) {
+      const titleElement = card.querySelector(_moduleTitleSelector);
+      if (titleElement?.textContent === _title) {
         const event = new MouseEvent('click', {
           bubbles: true,
           cancelable: true,
@@ -215,5 +219,19 @@ export const shiftClickModuleCard = Xdotoolify.setupWithPage(async (page, title:
       }
     }
     return false;
-  }, moduleCardSelector, title);
+  }, moduleCardSelector, moduleTitleSelector, title);
+});
+
+export const selectModuleChoice = Xdotoolify.setupWithPage(async (page, choice: 'teach' | 'learn' | 'mastery') => {
+  const choiceSelector = {
+    'teach': teachChoiceSelector,
+    'learn': learnChoiceSelector,
+    'mastery': masteryChoiceSelector
+  }[choice];
+
+  await page.X
+    .checkUntil(XC.visibleElementCount, moduleChoiceDialogSelector, 1)
+    .checkUntil(XC.visibleElementCount, choiceSelector, 1)
+    .run(XC.autoClick, choiceSelector)
+    .do();
 });

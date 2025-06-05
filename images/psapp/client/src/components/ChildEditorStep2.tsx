@@ -118,7 +118,6 @@ export const ChildEditorStep2: React.FC<ChildEditorStep2Props> = ({
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
         <Button
-          variant="outlined"
           color="primary"
           onClick={onBack}
           disabled={loading}
