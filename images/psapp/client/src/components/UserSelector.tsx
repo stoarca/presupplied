@@ -6,6 +6,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
+import Chip from '@mui/material/Chip';
 
 export interface UserOption {
   id: number;
@@ -23,9 +24,10 @@ interface UserSelectorProps {
   onSelect: (userId: number) => void;
   title: string;
   users: UserOption[];
+  wasShiftClick?: boolean;
 }
 
-export const UserSelector = ({ open, onClose, onSelect, title, users }: UserSelectorProps) => {
+export const UserSelector = ({ open, onClose, onSelect, title, users, wasShiftClick = false }: UserSelectorProps) => {
   const handleUserSelect = (userId: number) => {
     onSelect(userId);
     onClose();
@@ -39,7 +41,18 @@ export const UserSelector = ({ open, onClose, onSelect, title, users }: UserSele
       fullWidth
     >
       <DialogTitle sx={{ textAlign: 'center', pb: 0 }}>
-        {title}
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+          <Typography variant="h6" component="div">
+            {title}
+          </Typography>
+          {wasShiftClick && (
+            <Chip
+              label="Forcing completion"
+              size="small"
+              color="error"
+            />
+          )}
+        </Box>
       </DialogTitle>
       <DialogContent>
         <Box sx={{ minWidth: 275, maxWidth: 600, mx: 'auto' }}>

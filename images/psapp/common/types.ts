@@ -1,8 +1,56 @@
 import _KNOWLEDGE_MAP from '../static/knowledge-map.json';
-// HACK: we keep this here even though GraphJson is defined latr in the file
+
+// Test modules to add in test mode only
+const TEST_MODULES = [
+  {
+    id: 'PS_TESTING_ADULT',
+    deps: [],
+    title: '',
+    description: 'Test module for adult users',
+    studentVideos: [],
+    teacherVideos: [],
+    cell: { i: 0, j: 0 },
+    moduleType: 'ADULT_OWNED'
+  },
+  {
+    id: 'PS_TESTING_CHILD',
+    deps: [],
+    title: '', 
+    description: 'Test module for child users',
+    studentVideos: [],
+    teacherVideos: [],
+    cell: { i: 1, j: 0 },
+    moduleType: 'CHILD_OWNED'
+  },
+  {
+    id: 'PS_TESTING_DELEGATED',
+    deps: [],
+    title: '',
+    description: 'Test module for delegated completion',
+    studentVideos: [],
+    teacherVideos: [],
+    cell: { i: 2, j: 0 },
+    moduleType: 'CHILD_DELEGATED'
+  }
+];
+
+// Dynamically create knowledge map based on environment
+function createKnowledgeMap() {
+  // Include test modules in non-production environments
+  const isLocalDev = process.env.NODE_ENV !== 'production';
+  if (isLocalDev) {
+    return {
+      ..._KNOWLEDGE_MAP,
+      nodes: [..._KNOWLEDGE_MAP.nodes, ...TEST_MODULES]
+    };
+  }
+  return _KNOWLEDGE_MAP;
+}
+
+// HACK: we keep this here even though GraphJson is defined later in the file
 // because when we need to do a migration on this file, it should happen
 // up here
-export let KNOWLEDGE_MAP = _KNOWLEDGE_MAP as GraphJson;
+export let KNOWLEDGE_MAP = createKnowledgeMap() as GraphJson;
 
 export type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
@@ -58,9 +106,16 @@ export interface UserProgressDTO {
   [K: KMId]: UserProgressDTOEntry
 }
 
-export interface UserProgressVideoDTO {
-  [K: KMId]: Record<string, ProgressVideoStatus>
+export interface VideoProgressEntryDTO {
+  status: ProgressVideoStatus;
+  updatedAt: string;
 }
+
+export interface VideoProgressDTO {
+  [videoId: string]: VideoProgressEntryDTO;
+}
+
+export type UserVideoProgressDTO = Partial<Record<KMId, VideoProgressDTO>>;
 
 
 export interface ProfilePicture {

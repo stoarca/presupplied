@@ -23,7 +23,7 @@ import { HomePage } from './pages/HomePage';
 import { Debug } from './pages/Debug';
 import { Settings } from './pages/Settings';
 import { GeneralSettingsPage } from './pages/GeneralSettingsPage';
-import { ManageChildrenPage } from './pages/ManageChildrenPage';
+import { ChildrenPage } from './pages/ChildrenPage';
 import { CreateChildPage } from './pages/CreateChildPage';
 import { ChildProfile } from './pages/ChildProfile';
 import { EditChildPage } from './pages/EditChildPage';
@@ -37,7 +37,59 @@ interface AppProps {
   user: User;
 };
 
-const defaultTheme = createTheme();
+const primaryColor = '#3B3B3B';
+
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: primaryColor,
+    },
+    text: {
+      primary: primaryColor,
+    },
+    action: {
+      hover: 'rgba(59, 59, 59, 0.08)',
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        containedPrimary: {
+          backgroundColor: primaryColor,
+          color: '#ffffff',
+          '&:hover': {
+            backgroundColor: '#2B2B2B',
+          },
+        },
+        outlined: {
+          borderColor: primaryColor,
+          color: primaryColor,
+          '&:hover': {
+            backgroundColor: 'rgba(59, 59, 59, 0.08)',
+            borderColor: primaryColor,
+          },
+        },
+        text: {
+          color: primaryColor,
+          '&:hover': {
+            backgroundColor: 'rgba(59, 59, 59, 0.08)',
+          },
+        },
+      },
+    },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          color: primaryColor,
+          textDecorationColor: primaryColor,
+          '&:hover': {
+            color: primaryColor,
+          },
+        },
+      },
+    },
+  },
+});
 const knowledgeGraph = buildGraph(KNOWLEDGE_MAP);
 
 let App = (props: AppProps) => {
@@ -63,7 +115,7 @@ let App = (props: AppProps) => {
                       <Route path="debug" element={<Debug/>}/>
                       <Route path="settings" element={<Settings/>}/>
                       <Route path="settings/general" element={<GeneralSettingsPage/>}/>
-                      <Route path="settings/children" element={<ManageChildrenPage/>}/>
+                      <Route path="children" element={<ChildrenPage/>}/>
                       <Route path="create-child" element={<CreateChildPage/>}/>
                       <Route path="invitations" element={<PendingInvitations/>}/>
                       <Route path="sync-progress" element={<SyncProgressPage/>}/>

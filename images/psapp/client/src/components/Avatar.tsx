@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar as MuiAvatar } from '@mui/material';
+import { Avatar as MuiAvatar, SxProps, Theme } from '@mui/material';
 import { UserType, ProfilePicture } from '../../../common/types';
 import FaceIcon from '@mui/icons-material/Face';
 import SchoolIcon from '@mui/icons-material/School';
@@ -13,6 +13,7 @@ interface AvatarProps {
   selected?: boolean;
   onClick?: () => void;
   'data-test'?: string;
+  sx?: SxProps<Theme>;
 }
 
 export const Avatar: React.FC<AvatarProps> = ({
@@ -21,7 +22,8 @@ export const Avatar: React.FC<AvatarProps> = ({
   size = 40,
   selected = false,
   onClick,
-  'data-test': dataTest
+  'data-test': dataTest,
+  sx: customSx = {}
 }) => {
   const getUserIcon = (type?: UserType) => {
     switch (type) {
@@ -66,7 +68,8 @@ export const Avatar: React.FC<AvatarProps> = ({
           width: '90%',
           height: '90%',
           marginTop: '1px'
-        }
+        },
+        ...customSx
       }}
     >
       {!profilePicture?.image && getUserIcon(userType)}

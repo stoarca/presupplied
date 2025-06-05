@@ -1,11 +1,12 @@
 import React, { CSSProperties } from 'react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 import Alert from '@mui/material/Alert';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { ExpandMore } from '@mui/icons-material';
+import Link from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,6 +15,7 @@ import Typography from '@mui/material/Typography';
 
 import { useUserContext } from '../UserContext';
 import { typedFetch, API_HOST } from '../typedFetch';
+import { typedLocalStorage } from '../typedLocalStorage';
 import { UserType } from '../../../common/types';
 import { AccountSwitcher } from './AccountSwitcher';
 import { Avatar } from './Avatar';
@@ -25,7 +27,6 @@ export let NavBar = (props: NavBarProps) => {
   let [showAccountSwitcher, setShowAccountSwitcher] = React.useState(false);
 
   let navLinks;
-  let saveWarning;
   let [showUserMenu, setShowUserMenu] = React.useState(false);
   let userMenuRef = React.useRef<HTMLButtonElement | null>(null);
   let handleToggleUserMenu = React.useCallback(() => {
@@ -39,9 +40,18 @@ export let NavBar = (props: NavBarProps) => {
     });
     window.location.href = '/';
   }, []);
-  let [showSaveWarning, setShowSaveWarning] = React.useState(true);
+  let [showSaveWarning, setShowSaveWarning] = React.useState(() => {
+    const dismissedAt = typedLocalStorage.getJson('saveWarningDismissedAt');
+    if (!dismissedAt) {
+      return true;
+    }
+    const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
+    return dismissedAt < oneDayAgo;
+  });
+
   let handleCloseWarning = React.useCallback((e: React.SyntheticEvent) => {
     setShowSaveWarning(false);
+    typedLocalStorage.setJson('saveWarningDismissedAt', Date.now());
   }, []);
 
 
@@ -55,33 +65,12 @@ export let NavBar = (props: NavBarProps) => {
   }, []);
 
 
-  let buttonStyle = {
-    backgroundColor: '#023D54',
-    padding: '5px 15px',
-    // boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.2)',
-    borderRadius: '3px',
-    color: '#fff',
-    border: 'none',
-    cursor: 'pointer',
-    transition: 'transform 0.2s ease-in-out',
-  };
-
   const buttonContainerStyle: CSSProperties = {
     display: 'flex',
     flexDirection: 'row',
     gap: 6,
   };
 
-  if (showSaveWarning) {
-    saveWarning = (
-      <AppBar position="static" color="default" style={{ flex: '0 0 auto', alignItems: 'center' }}>
-        <Alert severity="warning" onClose={handleCloseWarning}>
-          Your progress is saved locally in this browser.
-          {' '}<Link to="/login" style={{color: '#023D54'}} data-test="login-link-warning">Login</Link> to sync to other devices.
-        </Alert>
-      </AppBar>
-    );
-  }
   if (user.dto) {
     if (user.isSelfManaged()) {
       navLinks = (
@@ -89,7 +78,7 @@ export let NavBar = (props: NavBarProps) => {
           <Tooltip title="Account">
             <Button ref={userMenuRef}
               onClick={handleToggleUserMenu}
-              sx={{ p: 0, color: '#023D54' }}
+              sx={{ p: 0, color: 'text.primary' }}
               endIcon={<ExpandMore />}
               data-test="user-display-email">
               {user.dto.email}
@@ -104,44 +93,15 @@ export let NavBar = (props: NavBarProps) => {
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             open={showUserMenu}
             onClose={handleToggleUserMenu}>
-            {(!(user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) ||
-             (user.dto?.children && user.dto?.children.length > 0)) && [
-              (user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) && (
-                <MenuItem
-                  key="add-child"
-                  component={Link}
-                  to="/create-child"
-                  onClick={handleCloseUserMenu}
-                  data-test="menu-item-add-child"
-                >
-                  <Typography textAlign="center">Add Child</Typography>
-                </MenuItem>
-              ),
-              (user.dto?.type === UserType.PARENT || user.dto?.type === UserType.TEACHER) &&
-                 user.dto?.children && user.dto?.children.length > 0 && (
-                <MenuItem key="child-mode" onClick={handleOpenAccountSwitcher} data-test="menu-item-child-mode">
-                  <Typography textAlign="center">Child Mode</Typography>
-                </MenuItem>
-              ),
-              <MenuItem
-                key="map-view"
-                component={Link}
-                to={location === '/map' ? '/' : '/map'}
-                onClick={handleCloseUserMenu}
-                data-test="menu-item-map-view"
-              >
-                <Typography textAlign="center">
-                  {location === '/map' ? 'Home View' : 'Map View'}
-                </Typography>
-              </MenuItem>,
+            {[
               <MenuItem
                 key="settings"
-                component={Link}
-                to="/settings/general"
                 onClick={handleCloseUserMenu}
                 data-test="menu-item-settings"
               >
-                <Typography textAlign="center">Settings</Typography>
+                <RouterLink to="/settings/general" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
+                  <Typography textAlign="center">Settings</Typography>
+                </RouterLink>
               </MenuItem>
             ].filter(Boolean)}
             <MenuItem onClick={handleLogout} data-test="menu-item-logout">
@@ -172,7 +132,7 @@ export let NavBar = (props: NavBarProps) => {
           <Typography
             data-test="user-display-name"
             sx={{
-              color: '#023D54',
+              color: 'text.primary',
               fontSize: '1.15rem',
               fontWeight: 700,
               marginTop: '2px',
@@ -183,24 +143,23 @@ export let NavBar = (props: NavBarProps) => {
         </Box>
       );
     }
-    saveWarning = null;
   } else {
     navLinks = (
       <React.Fragment>
         <div style={buttonContainerStyle}>
           <Button variant="outlined"
-            component={Link}
+            component={RouterLink}
             to="/login"
-            sx={{color: '#023D54'}}
+            sx={{color: 'text.primary'}}
             data-test="login-button-navbar"
           // style={buttonStyle}
           >
             Login
           </Button>
           <Button
-            component={Link}
+            variant="contained"
+            component={RouterLink}
             to="/register"
-            style={buttonStyle}
           >
             Register
           </Button>
@@ -212,11 +171,93 @@ export let NavBar = (props: NavBarProps) => {
 
   return (
     <React.Fragment>
-      {saveWarning}
       <AppBar position="static" style={{ flex: '0 0 auto', backgroundColor: 'transparent', boxShadow: 'none' }}>
-        <Toolbar style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div style={{ flexGrow: 1 }}></div>
-          {navLinks}
+        <Toolbar style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ flex: 1 }}></div>
+
+          {!user.dto && showSaveWarning && (
+            <Box sx={{
+              display: 'flex',
+              gap: 2,
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              <Alert
+                severity="warning"
+                onClose={handleCloseWarning}
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  py: 0.5,
+                  fontSize: '0.875rem'
+                }}
+              >
+                Your progress is saved locally in this browser.
+                {' '}<Link component={RouterLink} to="/login" sx={{color: 'text.primary', textDecoration: 'underline'}} data-test="login-link-warning">Login</Link> to sync to other devices.
+              </Alert>
+            </Box>
+          )}
+
+          {user.dto && (user.dto.type === UserType.PARENT || user.dto.type === UserType.TEACHER) && (
+            <Box sx={{
+              display: 'flex',
+              gap: 2,
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              <Button
+                component={RouterLink}
+                to="/"
+                sx={{
+                  color: 'text.primary',
+                  fontWeight: location === '/' ? 700 : 400,
+                  '&:hover': {
+                    fontWeight: 600,
+                    backgroundColor: 'transparent'
+                  }
+                }}
+                data-test="nav-button-home"
+              >
+                Home
+              </Button>
+              <Button
+                component={RouterLink}
+                to="/map"
+                sx={{
+                  color: 'text.primary',
+                  fontWeight: location === '/map' ? 700 : 400,
+                  '&:hover': {
+                    fontWeight: 600,
+                    backgroundColor: 'transparent'
+                  }
+                }}
+                data-test="nav-button-map"
+              >
+                Map
+              </Button>
+              <Button
+                component={RouterLink}
+                to="/children"
+                sx={{
+                  color: 'text.primary',
+                  fontWeight: location === '/children' ? 700 : 400,
+                  '&:hover': {
+                    fontWeight: 600,
+                    backgroundColor: 'transparent'
+                  }
+                }}
+                data-test="nav-button-children"
+              >
+                Children
+              </Button>
+            </Box>
+          )}
+
+          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+            {navLinks}
+          </div>
         </Toolbar>
       </AppBar>
 

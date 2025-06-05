@@ -9,7 +9,7 @@ export const CreateChildPage = () => {
   const user = useUserContext();
 
   const handleComplete = () => {
-    window.location.href = '/settings/children';
+    window.location.href = '/children';
   };
 
   if (!user.dto) {

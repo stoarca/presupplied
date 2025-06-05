@@ -15,12 +15,10 @@ export let ChoiceSelector = <T extends ChoiceType>(
   props: React.PropsWithChildren<ChoiceSelectorProps<T>>
 ) => {
   let handleClick = React.useCallback((e: React.MouseEvent) => {
-    console.log('GOT A CLICK');
     if (e.button !== 0) {
       return;
     }
     let index = parseInt(e.currentTarget.getAttribute('data-choice-index')!);
-    console.log('doing onselected');
     return props.onSelected(props.choices[index]);
   }, [props.choices, props.onSelected]);
 

@@ -97,12 +97,6 @@ export const GeneralSettings = () => {
               type="submit"
               variant="contained"
               disabled={isLoading || !name.trim() || name.trim() === user.dto.name}
-              sx={{
-                backgroundColor: '#023D54',
-                '&:hover': {
-                  backgroundColor: '#034a66',
-                },
-              }}
             >
               {isLoading ? (
                 <>

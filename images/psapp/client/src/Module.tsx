@@ -259,8 +259,16 @@ export let useWin = () => {
   let doWin = React.useCallback(() => {
     setWin(true);
     (async () => {
-      let kmid = window.location.href.match(/modules\/(.*)/)![1];
-      await user.markReached({[kmid]: ProgressStatus.PASSED});
+      let kmid = window.location.pathname.match(/modules\/([^/?]+)/)![1];
+      const urlParams = new URLSearchParams(window.location.search);
+      const childId = urlParams.get('childId');
+
+      if (childId) {
+        await user.markReached({[kmid]: ProgressStatus.PASSED}, parseInt(childId));
+      } else {
+        await user.markReached({[kmid]: ProgressStatus.PASSED});
+      }
+
       await new Promise(r => setTimeout(r, 2000));
       window.location.href = '/?scroll=' + kmid;
     })();
@@ -306,7 +314,6 @@ export let Module: React.FC<ModuleProps> = (props) => {
   let ref = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
-    console.log(ref.current);
     let preventDefault = (e: TouchEvent) => {
       e.preventDefault();
     };

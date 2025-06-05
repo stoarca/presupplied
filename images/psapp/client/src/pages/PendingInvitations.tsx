@@ -192,8 +192,8 @@ export const PendingInvitations = () => {
           p: 4,
           boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
         }}>
-          <PersonAdd sx={{ fontSize: 48, color: '#023D54', mb: 2 }} />
-          <Typography variant="h4" sx={{ color: '#023D54', mb: 1 }}>
+          <PersonAdd sx={{ fontSize: 48, color: 'text.primary', mb: 2 }} />
+          <Typography variant="h4" sx={{ color: 'text.primary', mb: 1 }}>
             Pending Invitations
           </Typography>
           <Typography variant="body1" color="text.secondary">
@@ -230,7 +230,7 @@ export const PendingInvitations = () => {
                       size={60}
                     />
                     <Box sx={{ ml: 2, flex: 1 }}>
-                      <Typography variant="h6" sx={{ color: '#023D54' }} data-test="child-name">
+                      <Typography variant="h6" sx={{ color: 'text.primary' }} data-test="child-name">
                         {invitation.childUser.name}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
@@ -249,7 +249,7 @@ export const PendingInvitations = () => {
 
                   {invitation.adults.length > 0 && (
                     <>
-                      <Typography variant="subtitle2" sx={{ mb: 1, color: '#023D54' }}>
+                      <Typography variant="subtitle2" sx={{ mb: 1, color: 'text.primary' }}>
                       Current Managing Adults:
                       </Typography>
                       <List dense sx={{ mb: 2 }}>
@@ -294,10 +294,6 @@ export const PendingInvitations = () => {
                       startIcon={<CheckCircle />}
                       onClick={() => handleInvitationAction(invitation.id, 'accept')}
                       disabled={processingInvitations.has(invitation.id)}
-                      sx={{
-                        bgcolor: '#023D54',
-                        '&:hover': { bgcolor: '#012A3A' }
-                      }}
                       data-test="accept-invitation-button"
                     >
                       {processingInvitations.has(invitation.id) ? 'Accepting...' : 'Accept'}

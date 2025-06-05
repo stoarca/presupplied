@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {
   Container,
-  Paper,
   Box,
   IconButton,
 } from '@mui/material';
+import { Card } from './Card';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { typedFetch, API_HOST } from '../typedFetch';
 import { useUserContext } from '../UserContext';
@@ -122,7 +122,7 @@ export const ChildProfileEditor = ({
 
   return (
     <Container maxWidth="sm" sx={{ py: 0, my: 0 }}>
-      <Paper elevation={3} sx={{ p: 4, position: 'relative', my: 0 }}>
+      <Card sx={{ my: 0 }}>
         {showCloseButton && onClose && (
           <IconButton
             aria-label="close"
@@ -181,7 +181,7 @@ export const ChildProfileEditor = ({
             </Box>
           </div>
         </Box>
-      </Paper>
+      </Card>
     </Container>
   );
 };

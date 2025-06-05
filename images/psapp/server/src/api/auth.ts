@@ -168,7 +168,11 @@ export const setupAuthRoutes = (router: express.Router) => {
     const pinRequired = targetUser.pinRequired || isAdult;
     const defaultPin = "4000";
 
-    if (pinRequired) {
+    // Adults can switch to their children without requiring a PIN, but only if they're currently acting as themselves
+    const isAdultActingAsSelf = !req.jwtUser.selectedUserId || req.jwtUser.selectedUserId === adultUser.id;
+    const isAdultSwitchingToChild = isAdultActingAsSelf && (targetUser.type === UserType.STUDENT);
+
+    if (pinRequired && !isAdultSwitchingToChild) {
       if (!req.body.pin) {
         return resp.status(401).json({
           errorCode: 'auth.switch.invalidPin',

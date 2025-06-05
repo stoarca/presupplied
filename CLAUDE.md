@@ -119,14 +119,16 @@ The core application using a client-server architecture:
 - **src/**
   - **index.tsx**: Main application entry point with routing
   - **components/**: Reusable UI components
-  - **pages/**: Main application pages (Login, Register, ChildHomePage, ParentHomePage)
+  - **pages/**: Main application pages (Login, Register, HomePage, Settings, etc.)
   - **ModuleContext.tsx**: Provides context for module components with audio support
-  - **Module.tsx**: Core module functionality including exercise logic and UI
-  - **StudentContext.tsx**: Manages student data and progress
+  - **Module.tsx**: Core module functionality including exercise logic and UI (handles childId parameter for delegated modules)
+  - **UserContext.tsx**: Manages user data and progress (replaced StudentContext)
   - **modules/**: Educational content organized by module
     - Each module (e.g., INTRODUCTION, READ_WORDS_*) has its own directory
     - Common modules with shared functionality in **modules/common/**
+    - Test modules (PS_TESTING_*) available in non-production environments
   - **util.ts**: Utility functions
+  - **components/**: Reusable components including UserSelector for child selection
 
 ##### Server Structure
 - **src/**
@@ -194,19 +196,165 @@ The application uses:
 
 ### Data Model
 
-- **Student**: User accounts with authentication
+- **User**: User accounts with authentication (types: parent, teacher, student)
 - **Module**: Educational modules with unique vanity IDs
-- **StudentProgress**: Tracks student completion of modules
-- **StudentProgressVideo**: Tracks student progress through videos
+- **UserProgress**: Tracks user completion of modules (with optional completedBy field for delegated completion)
+- **UserProgressVideo**: Tracks user progress through videos
+- **UserRelationship**: Links adults to children with relationship types (primary, secondary, observer)
+- **UserInvitation**: Manages invitations for adults to connect with children
+
+### Account Types and Access Patterns
+
+#### Adult Accounts (Parent/Teacher)
+- Can create and manage child accounts
+- See ADULT_OWNED modules for themselves
+- See CHILD_DELEGATED modules for each connected child
+- Can complete modules on behalf of children
+- Can invite other adults to connect with their children
+- Can switch between their own view and child views
+
+#### Child Accounts (Student)
+- Created and managed by adults
+- See only CHILD_OWNED modules
+- Cannot see ADULT_OWNED modules
+- Cannot manage other accounts
+- Progress tracked separately for each child
+
+#### Self-Managed Student Accounts
+- Student accounts with no adult connections
+- Act as "hybrid" accounts with access to all module types
+- Can complete CHILD_DELEGATED modules for themselves
+- Used for:
+  - Independent learners
+  - Anonymous users before registration
+  - Students who register directly without a parent/teacher
+
+#### Module Visibility Rules
+- **Adults**: See ADULT_OWNED modules + CHILD_DELEGATED modules (with child selector)
+- **Children**: See only CHILD_OWNED modules
+- **Self-managed students**: See all module types (act as both adult and child)
 
 ### Module System
 
-The curriculum is organized as a graph of modules with prerequisites (knowledge map). The modules include:
+The curriculum is organized as a graph of modules with prerequisites (knowledge map). 
+
+#### Module Types
+
+- **ADULT_OWNED**: Modules for adults only (e.g., ACCOUNT_AND_PASSWORD)
+- **CHILD_OWNED**: Modules completed by children directly (e.g., SOCIAL_SMILE, READ_WORDS_*)
+- **CHILD_DELEGATED**: Modules completed by adults on behalf of specific children (e.g., CALIBRATION)
+
+#### Module Categories
 
 - Reading modules (letters, words)
 - Recognition modules
 - Tracking modules
 - Interactive modules (finger tracing, mouse usage)
+- Test modules (PS_TESTING_*) - Available only in non-production environments
+
+#### Child Selection Flow
+
+When a parent/teacher with multiple children clicks on a CHILD_DELEGATED module:
+1. A UserSelector dialog appears showing all connected children
+2. The parent selects which child to complete the module for
+3. The module is launched with `?childId=` parameter
+4. Progress is tracked specifically for that child
+
+### Account Switching System
+
+The application supports account switching that allows adults (parents/teachers) to switch between their own account and their children's accounts. This is implemented using a dual-token system:
+
+#### JWT Token Structure
+
+The JWT token contains:
+```typescript
+interface JWTUser {
+  email: string;           // Email of the adult who originally logged in
+  selectedUserId?: number; // ID of the currently active user account
+}
+```
+
+#### Authentication Flow
+
+1. **Initial Login**: When an adult logs in, a JWT is created with their email and no `selectedUserId`
+2. **Account Switching**: When switching accounts via `/api/auth/switch`, a new JWT is issued with:
+   - Same `email` (preserving the original adult's identity)
+   - New `selectedUserId` (the target account to switch to)
+
+#### Account Types and Switching Capabilities
+
+**Adult Accounts (PARENT/TEACHER):**
+- Can switch to their own child accounts freely (no PIN required)
+- Cannot switch to other adult accounts
+- Must use PIN to switch back from child to adult account
+
+**Child Accounts (STUDENT with adults):**
+- Created and managed by adults
+- Cannot initiate account switching themselves
+- Accessible via adult account switching
+
+**Hybrid Accounts (Self-registered STUDENT):**
+- Student accounts that register independently without adult management
+- Have their own email/password login credentials
+- Act as both adult and child in the system:
+  - Can see ADULT_OWNED modules
+  - Can complete CHILD_DELEGATED modules for themselves
+  - Have full account management capabilities
+- Cannot switch to other accounts (no relationships exist)
+- Equivalent to "anonymous users before registration" but with persistent accounts
+
+#### Account Switching Rules
+
+**Who Can Switch:**
+- Only adults (PARENT/TEACHER accounts) can initiate account switching
+- Adults can only switch to their own account or child accounts they have relationships with
+- Hybrid accounts cannot switch (they operate independently)
+
+**PIN Requirements:**
+- **Adult to Child (first time)**: No PIN required - adults can freely switch to their children
+- **Child back to Adult**: PIN required (adult's PIN or default "4000")
+- **Child to other Child**: PIN required for the target child
+- **Adult to Adult**: Not allowed - adults cannot switch to other adult accounts
+
+**Current User Determination:**
+- If `selectedUserId` is present in JWT: Use that user as the current user
+- If `selectedUserId` is absent: Use the user associated with the JWT email
+- The `/api/user` endpoint returns the currently selected user's data
+
+#### Backend Implementation Details
+
+**JWT Verification Middleware:**
+```typescript
+app.use((req, resp, next) => {
+  req.jwtUser = null;
+  if (req.cookies['authToken']) {
+    req.jwtUser = jwt.verify(req.cookies['authToken'], JWT_SIGNING_KEY) as JWTUser;
+  }
+  next();
+});
+```
+
+**User Data Resolution:**
+1. Extract `selectedUserId` from JWT
+2. If `selectedUserId` exists: Load that user and verify adult has permission
+3. If no `selectedUserId`: Load user by email from JWT
+4. Return user data with relationships (children/adults/classmates as appropriate)
+5. Hybrid accounts have no relationships, so they see only their own data
+
+**Security Considerations:**
+- Account switching validates relationships before allowing access
+- Adults cannot switch to other adult accounts (relationship validation prevents this)
+- PIN protection prevents unauthorized access to adult accounts
+- Original adult identity is preserved in JWT even when viewing child accounts
+- Hybrid accounts are isolated - no cross-account access possible
+- All progress tracking maintains proper attribution (who completed what for whom)
+
+#### Progress Tracking with Account Switching
+
+- When an adult completes a module while viewing a child account, progress is recorded for the child
+- The `completedBy` field tracks which adult completed the module on behalf of the child
+- Adults can complete CHILD_DELEGATED modules for children, which appears in the child's progress
+- Hybrid accounts complete all modules for themselves (acting as both adult and child)
 
 ## Developer Guidelines
 
@@ -234,8 +382,11 @@ The curriculum is organized as a graph of modules with prerequisites (knowledge 
 
 3. **Adding New Modules**
   - Follow existing patterns in the `/modules` directory
-  - Update the knowledge map to include prerequisites
+  - Create module in `/images/psapp/client/src/modules/{MODULE_NAME}/index.tsx`
+  - Update the knowledge map to include prerequisites and module type
   - Generate appropriate audio assets if needed
+  - Module IDs starting with `PS_TESTING_` are automatically excluded from production and admin exports
+  - Add `data-test-module` attribute to module cards for E2E testing
 
 4. **Database Changes**
   - Use TypeORM migration system
@@ -317,4 +468,25 @@ The curriculum is organized as a graph of modules with prerequisites (knowledge 
   - **No arbitrary waits** - let `checkUntil` handle timing by checking repeatedly until condition is met
   - **Use `run(XC.autoClick, selector)`** for more realistic user interaction (moves mouse then clicks)
   - **Define reusable functions** with `XC.setupWithPage` for common operations
+  - **Use `checkUntil` after `requireCheckImmediatelyAfter` functions** like `selectAccount`
+  
+  **Testing Module Cards**
+  - Define a `sortCards` helper function for consistent comparison:
+    ```typescript
+    const sortCards = (cardList: { title: string; childIds: number[] }[]) => cardList
+      .map(card => ({ 
+        title: card.title, 
+        childIds: [...card.childIds].sort() 
+      }))
+      .sort((a, b) => a.title.localeCompare(b.title));
+    ```
+  - Use exact matches with `expect(sortCards(cards)).toEqual(sortCards(expected))`
+  
+  **Test Modules**
+  - Three test modules are available in non-production environments:
+    - `PS_TESTING_ADULT` - Adult owned module
+    - `PS_TESTING_CHILD` - Child owned module  
+    - `PS_TESTING_DELEGATED` - Child delegated module
+  - These modules have no videos, making tests faster and more reliable
+  - Test modules are automatically synced to the database on server startup
 

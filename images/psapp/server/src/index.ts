@@ -115,7 +115,6 @@ AppDataSource.initialize().then(async () => {
       req.jwtUser = jwt.verify(
         req.cookies['authToken'], env['JWT_SIGNING_KEY']!
       ) as JWTUser;
-      console.log(req.jwtUser);
     }
     next();
   });
@@ -156,7 +155,7 @@ AppDataSource.initialize().then(async () => {
   app.get('/debug', serveHtmlWithTestMode);
   app.get('/settings', serveHtmlWithTestMode);
   app.get('/settings/general', serveHtmlWithTestMode);
-  app.get('/settings/children', serveHtmlWithTestMode);
+  app.get('/children', serveHtmlWithTestMode);
   app.get('/create-child', serveHtmlWithTestMode);
   app.get('/invitations', serveHtmlWithTestMode);
   app.get('/sync-progress', serveHtmlWithTestMode);

@@ -14,10 +14,17 @@ import {
   relationshipTypeSelect,
   sendInvitationButton,
   inviteAdultButton,
-  userMenuButton
+  userMenuButton,
+  accountAvatarBase
 } from './onboarding';
 import { UserType, RelationshipType, ProgressStatus } from '/presupplied/images/psapp/common/types';
 
+const sortCards = (cardList: { title: string; childIds: number[] }[]) => cardList
+  .map(card => ({ 
+    title: card.title, 
+    childIds: [...card.childIds].sort() 
+  }))
+  .sort((a, b) => a.title.localeCompare(b.title));
 
 describe('Presupplied Onboarding E2E Tests', () => {
   let page: XWebDriver;
@@ -126,13 +133,15 @@ describe('Presupplied Onboarding E2E Tests', () => {
       .do();
 
     await page.X
-      .run(Onboarding.openAccountSwitcher)
-      .run(Onboarding.selectAccount, child1Id)
+      .run(Onboarding.switchToChildAccount, child1Id)
       .checkUntil(Onboarding.getCurrentUserName, child1Name)
       .checkUntil(C.getLocation, (location) => location.pathname === '/')
-      .checkUntil(XC.visibleElementCount, C.moduleCardSelector, 0)
-      .checkUntil(XC.visibleElementCount, Onboarding.noModulesMessageSelector, 1)
-      .run(Onboarding.openAccountSwitcher, true)
+      .checkUntil(C.getModuleCardInfo, (cards) => {
+        expect(sortCards(cards)).toEqual(sortCards([
+          { title: 'PS_TESTING_CHILD', childIds: [] }
+        ]));
+      })
+      .run(Onboarding.openAccountSwitcher)
       .run(Onboarding.selectAccount, child2Id, child2Pin)
       .checkUntil(Onboarding.getCurrentUserName, child2Name)
       .do();
@@ -262,21 +271,21 @@ describe('Presupplied Onboarding E2E Tests', () => {
 
     await page.X
       .checkUntil(C.getModuleCardInfo, (cards) => {
-        const calibrationCards = cards.filter(card => card.title === 'Introduction to presupplied.com');
-        expect(calibrationCards.length).toBe(1);
-        expect(cards.length).toBe(1);
+        const intro = cards.filter(card => card.title === 'Introduction to presupplied.com');
+        expect(intro.length).toBe(1);
+        expect(cards.length).toBe(4);
       })
       .run(C.shiftClickModuleCard, 'Introduction to presupplied.com')
       .checkUntil(C.getModuleCardInfo, (cards) => {
         const calibrationCards = cards.filter(card => card.title === 'Skill calibration');
         expect(calibrationCards.length).toBe(1);
-        expect(cards.length).toBe(1);
+        expect(cards.length).toBe(4);
       })
       .run(C.shiftClickModuleCard, 'Skill calibration')
       .checkUntil(C.getModuleCardInfo, (cards) => {
         const eyesCards = cards.filter(card => card.title === 'Recognizing eyes and faces');
         expect(eyesCards.length).toBe(1);
-        expect(cards.length).toBe(1);
+        expect(cards.length).toBe(4);
       })
       .checkUntil(XC.evaluate, () => {
         const progress = localStorage.getItem('progress');
@@ -331,16 +340,16 @@ describe('Presupplied Onboarding E2E Tests', () => {
         expect(Object.keys(progress).length).toBe(0);
       })
       .checkUntil(C.getModuleCardInfo, (cards) => {
-        expect(cards.length).toBe(2);
+        const child1Id = cards.find(card => card.title === 'Skill calibration')?.childIds[0];
+        expect(child1Id).toBeDefined();
+        expect(child1Id).not.toBe(child2Id);
         
-        const calibrationCards = cards.filter(card => card.title === 'Skill calibration');
-        expect(calibrationCards.length).toBe(1);
-        expect(calibrationCards[0].childIds.length).toBe(1);
-        expect(calibrationCards[0].childIds[0]).not.toBe(child2Id);
-        
-        const eyesFacesCards = cards.filter(card => card.title === 'Recognizing eyes and faces');
-        expect(eyesFacesCards.length).toBe(1);
-        expect(eyesFacesCards[0].childIds).toEqual([child2Id]);
+        expect(sortCards(cards)).toEqual(sortCards([
+          { title: 'PS_TESTING_ADULT', childIds: [] },
+          { title: 'PS_TESTING_DELEGATED', childIds: [child1Id!, child2Id] },
+          { title: 'Skill calibration', childIds: [child1Id!] },
+          { title: 'Recognizing eyes and faces', childIds: [child2Id] }
+        ]));
       })
       .checkUntil(Onboarding.getUserInfo, parentEmail, (userInfo) => {
         if ('success' in userInfo && userInfo.success) {
@@ -375,29 +384,33 @@ describe('Presupplied Onboarding E2E Tests', () => {
 
     await page.X
       .checkUntil(C.getModuleCardInfo, (cards) => {
-        const calibrationCards = cards.filter(card => card.title === 'Introduction to presupplied.com');
-        expect(calibrationCards.length).toBe(1);
-        expect(cards.length).toBe(1);
+        const introCards = cards.filter(card => card.title === 'Introduction to presupplied.com');
+        expect(introCards.length).toBe(1);
+        expect(cards.length).toBe(4);
       })
       .run(C.shiftClickModuleCard, 'Introduction to presupplied.com')
       .checkUntil(C.getModuleCardInfo, (cards) => {
         const calibrationCards = cards.filter(card => card.title === 'Skill calibration');
         expect(calibrationCards.length).toBe(1);
-        expect(cards.length).toBe(1);
+        expect(cards.length).toBe(4);
       })
       .run(C.shiftClickModuleCard, 'Skill calibration')
       .checkUntil(C.getModuleCardInfo, (cards) => {
         const eyesCards = cards.filter(card => card.title === 'Recognizing eyes and faces');
         expect(eyesCards.length).toBe(1);
-        expect(cards.length).toBe(1);
+        expect(cards.length).toBe(4);
       })
+      .run(C.shiftClickModuleCard, 'Recognizing eyes and faces')
+      .run(C.selectModuleChoice, 'mastery')
       .checkUntil(XC.evaluate, () => {
         const progress = localStorage.getItem('progress');
         return progress ? JSON.parse(progress) : null;
       }, (progress: any) => {
         expect(progress).not.toBeNull();
+        expect(Object.keys(progress).length).toBe(3);
         expect(progress['INTRODUCTION']).toBeDefined();
         expect(progress['CALIBRATION']).toBeDefined();
+        expect(progress['RECOGNIZE_EYES_FACES']).toBeDefined();
       })
       .run(Onboarding.registerUser, {
         name: studentName,
@@ -415,34 +428,43 @@ describe('Presupplied Onboarding E2E Tests', () => {
       .checkUntil(Onboarding.getUserInfo, studentEmail, (userInfo) => {
         if ('success' in userInfo && userInfo.success && userInfo.user.progress) {
           const progressKeys = Object.keys(userInfo.user.progress);
-          expect(progressKeys.length).toBe(2);
+          expect(progressKeys.length).toBe(3);
           expect(userInfo.user.progress['INTRODUCTION']).toBeDefined();
           expect(userInfo.user.progress['INTRODUCTION'].status).toBe(ProgressStatus.PASSED);
           expect(userInfo.user.progress['CALIBRATION']).toBeDefined();
           expect(userInfo.user.progress['CALIBRATION'].status).toBe(ProgressStatus.PASSED);
+          expect(userInfo.user.progress['RECOGNIZE_EYES_FACES']).toBeDefined();
+          expect(userInfo.user.progress['RECOGNIZE_EYES_FACES'].status).toBe(ProgressStatus.PASSED);
           
           return true;
         }
         return false;
       })
       .checkUntil(C.getModuleCardInfo, (cards) => {
-        expect(cards.length).toBe(1);
-        expect(cards[0].title).toBe('Recognizing eyes and faces');
-        expect(cards[0].childIds).toEqual([]);
-        return true;
+        expect(sortCards(cards)).toEqual(sortCards([
+          { title: 'PS_TESTING_ADULT', childIds: [] },
+          { title: 'PS_TESTING_CHILD', childIds: [] },
+          { title: 'PS_TESTING_DELEGATED', childIds: [] },
+          { title: 'Lifting head while on tummy', childIds: [] },
+          { title: 'Recognizing "say"', childIds: [] },
+          { title: 'Tracking faces', childIds: [] },
+          { title: 'Tracking sound', childIds: [] }
+        ]));
       })
-      .run(C.shiftClickModuleCard, 'Recognizing eyes and faces')
+      .run(C.shiftClickModuleCard, 'Tracking faces')
+      // intentionally no choice screen since we are registered as a student
+      // and there are only teaching videos
       .checkUntil(C.getModuleCardInfo, (cards) => {
-        expect(cards.length).toBe(4);
-        const liftingHeadCards = cards.filter(card => card.title === 'Lifting head while on tummy');
-        expect(liftingHeadCards.length).toBe(1);
-        const trackingFacesCards = cards.filter(card => card.title === 'Tracking faces');
-        expect(trackingFacesCards.length).toBe(1);
-        const trackingSoundCards = cards.filter(card => card.title === 'Tracking sound');
-        expect(trackingSoundCards.length).toBe(1);
-        const recognizingSayCards = cards.filter(card => card.title === 'Recognizing "say"');
-        expect(recognizingSayCards.length).toBe(1);
-        return true;
+        expect(sortCards(cards)).toEqual(sortCards([
+          { title: 'PS_TESTING_ADULT', childIds: [] },
+          { title: 'PS_TESTING_CHILD', childIds: [] },
+          { title: 'PS_TESTING_DELEGATED', childIds: [] },
+          { title: 'Lifting head while on tummy', childIds: [] },
+          { title: 'Recognizing "say"', childIds: [] },
+          { title: 'Social smiles and signs of affection', childIds: [] },
+          { title: 'Tracking objects', childIds: [] },
+          { title: 'Tracking sound', childIds: [] }
+        ]));
       })
       .do();
   });
@@ -500,16 +522,24 @@ describe('Presupplied Onboarding E2E Tests', () => {
     await page.X
       .run(C.navigateToRoute, '/')
       .checkUntil(C.getModuleCardInfo, (cards) => {
-        expect(cards.length).toBe(1);
-        expect(cards[0].title).toBe('Introduction to presupplied.com');
-        expect(cards[0].childIds).toEqual([]);
+        expect(cards.length).toBe(3);
+        const introCards = cards.filter(card => card.title === 'Introduction to presupplied.com');
+        expect(introCards.length).toBe(1);
+        expect(introCards[0].title).toBe('Introduction to presupplied.com');
+        expect(introCards[0].childIds).toEqual([]);
+        const childCards = cards.filter(card => card.title === 'PS_TESTING_CHILD');
+        expect(childCards.length).toBe(0);
+        const adultCards = cards.filter(card => card.title === 'PS_TESTING_ADULT');
+        expect(adultCards.length).toBe(1);
+        const delegateCards = cards.filter(card => card.title === 'PS_TESTING_DELEGATED');
+        expect(delegateCards.length).toBe(1);
       })
       .run(C.shiftClickModuleCard, 'Introduction to presupplied.com')
       .checkUntil(C.getModuleCardInfo, (cards) => {
         const calibrationCards = cards.filter(card => card.title === 'Skill calibration');
         expect(calibrationCards.length).toBe(1);
         expect(calibrationCards[0].childIds.sort()).toEqual([child1Id, child2Id].sort());
-        expect(cards.length).toBe(1);
+        expect(cards.length).toBe(3);
       })
       .run(C.shiftClickModuleCard, 'Skill calibration')
       .run(Onboarding.selectAccount, child1Id)
@@ -521,7 +551,7 @@ describe('Presupplied Onboarding E2E Tests', () => {
         const remainingCalibrationCards = cards.filter(card => card.title === 'Skill calibration');
         expect(remainingCalibrationCards.length).toBe(1);
         expect(remainingCalibrationCards[0].childIds).toEqual([child2Id]);
-        expect(cards.length).toBe(2);
+        expect(cards.length).toBe(4);
       })
       .run(Onboarding.navigateToChildProfile, child1Id)
       .run(Onboarding.openInviteAdultDialog)
@@ -535,7 +565,7 @@ describe('Presupplied Onboarding E2E Tests', () => {
       })
       .run(XC.autoClick, Onboarding.acceptInvitationButton)
       .checkUntil(C.getModuleCardInfo, (cards) => {
-        expect(cards.length).toBe(1);
+        expect(cards.length).toBe(3);
         expect(cards[0].title).toBe('Introduction to presupplied.com');
         expect(cards[0].childIds).toEqual([]);
       })
@@ -544,23 +574,24 @@ describe('Presupplied Onboarding E2E Tests', () => {
         const eyesFacesCards = cards.filter(card => card.title === 'Recognizing eyes and faces');
         expect(eyesFacesCards.length).toBe(1);
         expect(eyesFacesCards[0].childIds).toEqual([child1Id]);
-        expect(cards.length).toBe(1);
+        expect(cards.length).toBe(3);
       })
       .run(C.shiftClickModuleCard, 'Recognizing eyes and faces')
+      .run(C.selectModuleChoice, 'mastery')
       .checkUntil(C.getModuleCardInfo, (cards) => {
-        expect(cards.length).toBe(4);
+        expect(cards.length).toBe(6);
         const trackingCards = cards.filter(card => card.title === 'Tracking sound');
         expect(trackingCards.length).toBe(1);
         expect(trackingCards[0].childIds).toEqual([child1Id]);
       })
       .run(Onboarding.logout)
       .run(Onboarding.loginUser, parentEmail, parentPassword)
-      .run(Onboarding.openAccountSwitcher)
-      .run(Onboarding.selectAccount, child1Id)
+      .run(Onboarding.switchToChildAccount, child1Id)
       .checkUntil(C.getModuleCardInfo, (cards) => {
-        expect(cards.length).toBe(0);
+        expect(cards.length).toBe(1);
+        expect(cards[0].title).toBe('PS_TESTING_CHILD');
       })
-      .run(Onboarding.openAccountSwitcher, true)
+      .run(Onboarding.openAccountSwitcher)
       .checkUntil(Onboarding.getAccountSwitcherAccountIds, (accountIds) => {
         expect(accountIds).toHaveLength(3);
         expect(accountIds).toContain(child1Id);
@@ -569,13 +600,29 @@ describe('Presupplied Onboarding E2E Tests', () => {
       })
       .run(Onboarding.selectAccount, parentId, '4000')
       .checkUntil(C.getModuleCardInfo, (cards) => {
-        expect(cards.length).toBe(5);
+        expect(cards.length).toBe(7);
         const trackingCards = cards.filter(card => card.title === 'Tracking sound');
         expect(trackingCards.length).toBe(1);
         expect(trackingCards[0].childIds).toEqual([child1Id]);
         const finalCalibrationCards = cards.filter(card => card.title === 'Skill calibration');
         expect(finalCalibrationCards.length).toBe(1);
         expect(finalCalibrationCards[0].childIds).toEqual([child2Id]);
+      })
+      .run(XC.autoClick, '[data-test-module="PS_TESTING_DELEGATED"]')
+      .checkUntil(XC.visibleElementCount, accountAvatarBase, 2)
+      .run(Onboarding.selectAccount, child1Id)
+      .checkUntil(XC.visibleElementCount, '[data-choice-index="0"]', 1)
+      .run(XC.autoClick, '[data-choice-index="0"]')
+      .checkUntil(C.getModuleCardInfo, (cards) => {
+        expect(sortCards(cards)).toEqual(sortCards([
+          { title: 'Lifting head while on tummy', childIds: [child1Id] },
+          { title: 'PS_TESTING_ADULT', childIds: [] },
+          { title: 'PS_TESTING_DELEGATED', childIds: [child2Id] },
+          { title: 'Recognizing "say"', childIds: [child1Id] },
+          { title: 'Skill calibration', childIds: [child2Id] },
+          { title: 'Tracking faces', childIds: [child1Id] },
+          { title: 'Tracking sound', childIds: [child1Id] }
+        ]));
       })
       .do();
   });
