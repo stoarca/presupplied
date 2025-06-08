@@ -13,7 +13,6 @@ import {
 // Import type only to avoid circular dependency
 import type { User } from './User';
 import { Module } from './Module';
-import { UserProgressVideo } from './UserProgressVideo';
 import { ProgressStatus } from '../../../common/types';
 
 interface UserProgressParams {
@@ -52,11 +51,6 @@ export class UserProgress {
   @JoinColumn({ name: 'completedById' })
   completedBy?: User;
 
-  @OneToMany(
-    () => UserProgressVideo,
-    (userProgressVideo) => userProgressVideo.userProgress
-  )
-  videos!: UserProgressVideo[];
 
   constructor(params: UserProgressParams) {
     this.user = params.user;

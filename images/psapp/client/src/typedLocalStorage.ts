@@ -1,8 +1,8 @@
-import {UserProgressDTO, UserVideoProgressDTO} from '../../common/types';
+import {UserProgressDTO, VideoProgressDTO} from '../../common/types';
 
 type LocalStorageSchema = {
   progress: UserProgressDTO,
-  progressVideo: UserVideoProgressDTO,
+  progressVideo: VideoProgressDTO,
   saveWarningDismissedAt: number,
 };
 export let typedLocalStorage = {

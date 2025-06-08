@@ -4,7 +4,7 @@ import { In } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import { User } from '../entity/User';
 import { UserProgress } from '../entity/UserProgress';
-import { UserProgressVideo } from '../entity/UserProgressVideo';
+import { UserVideoProgress } from '../entity/UserVideoProgress';
 import { Module } from '../entity/Module';
 import { UserRelationship } from '../entity/UserRelationship';
 import {
@@ -25,68 +25,8 @@ KNOWLEDGE_MAP.nodes.forEach(node => {
 });
 
 export const setupLearningRoutes = (router: express.Router) => {
-  typedGet(router, '/api/learning/progressvideos/:kmid', async (req, resp, next) => {
-    if (!req.jwtUser) {
-      return resp.status(401).json({
-        errorCode: 'learning.progressvideos.noLogin',
-        message: 'You need to be logged in get video progress',
-      });
-    }
 
-    const userRepo = AppDataSource.getRepository(User);
-    const user = await userRepo.findOneBy({ email: req.jwtUser.email });
-    if (!user) {
-      return resp.status(401).json({
-        errorCode: 'learning.progressvideos.noStudent',
-        email: req.jwtUser.email,
-        message: 'Could not find a user with this email',
-      });
-    }
-
-    const moduleRepo = AppDataSource.getRepository(Module);
-    const module = await moduleRepo.findOneBy({
-      vanityId: req.params.kmid,
-    });
-    if (!module) {
-      return resp.status(400).json({
-        errorCode: 'learning.progressvideos.noModule',
-        moduleVanityId: req.params.kmid,
-        message: 'Could not find a student with this email',
-      });
-    }
-
-    const userProgressRepo = AppDataSource.getRepository(UserProgress);
-    const userProgress = await userProgressRepo.findOneBy({
-      user: { id: user.id },
-      module: { id: module.id },
-    });
-
-    if (!userProgress) {
-      return resp.json({
-        success: true,
-        videos: {},
-      });
-    }
-
-    const userProgressVideoRepo = AppDataSource.getRepository(UserProgressVideo);
-    const userProgressVideos = await userProgressVideoRepo.findBy({
-      userProgress: { id: userProgress.id },
-    });
-
-    const videos: VideoProgressDTO = {};
-    userProgressVideos.forEach(x => {
-      videos[x.videoVanityId] = {
-        status: x.status,
-        updatedAt: x.updatedAt.toISOString()
-      };
-    });
-    return resp.json({
-      success: true,
-      videos: videos,
-    });
-  });
-
-  typedPost(router, '/api/learning/events', async (req, resp, next) => {
+  typedPost(router, '/api/learning/module_progress', async (req, resp, next) => {
     if (!req.jwtUser) {
       return resp.status(401).json({
         errorCode: 'learning.event.noLogin',
@@ -94,9 +34,7 @@ export const setupLearningRoutes = (router: express.Router) => {
       });
     }
 
-    const moduleIds = Object.keys(
-      req.body.type === 'module' ? req.body.modules : req.body.moduleVideos
-    );
+    const moduleIds = Object.keys(req.body.modules);
 
     const userRepo = AppDataSource.getRepository(User);
     const baseUser = await userRepo.findOneBy({ email: req.jwtUser.email });
@@ -109,7 +47,7 @@ export const setupLearningRoutes = (router: express.Router) => {
 
     // Verify that onBehalfOfStudentId is set for modules that require it
     // Skip this check for student accounts as they can submit child modules for themselves
-    if (req.body.type === 'module' && baseUser.type !== 'student') {
+    if (baseUser.type !== 'student') {
       for (const moduleId of moduleIds) {
         const moduleData = moduleMap.get(moduleId);
         if (moduleData?.moduleType === ModuleType.CHILD_DELEGATED && !req.body.onBehalfOfStudentId) {
@@ -192,77 +130,104 @@ export const setupLearningRoutes = (router: express.Router) => {
     }
 
     const userProgressRepo = AppDataSource.getRepository(UserProgress);
-    if (req.body.type === 'module') {
-      const body = req.body;
-      await userProgressRepo.upsert(modules.map(x => {
-        const events = body.modules[x.vanityId].events;
-        const mostRecentEvent = events.sort((a, b) => b.time - a.time)[0];
-        const progressData: {
-          user: User;
-          module: Module;
-          status: ProgressStatus;
-          completedBy?: User;
-        } = {
-          user: targetUser,
-          module: x,
-          status: mostRecentEvent.status,
-        };
-        
-        if (req.body.onBehalfOfStudentId && targetUser.id !== baseUser.id) {
-          progressData.completedBy = baseUser;
-        }
-        
-        return progressData;
-      }), ['user', 'module'])
-    } else {
-      try {
-        await userProgressRepo.insert(modules.map(x => {
-          return {
-            user: targetUser,
-            module: x,
-            status: ProgressStatus.NOT_ATTEMPTED,
-          };
-        }));
-      } catch (e) {
-        if ((e as Error).message.includes('duplicate key value')) {
-          // row will alrady exist when we're watching a video on a module
-          // we've attempted before. Ignore this.
-        } else {
-          throw e;
-        }
+    await userProgressRepo.upsert(modules.map(x => {
+      const events = req.body.modules[x.vanityId].events;
+      const mostRecentEvent = events.sort((a, b) => b.time - a.time)[0];
+      const progressData: {
+        user: User;
+        module: Module;
+        status: ProgressStatus;
+        completedBy?: User;
+      } = {
+        user: targetUser,
+        module: x,
+        status: mostRecentEvent.status,
+      };
+      
+      if (req.body.onBehalfOfStudentId && targetUser.id !== baseUser.id) {
+        progressData.completedBy = baseUser;
+      }
+      
+      return progressData;
+    }), ['user', 'module'])
+
+    return resp.json({success: true});
+  });
+
+  typedPost(router, '/api/learning/video_progress', async (req, resp, next) => {
+    if (!req.jwtUser) {
+      return resp.status(401).json({
+        errorCode: 'learning.video_progress.noLogin',
+        message: 'You need to be logged in to save video progress',
+      });
+    }
+
+    const userRepo = AppDataSource.getRepository(User);
+    const baseUser = await userRepo.findOneBy({ email: req.jwtUser.email });
+    if (!baseUser) {
+      return resp.status(401).json({
+        errorCode: 'learning.video_progress.noUser',
+        message: 'Could not find the authenticated user',
+      });
+    }
+
+    let targetUser = baseUser;
+
+    if (req.jwtUser.selectedUserId && req.jwtUser.selectedUserId !== baseUser.id) {
+      const relationshipRepo = AppDataSource.getRepository(UserRelationship);
+      const relationship = await relationshipRepo.findOne({
+        where: {
+          adultId: baseUser.id,
+          childId: req.jwtUser.selectedUserId
+        },
+        relations: ['child']
+      });
+
+      if (!relationship) {
+        return resp.status(403).json({
+          errorCode: 'learning.video_progress.unauthorized',
+          message: 'No relationship exists with the selected user',
+        });
       }
 
-      const userProgresses = await userProgressRepo.find({
-        where: {
-          user: { id: targetUser.id },
-          module: { id: In(modules.map(x => x.id)) },
-        },
-        relations: {
-          module: true,
-        },
-      });
-      const userProgressMap: Record<string, UserProgress> = {};
-      userProgresses.forEach((x) => {
-        userProgressMap[x.module.vanityId] = x;
-      });
-      const userProgressVideoRepo = AppDataSource.getRepository(UserProgressVideo);
-      const inserts = [];
-      for (const kmid in req.body.moduleVideos) {
-        for (const videoVanityId in req.body.moduleVideos[kmid]!) {
-          const videoData = req.body.moduleVideos[kmid]![videoVanityId];
-          inserts.push({
-            userProgress: userProgressMap[kmid],
-            videoVanityId: videoVanityId,
-            status: videoData.status,
-            updatedAt: new Date(videoData.updatedAt),
-          });
-        }
-      }
-      await userProgressVideoRepo.upsert(
-        inserts,
-        ['userProgress', 'videoVanityId']
-      );
+      targetUser = relationship.child;
     }
+
+    if (req.body.onBehalfOfStudentId) {
+      const relationshipRepo = AppDataSource.getRepository(UserRelationship);
+      const relationship = await relationshipRepo.findOne({
+        where: {
+          adultId: baseUser.id,
+          childId: req.body.onBehalfOfStudentId
+        },
+        relations: ['child']
+      });
+
+      if (!relationship) {
+        return resp.status(403).json({
+          errorCode: 'learning.video_progress.unauthorized',
+          message: 'No relationship exists with the specified student',
+        });
+      }
+
+      targetUser = relationship.child;
+    }
+
+    const userVideoProgressRepo = AppDataSource.getRepository(UserVideoProgress);
+    const inserts = [];
+    for (const videoId in req.body.videos) {
+      const videoData = req.body.videos[videoId];
+      inserts.push({
+        user: targetUser,
+        videoId: videoId,
+        status: videoData.status,
+        updatedAt: new Date(videoData.updatedAt),
+      });
+    }
+    await userVideoProgressRepo.upsert(
+      inserts,
+      ['user', 'videoId']
+    );
 
     return resp.json({success: true});
   });

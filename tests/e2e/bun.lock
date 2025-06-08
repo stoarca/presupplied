@@ -9,7 +9,7 @@
         "longjohn": "^0.2.12",
         "selenium-webdriver": "^4.12.0",
         "typescript": "^5.2.2",
-        "xdotoolify": "2.0.16",
+        "xdotoolify": "2.0.20",
       },
     },
   },
@@ -70,6 +70,6 @@
 
     "ws": ["ws@8.18.2", "", { "peerDependencies": { "bufferutil": "^4.0.1", "utf-8-validate": ">=5.0.2" }, "optionalPeers": ["bufferutil", "utf-8-validate"] }, "sha512-DMricUmwGZUVr++AEAe2uiVM7UoO9MAVZMDu05UQOaUII0lp+zOzLLU4Xqh/JvTqklB1T4uELaaPBKyjE1r4fQ=="],
 
-    "xdotoolify": ["xdotoolify@2.0.16", "", { "dependencies": { "fast-deep-equal": "^3.1.3" } }, "sha512-NOS/CRUfjpF1KhVU0KulWR1irovkpaC/nmPttps7zQqydS2YzkrILxgehipNlr73wOPGD/Sd3LtLdkMn+0eScA=="],
+    "xdotoolify": ["xdotoolify@2.0.20", "", { "dependencies": { "fast-deep-equal": "^3.1.3" } }, "sha512-b6fQ1g6K9a9yEo224bDxqSzQjoKP5by5RYloDrBYwM49UJE4LGCEZpDYZRtRzuDCkWoEFtJp5kN9rgFVvJLsEw=="],
   }
 }

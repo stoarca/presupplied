@@ -16,14 +16,14 @@ import {
   PlayArrow as PlayIcon,
   CheckCircle as CheckIcon,
 } from '@mui/icons-material';
-import { VideoInfo, ProgressVideoStatus, VideoProgressDTO } from '../../../common/types';
+import { VideoInfo, VideoId, ProgressVideoStatus, VideoProgressDTO, getVideosByIds } from '../../../common/types';
 
 interface VideoListScreenProps {
   open: boolean;
   onClose: () => void;
   title: string;
   description: string;
-  videos: VideoInfo[];
+  videos: VideoId[];
   watchedVideos: VideoProgressDTO;
   onVideoSelect: (video: VideoInfo) => void;
   wasShiftClick?: boolean;
@@ -39,6 +39,8 @@ export const VideoListScreen = ({
   onVideoSelect,
   wasShiftClick = false,
 }: VideoListScreenProps) => {
+  const videoInfos = getVideosByIds(videos);
+
   const extractYouTubeId = (url: string): string | null => {
     const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
@@ -89,7 +91,7 @@ export const VideoListScreen = ({
         </Box>
 
         <List sx={{ pt: 0 }}>
-          {videos.map((video, index) => {
+          {videoInfos.map((video, index) => {
             const isWatched = watchedVideos[video.id]?.status === ProgressVideoStatus.WATCHED;
             const youtubeId = extractYouTubeId(video.url);
             const duration = getVideoDurationFromYouTube(youtubeId || '');
@@ -104,9 +106,9 @@ export const VideoListScreen = ({
                 >
                   <ListItemIcon>
                     {isWatched ? (
-                      <CheckIcon sx={{ color: 'success.main' }} />
+                      <CheckIcon sx={{ color: 'success.main' }} data-test="video-check" />
                     ) : (
-                      <PlayIcon sx={{ color: 'text.primary' }} />
+                      <PlayIcon sx={{ color: 'text.primary' }} data-test="video-play" />
                     )}
                   </ListItemIcon>
                   <ListItemText
@@ -114,7 +116,7 @@ export const VideoListScreen = ({
                     secondaryTypographyProps={{ component: 'div' }}
                     primary={
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography variant="subtitle1" component="div" sx={{ color: 'text.primary' }}>
+                        <Typography variant="subtitle1" component="div" sx={{ color: 'text.primary' }} data-test="video-title">
                           {video.title}
                         </Typography>
                         {isWatched ? (
@@ -123,6 +125,7 @@ export const VideoListScreen = ({
                             size="small"
                             color="success"
                             variant="outlined"
+                            data-test="video-status"
                           />
                         ) : (
                           <Chip
@@ -130,6 +133,7 @@ export const VideoListScreen = ({
                             size="small"
                             color="error"
                             variant="outlined"
+                            data-test="video-status"
                           />
                         )}
                       </Box>
@@ -140,7 +144,7 @@ export const VideoListScreen = ({
                           Duration: {duration}
                         </Typography>
                         {lastWatched && (
-                          <Typography variant="body2" component="div" color="text.secondary">
+                          <Typography variant="body2" component="div" color="text.secondary" data-test="video-last-watched">
                             Last watched: {lastWatched}
                           </Typography>
                         )}

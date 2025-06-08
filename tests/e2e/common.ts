@@ -5,6 +5,7 @@ import { Builder, By, until, WebDriver, WebElement, Capabilities } from 'seleniu
 import Xdotoolify, { XWebDriver } from 'xdotoolify';
 import * as XC from 'xdotoolify/dist/common';
 import { typedFetch } from '/presupplied/images/psapp/client/src/typedFetch';
+import { expect } from 'bun:test';
 
 Xdotoolify.defaultCheckUntilTimeout = 20000;
 
@@ -15,12 +16,38 @@ export const errorAlertSelector = '.MuiAlert-root';
 export const moduleCardSelector = '[data-test="module-card"]';
 export const moduleTitleSelector = '[data-test="module-title"]';
 export const moduleChoiceDialogSelector = '[data-test="module-choice-dialog"]';
+export const userSelectorDialogSelector = '[data-test="user-selector-dialog"]';
 export const teachChoiceSelector = '[data-test="teach-choice"]';
 export const learnChoiceSelector = '[data-test="learn-choice"]';
 export const masteryChoiceSelector = '[data-test="mastery-choice"]';
+export const videoListDialogSelector = '[data-test="video-list-dialog"]';
+export const videoItemSelector = '[data-test^="video-item-"]';
+export const videoTitleSelector = '[data-test="video-title"]';
+export const videoStatusSelector = '[data-test="video-status"]';
+export const videoCheckSelector = '[data-test="video-check"]';
+export const videoLastWatchedSelector = '[data-test="video-last-watched"]';
 export const settingsLink = 'a[href="/settings"]';
 export const manageChildrenLink = 'a[href="/settings/children"]';
 export const childCardSelector = '[data-test="child-card"]';
+export const navButtonMapSelector = '[data-test="nav-button-map"]';
+export const navButtonHomeSelector = '[data-test="nav-button-home"]';
+export const navButtonChildrenSelector = '[data-test="nav-button-children"]';
+
+// Map view selectors
+export const mapModuleNodeSelector = '[data-test^="map-module-node-"]';
+export const mapModuleBgSelector = '[data-test="map-module-bg"]';
+export const mapModuleTitleSelector = '[data-test="map-module-title"]';
+export const mapModuleChildrenSelector = '[data-test="map-module-children"]';
+export const mapModuleChildNameSelector = '[data-test="map-module-child-name"]';
+export const mapHoverRectangleSelector = '[data-test="map-hover-rectangle"]';
+export const originMarkerSelector = '[data-test="origin-marker"]';
+export const panZoomTransformSelector = '[data-test="pan-zoom-transform"]';
+export const getMapModuleNodeSelector = (moduleId: string) => `[data-test="map-module-node-${moduleId}"]`;
+
+// Admin toolbar selectors
+export const moduleEditDialogSelector = '[data-test="module-edit-dialog"]';
+export const moduleIdInputSelector = '[data-test="module-id-input"]';
+export const applyButtonSelector = '[data-test="apply-button"]';
 
 export const enableTestMode = Xdotoolify.setupWithoutPage(async () => {
   const response = await typedFetch({
@@ -163,9 +190,9 @@ export const navigateToRoute = Xdotoolify.setupWithPage(async (page, route: stri
     .run(XC.evaluate, (path: string) => {
       window.location.href = path;
     }, route)
-    .checkUntil(XC.evaluate, (path: string) => {
-      return window.location.pathname === path;
-    }, route, true)
+    .checkUntil(getLocation, (location) => {
+      return location.pathname + location.search === route;
+    })
     .do();
 });
 
@@ -204,22 +231,47 @@ export const getModuleCardInfo = Xdotoolify.setupWithPage(async (page) => {
 });
 
 export const shiftClickModuleCard = Xdotoolify.setupWithPage(async (page, title: string) => {
-  return XC.evaluate(page, (_moduleCardSelector: string, _moduleTitleSelector: string, _title: string) => {
-    const cards = document.querySelectorAll(_moduleCardSelector);
-    for (const card of cards) {
-      const titleElement = card.querySelector(_moduleTitleSelector);
-      if (titleElement?.textContent === _title) {
-        const event = new MouseEvent('click', {
-          bubbles: true,
-          cancelable: true,
-          shiftKey: true
-        });
-        card.dispatchEvent(event);
-        return true;
+  await page.X
+    .run(XC.evaluate, (_moduleCardSelector: string, _moduleTitleSelector: string, _title: string) => {
+      const cards = document.querySelectorAll(_moduleCardSelector);
+      for (const card of cards) {
+        const titleElement = card.querySelector(_moduleTitleSelector);
+        if (titleElement?.textContent === _title) {
+          const event = new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            shiftKey: true
+          });
+          card.dispatchEvent(event);
+          return true;
+        }
       }
-    }
-    return false;
-  }, moduleCardSelector, moduleTitleSelector, title);
+      return false;
+    }, moduleCardSelector, moduleTitleSelector, title)
+    .addRequireCheckImmediatelyAfter()
+    .do();
+});
+
+export const shiftClickMapModule = Xdotoolify.setupWithPage(async (page, title: string) => {
+  await page.X
+    .run(XC.evaluate, (_mapModuleNodeSelector: string, _mapModuleTitleSelector: string, _title: string) => {
+      const modules = document.querySelectorAll(_mapModuleNodeSelector);
+      for (const module of modules) {
+        const titleElement = module.querySelector(_mapModuleTitleSelector);
+        if (titleElement?.textContent === _title) {
+          const event = new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            shiftKey: true
+          });
+          module.dispatchEvent(event);
+          return true;
+        }
+      }
+      return false;
+    }, mapModuleNodeSelector, mapModuleTitleSelector, title)
+    .addRequireCheckImmediatelyAfter()
+    .do();
 });
 
 export const selectModuleChoice = Xdotoolify.setupWithPage(async (page, choice: 'teach' | 'learn' | 'mastery') => {
@@ -235,3 +287,198 @@ export const selectModuleChoice = Xdotoolify.setupWithPage(async (page, choice: 
     .run(XC.autoClick, choiceSelector)
     .do();
 });
+
+export const selectVideo = Xdotoolify.setupWithPage(async (page, index = 0) => {
+  await page.X
+    .checkUntil(XC.visibleElementCount, videoListDialogSelector, 1)
+    .checkUntil(XC.visibleElementCount, videoItemSelector, (count: number) => count > index)
+    .run(XC.autoClick, [videoItemSelector, index])
+    .do();
+});
+
+export const closeVideoList = Xdotoolify.setupWithPage(async (page) => {
+  await page.X
+    .run(XC.autoClick, 'body', { relpos: 'topleft' })
+    .checkUntil(XC.visibleElementCount, moduleChoiceDialogSelector, 1)
+    .do();
+});
+
+export const getVideoListInfo = Xdotoolify.setupWithPage(async (page) => {
+  return XC.evaluate(page, (_videoItemSelector: string, _videoTitleSelector: string, _videoStatusSelector: string, _videoCheckSelector: string, _videoLastWatchedSelector: string) => {
+    const videoItems = document.querySelectorAll(_videoItemSelector);
+    return Array.from(videoItems).map((item) => {
+      const videoId = item.getAttribute('data-test')?.replace('video-item-', '') || '';
+      const titleElement = item.querySelector(_videoTitleSelector);
+      const statusElement = item.querySelector(_videoStatusSelector);
+      const checkElement = item.querySelector(_videoCheckSelector);
+      const lastWatchedElement = item.querySelector(_videoLastWatchedSelector);
+      
+      const lastWatchedText = lastWatchedElement?.textContent?.trim() || '';
+      const lastWatched = lastWatchedText.replace('Last watched: ', '');
+      
+      return {
+        videoId,
+        title: titleElement?.textContent?.trim() || '',
+        isWatched: checkElement !== null,
+        status: statusElement?.textContent?.trim() || '',
+        lastWatched
+      };
+    });
+  }, videoItemSelector, videoTitleSelector, videoStatusSelector, videoCheckSelector, videoLastWatchedSelector);
+});
+
+export const getMapModules = Xdotoolify.setupWithPage(async (page) => {
+  return XC.evaluate(page, (_mapModuleNodeSelector: string, _mapModuleBgSelector: string, _mapModuleTitleSelector: string, _mapModuleChildrenSelector: string, _mapModuleChildNameSelector: string) => {
+    const modules: any[] = [];
+    const moduleNodes = document.querySelectorAll(_mapModuleNodeSelector);
+    
+    moduleNodes.forEach((node) => {
+      const moduleId = node.getAttribute('data-test')?.replace('map-module-node-', '') || '';
+      const titleElement = node.querySelector(_mapModuleTitleSelector);
+      const bgElement = node.querySelector(_mapModuleBgSelector);
+      const childrenContainer = node.querySelector(_mapModuleChildrenSelector);
+      const childNameElements = childrenContainer?.querySelectorAll(_mapModuleChildNameSelector) || [];
+      
+      const children: string[] = [];
+      childNameElements.forEach((nameEl) => {
+        const name = nameEl.textContent?.trim();
+        if (name) {
+          children.push(name);
+        }
+      });
+      
+      const computedStyle = window.getComputedStyle(node);
+      const backgroundColor = bgElement ? window.getComputedStyle(bgElement).backgroundColor : '';
+      
+      // Convert color to status
+      let status: 'reached' | 'reachable' | 'unreached';
+      if (backgroundColor === 'rgb(144, 238, 144)') { // green
+        status = 'reached';
+      } else if (backgroundColor === 'rgb(241, 235, 156)') { // yellow
+        status = 'reachable';
+      } else {
+        status = 'unreached';
+      }
+      
+      modules.push({
+        moduleId,
+        title: titleElement?.textContent?.trim() || '',
+        status,
+        children,
+        position: {
+          left: parseInt(computedStyle.left || '0'),
+          top: parseInt(computedStyle.top || '0')
+        },
+        opacity: parseFloat(computedStyle.opacity || '1')
+      });
+    });
+    
+    return modules.sort((a, b) => {
+      if (a.position.top !== b.position.top) {
+        return a.position.top - b.position.top;
+      }
+      return a.position.left - b.position.left;
+    });
+  }, mapModuleNodeSelector, mapModuleBgSelector, mapModuleTitleSelector, mapModuleChildrenSelector, mapModuleChildNameSelector);
+});
+
+export const clickMapModule = Xdotoolify.setupWithPage(async (page, moduleId: string) => {
+  await page.X
+    .checkUntil(XC.visibleElementCount, getMapModuleNodeSelector(moduleId), 1)
+    .run(XC.autoClick, getMapModuleNodeSelector(moduleId))
+    .do();
+});
+
+export const getBoundingClientRect = Xdotoolify.setupWithPage(async (page, selector: string) => {
+  return XC.evaluate(page, (_selector: string) => {
+    const element = document.querySelector(_selector);
+    if (!element) {
+      return null;
+    }
+    const rect = element.getBoundingClientRect();
+    return {
+      top: rect.top,
+      left: rect.left,
+      bottom: rect.bottom,
+      right: rect.right,
+      width: rect.width,
+      height: rect.height,
+      x: rect.x,
+      y: rect.y
+    };
+  }, selector);
+});
+
+export const getMapZoomLevel = Xdotoolify.setupWithPage(async (page) => {
+  return XC.evaluate(page, (_selector: string) => {
+    const element = document.querySelector(_selector);
+    if (!element) {
+      throw new Error(`Element not found: ${_selector}`);
+    }
+    const style = window.getComputedStyle(element);
+    const transform = style.transform;
+    
+    // Handle matrix transform: matrix(a, b, c, d, tx, ty) where a is scale X
+    const matrixMatch = transform.match(/matrix\(([^,]+),/);
+    if (matrixMatch) {
+      return parseFloat(matrixMatch[1]);
+    }
+    
+    // Handle scale transform as fallback
+    const scaleMatch = transform.match(/scale\(([^)]+)\)/);
+    return scaleMatch ? parseFloat(scaleMatch[1]) : 1;
+  }, panZoomTransformSelector);
+});
+
+export const getHoverRectInfo = Xdotoolify.setupWithPage(async (page) => {
+  return XC.evaluate(page, () => {
+    const hoverRect = document.querySelector('[data-test="map-hover-rectangle"]');
+    return hoverRect ? {
+      visible: window.getComputedStyle(hoverRect).display !== 'none',
+      backgroundColor: window.getComputedStyle(hoverRect).backgroundColor,
+      bounds: hoverRect.getBoundingClientRect()
+    } : null;
+  });
+});
+
+export const verifyHoverRect = Xdotoolify.setupWithPage(async (page, kmid: string) => {
+  const moduleSelector = getMapModuleNodeSelector(kmid);
+  let moduleBounds: any;
+  
+  await page.X
+    .checkUntil(getBoundingClientRect, moduleSelector, (bounds) => {
+      moduleBounds = bounds;
+      return bounds !== null;
+    })
+    .checkUntil(getHoverRectInfo, (hoverInfo) => {
+      if (!hoverInfo) return false;
+      expect(hoverInfo.visible).toBe(true);
+      
+      expect(hoverInfo.bounds.left).toBeCloseTo(moduleBounds.left, 1);
+      expect(hoverInfo.bounds.top).toBeCloseTo(moduleBounds.top, 1);
+      expect(hoverInfo.bounds.width).toBeCloseTo(moduleBounds.width, 1);
+      expect(hoverInfo.bounds.height).toBeCloseTo(moduleBounds.height, 1);
+      
+      return hoverInfo.visible;
+    })
+    .do();
+
+  return true;
+});
+
+
+
+export const checkForErrorsAndLogs = async () => {
+  const errors = await fetchWebErrors();
+  if (errors.length > 0) {
+    console.error('Client-side errors detected:');
+    errors.forEach(error => console.error(` - ${error}`));
+    throw new Error('Client-side errors detected during test');
+  }
+
+  const logs = await fetchWebLogs();
+  if (logs.length > 0) {
+    console.log('Client-side logs:');
+    logs.forEach(log => console.log(` - ${log}`));
+  }
+};

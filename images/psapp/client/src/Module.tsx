@@ -270,7 +270,14 @@ export let useWin = () => {
       }
 
       await new Promise(r => setTimeout(r, 2000));
-      window.location.href = '/?scroll=' + kmid;
+
+      // Check for returnTo parameter to redirect back to the originating page
+      const returnTo = urlParams.get('returnTo');
+      if (returnTo) {
+        window.location.href = returnTo + '?scroll=' + kmid;
+      } else {
+        window.location.href = '/?scroll=' + kmid;
+      }
     })();
   }, [user]);
 

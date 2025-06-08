@@ -18,27 +18,19 @@ let knowledgeGraph = buildGraph(KNOWLEDGE_MAP);
 export let HomePage = () => {
   let user = useUserContext();
 
+  let reached = React.useMemo(() => new Set<string>(
+    Object.entries(user.progress()).filter(
+      ([k, v]) => v.status === ProgressStatus.PASSED
+    ).map(([k, v]) => k)
+  ), [user, user.dto]);
   const { reachable, childrenReachableSets } = React.useMemo(() => {
     if (!user.dto) {
-      const userPassed = new Set(
-        Object.entries(user.progress()).filter(
-          ([k, v]) => v.status === ProgressStatus.PASSED
-        ).map(([k, v]) => k)
-      );
-
-      const result = knowledgeGraph.getReachables('hybrid', userPassed, new Map());
-
+      const result = knowledgeGraph.getReachables('hybrid', reached, new Map());
       return {
         reachable: result.reachable,
         childrenReachableSets: new Map<number, Set<string>>()
       };
     }
-
-    const userPassed = new Set(
-      Object.entries(user.progress()).filter(
-        ([k, v]) => v.status === ProgressStatus.PASSED
-      ).map(([k, v]) => k)
-    );
 
     const childrenReachedSets = new Map<number, Set<string>>();
     if (user.dto.children) {
@@ -52,18 +44,17 @@ export let HomePage = () => {
       });
     }
 
-    // Self-registered students (no adults) should use 'hybrid' mode to see all module types
     const userType = user.dto.type === UserType.STUDENT && (!user.dto.adults || user.dto.adults.length === 0)
       ? 'hybrid'
       : user.dto.type;
 
-    const result = knowledgeGraph.getReachables(userType, userPassed, childrenReachedSets);
+    const result = knowledgeGraph.getReachables(userType, reached, childrenReachedSets);
 
     return {
       reachable: result.reachable,
       childrenReachableSets: result.childrenReachableSets
     };
-  }, [user.dto, user, knowledgeGraph]);
+  }, [user, reached, knowledgeGraph]);
 
   let reachableAndImplemented = React.useMemo(() => {
     return new Set(Array.from(reachable).filter(x => !!moduleComponents[x]));

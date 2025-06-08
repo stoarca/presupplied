@@ -1,0 +1,62 @@
+[
+  {
+    "id": "REPEAT_SOUNDS",
+    "title": "Help develop your baby's ability to repeat sounds",
+    "url": "https://www.youtube.com/watch?v=pym0KCKT_tE"
+  },
+  {
+    "id": "SING_ALPHABET", 
+    "title": "Teach your child to sing the alphabet",
+    "url": "https://www.youtube.com/watch?v=8jXJP8GR3x0"
+  },
+  {
+    "id": "RECOGNIZE_EYES_FACES_TRAINING",
+    "title": "Recognizing eyes and faces",
+    "url": "https://www.youtube.com/watch?v=2TZDgDCQ1Jo"
+  },
+  {
+    "id": "BABBLE_TRAINING",
+    "title": "Help your child develop the skill of babbling", 
+    "url": "https://www.youtube.com/watch?v=_TUN9auJXKE"
+  },
+  {
+    "id": "TUMMY_TIME_TRAINING",
+    "title": "Tips for tummy time",
+    "url": "https://www.youtube.com/watch?v=V_t5WtG_MNY"
+  },
+  {
+    "id": "SOCIAL_SMILE_TRAINING",
+    "title": "Tips for getting your baby to do a social smile",
+    "url": "https://www.youtube.com/watch?v=x8iqKhAqzi0"
+  },
+  {
+    "id": "TRACKING_FACE_TRAINING",
+    "title": "Tips for developing your baby's ability to follow your face",
+    "url": "https://www.youtube.com/watch?v=XN2bOw64gIU"
+  },
+  {
+    "id": "TRACKING_SOUND_TRAINING",
+    "title": "Helping your baby track sounds with his eyes",
+    "url": "https://www.youtube.com/watch?v=j0jZWUcwUWM"
+  },
+  {
+    "id": "TRACKING_OBJECTS_TRAINING",
+    "title": "Tips for developing your baby's ability to follow objects",
+    "url": "https://www.youtube.com/watch?v=WcFIZ-eDMfU"
+  },
+  {
+    "id": "RECOGNIZE_SAY_TRAINING",
+    "title": "Helping your baby learn the word \"say\"",
+    "url": "https://www.youtube.com/watch?v=-G0xX5OdeCg"
+  },
+  {
+    "id": "PS_TESTING_TEACHER_VIDEO",
+    "title": "This is a test teaching video",
+    "url": "https://www.youtube.com/watch?v=2TZDgDCQ1J"
+  },
+  {
+    "id": "PS_TESTING_STUDENT_VIDEO",
+    "title": "This is a test learning video", 
+    "url": "https://www.youtube.com/watch?v=pym0KCKT_t"
+  }
+]

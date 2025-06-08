@@ -8,19 +8,18 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 
-// Import for type only
-import type { UserProgress } from './UserProgress';
+import type { User } from './User';
 import { ProgressVideoStatus } from '../../../common/types';
 
-interface UserProgressVideoParams {
-  userProgress: UserProgress;
-  videoVanityId: string;
+interface UserVideoProgressParams {
+  user: User;
+  videoId: string;
   status: ProgressVideoStatus;
 }
 
 @Entity()
-@Index(['userProgress', 'videoVanityId'], {unique: true})
-export class UserProgressVideo {
+@Index(['user', 'videoId'], {unique: true})
+export class UserVideoProgress {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -30,12 +29,11 @@ export class UserProgressVideo {
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  // Use string literal to avoid circular dependency in runtime
-  @ManyToOne('UserProgress', 'videos')
-  userProgress: UserProgress;
+  @ManyToOne('User', { onDelete: 'CASCADE' })
+  user: User;
 
   @Column({ type: 'varchar' })
-  videoVanityId: string;
+  videoId: string;
 
   @Column({
     type: 'enum',
@@ -44,9 +42,9 @@ export class UserProgressVideo {
   })
   status: ProgressVideoStatus;
 
-  constructor(params: UserProgressVideoParams) {
-    this.userProgress = params.userProgress;
-    this.videoVanityId = params.videoVanityId;
+  constructor(params: UserVideoProgressParams) {
+    this.user = params.user;
+    this.videoId = params.videoId;
     this.status = params.status;
   }
 }

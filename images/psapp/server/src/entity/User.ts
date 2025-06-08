@@ -11,6 +11,7 @@ import {
 // Use type import to avoid circular dependency
 import type { UserProgress } from './UserProgress';
 import type { UserRelationship } from './UserRelationship';
+import type { UserVideoProgress } from './UserVideoProgress';
 
 import { UserType } from '../../../common/types';
 import type { ProfilePicture } from '../../../common/types';
@@ -69,7 +70,13 @@ export class User {
   )
   progress!: UserProgress[];
 
-  
+  @OneToMany(
+    'UserVideoProgress',
+    'user',
+    { cascade: true }
+  )
+  videoProgress!: UserVideoProgress[];
+
   @OneToMany(
     'UserRelationship',
     'adult',

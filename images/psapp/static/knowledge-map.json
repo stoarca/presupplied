@@ -23,13 +23,7 @@
       ],
       "title": "Repeating sounds",
       "description": "Help develop your baby's ability to repeat sounds.",
-      "studentVideos": [
-        {
-          "id": "REPEAT_SOUNDS",
-          "title": "Help develop your baby's ability to repeat sounds",
-          "url": "https://www.youtube.com/watch?v=pym0KCKT_tE"
-        }
-      ],
+      "studentVideos": ["REPEAT_SOUNDS"],
       "teacherVideos": [],
       "cell": {
         "i": 42,
@@ -169,13 +163,7 @@
       ],
       "title": "Singing the alphabet",
       "description": "Teach your child to sing the alphabet",
-      "studentVideos": [
-        {
-          "id": "SING_ALPHABET",
-          "title": "Teach your child to sing the alphabet",
-          "url": "https://www.youtube.com/watch?v=8jXJP8GR3x0"
-        }
-      ],
+      "studentVideos": ["SING_ALPHABET"],
       "teacherVideos": [],
       "cell": {
         "i": 43,
@@ -5199,13 +5187,7 @@
       "title": "Recognizing eyes and faces",
       "description": "The very first skill a baby learns is to recognize your eyes and face. To complete this module, a baby needs to be able to make and hold eye contact.",
       "studentVideos": [],
-      "teacherVideos": [
-        {
-          "id": "TRAINING",
-          "title": "Recognizing eyes and faces",
-          "url": "https://www.youtube.com/watch?v=2TZDgDCQ1Jo"
-        }
-      ],
+      "teacherVideos": ["RECOGNIZE_EYES_FACES_TRAINING"],
       "cell": {
         "i": 39,
         "j": 2
@@ -5221,13 +5203,7 @@
       "title": "Babbling",
       "description": "In this module, we'll help develop your baby's babbling.",
       "studentVideos": [],
-      "teacherVideos": [
-        {
-          "id": "BABBLE",
-          "title": "Help your child develop the skill of babbling",
-          "url": "https://www.youtube.com/watch?v=_TUN9auJXKE"
-        }
-      ],
+      "teacherVideos": ["BABBLE_TRAINING"],
       "cell": {
         "i": 44,
         "j": 4
@@ -5257,13 +5233,7 @@
       "title": "Lifting head while on tummy",
       "description": "In this module, we help develop your baby's ability to lift his/her head while on their tummy.",
       "studentVideos": [],
-      "teacherVideos": [
-        {
-          "id": "TRAINING",
-          "title": "Tips for tummy time",
-          "url": "https://www.youtube.com/watch?v=V_t5WtG_MNY"
-        }
-      ],
+      "teacherVideos": ["TUMMY_TIME_TRAINING"],
       "cell": {
         "i": 3,
         "j": 3
@@ -5278,13 +5248,7 @@
       "title": "Social smiles and signs of affection",
       "description": "In this module, we help develop your baby's ability to do a social smile.",
       "studentVideos": [],
-      "teacherVideos": [
-        {
-          "id": "TRAINING",
-          "title": "Tips for getting your baby to do a social smile",
-          "url": "https://www.youtube.com/watch?v=x8iqKhAqzi0"
-        }
-      ],
+      "teacherVideos": ["SOCIAL_SMILE_TRAINING"],
       "cell": {
         "i": 40,
         "j": 4
@@ -5299,13 +5263,7 @@
       "title": "Tracking faces",
       "description": "In this module, we develop your baby's ability to follow your face as it moves around.",
       "studentVideos": [],
-      "teacherVideos": [
-        {
-          "id": "TRAINING",
-          "title": "Tips for developing your baby's ability to follow your face",
-          "url": "https://www.youtube.com/watch?v=XN2bOw64gIU"
-        }
-      ],
+      "teacherVideos": ["TRACKING_FACE_TRAINING"],
       "cell": {
         "i": 4,
         "j": 3
@@ -5691,13 +5649,7 @@
       "title": "Tracking sound",
       "description": "In this module, we help develop your baby's ability to track sounds with his eyes.",
       "studentVideos": [],
-      "teacherVideos": [
-        {
-          "id": "TRAINING",
-          "title": "Helping your baby track sounds with his eyes",
-          "url": "https://www.youtube.com/watch?v=j0jZWUcwUWM"
-        }
-      ],
+      "teacherVideos": ["TRACKING_SOUND_TRAINING"],
       "cell": {
         "i": 42,
         "j": 3
@@ -5712,13 +5664,7 @@
       "title": "Tracking objects",
       "description": "In this module, we develop your baby's ability to follow objects with their eyes",
       "studentVideos": [],
-      "teacherVideos": [
-        {
-          "id": "TRAINING",
-          "title": "Tips for developing your baby's ability to follow objects",
-          "url": "https://www.youtube.com/watch?v=WcFIZ-eDMfU"
-        }
-      ],
+      "teacherVideos": ["TRACKING_OBJECTS_TRAINING"],
       "cell": {
         "i": 5,
         "j": 4
@@ -7738,13 +7684,7 @@
       "title": "Recognizing \"say\"",
       "description": "In this module, we help teach your baby the meaning of the word \"say\".",
       "studentVideos": [],
-      "teacherVideos": [
-        {
-          "id": "TRAINING",
-          "title": "Helping your baby learn the word \"say\"",
-          "url": "https://www.youtube.com/watch?v=-G0xX5OdeCg"
-        }
-      ],
+      "teacherVideos": ["RECOGNIZE_SAY_TRAINING"],
       "cell": {
         "i": 43,
         "j": 3

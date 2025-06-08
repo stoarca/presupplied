@@ -7,8 +7,23 @@ export class TechTree extends DepGraph<GraphNode> {
   _memoizedGrid!: string[][];
   _memoizedRows!: number;
   _memoizedCols!: number;
-  _cachedOverallOrder!: string[];
   _cachedModulesByType!: Map<ModuleType, Set<string>>;
+
+  getModulesByType(moduleType: ModuleType): Set<string> {
+    if (this._cachedModulesByType.get(ModuleType.ADULT_OWNED)!.size === 0 &&
+        this._cachedModulesByType.get(ModuleType.CHILD_DELEGATED)!.size === 0 &&
+        this._cachedModulesByType.get(ModuleType.CHILD_OWNED)!.size === 0) {
+      this.overallOrder().forEach(kmid => {
+        const node = this.getNodeData(kmid);
+        const typeSet = this._cachedModulesByType.get(node.moduleType);
+        if (!typeSet) {
+          throw new Error(`Unknown module type: ${node.moduleType}`);
+        }
+        typeSet.add(kmid);
+      });
+    }
+    return this._cachedModulesByType.get(moduleType)!;
+  }
 
   constructor() {
     super();
@@ -62,7 +77,7 @@ export class TechTree extends DepGraph<GraphNode> {
 
     if (userType === UserType.STUDENT) {
       const studentReached = new Set(reached);
-      const adultOwnedModules = this._cachedModulesByType.get(ModuleType.ADULT_OWNED)!;
+      const adultOwnedModules = this.getModulesByType(ModuleType.ADULT_OWNED);
       adultOwnedModules.forEach(kmid => studentReached.add(kmid));
 
       const studentReachable = this.getBasicReachable(studentReached);
@@ -89,7 +104,7 @@ export class TechTree extends DepGraph<GraphNode> {
     });
 
     if (childrenReachedSets) {
-      const adultOwnedModules = this._cachedModulesByType.get(ModuleType.ADULT_OWNED)!;
+      const adultOwnedModules = this.getModulesByType(ModuleType.ADULT_OWNED);
 
       const checkAllAdultDepsReached = (kmid: string): boolean => {
         const deps = this.dependenciesOf(kmid);
@@ -152,7 +167,6 @@ export class TechTree extends DepGraph<GraphNode> {
     this._memoizedGrid = new Array(200).fill(0).map(x => new Array(120));
     this._memoizedRows = 0;
     this._memoizedCols = 0;
-    this._cachedOverallOrder = [];
     this._cachedModulesByType = new Map([
       [ModuleType.ADULT_OWNED, new Set()],
       [ModuleType.CHILD_DELEGATED, new Set()],
@@ -193,16 +207,6 @@ export const buildGraph = (graphJson: GraphJson) => {
     }
   }
 
-  // Populate caches after graph is built
-  graph._cachedOverallOrder = graph.overallOrder();
-  graph._cachedOverallOrder.forEach(kmid => {
-    const node = graph.getNodeData(kmid);
-    const typeSet = graph._cachedModulesByType.get(node.moduleType);
-    if (!typeSet) {
-      throw new Error(`Unknown module type: ${node.moduleType}`);
-    }
-    typeSet.add(kmid);
-  });
 
   return graph;
 };

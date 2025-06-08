@@ -10,7 +10,7 @@ import { In, Like, Not } from 'typeorm';
 import { AppDataSource } from './data-source';
 import { User } from './entity/User';
 import { UserProgress } from './entity/UserProgress';
-import { UserProgressVideo } from './entity/UserProgressVideo';
+import { UserVideoProgress } from './entity/UserVideoProgress';
 import { Module } from './entity/Module';
 import { UserRelationship } from './entity/UserRelationship';
 import { env } from './env';

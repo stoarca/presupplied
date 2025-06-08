@@ -369,7 +369,22 @@ export let PanZoomDiv = React.forwardRef<HTMLDivElement, PanZoomDivProps>(({
     onTouchEnd,
   ]);
 
-  let scale = 1000 / viewBox.w;
+  const [containerSize, setContainerSize] = React.useState({ width: 0, height: 0 });
+
+  React.useLayoutEffect(() => {
+    const updateSize = () => {
+      if (innerRef.current) {
+        const rect = innerRef.current.getBoundingClientRect();
+        setContainerSize({ width: rect.width, height: rect.height });
+      }
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
+  let scale = containerSize.width > 0 ? containerSize.width / viewBox.w : 1;
   let transformStyle = {
     transform: `scale(${scale}) translate(${-viewBox.x}px, ${-viewBox.y}px)`,
     transformOrigin: '0 0',
@@ -384,14 +399,16 @@ export let PanZoomDiv = React.forwardRef<HTMLDivElement, PanZoomDivProps>(({
         ...style
       }}
       {...divProps}>
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        ...transformStyle
-      }}>
+      <div
+        data-test="pan-zoom-transform"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          ...transformStyle
+        }}>
         {children}
       </div>
     </div>

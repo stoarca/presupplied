@@ -5,12 +5,14 @@ import { AppDataSource } from '../data-source';
 import { User } from '../entity/User';
 import { UserRelationship } from '../entity/UserRelationship';
 import { UserInvitation, InvitationStatus } from '../entity/UserInvitation';
+import { UserVideoProgress } from '../entity/UserVideoProgress';
 import {
   UserProgressDTO,
   UserDTO,
   UserType,
   RelationshipType,
-  InvitationDTO
+  InvitationDTO,
+  VideoProgressDTO
 } from '../../../common/types';
 import { typedGet, typedPost } from '../typedRoutes';
 
@@ -38,7 +40,7 @@ export const setupUserRoutes = (router: express.Router) => {
       if (childId === adultUser.id) {
         selectedUser = await userRepo.findOne({
           where: { id: adultUser.id },
-          relations: { progress: { module: true } }
+          relations: { progress: { module: true }, videoProgress: true }
         });
       } else {
         const relationshipRepo = AppDataSource.getRepository(UserRelationship);
@@ -55,13 +57,13 @@ export const setupUserRoutes = (router: express.Router) => {
 
         selectedUser = await userRepo.findOne({
           where: { id: childId },
-          relations: { progress: { module: true } }
+          relations: { progress: { module: true }, videoProgress: true }
         });
       }
     } else {
       selectedUser = await userRepo.findOne({
         where: { email: req.jwtUser.email },
-        relations: { progress: { module: true } }
+        relations: { progress: { module: true }, videoProgress: true }
       });
     }
 
@@ -83,6 +85,13 @@ export const setupUserRoutes = (router: express.Router) => {
         };
         return acc;
       }, {} as UserProgressDTO),
+      videoProgress: selectedUser.videoProgress.reduce((acc, x) => {
+        acc[x.videoId] = {
+          status: x.status,
+          updatedAt: x.updatedAt.toISOString()
+        };
+        return acc;
+      }, {} as VideoProgressDTO),
       pendingInvites: [],
     };
 
@@ -338,6 +347,7 @@ export const setupUserRoutes = (router: express.Router) => {
         profilePicture: targetUser.profilePicture,
         pinRequired: targetUser.pinRequired,
         progress: {},
+        videoProgress: {},
         pendingInvites: []
       };
       
@@ -401,6 +411,7 @@ export const setupUserRoutes = (router: express.Router) => {
         profilePicture: targetUser.profilePicture,
         pinRequired: targetUser.pinRequired,
         progress: {},
+        videoProgress: {},
         adults: targetUser.adultRelationships.map(rel => ({
           id: rel.adult.id,
           name: rel.adult.name,

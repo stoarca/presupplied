@@ -23,11 +23,12 @@ interface UserSelectorProps {
   onClose: () => void;
   onSelect: (userId: number) => void;
   title: string;
+  subtitle?: string;
   users: UserOption[];
   wasShiftClick?: boolean;
 }
 
-export const UserSelector = ({ open, onClose, onSelect, title, users, wasShiftClick = false }: UserSelectorProps) => {
+export const UserSelector = ({ open, onClose, onSelect, title, subtitle, users, wasShiftClick = false }: UserSelectorProps) => {
   const handleUserSelect = (userId: number) => {
     onSelect(userId);
     onClose();
@@ -39,6 +40,7 @@ export const UserSelector = ({ open, onClose, onSelect, title, users, wasShiftCl
       onClose={onClose}
       maxWidth="md"
       fullWidth
+      data-test="user-selector-dialog"
     >
       <DialogTitle sx={{ textAlign: 'center', pb: 0 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
@@ -53,6 +55,11 @@ export const UserSelector = ({ open, onClose, onSelect, title, users, wasShiftCl
             />
           )}
         </Box>
+        {subtitle && (
+          <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', mt: 1 }}>
+            {subtitle}
+          </Typography>
+        )}
       </DialogTitle>
       <DialogContent>
         <Box sx={{ minWidth: 275, maxWidth: 600, mx: 'auto' }}>
