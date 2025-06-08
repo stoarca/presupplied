@@ -1,6 +1,6 @@
-MIT License
+MIT License with Attribution Requirement
 
-Copyright (c) Sergiu Toarca and affiliates.
+Copyright (c) 2025 presupplied.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -9,8 +9,21 @@ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
+
+2. Any distribution, public deployment, or derivative work of the Software that
+   includes a user interface must display a visible hyperlink to
+   https://presupplied.com on the homepage, the map view, and each individual
+   learning module of the user interface. For the purposes of this license:
+   - The "homepage" is defined as the primary or initial page presented to users
+     when accessing the user interface of the Software or its derivative work.
+   - The "map view" is defined as the page or interface component that displays
+     a map or spatial representation of the learning modules.
+   - An "individual learning module" is defined as a distinct page or interface
+     component that delivers a specific educational lesson or activity.
+   The hyperlink must be clearly labeled as "presupplied.com Homepage" and must
+   remain functional and accessible to users on each specified interface.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,

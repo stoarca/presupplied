@@ -4,7 +4,7 @@ import * as XC from 'xdotoolify/dist/common';
 import { UserType } from '/presupplied/images/psapp/common/types';
 import { typedFetch } from '/presupplied/images/psapp/client/src/typedFetch';
 import * as C from './common';
-import { moduleCardSelector, settingsLink, manageChildrenLink, childCardSelector } from './common';
+import { moduleCardSelector, settingsLink, manageChildrenLink, childCardSelector, navButtonChildrenSelector } from './common';
 
 interface RegistrationDetails {
   name: string;
@@ -33,7 +33,6 @@ interface ChildDetails extends ChildStep1Details, ChildStep2Details {}
 // Base selectors for navigation and forms
 export const registerLink = 'a[href="/register"]';
 export const loginLink = '[data-test="login-button-navbar"]';
-export const navButtonChildren = '[data-test="nav-button-children"]';
 export const nameInput = 'input[name="name"]';
 export const emailInput = 'input[name="email"]';
 export const passwordInput = 'input[name="password"]';
@@ -217,8 +216,8 @@ export const submitLogin = Xdotoolify.setupWithPage(async (page, expectSuccess =
 // Child account management  
 export const openChildCreator = Xdotoolify.setupWithPage(async (page) => {
   await page.X
-    .checkUntil(XC.visibleElementCount, navButtonChildren, 1)
-    .run(XC.autoClick, navButtonChildren)
+    .checkUntil(XC.visibleElementCount, navButtonChildrenSelector, 1)
+    .run(XC.autoClick, navButtonChildrenSelector)
     .checkUntil(XC.evaluate, () => {
       return window.location.pathname;
     }, '/children')
@@ -366,8 +365,8 @@ export const navigateToChildProfile = Xdotoolify.setupWithPage(
     } else {
       const childCardSelector = getChildCardSelector(childId);
       await page.X
-        .checkUntil(XC.visibleElementCount, navButtonChildren, 1)
-        .run(XC.autoClick, navButtonChildren)
+        .checkUntil(XC.visibleElementCount, navButtonChildrenSelector, 1)
+        .run(XC.autoClick, navButtonChildrenSelector)
         .checkUntil(XC.evaluate, () => {
           return window.location.pathname;
         }, '/children')

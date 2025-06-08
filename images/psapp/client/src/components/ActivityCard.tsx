@@ -22,7 +22,8 @@ export let ActivityCard = ({ kmid, user, relevantChildrenSorted = [], mapMode = 
   const { handleModuleClick, ModuleInteractionComponents } = useModuleInteraction(
     kmid,
     user,
-    relevantChildrenSorted
+    relevantChildrenSorted,
+    knowledgeGraph
   );
 
   return (

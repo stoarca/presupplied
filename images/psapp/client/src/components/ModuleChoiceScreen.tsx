@@ -12,7 +12,7 @@ import {
   Star as StarIcon,
   School as DiplomaIcon,
 } from '@mui/icons-material';
-import { VideoInfo, UserType, ModuleType, ProgressVideoStatus, VideoProgressDTO } from '../../../common/types';
+import { VideoId, UserType, ModuleType, ProgressVideoStatus, VideoProgressDTO } from '../../../common/types';
 import { User } from '../UserContext';
 
 interface ModuleChoiceScreenProps {
@@ -21,8 +21,8 @@ interface ModuleChoiceScreenProps {
   moduleTitle: string;
   moduleType: ModuleType;
   user: User;
-  teacherVideos: VideoInfo[];
-  studentVideos: VideoInfo[];
+  teacherVideos: VideoId[];
+  studentVideos: VideoId[];
   watchedVideos: VideoProgressDTO;
   onTeachChoice: () => void;
   onLearnChoice: () => void;
@@ -50,13 +50,13 @@ export const ModuleChoiceScreen = ({
   const isChildDelegated = moduleType === ModuleType.CHILD_DELEGATED;
   const isHybridUser = user.isSelfManaged() && !isAdult;
 
-  const getUnwatchedVideosInfo = (videos: VideoInfo[]) => {
-    const unwatched = videos.filter(video =>
-      watchedVideos[video.id]?.status !== ProgressVideoStatus.WATCHED
+  const getUnwatchedVideosInfo = (videoIds: VideoId[]) => {
+    const unwatched = videoIds.filter(videoId =>
+      watchedVideos[videoId]?.status !== ProgressVideoStatus.WATCHED
     );
     return {
       count: unwatched.length,
-      total: videos.length,
+      total: videoIds.length,
     };
   };
 

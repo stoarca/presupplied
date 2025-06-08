@@ -5,7 +5,7 @@ import { AppDataSource } from '../data-source';
 import { User } from '../entity/User';
 import { UserRelationship } from '../entity/UserRelationship';
 import { typedPost, typedGet } from '../typedRoutes';
-import { RelationshipType, UserType, UserProgressDTO } from '../../../common/types';
+import { RelationshipType, UserType, UserProgressDTO, VideoProgressDTO } from '../../../common/types';
 
 // Store logs and errors for testing purposes
 const testLogs: string[] = [];
@@ -124,7 +124,7 @@ export const setupTestRoutes = (router: express.Router) => {
     const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.findOne({
       where: { email },
-      relations: ['progress', 'progress.module', 'childRelationships', 'childRelationships.child', 'childRelationships.child.progress', 'childRelationships.child.progress.module', 'childRelationships.child.progress.completedBy'],
+      relations: ['progress', 'progress.module', 'videoProgress', 'childRelationships', 'childRelationships.child', 'childRelationships.child.progress', 'childRelationships.child.progress.module', 'childRelationships.child.progress.completedBy'],
     });
 
     if (!user) {
@@ -148,6 +148,13 @@ export const setupTestRoutes = (router: express.Router) => {
         };
         return acc;
       }, {} as UserProgressDTO),
+      videoProgress: user.videoProgress.reduce((acc, x) => {
+        acc[x.videoId] = {
+          status: x.status,
+          updatedAt: x.updatedAt.toISOString()
+        };
+        return acc;
+      }, {} as VideoProgressDTO),
       pendingInvites: [],
       children: user.childRelationships.map(rel => ({
         id: rel.child.id,

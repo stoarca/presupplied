@@ -22,10 +22,11 @@ let genId = () => {
 };
 
 
-let CELL_WIDTH = 300;
-let CELL_W_PADDING = 75;
-let CELL_HEIGHT = 120;
-let CELL_H_PADDING = 30;
+export const CELL_WIDTH = 300;
+export const CELL_W_PADDING = 75;
+export const CELL_HEIGHT = 120;
+export const CELL_H_PADDING = 30;
+export const HOVER_RECT_BACKGROUND_COLOR = 'rgba(0, 204, 238, 0.2)';
 let nodePos = (cell: Cell) => {
   let ret = {
     x: cell.j * (CELL_WIDTH + CELL_W_PADDING),
@@ -60,7 +61,7 @@ interface KnowledgeNodeProps {
   childrenReachableSets?: Map<number, Set<string>>,
 };
 
-let KnowledgeNode = ({
+let KnowledgeNodeWithInteraction = ({
   kmid,
   knowledgeGraph,
   reached,
@@ -73,14 +74,52 @@ let KnowledgeNode = ({
   childrenReachedSets = new Map(),
   childrenReachableSets = new Map(),
 }: KnowledgeNodeProps) => {
-  let node = knowledgeGraph.getNodeData(kmid);
-  let pos = nodePos(node.cell);
-
   const { handleModuleClick, ModuleInteractionComponents } = useModuleInteraction(
     kmid,
     user,
-    relevantChildrenSorted
+    relevantChildrenSorted,
+    knowledgeGraph
   );
+
+  return (
+    <KnowledgeNode
+      kmid={kmid}
+      knowledgeGraph={knowledgeGraph}
+      reached={reached}
+      reachable={reachable}
+      dependants={dependants}
+      isSelected={isSelected}
+      admin={admin}
+      user={user}
+      relevantChildrenSorted={relevantChildrenSorted}
+      childrenReachedSets={childrenReachedSets}
+      childrenReachableSets={childrenReachableSets}
+      handleModuleClick={handleModuleClick}
+      ModuleInteractionComponents={ModuleInteractionComponents}
+    />
+  );
+};
+
+let KnowledgeNode = ({
+  kmid,
+  knowledgeGraph,
+  reached,
+  reachable,
+  dependants,
+  isSelected = false,
+  admin,
+  user,
+  relevantChildrenSorted = [],
+  childrenReachedSets = new Map(),
+  childrenReachableSets = new Map(),
+  handleModuleClick,
+  ModuleInteractionComponents,
+}: KnowledgeNodeProps & {
+  handleModuleClick?: (e: React.MouseEvent) => void,
+  ModuleInteractionComponents?: React.ReactNode,
+}) => {
+  let node = knowledgeGraph.getNodeData(kmid);
+  let pos = nodePos(node.cell);
 
   let backgroundColor: string;
   let opacity = 1;
@@ -106,12 +145,10 @@ let KnowledgeNode = ({
         break;
       }
     }
-    if (!isChildReached) {
-      for (let childReachable of childrenReachableSets.values()) {
-        if (childReachable.has(kmid)) {
-          isChildReachable = true;
-          break;
-        }
+    for (let childReachable of childrenReachableSets.values()) {
+      if (childReachable.has(kmid)) {
+        isChildReachable = true;
+        break;
       }
     }
 
@@ -121,10 +158,6 @@ let KnowledgeNode = ({
       backgroundColor = '#90EE90';
     } else {
       backgroundColor = '#777777';
-    }
-
-    if ((isChildReached || isChildReachable) && !isUserReached && !isUserReachable) {
-      opacity = 0.3;
     }
   }
 
@@ -136,6 +169,7 @@ let KnowledgeNode = ({
   return (
     <>
       <div
+        data-test={`map-module-node-${kmid}`}
         onClick={!admin ? handleModuleClick : undefined}
         style={{
           position: 'absolute',
@@ -150,47 +184,56 @@ let KnowledgeNode = ({
           cursor: 'pointer',
         }}
       >
-        <div style={{
-          width: '100%',
-          height: '100%',
-          backgroundColor,
-          borderRadius: '8px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '10px',
-          boxSizing: 'border-box',
-        }}>
-          <div style={{
-            color: '#333',
-            fontSize: '14px',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            marginBottom: showChildren ? '8px' : '0',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
+        <div
+          data-test="map-module-bg"
+          style={{
             width: '100%',
+            height: '100%',
+            backgroundColor,
+            borderRadius: '8px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '10px',
+            boxSizing: 'border-box',
           }}>
+          <div
+            data-test="map-module-title"
+            style={{
+              color: '#333',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              marginBottom: showChildren ? '8px' : '0',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              width: '100%',
+            }}>
             {node.title || node.id}
           </div>
           {showChildren && (
-            <div style={{
-              display: 'flex',
-              gap: '8px',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexWrap: 'nowrap',
-              overflow: 'hidden',
-            }}>
+            <div
+              data-test="map-module-children"
+              style={{
+                display: 'flex',
+                gap: '8px',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexWrap: 'nowrap',
+                overflow: 'hidden',
+              }}>
               {relevantChildrenSorted.slice(0, 3).map(child => (
-                <div key={child.id} style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '2px',
-                }}>
+                <div
+                  key={child.id}
+                  data-test={`map-module-child-${child.id}`}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '2px',
+                  }}>
                   <Avatar
                     userType={UserType.STUDENT}
                     profilePicture={child.profilePicture}
@@ -200,15 +243,17 @@ let KnowledgeNode = ({
                       boxShadow: 'none',
                     }}
                   />
-                  <div style={{
-                    fontSize: '10px',
-                    color: '#333',
-                    fontWeight: 'bold',
-                    maxWidth: '50px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}>
+                  <div
+                    data-test="map-module-child-name"
+                    style={{
+                      fontSize: '10px',
+                      color: '#333',
+                      fontWeight: 'bold',
+                      maxWidth: '50px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}>
                     {child.name}
                   </div>
                 </div>
@@ -311,8 +356,8 @@ export let BaseKnowledgeMap = ({
     setViewBox({
       x: pos.x - w / 2 + CELL_WIDTH / 2,
       y: pos.y - h / 2 + CELL_HEIGHT / 2,
-      w: 2000,
-      h: 2000,
+      w: w,
+      h: h,
     });
   }, []);
 
@@ -320,6 +365,28 @@ export let BaseKnowledgeMap = ({
     let ret = knowledgeGraph.overallOrder();
     return ret;
   }, [knowledgeGraph]);
+
+  let shownModules = React.useMemo(() => {
+    if (admin) {
+      return new Map(topSorted.map(kmid => [kmid, true]));
+    }
+
+    const shown = new Map<string, boolean>();
+
+    for (const kmid of topSorted) {
+      if (!moduleComponents[kmid]) {
+        shown.set(kmid, false);
+        continue;
+      }
+
+      const dependencies = knowledgeGraph.directDependenciesOf(kmid);
+      const allDepsShown = dependencies.every(dep => shown.get(dep) === true);
+
+      shown.set(kmid, allDepsShown);
+    }
+
+    return shown;
+  }, [topSorted, knowledgeGraph, admin]);
 
   let [hoverCell, _setHoverCell] = React.useState<Cell | null>(null);
   let setHoverCell = React.useCallback((cell: Cell | null) => {
@@ -331,7 +398,7 @@ export let BaseKnowledgeMap = ({
 
   let handleMouseMove = React.useCallback((e: MouseEvent) => {
     let containerRect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
-    let scale = 1000 / viewBox.w;
+    let scale = containerRect.width / viewBox.w;
 
     // Convert mouse position to content coordinates accounting for CSS transforms
     let relativeX = e.clientX - containerRect.left;
@@ -361,7 +428,7 @@ export let BaseKnowledgeMap = ({
 
     if (!admin) {
       let hoverNodeId = grid[newHoverCell.i][newHoverCell.j];
-      if (!hoverNodeId) {
+      if (!hoverNodeId || !shownModules.get(hoverNodeId)) {
         setHoverCell(null);
         return;
       }
@@ -378,136 +445,110 @@ export let BaseKnowledgeMap = ({
     }
   }, [hoverCell, grid, admin, viewBox, setHoverCell]);
 
-  let edges = [];
-  let nodes = [];
-  for (let i = 0; i < topSorted.length; ++i) {
-    let kmid = topSorted[i];
-    let node = knowledgeGraph.getNodeData(kmid);
+  let { edges, nodes } = React.useMemo(() => {
+    let edges = [];
+    let nodes = [];
+    for (let i = 0; i < topSorted.length; ++i) {
+      let kmid = topSorted[i];
+      let node = knowledgeGraph.getNodeData(kmid);
 
-    if (!admin) {
-      if (!moduleComponents[kmid]) {
+      if (!admin && !shownModules.get(kmid)) {
         continue;
       }
 
-      let isUserReachedOrReachable = (reached && reached.has(kmid)) || (reachable && reachable.has(kmid));
-      let isChildModule = false;
+      let pos = nodePos(node.cell);
+      let dependants = knowledgeGraph.directDependantsOf(kmid);
 
-      for (let childReached of childrenReachedSets.values()) {
-        if (childReached.has(kmid)) {
-          isChildModule = true;
-          break;
-        }
-      }
-      if (!isChildModule) {
-        for (let childReachable of childrenReachableSets.values()) {
-          if (childReachable.has(kmid)) {
-            isChildModule = true;
-            break;
-          }
-        }
-      }
-
-      if (!isUserReachedOrReachable && !isChildModule) {
-        continue;
-      }
-    }
-
-    let pos = nodePos(node.cell);
-    let dependants = knowledgeGraph.directDependantsOf(kmid);
-
-    // Create edges first
-    for (let depKmid of dependants) {
-      if (!admin) {
-        if (!moduleComponents[depKmid]) {
+      // Create edges first
+      for (let depKmid of dependants) {
+        if (!admin && !shownModules.get(depKmid)) {
           continue;
         }
 
-        let isDepUserReachedOrReachable = (reached && reached.has(depKmid)) || (reachable && reachable.has(depKmid));
-        let isDepChildModule = false;
+        let dependant = knowledgeGraph.getNodeData(depKmid);
+        let dependantPos = nodePos(dependant.cell);
+        let isSelectedMe = selectedCells.some(
+          x => x.i === node.cell.i && x.j === node.cell.j
+        );
+        let isSelectedDep = selectedCells.some(
+          x => x.i === dependant.cell.i && x.j === dependant.cell.j
+        );
+        let strokeWidth = isSelectedDep || isSelectedMe ? 5 : 2;
+        let strokeColor = isSelectedDep || isSelectedMe ? 'blue' : 'black';
 
-        for (let childReached of childrenReachedSets.values()) {
-          if (childReached.has(depKmid)) {
-            isDepChildModule = true;
-            break;
-          }
-        }
-        if (!isDepChildModule) {
-          for (let childReachable of childrenReachableSets.values()) {
-            if (childReachable.has(depKmid)) {
-              isDepChildModule = true;
-              break;
-            }
-          }
-        }
-
-        if (!isDepUserReachedOrReachable && !isDepChildModule) {
-          continue;
-        }
+        edges.push(
+          <div
+            key={`dep-${kmid}-${depKmid}`}
+            style={{
+              position: 'absolute',
+              left: pos.x + CELL_WIDTH,
+              top: pos.y + CELL_HEIGHT / 2,
+              width: Math.sqrt(
+                Math.pow(dependantPos.x - pos.x - CELL_WIDTH, 2) +
+                Math.pow(dependantPos.y - pos.y, 2)
+              ),
+              height: strokeWidth,
+              backgroundColor: strokeColor,
+              transformOrigin: '0 50%',
+              transform: `rotate(${Math.atan2(
+                dependantPos.y - pos.y,
+                dependantPos.x - pos.x - CELL_WIDTH
+              )}rad)`,
+            }}
+          />
+        );
       }
 
-      let dependant = knowledgeGraph.getNodeData(depKmid);
-      let dependantPos = nodePos(dependant.cell);
-      let isSelectedMe = selectedCells.some(
+      let relevantChildrenSorted: ChildInfoWithProgress[] = [];
+      if (!admin && (node.moduleType === ModuleType.CHILD_DELEGATED || node.moduleType === ModuleType.CHILD_OWNED) && user.dto?.children) {
+        relevantChildrenSorted = user.dto.children
+            .filter((child: ChildInfoWithProgress) => {
+              const childReachable = childrenReachableSets.get(child.id);
+              return childReachable?.has(kmid) || false;
+            })
+            .sort((a: ChildInfoWithProgress, b: ChildInfoWithProgress) => a.name.localeCompare(b.name));
+      }
+
+      let isSelected = selectedCells.some(
         x => x.i === node.cell.i && x.j === node.cell.j
       );
-      let isSelectedDep = selectedCells.some(
-        x => x.i === dependant.cell.i && x.j === dependant.cell.j
-      );
-      let strokeWidth = isSelectedDep || isSelectedMe ? 5 : 2;
-      let strokeColor = isSelectedDep || isSelectedMe ? 'blue' : 'black';
 
-      edges.push(
-        <div
-          key={`dep-${kmid}-${depKmid}`}
-          style={{
-            position: 'absolute',
-            left: pos.x + CELL_WIDTH,
-            top: pos.y + CELL_HEIGHT / 2,
-            width: Math.sqrt(
-              Math.pow(dependantPos.x - pos.x - CELL_WIDTH, 2) +
-              Math.pow(dependantPos.y - pos.y, 2)
-            ),
-            height: strokeWidth,
-            backgroundColor: strokeColor,
-            transformOrigin: '0 50%',
-            transform: `rotate(${Math.atan2(
-              dependantPos.y - pos.y,
-              dependantPos.x - pos.x - CELL_WIDTH
-            )}rad)`,
-          }}
-        />
-      );
+      if (admin) {
+        nodes.push(
+          <KnowledgeNode key={kmid}
+            kmid={kmid}
+            knowledgeGraph={knowledgeGraph}
+            reached={reached}
+            reachable={reachable}
+            dependants={dependants}
+            isSelected={isSelected}
+            admin={admin}
+            user={user}
+            relevantChildrenSorted={relevantChildrenSorted}
+            childrenReachedSets={childrenReachedSets}
+            childrenReachableSets={childrenReachableSets}
+            handleModuleClick={undefined}
+            ModuleInteractionComponents={null}/>
+        );
+      } else {
+        nodes.push(
+          <KnowledgeNodeWithInteraction key={kmid}
+            kmid={kmid}
+            knowledgeGraph={knowledgeGraph}
+            reached={reached}
+            reachable={reachable}
+            dependants={dependants}
+            isSelected={isSelected}
+            admin={admin}
+            user={user}
+            relevantChildrenSorted={relevantChildrenSorted}
+            childrenReachedSets={childrenReachedSets}
+            childrenReachableSets={childrenReachableSets}/>
+        );
+      }
     }
-
-    let relevantChildrenSorted: ChildInfoWithProgress[] = [];
-    if (!admin && node.moduleType === ModuleType.CHILD_DELEGATED && user.dto?.children) {
-      relevantChildrenSorted = user.dto.children
-          .filter((child: ChildInfoWithProgress) => {
-            const childReachable = childrenReachableSets.get(child.id);
-            return childReachable?.has(kmid) || false;
-          })
-          .sort((a: ChildInfoWithProgress, b: ChildInfoWithProgress) => a.name.localeCompare(b.name));
-    }
-
-    let isSelected = selectedCells.some(
-      x => x.i === node.cell.i && x.j === node.cell.j
-    );
-
-    nodes.push(
-      <KnowledgeNode key={kmid}
-        kmid={kmid}
-        knowledgeGraph={knowledgeGraph}
-        reached={reached}
-        reachable={reachable}
-        dependants={dependants}
-        isSelected={isSelected}
-        admin={admin}
-        user={user}
-        relevantChildrenSorted={relevantChildrenSorted}
-        childrenReachedSets={childrenReachedSets}
-        childrenReachableSets={childrenReachableSets}/>
-    );
-  }
+    return { edges, nodes };
+  }, [topSorted, knowledgeGraph, admin, shownModules, selectedCells, reached, reachable, childrenReachableSets, childrenReachedSets, user]);
 
   let selectRects = selectedCells.map(x => {
     let pos = nodePos(x);
@@ -526,17 +567,18 @@ export let BaseKnowledgeMap = ({
   });
 
   let hoverRect = null;
-  if (hoverCell && grid[hoverCell.i] && grid[hoverCell.i][hoverCell.j]) {
+  if (hoverCell && (admin || (grid[hoverCell.i] && grid[hoverCell.i][hoverCell.j]))) {
     let pos = nodePos(hoverCell);
     hoverRect = (
       <div
+        data-test="map-hover-rectangle"
         style={{
           position: 'absolute',
           left: pos.x,
           top: pos.y,
           width: CELL_WIDTH,
           height: CELL_HEIGHT,
-          backgroundColor: 'rgba(0, 204, 238, 0.2)',
+          backgroundColor: HOVER_RECT_BACKGROUND_COLOR,
           pointerEvents: 'none',
           border: '2px solid rgba(0, 204, 238, 0.5)',
           borderRadius: '8px',
@@ -549,6 +591,7 @@ export let BaseKnowledgeMap = ({
   if (admin) {
     originMarker = (
       <div
+        data-test="origin-marker"
         style={{
           position: 'absolute',
           left: -CELL_HEIGHT / 6,
@@ -786,7 +829,7 @@ let AdminKnowledgeMap = ({
       setKnowledgeMap({
         ...knowledgeMap,
         nodes: [...knowledgeMap.nodes, {
-          id: 'newnode' + genId(),
+          id: 'NEW_MODULE_' + genId(),
           title: '',
           description: '',
           studentVideos: [],
@@ -1077,7 +1120,7 @@ let UserKnowledgeMap = ({
     Object.entries(user.progress()).filter(
       ([k, v]) => v.status === ProgressStatus.PASSED
     ).map(([k, v]) => k)
-  ), [user]);
+  ), [user, user.dto]);
   const { reachable, childrenReachableSets, childrenReachedSets } = React.useMemo(() => {
     if (!user.dto) {
       const result = knowledgeGraph.getReachables('hybrid', reached, new Map());
@@ -1111,7 +1154,7 @@ let UserKnowledgeMap = ({
       childrenReachableSets: result.childrenReachableSets,
       childrenReachedSets
     };
-  }, [knowledgeGraph, reached, user.dto]);
+  }, [user, reached, knowledgeGraph]);
 
   return (
     <React.Fragment>

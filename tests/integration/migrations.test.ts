@@ -27,6 +27,47 @@ describe('Migration Integration Tests', () => {
     ).toString().trim();
   }
 
+  function listAllTables(): string[] {
+    const result = queryDatabase(
+      "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE' ORDER BY table_name"
+    );
+    return result.split('\n').filter(line => line.trim() !== '').map(line => line.trim());
+  }
+
+  function printTableState(label: string): void {
+    console.log(`\n=== ${label} ===`);
+    const tables = listAllTables();
+    if (tables.length === 0) {
+      console.log('No tables found');
+    } else {
+      console.log('Tables:');
+      tables.forEach(table => console.log(`  - ${table}`));
+    }
+    console.log('================\n');
+  }
+
+  function getExpectedTableNames(): string[] {
+    const getTablesScript = `
+      import { AppDataSource } from './src/data-source.js';
+      await AppDataSource.initialize();
+      const tableNames = AppDataSource.entityMetadatas
+        .map(metadata => metadata.tableName)
+        .sort();
+      console.log(JSON.stringify(tableNames));
+      await AppDataSource.destroy();
+    `;
+    
+    const result = execSync(
+      `bun -e "${getTablesScript}"`,
+      {
+        ...execOptions,
+        stdio: 'pipe'
+      }
+    ).toString().trim();
+    
+    return JSON.parse(result);
+  }
+
   beforeAll(async () => {
     console.log('Starting PostgreSQL service...');
     execSync('service postgresql start', { stdio: 'pipe' });
@@ -154,6 +195,23 @@ describe('Migration Integration Tests', () => {
     
     expect(executedMigrations).toBe(totalMigrationCount);
     expect(pendingMigrations).toBe(0);
+  }, 30000);
+
+  it('should have database tables that exactly match entity definitions', async () => {
+    const actualTables = listAllTables().filter(table => table !== 'migrations').sort();
+    const expectedTables = getExpectedTableNames().filter(table => table !== 'migrations').sort();
+    
+    const missingTables = expectedTables.filter(table => !actualTables.includes(table));
+    if (missingTables.length > 0) {
+      throw new Error(`Missing tables in database: ${missingTables.join(', ')}`);
+    }
+    
+    const extraTables = actualTables.filter(table => !expectedTables.includes(table));
+    if (extraTables.length > 0) {
+      throw new Error(`Extra tables in database. TypeORM does not delete tables when the entity is deleted for some reason, you need to manually drop (and recreate in the downgrade) any tables that were removed. Extra tables: ${extraTables.join(', ')}`);
+    }
+    
+    expect(actualTables).toEqual(expectedTables);
   }, 30000);
 
   it('should revert all migrations successfully', async () => {

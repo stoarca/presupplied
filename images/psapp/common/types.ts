@@ -1,4 +1,5 @@
 import _KNOWLEDGE_MAP from '../static/knowledge-map.json';
+import _VIDEOS from '../static/videos.json';
 
 // Test modules to add in test mode only
 const TEST_MODULES = [
@@ -17,8 +18,8 @@ const TEST_MODULES = [
     deps: [],
     title: '', 
     description: 'Test module for child users',
-    studentVideos: [],
-    teacherVideos: [],
+    studentVideos: ['PS_TESTING_STUDENT_VIDEO'],
+    teacherVideos: ['PS_TESTING_TEACHER_VIDEO'],
     cell: { i: 1, j: 0 },
     moduleType: 'CHILD_OWNED'
   },
@@ -45,6 +46,22 @@ function createKnowledgeMap() {
     };
   }
   return _KNOWLEDGE_MAP;
+}
+
+// Convert videos list to dictionary for easy lookup
+const VIDEOS_DICT = _VIDEOS.reduce((acc, video) => {
+  acc[video.id] = video;
+  return acc;
+}, {} as Record<string, VideoInfo>);
+
+export const VIDEOS = VIDEOS_DICT;
+
+export function getVideoById(videoId: VideoId): VideoInfo {
+  return VIDEOS[videoId];
+}
+
+export function getVideosByIds(videoIds: VideoId[]): VideoInfo[] {
+  return videoIds.map(id => getVideoById(id));
 }
 
 // HACK: we keep this here even though GraphJson is defined later in the file
@@ -112,10 +129,9 @@ export interface VideoProgressEntryDTO {
 }
 
 export interface VideoProgressDTO {
-  [videoId: string]: VideoProgressEntryDTO;
+  [videoId: VideoId]: VideoProgressEntryDTO;
 }
 
-export type UserVideoProgressDTO = Partial<Record<KMId, VideoProgressDTO>>;
 
 
 export interface ProfilePicture {
@@ -153,6 +169,7 @@ export interface UserDTO {
   profilePicture?: ProfilePicture;
   pinRequired: boolean;
   progress: UserProgressDTO;
+  videoProgress: VideoProgressDTO;
   children?: ChildInfoWithProgress[];
   adults?: AdultInfo[];
   classmates?: ChildInfo[];
@@ -160,17 +177,20 @@ export interface UserDTO {
 }
 
 export interface VideoInfo {
-  id: string, // This id only has to be unique within a module
+  id: string,
   title: string,
   url: string,
 }
+
+type VideoType = typeof _VIDEOS;
+export type VideoId = VideoType[number]['id'];
 
 export interface GraphNodeInfo {
   id: string,
   title: string,
   description: string,
-  studentVideos: VideoInfo[],
-  teacherVideos: VideoInfo[],
+  studentVideos: VideoId[],
+  teacherVideos: VideoId[],
   moduleType: ModuleType,
 }
 export interface GraphNode extends GraphNodeInfo {

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Cell } from './types';
 import { TechTree } from './dependency-graph';
 import {
-  KNOWLEDGE_MAP, VideoInfo, GraphNodeInfo, ModuleType
+  KNOWLEDGE_MAP, VideoId, GraphNodeInfo, ModuleType
 } from '../../common/types';
 
 export let TOOLBAR_WIDTH = '550px';
@@ -13,27 +13,12 @@ type CI = React.ChangeEvent<HTMLInputElement>;
 type CT = React.ChangeEvent<HTMLTextAreaElement>;
 type M = React.MouseEvent<HTMLButtonElement>;
 
-let mapToMdLinks = (videoInfos: VideoInfo[]): string => {
-  return videoInfos.map(({ id, title, url }) => {
-    return `${id}: [${title}](${url})`; // markdown format
-  }).join('\n');
+let mapToVideoIds = (videoIds: VideoId[]): string => {
+  return videoIds.join(', ');
 };
 
-let mapFromMdLinks = (str: string): VideoInfo[] => {
-  let ret: VideoInfo[] = [];
-  let lines = str.split('\n').map(x => x.trim()).filter(x => !!x);
-  for (let line of lines) {
-    let match = line.match(/^([a-zA-Z0-9_]+):\s*\[([^[\]]+)\]\(([^()]+)\)$/);
-    if (!match) {
-      throw new Error('md links not valid');
-    }
-    ret.push({
-      id: match[1],
-      title: match[2],
-      url: match[3],
-    });
-  }
-  return ret;
+let mapFromVideoIds = (str: string): VideoId[] => {
+  return str.split(',').map(x => x.trim()).filter(x => !!x) as VideoId[];
 };
 
 interface ToolbarForOneProps {
@@ -60,8 +45,8 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
   React.useEffect(() => {
     setTempTitle(node.title);
     setTempDesc(node.description);
-    setTempStudentVids(mapToMdLinks(node.studentVideos));
-    setTempTeacherVids(mapToMdLinks(node.teacherVideos));
+    setTempStudentVids(mapToVideoIds(node.studentVideos));
+    setTempTeacherVids(mapToVideoIds(node.teacherVideos));
     setTempModuleType(node.moduleType);
   }, [node]);
   React.useEffect(() => {
@@ -101,27 +86,8 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
   let handleSubmit = React.useCallback((e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    let newStudentVids;
-    try {
-      newStudentVids = mapFromMdLinks(tempStudentVids);
-    } catch (e) {
-      if (!(e instanceof Error && e.message.includes('md links not valid'))) {
-        throw e;
-      }
-      alert('Student video links were not valid'); // eslint-disable-line no-alert
-      return;
-    }
-
-    let newTeacherVids;
-    try {
-      newTeacherVids = mapFromMdLinks(tempTeacherVids);
-    } catch (e) {
-      if (!(e instanceof Error && e.message.includes('md links not valid'))) {
-        throw e;
-      }
-      alert('Teacher video links were not valid'); // eslint-disable-line no-alert
-      return;
-    }
+    const newStudentVids = mapFromVideoIds(tempStudentVids);
+    const newTeacherVids = mapFromVideoIds(tempTeacherVids);
 
     props.onChangeNode(kmid, {
       id: tempId,
@@ -159,10 +125,11 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
   }, [kmid, props.onMoveTreeDown]);
 
   return (
-    <div>
+    <div data-test="module-edit-dialog">
       <form onSubmit={handleSubmit}>
         <div>
           <input type="text"
+            data-test="module-id-input"
             style={{ width: '100%' }}
             ref={ref}
             value={tempId}
@@ -188,7 +155,7 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
           <textarea
             style={{ width: '100%' }}
             value={tempStudentVids}
-            placeholder="videos for learning"
+            placeholder="video IDs for learning (comma-separated)"
             onChange={handleChangeStudentVids} />
         </div>
         Teaching videos:
@@ -196,7 +163,7 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
           <textarea
             style={{ width: '100%' }}
             value={tempTeacherVids}
-            placeholder="videos for teaching"
+            placeholder="video IDs for teaching (comma-separated)"
             onChange={handleChangeTeacherVids} />
         </div>
         <div>
@@ -213,7 +180,7 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
           </label>
         </div>
         <div>
-          <button type="submit">Apply</button>
+          <button type="submit" data-test="apply-button">Apply</button>
         </div>
       </form>
       <div>

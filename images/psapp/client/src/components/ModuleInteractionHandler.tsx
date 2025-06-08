@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProgressStatus, ModuleType, UserType, ChildInfoWithProgress, ProgressVideoStatus, VideoInfo, VideoProgressDTO } from '../../../common/types';
-import { buildGraph } from '../dependency-graph';
-import { KNOWLEDGE_MAP } from '../../../common/types';
+import { TechTree } from '../dependency-graph';
 import { User } from '../UserContext';
 import { UserSelector } from './UserSelector';
 import { ModuleChoiceScreen } from './ModuleChoiceScreen';
@@ -11,7 +10,6 @@ import { useErrorContext } from '../ErrorContext';
 import { Modal } from '@mui/material';
 import YouTube, { YouTubeEvent, YouTubeProps } from 'react-youtube';
 
-const knowledgeGraph = buildGraph(KNOWLEDGE_MAP);
 
 let extractYouTubeId = (url: string): string | null => {
   let regExp =
@@ -82,10 +80,11 @@ let VideoModal = ({
 export const useModuleInteraction = (
   kmid: string,
   user: User,
-  relevantChildrenSorted: ChildInfoWithProgress[] = []
+  relevantChildrenSorted: ChildInfoWithProgress[] = [],
+  knowledgeGraph: TechTree
 ) => {
   const navigate = useNavigate();
-  const node = React.useMemo(() => knowledgeGraph.getNodeData(kmid), [kmid]);
+  const node = React.useMemo(() => knowledgeGraph.getNodeData(kmid), [kmid, knowledgeGraph]);
   const [showChildSelector, setShowChildSelector] = React.useState(false);
   const [wasShiftClick, setWasShiftClick] = React.useState(false);
   const [showChoiceScreen, setShowChoiceScreen] = React.useState(false);
@@ -99,24 +98,26 @@ export const useModuleInteraction = (
 
 
   const relevantChildrenOptions = React.useMemo(() => {
-    return relevantChildrenSorted.map(child => ({
+    // For shift-click, show all children; otherwise show only relevant children
+    const childrenToShow = wasShiftClick && user.dto?.children
+      ? user.dto.children
+      : relevantChildrenSorted;
+
+    return childrenToShow.map(child => ({
       id: child.id,
       name: child.name,
       userType: UserType.STUDENT,
       profilePicture: child.profilePicture
     }));
-  }, [relevantChildrenSorted]);
+  }, [relevantChildrenSorted, wasShiftClick, user.dto?.children]);
 
   React.useEffect(() => {
-    const loadWatchedVideos = async () => {
-      try {
-        const videos = await user.videos(kmid);
-        setWatchedVideos(videos);
-      } catch (error) {
-        console.error('Error loading watched videos:', error);
-      }
-    };
-    loadWatchedVideos();
+    try {
+      const videos = user.videos(kmid);
+      setWatchedVideos(videos);
+    } catch (error) {
+      console.error('Error loading watched videos:', error);
+    }
   }, [kmid, user]);
 
   React.useEffect(() => {
@@ -157,28 +158,47 @@ export const useModuleInteraction = (
     } else if (node.moduleType === ModuleType.CHILD_DELEGATED && relevantChildrenSorted.length > 1) {
       setShowChildSelector(true);
     } else if (isShiftClick) {
-      // For shift-click with no videos and no child selector needed, mark progress directly
-      try {
-        const currentStatus = user.progress()[kmid]?.status || ProgressStatus.NOT_ATTEMPTED;
-        const newStatus = currentStatus === ProgressStatus.PASSED ?
-          ProgressStatus.NOT_ATTEMPTED : ProgressStatus.PASSED;
+      // For shift-click on adult modules, mark progress directly for the current user
+      if (node.moduleType === ModuleType.ADULT_OWNED) {
+        try {
+          const currentStatus = user.progress()[kmid]?.status || ProgressStatus.NOT_ATTEMPTED;
+          const newStatus = currentStatus === ProgressStatus.PASSED ?
+            ProgressStatus.NOT_ATTEMPTED : ProgressStatus.PASSED;
 
-        if (user.dto && node.moduleType === ModuleType.CHILD_DELEGATED && relevantChildrenSorted.length > 0) {
-          await user.markReached({
-            [kmid]: newStatus
-          }, relevantChildrenSorted[0].id);
-        } else {
           await user.markReached({
             [kmid]: newStatus
           });
+        } catch (error) {
+          console.error('Error marking progress:', error);
+          showError({
+            code: 'MARK_PROGRESS_ERROR',
+            message: error instanceof Error ? error.message : 'Failed to mark progress'
+          });
         }
-      } catch (error) {
-        console.error('Error marking progress:', error);
-        showError({
-          code: 'MARK_PROGRESS_ERROR',
-          message: error instanceof Error ? error.message : 'Failed to mark progress'
-        });
+      } else if (user.dto?.children && user.dto.children.length > 0) {
+        // For non-adult modules, show child selector if there are children
+        setShowChildSelector(true);
+      } else {
+        // No children, mark progress directly for the current user
+        try {
+          const currentStatus = user.progress()[kmid]?.status || ProgressStatus.NOT_ATTEMPTED;
+          const newStatus = currentStatus === ProgressStatus.PASSED ?
+            ProgressStatus.NOT_ATTEMPTED : ProgressStatus.PASSED;
+
+          await user.markReached({
+            [kmid]: newStatus
+          });
+        } catch (error) {
+          console.error('Error marking progress:', error);
+          showError({
+            code: 'MARK_PROGRESS_ERROR',
+            message: error instanceof Error ? error.message : 'Failed to mark progress'
+          });
+        }
       }
+    } else if (node.moduleType === ModuleType.CHILD_DELEGATED && relevantChildrenSorted.length > 0) {
+      const returnTo = window.location.pathname;
+      navigate(`/modules/${kmid}?childId=${relevantChildrenSorted[0].id}&returnTo=${encodeURIComponent(returnTo)}`);
     } else {
       navigate(`/modules/${kmid}`);
     }
@@ -202,30 +222,48 @@ export const useModuleInteraction = (
     if (node.moduleType === ModuleType.CHILD_DELEGATED && relevantChildrenSorted.length > 1) {
       setShowChildSelector(true);
     } else if (wasShiftClick) {
-      try {
-        const currentStatus = user.progress()[kmid]?.status || ProgressStatus.NOT_ATTEMPTED;
-        const newStatus = currentStatus === ProgressStatus.PASSED ?
-          ProgressStatus.NOT_ATTEMPTED : ProgressStatus.PASSED;
+      // For shift-click on adult modules, mark progress directly for the current user
+      if (node.moduleType === ModuleType.ADULT_OWNED) {
+        try {
+          const currentStatus = user.progress()[kmid]?.status || ProgressStatus.NOT_ATTEMPTED;
+          const newStatus = currentStatus === ProgressStatus.PASSED ?
+            ProgressStatus.NOT_ATTEMPTED : ProgressStatus.PASSED;
 
-        if (user.dto && node.moduleType === ModuleType.CHILD_DELEGATED && relevantChildrenSorted.length > 0) {
-          await user.markReached({
-            [kmid]: newStatus
-          }, relevantChildrenSorted[0].id);
-        } else {
           await user.markReached({
             [kmid]: newStatus
           });
+        } catch (error) {
+          showError({
+            code: 'MARK_PROGRESS_ERROR',
+            message: error instanceof Error ? error.message : 'Failed to mark progress'
+          });
         }
-      } catch (error) {
-        showError({
-          code: 'MARK_PROGRESS_ERROR',
-          message: error instanceof Error ? error.message : 'Failed to mark progress'
-        });
+      } else if (user.dto?.children && user.dto.children.length > 0) {
+        // For non-adult modules, show child selector if there are children
+        setShowChildSelector(true);
+      } else {
+        // No children, mark progress directly for the current user
+        try {
+          const currentStatus = user.progress()[kmid]?.status || ProgressStatus.NOT_ATTEMPTED;
+          const newStatus = currentStatus === ProgressStatus.PASSED ?
+            ProgressStatus.NOT_ATTEMPTED : ProgressStatus.PASSED;
+
+          await user.markReached({
+            [kmid]: newStatus
+          });
+        } catch (error) {
+          showError({
+            code: 'MARK_PROGRESS_ERROR',
+            message: error instanceof Error ? error.message : 'Failed to mark progress'
+          });
+        }
       }
     } else if (node.moduleType === ModuleType.CHILD_DELEGATED && relevantChildrenSorted.length > 0) {
-      navigate(`/modules/${kmid}?childId=${relevantChildrenSorted[0].id}`);
+      const returnTo = window.location.pathname;
+      navigate(`/modules/${kmid}?childId=${relevantChildrenSorted[0].id}&returnTo=${encodeURIComponent(returnTo)}`);
     } else {
-      navigate(`/modules/${kmid}`);
+      const returnTo = window.location.pathname;
+      navigate(`/modules/${kmid}?returnTo=${encodeURIComponent(returnTo)}`);
     }
   }, [navigate, kmid, wasShiftClick, user, node.moduleType, relevantChildrenSorted, showError]);
 
@@ -233,7 +271,9 @@ export const useModuleInteraction = (
     setShowChildSelector(false);
 
     if (wasShiftClick) {
-      const currentStatus = user.progress()[kmid]?.status || ProgressStatus.NOT_ATTEMPTED;
+      // For shift-click, toggle the child's progress on this module
+      const selectedChild = user.dto?.children?.find(child => child.id === childId);
+      const currentStatus = selectedChild?.progress[kmid]?.status || ProgressStatus.NOT_ATTEMPTED;
       const newStatus = currentStatus === ProgressStatus.PASSED ?
         ProgressStatus.NOT_ATTEMPTED : ProgressStatus.PASSED;
 
@@ -241,16 +281,15 @@ export const useModuleInteraction = (
         [kmid]: newStatus
       }, childId);
     } else {
-      navigate(`/modules/${kmid}?childId=${childId}`);
+      const returnTo = window.location.pathname;
+      navigate(`/modules/${kmid}?childId=${childId}&returnTo=${encodeURIComponent(returnTo)}`);
     }
   }, [kmid, user, navigate, wasShiftClick]);
 
   const handleVideoSelect = React.useCallback(async (video: VideoInfo) => {
     if (wasShiftClick) {
       await user.markWatched({
-        [kmid]: {
-          [video.id]: ProgressVideoStatus.WATCHED,
-        },
+        [video.id]: ProgressVideoStatus.WATCHED,
       });
     } else {
       // Push a history entry for the video
@@ -265,14 +304,12 @@ export const useModuleInteraction = (
 
   const handleVideoDone = React.useCallback(async () => {
     await user.markWatched({
-      [kmid]: {
-        [currentVideoId]: ProgressVideoStatus.WATCHED,
-      },
+      [currentVideoId]: ProgressVideoStatus.WATCHED,
     });
 
     // Go back in history to return to video list
     window.history.back();
-  }, [kmid, user, currentVideoId]);
+  }, [user, currentVideoId]);
 
   const ModuleInteractionComponents = (
     <>
@@ -280,7 +317,8 @@ export const useModuleInteraction = (
         open={showChildSelector}
         onClose={() => setShowChildSelector(false)}
         onSelect={handleChildSelect}
-        title={wasShiftClick ? 'Which child would you like to mark progress for?' : 'Which child would you like to complete this module with?'}
+        title={node.title || node.id}
+        subtitle="Which child would you like to complete this module with?"
         users={relevantChildrenOptions}
         wasShiftClick={wasShiftClick}
       />

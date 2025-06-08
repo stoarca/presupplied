@@ -7,10 +7,10 @@ import {
   ProgressStatus,
   ProgressVideoStatus,
   UserProgressDTO,
-  UserVideoProgressDTO,
   VideoProgressDTO,
   ModuleType,
-  UserType
+  UserType,
+  VideoId
 } from '../../common/types';
 import { TechTree } from './dependency-graph';
 import { typedFetch, API_HOST } from './typedFetch';
@@ -77,23 +77,41 @@ export class User {
     return ret;
   }
 
-  async videos(kmid: KMId): Promise<VideoProgressDTO> {
+  videos(kmid: KMId): VideoProgressDTO {
     if (this.dto) {
-      let resp = await typedFetch({
-        host: API_HOST,
-        endpoint: '/api/learning/progressvideos/:kmid',
-        method: 'get',
-        params: {
-          kmid: kmid,
-        },
-      });
-      if ('success' in resp) {
-        return resp.videos;
+      const moduleNode = KNOWLEDGE_MAP.nodes.find(node => node.id === kmid);
+      if (!moduleNode) {
+        throw new Error(`Module ${kmid} not found in knowledge map`);
       }
-      throw new Error(JSON.stringify(resp));
+
+      const relevantVideoIds = [...moduleNode.studentVideos, ...moduleNode.teacherVideos];
+      const filteredProgress: VideoProgressDTO = {};
+
+      for (const videoId of relevantVideoIds) {
+        if (this.dto.videoProgress[videoId]) {
+          filteredProgress[videoId] = this.dto.videoProgress[videoId];
+        }
+      }
+
+      return filteredProgress;
     } else {
-      let progressVideo = typedLocalStorage.getJson('progressVideo');
-      return progressVideo?.[kmid] || {};
+      let progressVideo = typedLocalStorage.getJson('progressVideo') || {};
+
+      const moduleNode = KNOWLEDGE_MAP.nodes.find(node => node.id === kmid);
+      if (!moduleNode) {
+        throw new Error(`Module ${kmid} not found in knowledge map`);
+      }
+
+      const relevantVideoIds = [...moduleNode.studentVideos, ...moduleNode.teacherVideos];
+      const filteredProgress: VideoProgressDTO = {};
+
+      for (const videoId of relevantVideoIds) {
+        if (progressVideo[videoId]) {
+          filteredProgress[videoId] = progressVideo[videoId];
+        }
+      }
+
+      return filteredProgress;
     }
   }
 
@@ -101,10 +119,9 @@ export class User {
     if (this.dto) {
       const response = await typedFetch({
         host: API_HOST,
-        endpoint: '/api/learning/events',
+        endpoint: '/api/learning/module_progress',
         method: 'post',
         body: {
-          type: 'module',
           modules: mapObject(modules, ([kmid, status]) => {
             return [kmid, {
               events: [{
@@ -151,28 +168,24 @@ export class User {
   }
 
   async markWatched(
-    moduleVideos: Record<KMId, Record<string, ProgressVideoStatus>>,
+    videos: Record<VideoId, ProgressVideoStatus>,
     onBehalfOfStudentId?: number
   ) {
     if (this.dto) {
-      const moduleVideosDTO: UserVideoProgressDTO = {};
-      for (const kmid in moduleVideos) {
-        moduleVideosDTO[kmid] = {};
-        for (const videoId in moduleVideos[kmid]) {
-          moduleVideosDTO[kmid]![videoId] = {
-            status: moduleVideos[kmid][videoId],
-            updatedAt: new Date().toISOString()
-          };
-        }
+      const videosDTO: VideoProgressDTO = {};
+      for (const videoId in videos) {
+        videosDTO[videoId] = {
+          status: videos[videoId],
+          updatedAt: new Date().toISOString()
+        };
       }
 
       const response = await typedFetch({
         host: API_HOST,
-        endpoint: '/api/learning/events',
+        endpoint: '/api/learning/video_progress',
         method: 'post',
         body: {
-          type: 'video',
-          moduleVideos: moduleVideosDTO,
+          videos: videosDTO,
           onBehalfOfStudentId
         },
       });
@@ -181,23 +194,13 @@ export class User {
         throw new Error(response.message || 'Failed to mark video as watched');
       }
     } else {
-      let progressVideo = typedLocalStorage.getJson('progressVideo');
-      if (!progressVideo) {
-        progressVideo = {};
-      }
+      let progressVideo: VideoProgressDTO = typedLocalStorage.getJson('progressVideo') || {};
 
-      for (let kmid in moduleVideos) {
-        if (!progressVideo[kmid]) {
-          progressVideo[kmid] = {};
-        }
-
-        let videos = moduleVideos[kmid];
-        for (let videoVanityId in videos) {
-          progressVideo[kmid]![videoVanityId] = {
-            status: videos[videoVanityId],
-            updatedAt: new Date().toISOString()
-          };
-        }
+      for (const videoId in videos) {
+        progressVideo[videoId] = {
+          status: videos[videoId],
+          updatedAt: new Date().toISOString()
+        };
       }
       typedLocalStorage.setJson('progressVideo', progressVideo);
     }
@@ -240,29 +243,6 @@ export class User {
     return { adultProgress, childProgress };
   }
 
-  separateProgressVideosByModuleType(knowledgeGraph: TechTree, progressVideos: UserVideoProgressDTO): {
-    adultProgressVideos: UserVideoProgressDTO;
-    childProgressVideos: UserVideoProgressDTO;
-  } {
-    const adultProgressVideos: UserVideoProgressDTO = {};
-    const childProgressVideos: UserVideoProgressDTO = {};
-
-    for (const [kmid, videos] of Object.entries(progressVideos)) {
-      try {
-        const module = knowledgeGraph.getNodeData(kmid);
-
-        if (module.moduleType === ModuleType.ADULT_OWNED) {
-          adultProgressVideos[kmid] = videos;
-        } else {
-          childProgressVideos[kmid] = videos;
-        }
-      } catch {
-        console.error(`Module ${kmid} not found in knowledge graph`);
-      }
-    }
-
-    return { adultProgressVideos, childProgressVideos };
-  }
 
   private filterPassedProgress(progress: UserProgressDTO): UserProgressDTO {
     return Object.entries(progress).reduce((acc, [kmid, entry]) => {
@@ -273,55 +253,56 @@ export class User {
     }, {} as UserProgressDTO);
   }
 
-  private async syncProgressBatch(
-    modules: UserProgressDTO,
-    videos: UserVideoProgressDTO,
-    onBehalfOfStudentId?: number
-  ): Promise<void> {
-    const passedModules = this.filterPassedProgress(modules);
-
-
-    if (Object.keys(passedModules).length > 0) {
-      const resp = await typedFetch({
-        host: API_HOST,
-        endpoint: '/api/learning/events',
-        method: 'post',
-        body: {
-          type: 'module',
-          modules: passedModules,
-          onBehalfOfStudentId,
-        },
-      });
-
-      if (!('success' in resp)) {
-        throw new Error(resp.message);
-      }
-    }
-
-    if (Object.keys(videos).length > 0) {
-      const resp = await typedFetch({
-        host: API_HOST,
-        endpoint: '/api/learning/events',
-        method: 'post',
-        body: {
-          type: 'video',
-          moduleVideos: videos,
-          onBehalfOfStudentId,
-        },
-      });
-
-      if (!('success' in resp)) {
-        throw new Error(resp.message);
-      }
-    }
-  }
-
   async mergeToServer(onBehalfOfStudentId?: number) {
     const progress = typedLocalStorage.getJson('progress') || {};
     const progressVideo = typedLocalStorage.getJson('progressVideo') || {};
 
+    const passedModules = this.filterPassedProgress(progress);
 
-    await this.syncProgressBatch(progress, progressVideo, onBehalfOfStudentId);
+    if (Object.keys(passedModules).length > 0) {
+      const resp = await typedFetch({
+        host: API_HOST,
+        endpoint: '/api/learning/module_progress',
+        method: 'post',
+        body: {
+          modules: mapObject(passedModules, ([kmid, entry]) => {
+            return [kmid, {
+              events: entry.events,
+            }];
+          }),
+          onBehalfOfStudentId,
+        },
+      });
+
+      if ('errorCode' in resp) {
+        throw new Error(resp.message);
+      }
+    }
+
+    if (Object.keys(progressVideo).length > 0) {
+      const videosDTO: VideoProgressDTO = {};
+      for (const videoId in progressVideo) {
+        const videoEntry = progressVideo[videoId];
+        videosDTO[videoId] = {
+          status: videoEntry.status,
+          updatedAt: videoEntry.updatedAt
+        };
+      }
+
+      const resp = await typedFetch({
+        host: API_HOST,
+        endpoint: '/api/learning/video_progress',
+        method: 'post',
+        body: {
+          videos: videosDTO,
+          onBehalfOfStudentId,
+        },
+      });
+
+      if ('errorCode' in resp) {
+        throw new Error(resp.message);
+      }
+    }
 
     typedLocalStorage.removeJson('progress');
     typedLocalStorage.removeJson('progressVideo');
@@ -332,16 +313,90 @@ export class User {
     const progressVideo = typedLocalStorage.getJson('progressVideo') || {};
 
     const { adultProgress, childProgress } = this.separateProgressByModuleType(knowledgeGraph, progress);
-    const { adultProgressVideos, childProgressVideos } = this.separateProgressVideosByModuleType(knowledgeGraph, progressVideo);
 
-    // Sync adult progress to self
-    if (Object.keys(adultProgress).length > 0 || Object.keys(adultProgressVideos).length > 0) {
-      await this.syncProgressBatch(adultProgress, adultProgressVideos);
+    if (Object.keys(adultProgress).length > 0) {
+      const passedAdultModules = this.filterPassedProgress(adultProgress);
+      if (Object.keys(passedAdultModules).length > 0) {
+        const resp = await typedFetch({
+          host: API_HOST,
+          endpoint: '/api/learning/module_progress',
+          method: 'post',
+          body: {
+            modules: mapObject(passedAdultModules, ([kmid, entry]) => {
+              return [kmid, {
+                events: entry.events,
+              }];
+            }),
+          },
+        });
+
+        if ('errorCode' in resp) {
+          throw new Error(resp.message);
+        }
+      }
     }
 
-    // Sync child progress to specified child
-    if (childId && (Object.keys(childProgress).length > 0 || Object.keys(childProgressVideos).length > 0)) {
-      await this.syncProgressBatch(childProgress, childProgressVideos, childId);
+    if (childId && Object.keys(childProgress).length > 0) {
+      const passedChildModules = this.filterPassedProgress(childProgress);
+      if (Object.keys(passedChildModules).length > 0) {
+        const resp = await typedFetch({
+          host: API_HOST,
+          endpoint: '/api/learning/module_progress',
+          method: 'post',
+          body: {
+            modules: mapObject(passedChildModules, ([kmid, entry]) => {
+              return [kmid, {
+                events: entry.events,
+              }];
+            }),
+            onBehalfOfStudentId: childId,
+          },
+        });
+
+        if ('errorCode' in resp) {
+          throw new Error(resp.message);
+        }
+      }
+    }
+
+    if (Object.keys(progressVideo).length > 0) {
+      const videosDTO: VideoProgressDTO = {};
+      for (const videoId in progressVideo) {
+        const videoEntry = progressVideo[videoId];
+        videosDTO[videoId] = {
+          status: videoEntry.status,
+          updatedAt: videoEntry.updatedAt
+        };
+      }
+
+      if (childId) {
+        const resp = await typedFetch({
+          host: API_HOST,
+          endpoint: '/api/learning/video_progress',
+          method: 'post',
+          body: {
+            videos: videosDTO,
+            onBehalfOfStudentId: childId,
+          },
+        });
+
+        if ('errorCode' in resp) {
+          throw new Error(resp.message);
+        }
+      } else {
+        const resp = await typedFetch({
+          host: API_HOST,
+          endpoint: '/api/learning/video_progress',
+          method: 'post',
+          body: {
+            videos: videosDTO,
+          },
+        });
+
+        if ('errorCode' in resp) {
+          throw new Error(resp.message);
+        }
+      }
     }
 
     typedLocalStorage.removeJson('progress');

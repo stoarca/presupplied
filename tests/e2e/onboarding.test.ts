@@ -17,7 +17,7 @@ import {
   userMenuButton,
   accountAvatarBase
 } from './onboarding';
-import { UserType, RelationshipType, ProgressStatus } from '/presupplied/images/psapp/common/types';
+import { UserType, RelationshipType, ProgressStatus, ProgressVideoStatus } from '/presupplied/images/psapp/common/types';
 
 const sortCards = (cardList: { title: string; childIds: number[] }[]) => cardList
   .map(card => ({ 
@@ -44,18 +44,7 @@ describe('Presupplied Onboarding E2E Tests', () => {
   });
 
   afterEach(async () => {
-    const errors = await C.fetchWebErrors();
-    if (errors.length > 0) {
-      console.error('Client-side errors detected:');
-      errors.forEach(error => console.error(` - ${error}`));
-      throw new Error('Client-side errors detected during test');
-    }
-
-    const logs = await C.fetchWebLogs();
-    if (logs.length > 0) {
-      console.log('Client-side logs:');
-      logs.forEach(log => console.log(` - ${log}`));
-    }
+    await C.checkForErrorsAndLogs();
     
     if (page) {
       await page.quit();
@@ -281,11 +270,37 @@ describe('Presupplied Onboarding E2E Tests', () => {
         expect(calibrationCards.length).toBe(1);
         expect(cards.length).toBe(4);
       })
+      .run(C.shiftClickModuleCard, 'PS_TESTING_CHILD')
+      .checkUntil(XC.visibleElementCount, C.moduleChoiceDialogSelector, 1)
+      .run(C.selectModuleChoice, 'teach')
+      .checkUntil(XC.visibleElementCount, C.videoListDialogSelector, 1)
+      .run(C.selectVideo, 0)
+      .checkUntil(C.getVideoListInfo, (videos) => {
+        expect(videos[0].isWatched).toBe(true);
+        expect(videos[0].status).toBe('Watched');
+        const today = new Date().toLocaleDateString();
+        const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toLocaleDateString();
+        expect([today, yesterday]).toContain(videos[0].lastWatched);
+      })
+      .run(C.closeVideoList)
+      .run(C.selectModuleChoice, 'learn')
+      .checkUntil(XC.visibleElementCount, C.videoListDialogSelector, 1)
+      .run(C.selectVideo, 0)
+      .checkUntil(C.getVideoListInfo, (videos) => {
+        expect(videos[0].isWatched).toBe(true);
+        expect(videos[0].status).toBe('Watched');
+        const today = new Date().toLocaleDateString();
+        const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toLocaleDateString();
+        expect([today, yesterday]).toContain(videos[0].lastWatched);
+      })
+      .run(C.closeVideoList)
+      .run(C.selectModuleChoice, 'mastery')
+      .checkUntil(XC.visibleElementCount, C.moduleChoiceDialogSelector, 0)
       .run(C.shiftClickModuleCard, 'Skill calibration')
       .checkUntil(C.getModuleCardInfo, (cards) => {
         const eyesCards = cards.filter(card => card.title === 'Recognizing eyes and faces');
         expect(eyesCards.length).toBe(1);
-        expect(cards.length).toBe(4);
+        expect(cards.length).toBe(3);
       })
       .checkUntil(XC.evaluate, () => {
         const progress = localStorage.getItem('progress');
@@ -294,6 +309,17 @@ describe('Presupplied Onboarding E2E Tests', () => {
         expect(progress).not.toBeNull();
         expect(progress['INTRODUCTION']).toBeDefined();
         expect(progress['CALIBRATION']).toBeDefined();
+        expect(progress['PS_TESTING_CHILD']).toBeDefined();
+      })
+      .checkUntil(XC.evaluate, () => {
+        const progressVideo = localStorage.getItem('progressVideo');
+        return progressVideo ? JSON.parse(progressVideo) : null;
+      }, (progressVideo: any) => {
+        expect(progressVideo).not.toBeNull();
+        expect(progressVideo['PS_TESTING_TEACHER_VIDEO']).toBeDefined();
+        expect(progressVideo['PS_TESTING_TEACHER_VIDEO'].status).toBe(ProgressVideoStatus.WATCHED);
+        expect(progressVideo['PS_TESTING_STUDENT_VIDEO']).toBeDefined();
+        expect(progressVideo['PS_TESTING_STUDENT_VIDEO'].status).toBe(ProgressVideoStatus.WATCHED);
       })
       .run(Onboarding.registerUser, {
         name: 'Test Parent',
@@ -371,7 +397,9 @@ describe('Presupplied Onboarding E2E Tests', () => {
           expect(child2Info.progress).toBeDefined();
           expect(child2Info.progress['CALIBRATION']).toBeDefined();
           expect(child2Info.progress['CALIBRATION'].status).toBe(ProgressStatus.PASSED);
-          expect(Object.keys(child2Info.progress).length).toBe(1);
+          expect(child2Info.progress['PS_TESTING_CHILD']).toBeDefined();
+          expect(child2Info.progress['PS_TESTING_CHILD'].status).toBe(ProgressStatus.PASSED);
+          expect(Object.keys(child2Info.progress).length).toBe(2);
         }
       })
       .do();
@@ -401,6 +429,7 @@ describe('Presupplied Onboarding E2E Tests', () => {
         expect(cards.length).toBe(4);
       })
       .run(C.shiftClickModuleCard, 'Recognizing eyes and faces')
+      .checkUntil(XC.visibleElementCount, C.moduleChoiceDialogSelector, 1)
       .run(C.selectModuleChoice, 'mastery')
       .checkUntil(XC.evaluate, () => {
         const progress = localStorage.getItem('progress');
@@ -542,6 +571,7 @@ describe('Presupplied Onboarding E2E Tests', () => {
         expect(cards.length).toBe(3);
       })
       .run(C.shiftClickModuleCard, 'Skill calibration')
+      .checkUntil(XC.visibleElementCount, C.userSelectorDialogSelector, 1)
       .run(Onboarding.selectAccount, child1Id)
       .checkUntil(C.getModuleCardInfo, (cards) => {
         const eyesFacesCard = cards.find(card => card.title === 'Recognizing eyes and faces');
@@ -577,7 +607,10 @@ describe('Presupplied Onboarding E2E Tests', () => {
         expect(cards.length).toBe(3);
       })
       .run(C.shiftClickModuleCard, 'Recognizing eyes and faces')
+      .checkUntil(XC.visibleElementCount, C.moduleChoiceDialogSelector, 1)
       .run(C.selectModuleChoice, 'mastery')
+      .checkUntil(XC.visibleElementCount, C.userSelectorDialogSelector, 1)
+      .run(Onboarding.selectAccount, child1Id)
       .checkUntil(C.getModuleCardInfo, (cards) => {
         expect(cards.length).toBe(6);
         const trackingCards = cards.filter(card => card.title === 'Tracking sound');
