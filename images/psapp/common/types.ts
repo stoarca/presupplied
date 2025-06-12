@@ -77,6 +77,11 @@ export enum UserType {
   STUDENT = 'student',
 }
 
+export enum Gender {
+  MALE = 'male',
+  FEMALE = 'female'
+}
+
 export enum RelationshipType {
   PRIMARY = 'primary',       // Primary caretaker - can manage child and assign others
   SECONDARY = 'secondary',   // Secondary caretaker - can manage child but not modify relationships
@@ -145,6 +150,8 @@ export interface ChildInfo {
   profilePicture: ProfilePicture;
   pinRequired: boolean;
   relationshipType: RelationshipType;
+  birthday?: string | null;
+  gender?: Gender | null;
 }
 
 export interface ChildInfoWithProgress extends ChildInfo {
@@ -174,6 +181,8 @@ export interface UserDTO {
   adults?: AdultInfo[];
   classmates?: ChildInfo[];
   pendingInvites: InvitationDTO[];
+  birthday?: string | null;
+  gender?: Gender | null;
 }
 
 export interface VideoInfo {

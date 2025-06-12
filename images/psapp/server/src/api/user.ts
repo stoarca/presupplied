@@ -93,6 +93,8 @@ export const setupUserRoutes = (router: express.Router) => {
         return acc;
       }, {} as VideoProgressDTO),
       pendingInvites: [],
+      birthday: selectedUser.birthday ? selectedUser.birthday.toString() : null,
+      gender: selectedUser.gender || null
     };
 
     if (selectedUser.type === UserType.PARENT || selectedUser.type === UserType.TEACHER) {
@@ -118,7 +120,9 @@ export const setupUserRoutes = (router: express.Router) => {
               events: [],
             };
             return acc;
-          }, {} as UserProgressDTO)
+          }, {} as UserProgressDTO),
+          birthday: rel.child.birthday ? rel.child.birthday.toString() : null,
+          gender: rel.child.gender || null
         }));
       }
 
@@ -199,7 +203,9 @@ export const setupUserRoutes = (router: express.Router) => {
                 name: rel.child.name,
                 profilePicture: rel.child.profilePicture!,
                 pinRequired: rel.child.pinRequired,
-                relationshipType: rel.type
+                relationshipType: rel.type,
+                birthday: rel.child.birthday ? rel.child.birthday.toString() : null,
+                gender: rel.child.gender || null
               }));
             }
           }
@@ -258,6 +264,12 @@ export const setupUserRoutes = (router: express.Router) => {
       if (req.body.profilePicture) {
         targetUser.profilePicture = req.body.profilePicture;
       }
+      if (req.body.birthday !== undefined) {
+        targetUser.birthday = req.body.birthday ? new Date(req.body.birthday) : null;
+      }
+      if (req.body.gender !== undefined) {
+        targetUser.gender = req.body.gender || null;
+      }
       await userRepo.save(targetUser);
       return resp.json({
         success: true
@@ -285,6 +297,12 @@ export const setupUserRoutes = (router: express.Router) => {
       }
       if (req.body.profilePicture) {
         targetUser.profilePicture = req.body.profilePicture;
+      }
+      if (req.body.birthday !== undefined) {
+        targetUser.birthday = req.body.birthday ? new Date(req.body.birthday) : null;
+      }
+      if (req.body.gender !== undefined) {
+        targetUser.gender = req.body.gender || null;
       }
       await userRepo.save(targetUser);
       return resp.json({
@@ -348,7 +366,9 @@ export const setupUserRoutes = (router: express.Router) => {
         pinRequired: targetUser.pinRequired,
         progress: {},
         videoProgress: {},
-        pendingInvites: []
+        pendingInvites: [],
+        birthday: targetUser.birthday ? targetUser.birthday.toString() : null,
+        gender: targetUser.gender || null
       };
       
       return resp.json({
@@ -421,7 +441,9 @@ export const setupUserRoutes = (router: express.Router) => {
           relationshipType: rel.type,
           loggedIn: rel.adult.id === currentUser.id
         })),
-        pendingInvites: invites
+        pendingInvites: invites,
+        birthday: targetUser.birthday ? targetUser.birthday.toString() : null,
+        gender: targetUser.gender || null
       };
 
       return resp.json({

@@ -20,6 +20,8 @@ interface LoginCredentials {
 
 interface ChildStep1Details {
   name: string;
+  birthday?: string;
+  gender?: 'male' | 'female';
   pinRequired?: boolean;
   pin?: string;
 }
@@ -71,6 +73,8 @@ export const getAccountSwitcherAccountIds = Xdotoolify.setupWithPage(async (page
 // Child creation selectors
 export const addChildCard = '[data-test="add-child-card"]';
 export const childNameInput = 'input[data-test="child-name-input"]';
+export const birthdayInput = 'input[data-test="birthday-input"]';
+export const genderSelect = '[data-test="gender-select"]';
 export const pinRequiredCheckbox = 'input[data-test="pin-required-checkbox"]';
 export const pinInput = 'input[data-test="pin-input"]';
 export const createChildNextButton = 'button[data-test="create-child-next-button"]';
@@ -230,12 +234,35 @@ export const openChildCreator = Xdotoolify.setupWithPage(async (page) => {
     .do();
 });
 
-export const enterChildDetails = Xdotoolify.setupWithPage(async (page, { name, pinRequired = false, pin = "" }: ChildStep1Details) => {
+export const enterChildDetails = Xdotoolify.setupWithPage(async (page, { name, birthday, gender, pinRequired = false, pin = "" }: ChildStep1Details) => {
   await page.X
     .checkUntil(XC.visibleElementCount, childNameInput, 1)
     .run(XC.autoType, childNameInput, name)
     .checkUntil(XC.getInputValue, childNameInput, name)
     .do();
+
+  if (birthday) {
+    await page.X
+      .checkUntil(XC.visibleElementCount, birthdayInput, 1)
+      .run(XC.autoType, birthdayInput, birthday, { overwrite: true })
+      .checkUntil(XC.getInputValue, birthdayInput, (value: string) => {
+        // HTML date inputs store values in YYYY-MM-DD format
+        // Convert MM/DD/YYYY to YYYY-MM-DD for comparison
+        const [month, day, year] = birthday.split('/');
+        const expectedValue = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        return value === expectedValue;
+      })
+      .do();
+  }
+
+  if (gender) {
+    await page.X
+      .checkUntil(XC.visibleElementCount, genderSelect, 1)
+      .run(XC.autoClick, genderSelect, { unsafeIgnoreUnmatchedClick: true })
+      .checkUntil(XC.visibleElementCount, `[data-test="gender-${gender}"]`, 1)
+      .run(XC.autoClick, `[data-test="gender-${gender}"]`)
+      .do();
+  }
 
   if (pinRequired) {
     await page.X

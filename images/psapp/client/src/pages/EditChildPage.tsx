@@ -5,7 +5,7 @@ import { NavBar } from '../components/NavBar';
 import { ChildProfileEditor } from '../components/ChildProfileEditor';
 import { useUserContext } from '../UserContext';
 import { typedFetch, API_HOST } from '../typedFetch';
-import { UserDTO, RelationshipType } from '../../../common/types';
+import { UserDTO, RelationshipType, Gender } from '../../../common/types';
 
 export const EditChildPage = () => {
   const { childId } = useParams<{ childId: string }>();
@@ -20,7 +20,9 @@ export const EditChildPage = () => {
     pinRequired: false,
     pin: '',
     avatarPath: '',
-    avatarColor: ''
+    avatarColor: '',
+    birthday: null as string | null,
+    gender: null as Gender | null
   });
 
   useEffect(() => {
@@ -46,7 +48,9 @@ export const EditChildPage = () => {
             pinRequired: response.user.pinRequired,
             pin: '',
             avatarPath: response.user.profilePicture!.image,
-            avatarColor: response.user.profilePicture!.background
+            avatarColor: response.user.profilePicture!.background,
+            birthday: response.user.birthday || null,
+            gender: response.user.gender || null
           });
         } else {
           setError('Child not found or access denied');

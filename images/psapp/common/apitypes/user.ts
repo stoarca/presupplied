@@ -1,4 +1,4 @@
-import { UserDTO, ProfilePicture } from '../types';
+import { UserDTO, ProfilePicture, Gender } from '../types';
 
 export type UserEndpoints = {
   '/api/user': {
@@ -42,6 +42,8 @@ export type UserEndpoints = {
       Body: {
         name?: string,
         profilePicture?: ProfilePicture,
+        birthday?: string | null,
+        gender?: Gender | null,
       },
       Response: {
         success: true,

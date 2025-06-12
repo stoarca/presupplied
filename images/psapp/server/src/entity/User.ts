@@ -13,7 +13,7 @@ import type { UserProgress } from './UserProgress';
 import type { UserRelationship } from './UserRelationship';
 import type { UserVideoProgress } from './UserVideoProgress';
 
-import { UserType } from '../../../common/types';
+import { UserType, Gender } from '../../../common/types';
 import type { ProfilePicture } from '../../../common/types';
 
 interface UserParams {
@@ -24,6 +24,8 @@ interface UserParams {
   profilePicture?: ProfilePicture;
   pin?: string;
   pinRequired?: boolean;
+  birthday?: Date | null;
+  gender?: Gender | null;
 }
 
 @Entity()
@@ -62,6 +64,16 @@ export class User {
   
   @Column({ type: 'boolean', default: false })
   pinRequired: boolean;
+
+  @Column({ type: 'date', nullable: true })
+  birthday?: Date | null;
+
+  @Column({
+    type: 'enum',
+    enum: Gender,
+    nullable: true
+  })
+  gender?: Gender | null;
 
   @OneToMany(
     'UserProgress',
@@ -115,5 +127,7 @@ export class User {
     this.profilePicture = params.profilePicture;
     this.pin = params.pin;
     this.pinRequired = params.pinRequired || false;
+    this.birthday = params.birthday || null;
+    this.gender = params.gender || null;
   }
 }

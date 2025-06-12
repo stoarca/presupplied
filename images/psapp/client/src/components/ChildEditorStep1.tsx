@@ -7,16 +7,22 @@ import {
   FormControlLabel,
   Switch,
   Alert,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
-import { UserType } from '../../../common/types';
+import { UserType, Gender } from '../../../common/types';
 
 interface ChildEditorStep1Props {
   childData: {
     name: string;
     pinRequired: boolean;
     pin: string;
+    birthday?: string | null;
+    gender?: Gender | null;
   };
-  onDataChange: (field: string, value: string | boolean) => void;
+  onDataChange: (field: string, value: string | boolean | Gender | null) => void;
   onNext: () => void;
   error: string | null;
   userType: UserType;
@@ -82,6 +88,37 @@ export const ChildEditorStep1: React.FC<ChildEditorStep1Props> = ({
         helperText={childData.name !== '' && !isNameValid ? 'Name must be at least 2 characters' : ''}
         inputProps={{ 'data-test': 'child-name-input' }}
       />
+
+      <TextField
+        margin="normal"
+        fullWidth
+        id="birthday"
+        label="Birthday (optional)"
+        name="birthday"
+        type="date"
+        value={childData.birthday || ''}
+        onChange={(e) => onDataChange('birthday', e.target.value || null)}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        inputProps={{ 'data-test': 'birthday-input' }}
+      />
+
+      <FormControl fullWidth margin="normal">
+        <InputLabel id="gender-label">Gender (optional)</InputLabel>
+        <Select
+          labelId="gender-label"
+          id="gender"
+          value={childData.gender || ''}
+          onChange={(e) => onDataChange('gender', e.target.value ? e.target.value as Gender : null)}
+          label="Gender (optional)"
+          data-test="gender-select"
+        >
+          <MenuItem value="" data-test="gender-prefer-not-to-disclose">Prefer not to disclose</MenuItem>
+          <MenuItem value={Gender.MALE} data-test="gender-male">Male</MenuItem>
+          <MenuItem value={Gender.FEMALE} data-test="gender-female">Female</MenuItem>
+        </Select>
+      </FormControl>
 
       <FormControlLabel
         control={

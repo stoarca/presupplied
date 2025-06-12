@@ -43,7 +43,9 @@ export const setupChildrenRoutes = (router: express.Router) => {
         type: UserType.STUDENT,
         pinRequired: req.body.pinRequired || false,
         pin: req.body.pin,
-        profilePicture: req.body.profilePicture
+        profilePicture: req.body.profilePicture,
+        birthday: req.body.birthday ? new Date(req.body.birthday) : null,
+        gender: req.body.gender || null
       });
 
       const savedChildUser = await userRepo.save(childUser);
@@ -109,7 +111,9 @@ export const setupChildrenRoutes = (router: express.Router) => {
       name: rel.child.name,
       profilePicture: rel.child.profilePicture!,
       pinRequired: rel.child.pinRequired,
-      relationshipType: rel.type
+      relationshipType: rel.type,
+      birthday: rel.child.birthday ? rel.child.birthday.toString() : null,
+      gender: rel.child.gender || null
     }));
 
     return resp.json({

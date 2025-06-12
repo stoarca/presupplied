@@ -6,6 +6,7 @@ import { TechTree } from './dependency-graph';
 import {
   KNOWLEDGE_MAP, VideoId, GraphNodeInfo, ModuleType
 } from '../../common/types';
+import { moduleComponents } from './ModuleContext';
 
 export let TOOLBAR_WIDTH = '550px';
 
@@ -19,6 +20,36 @@ let mapToVideoIds = (videoIds: VideoId[]): string => {
 
 let mapFromVideoIds = (str: string): VideoId[] => {
   return str.split(',').map(x => x.trim()).filter(x => !!x) as VideoId[];
+};
+
+let getUnimplementedDependencies = (
+  moduleId: string,
+  knowledgeGraph: TechTree
+): string[] => {
+  const visited = new Set<string>();
+  const unimplemented: string[] = [];
+
+  const collectDependencies = (nodeId: string) => {
+    if (visited.has(nodeId)) {
+      return;
+    }
+    visited.add(nodeId);
+
+    try {
+      const dependencies = knowledgeGraph.directDependenciesOf(nodeId);
+      for (const dep of dependencies) {
+        if (!moduleComponents[dep]) {
+          unimplemented.push(dep);
+        }
+        collectDependencies(dep);
+      }
+    } catch {
+      // Module doesn't exist in graph, skip
+    }
+  };
+
+  collectDependencies(moduleId);
+  return [...new Set(unimplemented)];
 };
 
 interface ToolbarForOneProps {
@@ -124,6 +155,10 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
     props.onMoveTreeDown(kmid);
   }, [kmid, props.onMoveTreeDown]);
 
+  const unimplementedDeps = React.useMemo(() => {
+    return getUnimplementedDependencies(kmid, props.knowledgeGraph);
+  }, [kmid, props.knowledgeGraph]);
+
   return (
     <div data-test="module-edit-dialog">
       <form onSubmit={handleSubmit}>
@@ -203,6 +238,21 @@ let ToolbarForOne = (props: ToolbarForOneProps) => {
       <div>
         <button onClick={handleMoveTreeDown}>Move Tree Down</button>
       </div>
+      {unimplementedDeps.length > 0 && (
+        <div style={{ marginTop: '20px', padding: '10px', backgroundColor: '#ffe6e6', borderRadius: '4px' }}>
+          <strong>Unimplemented Dependencies:</strong>
+          <ul style={{ margin: '10px 0', paddingLeft: '20px' }}>
+            {unimplementedDeps.slice(0, 5).map(dep => (
+              <li key={dep} style={{ color: '#cc0000' }}>{dep}</li>
+            ))}
+            {unimplementedDeps.length > 5 && (
+              <li style={{ color: '#666', fontStyle: 'italic' }}>
+                ... and {unimplementedDeps.length - 5} more
+              </li>
+            )}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

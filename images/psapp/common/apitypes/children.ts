@@ -1,4 +1,4 @@
-import { ChildInfo, RelationshipType, ProfilePicture } from '../types';
+import { ChildInfo, RelationshipType, ProfilePicture, Gender } from '../types';
 
 export type ChildrenEndpoints = {
   '/api/children': {
@@ -28,6 +28,8 @@ export type ChildrenEndpoints = {
         pinRequired?: boolean,
         pin?: string,
         profilePicture?: ProfilePicture,
+        birthday?: string | null,
+        gender?: Gender | null,
       },
       Response: {
         success: true,

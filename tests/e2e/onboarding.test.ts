@@ -86,7 +86,12 @@ describe('Presupplied Onboarding E2E Tests', () => {
       .run(Onboarding.submitRegistration)
       .checkUntil(XC.elementText, Onboarding.userMenuButton, (x: string | null) => 
         expect(x?.toLowerCase()).toBe(validEmail.toLowerCase()))
-      .run(Onboarding.createChildComplete, { name: child1Name, avatarId: 'bear' })
+      .run(Onboarding.createChildComplete, { 
+        name: child1Name, 
+        birthday: '05/15/2020',
+        gender: 'female',
+        avatarId: 'bear' 
+      })
       .checkUntil(Onboarding.getUserInfo, validEmail, (userInfo) => {
         expect('success' in userInfo && userInfo.success).toBe(true);
         if ('success' in userInfo && userInfo.success) {

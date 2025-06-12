@@ -8,7 +8,7 @@ import { Card } from './Card';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { typedFetch, API_HOST } from '../typedFetch';
 import { useUserContext } from '../UserContext';
-import { UserType } from '../../../common/types';
+import { UserType, Gender } from '../../../common/types';
 import { ChildEditorStep1 } from './ChildEditorStep1';
 import { ChildEditorStep2 } from './ChildEditorStep2';
 
@@ -20,6 +20,8 @@ interface ChildProfileEditorProps {
     pin: string;
     avatarPath: string;
     avatarColor: string;
+    birthday?: string | null;
+    gender?: Gender | null;
   };
   childId?: string;
   onComplete: () => void;
@@ -43,11 +45,13 @@ export const ChildProfileEditor = ({
     pinRequired: false,
     pin: '',
     avatarPath: '/static/images/avatars/elephant.png',
-    avatarColor: '#88D8B0'
+    avatarColor: '#88D8B0',
+    birthday: null as string | null,
+    gender: null as Gender | null
   });
   const user = useUserContext();
 
-  const handleDataChange = (field: string, value: string | boolean) => {
+  const handleDataChange = (field: string, value: string | boolean | Gender | null) => {
     setChildData(prev => ({
       ...prev,
       [field]: value
@@ -85,7 +89,9 @@ export const ChildProfileEditor = ({
             name: childData.name,
             pin: childData.pin || undefined,
             pinRequired: childData.pinRequired,
-            profilePicture
+            profilePicture,
+            birthday: childData.birthday,
+            gender: childData.gender
           }
         });
 
@@ -102,7 +108,9 @@ export const ChildProfileEditor = ({
           params: { id: childId! },
           body: {
             name: childData.name.trim(),
-            profilePicture
+            profilePicture,
+            birthday: childData.birthday,
+            gender: childData.gender
           }
         });
 
