@@ -2,9 +2,10 @@ import React from 'react';
 
 import {useExercise, useTrainingDataRecorder, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
-import {ProbabilisticDeck, withAbort} from '@src/util';
+import {ProbabilisticDeck} from '@src/util';
 import {STTModule} from '@src/modules/common/SPEECH_TO_TEXT_SHIM/ModuleBuilder';
 import {LETTER_SOUNDS, BIGRAM_SOUNDS} from '@src/modules/common/READING/util';
+import {pronounceStepByStep} from '@src/modules/common/READING/pronunciation';
 
 import whatWordIsThis from './what_word_is_this.wav';
 import whatSoundDoesThisMake from './what_sound_does_this_make.wav';
@@ -105,47 +106,20 @@ export let ModuleBuilder = ({
   let pronounceAbortController = React.useRef(new AbortController());
   let [pronouncePosition, setPronouncePosition] = React.useState([0, 0]);
   let _pronounce = React.useCallback(async (signal: AbortSignal) => {
-    for (let i = 0; i < exercise.variant.sounds.length; ++i) {
-      let startPos = exercise.variant.sounds[i][0];
-      let lastPos;
-      if (i === exercise.variant.sounds.length - 1) {
-        lastPos = exercise.variant.word.length;
-      } else {
-        lastPos = exercise.variant.sounds[i + 1][0];
-      }
-      setPronouncePosition([startPos, lastPos]);
-      let sound = exercise.variant.sounds[i][1];
-      if (sound in LETTER_SOUNDS) {
-        // TODO: why does typescript not narrow the type here by itself?
-        await withAbort(() => moduleContext.playAudio(
-          LETTER_SOUNDS[sound as keyof typeof LETTER_SOUNDS]
-        ), signal);
-      } else {
-        await withAbort(() => moduleContext.playAudio(
-          BIGRAM_SOUNDS[sound as keyof typeof BIGRAM_SOUNDS]
-        ), signal);
-      }
-      if (exercise.variant.sounds.length > 6) {
-        await withAbort(() => new Promise(r => setTimeout(r, 50)), signal);
-      } else if (exercise.variant.sounds.length > 4) {
-        await withAbort(() => new Promise(r => setTimeout(r, 250)), signal);
-      } else {
-        await withAbort(() => new Promise(r => setTimeout(r, 500)), signal);
-      }
-    }
-    setPronouncePosition([0, exercise.variant.word.length]);
-    if (!isSingleSound) {
-      await withAbort(
-        () => moduleContext.playAudio(exercise.variant.spoken),
-        signal
-      );
-    }
+    await pronounceStepByStep({
+      moduleContext,
+      sounds: exercise.variant.sounds,
+      word: exercise.variant.word,
+      spokenAudio: exercise.variant.spoken,
+      isSingleSound,
+      onPositionChange: setPronouncePosition,
+      signal
+    });
   }, [exercise, moduleContext, isSingleSound]);
   let pronounce = React.useCallback(async () => {
     pronounceAbortController.current.abort();
     pronounceAbortController.current = new AbortController();
     await _pronounce(pronounceAbortController.current.signal);
-    setPronouncePosition([0, 0]);
   }, [_pronounce]);
 
   let doingFailure = React.useRef(false);
@@ -174,6 +148,10 @@ export let ModuleBuilder = ({
     fontFamily: 'sans-serif',
     fontSize: '200px',
   };
+  console.log('rendering');
+  console.log(pronouncePosition);
+  console.log(exercise.variant.word);
+  console.log(exercise.variant.word.substring(0, pronouncePosition[0]));
   let text = (
     <text style={textStyle}
       dominantBaseline="central"

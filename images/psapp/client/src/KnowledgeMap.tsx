@@ -166,6 +166,25 @@ let KnowledgeNode = ({
 
   let showChildren = !admin && relevantChildrenSorted.length > 0;
 
+  let moduleTypeIcon: string | null = null;
+  let iconColor: string = '#2E7D32';
+  if (admin) {
+    switch (node.moduleType) {
+      case ModuleType.CHILD_OWNED:
+        moduleTypeIcon = '/static/images/icons/child.png';
+        iconColor = '#2E7D32';
+        break;
+      case ModuleType.CHILD_DELEGATED:
+        moduleTypeIcon = '/static/images/icons/teacher_child_together.png';
+        iconColor = '#00ACC1';
+        break;
+      case ModuleType.ADULT_OWNED:
+        moduleTypeIcon = '/static/images/icons/teacher.png';
+        iconColor = '#1976D2';
+        break;
+    }
+  }
+
   return (
     <>
       <div
@@ -213,6 +232,95 @@ let KnowledgeNode = ({
             }}>
             {node.title || node.id}
           </div>
+          {moduleTypeIcon && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '5px',
+                right: '5px',
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                backgroundColor: iconColor,
+                border: '2px solid white',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden',
+              }}>
+              <img
+                src={moduleTypeIcon}
+                alt="Module type"
+                style={{
+                  width: node.moduleType === ModuleType.CHILD_OWNED ? '22px' : '32px',
+                  height: node.moduleType === ModuleType.CHILD_OWNED ? '22px' : '32px',
+                  objectFit: 'cover',
+                  borderRadius: '50%',
+                }}
+              />
+            </div>
+          )}
+          {admin && (node.studentVideos.length > 0 || node.teacherVideos.length > 0) && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '5px',
+                left: '5px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '2px',
+              }}>
+              {node.studentVideos.length > 0 && (
+                <div
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    backgroundColor: '#4CAF50',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                  }}
+                  title="Has student videos">
+                  <img
+                    src="/static/images/icons/play.png"
+                    alt="Student video"
+                    style={{
+                      width: '12px',
+                      height: '12px',
+                      filter: 'brightness(0) invert(1)',
+                    }}
+                  />
+                </div>
+              )}
+              {node.teacherVideos.length > 0 && (
+                <div
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    backgroundColor: '#FF9800',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                  }}
+                  title="Has teacher videos">
+                  <img
+                    src="/static/images/icons/grad_cap.png"
+                    alt="Teacher video"
+                    style={{
+                      width: '12px',
+                      height: '12px',
+                      filter: 'brightness(0) invert(1)',
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          )}
           {showChildren && (
             <div
               data-test="map-module-children"

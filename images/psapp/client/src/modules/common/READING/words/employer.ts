@@ -1,6 +1,6 @@
 import employerWord from './employer.wav';
 export default {
   word: 'employer',
-  sounds: [[0, 'eShort'], [2, 'm'], [3, 'p'], [4, 'l'], [5, 'oLongMore'], [6, 'yConsonant'], [7, 'schwa'], [8, 'r']],
+  sounds: [[0, 'eShort'], [1, 'm'], [2, 'p'], [3, 'l'], [4, 'oLongMore'], [5, 'yConsonant'], [6, 'schwa'], [7, 'r']],
   spoken: employerWord
 } as const;
