@@ -1,6 +1,6 @@
 import alphabetWord from './alphabet.wav';
 export default {
   word: 'alphabet',
-  sounds: [[0, 'aShortAt'], [2, 'l'], [3, 'f'], [5, 'aShortAt'], [6, 'b'], [7, 'eShort'], [8, 't']],
+  sounds: [[0, 'aShortAt'], [1, 'l'], [2, 'f'], [4, 'aShortAt'], [5, 'b'], [6, 'eShort'], [7, 't']],
   spoken: alphabetWord
 } as const;

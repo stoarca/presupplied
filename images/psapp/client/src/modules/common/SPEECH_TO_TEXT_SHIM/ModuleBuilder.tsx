@@ -17,9 +17,9 @@ export let STTModule: React.FC<ModuleProps> = ({
 }) => {
   React.useEffect(() => {
     let listener = (e: KeyboardEvent) => {
-      if (e.key === 'y') {
+      if (e.key.toLowerCase() === 'y') {
         doSuccess({sound: goodDing});
-      } else if (e.key === 'n') {
+      } else if (e.key.toLowerCase() === 'n') {
         doFailure();
       }
     };

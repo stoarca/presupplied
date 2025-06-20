@@ -142,6 +142,7 @@ export let useExercise = <E extends Ex<V>, V, P>({
   let [exercise, setExercise] = React.useState(onGenExercise);
   let [partial, setPartial] = React.useState<P>(initialPartial);
   let [playingInstructions, setPlayingInstructions] = React.useState(false);
+  let [lastActionTime, setLastActionTime] = React.useState(Date.now());
   React.useEffect(() => {
     (async () => {
       setPlayingInstructions(true);
@@ -152,7 +153,7 @@ export let useExercise = <E extends Ex<V>, V, P>({
   React.useEffect(() => {
     let interval = setInterval(() => onPlayInstructions(exercise), 15000);
     return () => clearInterval(interval);
-  }, [onPlayInstructions, exercise]);
+  }, [onPlayInstructions, exercise, lastActionTime]);
 
   let [alreadyFailed, setAlreadyFailed] = React.useState(false);
   let [alreadyCompleted, setAlreadyCompleted] = React.useState(false);
@@ -174,6 +175,7 @@ export let useExercise = <E extends Ex<V>, V, P>({
       return;
     }
 
+    setLastActionTime(Date.now());
     // TODO: what if a failure happens between the last partialSuccess and this
     // success
     setAlreadyCompleted(true);
@@ -197,6 +199,7 @@ export let useExercise = <E extends Ex<V>, V, P>({
       return;
     }
 
+    setLastActionTime(Date.now());
     setPartial(_partial);
     if (doDing) {
       await moduleContext.playAudio(goodDing);
@@ -211,6 +214,7 @@ export let useExercise = <E extends Ex<V>, V, P>({
       return;
     }
 
+    setLastActionTime(Date.now());
     if (!alreadyFailed) {
       setAlreadyFailed(true);
       vlist.markFailure(exercise.variant);
