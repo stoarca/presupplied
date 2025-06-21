@@ -1,154 +1,66 @@
-import React from 'react';
-
-import {ChoiceSelector} from '@src/ChoiceSelector';
-import {Module, useExercise, Ex} from '@src/Module';
-import {ModuleContext} from '@src/ModuleContext';
-import {ProbabilisticDeck} from '@src/util';
-
-import {youAlreadyDidThatOne} from '@modules/common/sounds';
+import {MyEx as ChoiceEx, ChoiceItem} from '@modules/common/CHOICE/ModuleBuilder';
 
 export type Type =
     'allbefore' | 'onebefore' | 'previous' | 'allafter' | 'oneafter' | 'next';
 
-export type Variant = [Type, () => number];
+export type Variant = [Type, number];
 
-interface MyEx extends Ex<Variant> {
-  number: number,
+export interface MyEx extends ChoiceEx<Variant> {
 }
 
-let variantToSentence = (v: Variant, ex: MyEx) => {
-  if (v[0] === 'allbefore') {
-    return `Tap all the numbers that come before ${ex.number}.`;
-  } else if (v[0] === 'onebefore') {
-    return `Tap the number that comes before ${ex.number}.`;
-  } else if (v[0] === 'previous') {
-    return `We're at ${ex.number}. Tap the previous number.`;
-  } else if (v[0] === 'allafter') {
-    return `Tap all the numbers that come after ${ex.number}.`;
-  } else if (v[0] === 'oneafter') {
-    return `Tap the number that comes after ${ex.number}.`;
-  } else if (v[0] === 'next') {
-    return `We're at ${ex.number}. Tap the next number.`;
+export let exerciseToSentence = (exercise: MyEx) => {
+  const number = exercise.variant[1];
+  if (exercise.variant[0] === 'allbefore') {
+    return `Tap all the numbers that come before ${number}.`;
+  } else if (exercise.variant[0] === 'onebefore') {
+    return `Tap the number that comes before ${number}.`;
+  } else if (exercise.variant[0] === 'previous') {
+    return `We're at ${number}. Tap the previous number.`;
+  } else if (exercise.variant[0] === 'allafter') {
+    return `Tap all the numbers that come after ${number}.`;
+  } else if (exercise.variant[0] === 'oneafter') {
+    return `Tap the number that comes after ${number}.`;
+  } else if (exercise.variant[0] === 'next') {
+    return `We're at ${number}. Tap the next number.`;
   } else {
-    let exhaustiveCheck: never = v[0]; // eslint-disable-line no-unused-vars
-    throw new Error('variantToSentence unknown variant ' + v);
+    let exhaustiveCheck: never = exercise.variant[0]; // eslint-disable-line no-unused-vars
+    throw new Error('exerciseToSentence unknown variant ' + exercise.variant);
   }
 };
 
-interface ModuleBuilderProps {
-  variants: Variant[],
-  numNumbers: number,
-  maxScorePerVariant: number,
-}
+export let isCorrectChoice = (choice: ChoiceItem, exercise: MyEx): boolean => {
+  const type = exercise.variant[0];
+  const number = exercise.variant[1];
 
-export let ModuleBuilder = ({
-  variants,
-  numNumbers,
-  maxScorePerVariant,
-}: ModuleBuilderProps) => {
-  return (props: void) => {
-    let moduleContext = React.useContext(ModuleContext);
+  if (typeof choice !== 'number') {
+    return false;
+  }
 
-    let vlist = React.useMemo(
-      () => new ProbabilisticDeck(variants.map(v => ({ variant: v, millicards: maxScorePerVariant * 1000 })), maxScorePerVariant * 1000), []
-    );
-    let generateExercise = React.useCallback(() => {
-      let variant = vlist.pickVariant();
-      return {
-        variant: variant,
-        number: variant[1](),
-      };
-    }, [vlist]);
-    let playInstructions = React.useCallback((exercise: MyEx) => {
-      return moduleContext.playTTS(
-        variantToSentence(exercise.variant, exercise)
-      );
-    }, [moduleContext]);
-    let {
-      exercise,
-      partial,
-      score,
-      maxScore,
-      doSuccess,
-      doPartialSuccess,
-      doFailure
-    } = useExercise({
-      onGenExercise: generateExercise,
-      initialPartial: (): number[] => [],
-      onPlayInstructions: playInstructions,
-      playOnEveryExercise: true,
-      vlist: vlist,
-    });
-
-    let handleSelected = React.useCallback(async (index: number) => {
-      let number = index;
-      if (partial.includes(number)) {
-        moduleContext.playAudio(youAlreadyDidThatOne);
-        return;
-      }
-
-      if (['allbefore', 'onebefore', 'previous'].includes(exercise.variant[0])) {
-        if (number >= exercise.number) {
-          doFailure();
-        } else if (exercise.variant[0] === 'allbefore') {
-          let newPartial = [...partial, number];
-          if (newPartial.length === exercise.number) {
-            await doPartialSuccess(newPartial);
-            doSuccess();
-          } else {
-            doPartialSuccess(newPartial);
-          }
-        } else if (number === exercise.number - 1) {
-          await doPartialSuccess([number]);
-          doSuccess();
-        } else {
-          doFailure();
-        }
-      } else if (['allafter', 'oneafter', 'next'].includes(exercise.variant[0])) {
-        if (number <= exercise.number) {
-          doFailure();
-        } else if (exercise.variant[0] === 'allafter') {
-          let newPartial = [...partial, number];
-          await doPartialSuccess(newPartial);
-          if (newPartial.length === numNumbers - exercise.number - 1) {
-            doSuccess();
-          }
-        } else if (number === exercise.number + 1) {
-          await doPartialSuccess([number]);
-          doSuccess();
-        } else {
-          doFailure();
-        }
-      } else {
-        throw new Error('Unknown variant id ' + exercise.variant);
-      }
-    }, [
-      moduleContext, exercise, partial, doSuccess, doPartialSuccess, doFailure
-    ]);
-
-    let getFill = React.useCallback((choiceIndex: number) => {
-      let fill = 'white';
-      if (choiceIndex === exercise.number) {
-        fill = '#0000ff33';
-      } else if (partial.includes(choiceIndex)) {
-        fill = '#00ff0033';
-      }
-      return fill;
-    }, [exercise, partial]);
-    let choicesArr = Array(numNumbers).fill(1).map((x, i) => i);
-    console.log(choicesArr);
-    let choices = (
-      <ChoiceSelector
-        choices={choicesArr}
-        howManyPerRow={Math.min(numNumbers, 10)}
-        getFill={getFill}
-        onSelected={handleSelected}/>
-    );
-
-    return (
-      <Module type="svg" score={score} maxScore={maxScore}>
-        {choices}
-      </Module>
-    );
-  };
+  if (['allbefore', 'onebefore', 'previous'].includes(type)) {
+    if (type === 'allbefore') {
+      return choice < number;
+    } else {
+      return choice === number - 1;
+    }
+  } else if (type === 'allafter') {
+    return choice > number;
+  } else {
+    return choice === number + 1;
+  }
 };
+
+export let getAllCorrectChoices = (exercise: MyEx, numNumbers: number): ChoiceItem[] => {
+  const type = exercise.variant[0];
+  const number = exercise.variant[1];
+
+  if (type === 'allbefore') {
+    return Array.from({length: number}, (_, i) => i);
+  } else if (type === 'allafter') {
+    return Array.from({length: numNumbers - number - 1}, (_, i) => number + 1 + i);
+  } else {
+    return [type === 'onebefore' || type === 'previous'
+      ? number - 1
+      : number + 1];
+  }
+};
+

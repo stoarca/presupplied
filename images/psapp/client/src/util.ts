@@ -132,6 +132,7 @@ export let shuffle = <T>(arr: T[]): T[] => {
 export class ProbabilisticDeck<T> {
   variants: readonly { variant: T; millicards: number }[];
   variantsMap: Map<T, { maxMillicards: number; millicards: number }>;
+  private currentFailedVariant: T | null = null;
 
   constructor(
     variants: readonly { variant: T; millicards: number }[],
@@ -141,7 +142,10 @@ export class ProbabilisticDeck<T> {
     this.variantsMap = new Map();
 
     for (let { variant, millicards } of variants) {
-      const maxMillicards = millicards;
+      if (maxMillicardsPerVariant < millicards) {
+        throw new Error(`maxMillicardsPerVariant (${maxMillicardsPerVariant}) cannot be less than variant millicards (${millicards})`);
+      }
+      const maxMillicards = maxMillicardsPerVariant;
       this.variantsMap.set(variant, {
         maxMillicards,
         millicards,
@@ -262,20 +266,36 @@ export class ProbabilisticDeck<T> {
   }
 
   markSuccess(variant: T) {
+    if (this.currentFailedVariant !== null && this.currentFailedVariant !== variant) {
+      throw new Error('Cannot mark success on a different variant while another variant is failed');
+    }
+
     const variantData = this.variantsMap.get(variant)!;
 
     if (variantData.millicards <= 0) {
       throw new Error('Cannot mark success on a variant with 0 or negative millicards');
     }
 
-    variantData.millicards -= 1000;
+    // If this variant is currently failed and being corrected, keep it at maxMillicards
+    if (this.currentFailedVariant === variant && variantData.millicards === variantData.maxMillicards) {
+      // First success after failure - clear the failed state but don't subtract millicards
+      this.currentFailedVariant = null;
+    } else {
+      // Normal success - subtract 1000 millicards
+      variantData.millicards -= 1000;
+    }
 
     this.validateState();
   }
 
   markFailure(variant: T) {
+    if (this.currentFailedVariant !== null && this.currentFailedVariant !== variant) {
+      throw new Error('Cannot mark failure on a different variant while another variant is failed');
+    }
+
     const variantData = this.variantsMap.get(variant)!;
     variantData.millicards = variantData.maxMillicards;
+    this.currentFailedVariant = variant;
     this.validateState();
   }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import {ModuleBuilder} from '@src/modules/common/READ_WORDS/ModuleBuilder';
 
+import zeroWord from '@src/modules/common/READING/words/zero';
 import oneWord from '@src/modules/common/READING/words/one';
 import twoWord from '@src/modules/common/READING/words/two';
 import threeWord from '@src/modules/common/READING/words/three';
@@ -16,6 +17,7 @@ import twelveWord from '@src/modules/common/READING/words/twelve';
 import thirteenWord from '@src/modules/common/READING/words/thirteen';
 
 export let words = [
+  zeroWord,
   oneWord,
   twoWord,
   threeWord,

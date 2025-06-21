@@ -16,7 +16,9 @@ export default (props: never) => {
     modules.forEach((kmid) => {
       acc[kmid] = ProgressStatus.PASSED;
     });
-    return user.markReached(acc);
+    const urlParams = new URLSearchParams(window.location.search);
+    const childId = urlParams.get('childId');
+    return user.markReachedSplit(knowledgeGraph, acc, childId ? parseInt(childId) : undefined);
   }, [user]);
   let lecture: VideoLecture = {
     exercises: [{
@@ -160,6 +162,27 @@ export default (props: never) => {
               }
             }
           }],
+        },
+      },
+    }, {
+      question: 'Can your child do a pincer grasp (pick up small objects with thumb and forefinger)?',
+      skipIf: () => {
+        let currentProgress = user.progress();
+        return currentProgress['PINCER_GRASP']?.status === ProgressStatus.PASSED;
+      },
+      choices: {
+        yes: {
+          sideEffect: () => {
+            let modules = Array.from(new Set([
+              'PINCER_GRASP',
+              ...knowledgeGraph.dependenciesOf('PINCER_GRASP'),
+            ]));
+            return bulkMarkReached(modules);
+          },
+          action: 'next',
+        },
+        no: {
+          action: 'next',
         },
       },
     }, {

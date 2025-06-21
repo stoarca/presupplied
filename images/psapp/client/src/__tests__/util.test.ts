@@ -14,7 +14,7 @@ describe('ProbabilisticDeck', () => {
       { variant: [0, 0], millicards: 1000 },
       { variant: [1, 1], millicards: 1000 }
     ];
-    maxScorePerVariant = 2;
+    maxScorePerVariant = 1000;
     deck = new ProbabilisticDeck(variants, maxScorePerVariant);
   });
 
@@ -116,7 +116,7 @@ describe('ProbabilisticDeck', () => {
         { variant: 'B', millicards: 500 },   // 0.5 card
         { variant: 'C', millicards: 500 }    // 0.5 card
       ];
-      const customDeck = new ProbabilisticDeck<string>(stringVariants, maxScorePerVariant);
+      const customDeck = new ProbabilisticDeck<string>(stringVariants, 2000);
 
       // Track which cards are drawn in this trial
       const drawnInThisTrial: Record<string, number> = { 'A': 0, 'B': 0, 'C': 0 };
@@ -176,7 +176,7 @@ describe('ProbabilisticDeck', () => {
       { variant: 'A', millicards: 500 },
       { variant: 'B', millicards: 500 }
     ];
-    const deck = new ProbabilisticDeck<string>(variants, 1);
+    const deck = new ProbabilisticDeck<string>(variants, 1000);
     // We should be able to draw one card
     const pick = deck.pickVariant();
     deck.markSuccess(pick);
@@ -198,7 +198,7 @@ describe('ProbabilisticDeck', () => {
         { variant: 'C', millicards: 500 },
         { variant: 'D', millicards: 500 }
       ];
-      const deck = new ProbabilisticDeck<string>(variants, 2);
+      const deck = new ProbabilisticDeck<string>(variants, 2000);
 
       // We should only be able to draw 1 card
       const pick = deck.pickVariant();
@@ -237,7 +237,7 @@ describe('ProbabilisticDeck', () => {
       { variant: 'B', millicards: 1000 },
       { variant: 'C', millicards: 999 }
     ];
-    const deck1 = new ProbabilisticDeck<string>(variants1, 1);
+    const deck1 = new ProbabilisticDeck<string>(variants1, 1000);
 
     const pick1 = deck1.pickVariant();
     expect(pick1).toBe('B');
@@ -251,7 +251,7 @@ describe('ProbabilisticDeck', () => {
       { variant: 'C', millicards: 1000 },
       { variant: 'D', millicards: 500 }
     ];
-    const deck2 = new ProbabilisticDeck<string>(variants2, 1);
+    const deck2 = new ProbabilisticDeck<string>(variants2, 1000);
 
     const firstPick = deck2.pickVariant();
     expect(['B', 'C']).toContain(firstPick);
@@ -271,7 +271,7 @@ describe('ProbabilisticDeck', () => {
       { variant: 'B', millicards: -100 },
       { variant: 'C', millicards: 500 }
     ];
-    const deck = new ProbabilisticDeck<string>(variants, 1);
+    const deck = new ProbabilisticDeck<string>(variants, 1000);
 
     expect(() => deck.markSuccess('A')).toThrow('Cannot mark success on a variant with 0 or negative millicards');
     expect(() => deck.markSuccess('B')).toThrow('Cannot mark success on a variant with 0 or negative millicards');
@@ -285,7 +285,7 @@ describe('ProbabilisticDeck', () => {
         { variant: 'B', millicards: 1000 },
         { variant: 'C', millicards: 1000 },
         { variant: 'D', millicards: 1000 }
-      ], 1);
+      ], 1000);
     }).toThrow('Invalid deck state: more guaranteed cards than total cards');
 
     const variants = [
@@ -293,12 +293,66 @@ describe('ProbabilisticDeck', () => {
       { variant: 'B', millicards: 1000 },
       { variant: 'C', millicards: 1000 }
     ];
-    const deck = new ProbabilisticDeck<string>(variants, 1);
+    const deck = new ProbabilisticDeck<string>(variants, 1000);
 
     const pick = deck.pickVariant();
     deck.markSuccess(pick);
 
     const secondPick = deck.pickVariant();
     expect(() => deck.markSuccess(secondPick)).not.toThrow();
+  });
+
+  test('constructor should throw when maxMillicardsPerVariant is less than any variant millicards', () => {
+    expect(() => {
+      new ProbabilisticDeck<string>([
+        { variant: 'A', millicards: 1000 },
+        { variant: 'B', millicards: 2000 },
+        { variant: 'C', millicards: 500 }
+      ], 1500);
+    }).toThrow('maxMillicardsPerVariant (1500) cannot be less than variant millicards (2000)');
+
+    expect(() => {
+      new ProbabilisticDeck<string>([
+        { variant: 'A', millicards: 100 },
+        { variant: 'B', millicards: 50 }
+      ], 10);
+    }).toThrow('maxMillicardsPerVariant (10) cannot be less than variant millicards (100)');
+  });
+
+  test('failure then immediate success should keep all cards in deck', () => {
+    const variants = [
+      { variant: 'A', millicards: 1000 },
+      { variant: 'B', millicards: 1000 },
+      { variant: 'C', millicards: 1000 }
+    ];
+
+    const deck = new ProbabilisticDeck<string>(variants, 2000);
+    expect(deck['getTotalMillicards']()).toBe(3000);
+
+    const firstPick = 'A';
+    deck.markFailure(firstPick);
+    expect(deck['getTotalMillicards']()).toBe(4000);
+
+    // Once a card is failed, the only possible action is to either continue failing that card
+    // or to mark it successful. Another card cannot be dealt with.
+    expect(() => deck.markSuccess('B')).toThrow();
+    expect(() => deck.markFailure('B')).toThrow();
+
+    deck.markSuccess(firstPick);
+    expect(deck['getTotalMillicards']()).toBe(4000);
+
+    deck.markSuccess(firstPick);
+    expect(deck['getTotalMillicards']()).toBe(3000);
+
+    const secondPick = 'B';
+    deck.markSuccess(secondPick);
+    expect(deck['getTotalMillicards']()).toBe(2000);
+
+    const thirdPick = 'C';
+    deck.markSuccess(thirdPick);
+    expect(deck['getTotalMillicards']()).toBe(1000);
+
+    const lastPick = deck.pickVariant();
+    expect(lastPick).toBe('A');
   });
 });

@@ -14,6 +14,7 @@ import {ViewBox, visibleViewBoxSize} from './util';
 import {NavBar} from './components/NavBar';
 import {Avatar} from './components/Avatar';
 import {useModuleInteraction} from './components/ModuleInteractionHandler';
+import {SearchOverlay, SearchResult} from './components/SearchOverlay';
 import {UserType} from '../../common/types';
 
 let autoIncrementingId = 0;
@@ -123,6 +124,7 @@ let KnowledgeNode = ({
 
   let backgroundColor: string;
   let opacity = 1;
+  let showChildren = false;
 
   if (admin) {
     if (knowledgeGraph.directDependantsOf(kmid).length === 0) {
@@ -159,12 +161,12 @@ let KnowledgeNode = ({
     } else {
       backgroundColor = '#777777';
     }
+
+    showChildren = relevantChildrenSorted.length > 0 && (isUserReachable || isChildReachable);
   }
 
   let borderColor = isSelected ? '#00ccee' : 'transparent';
   let borderWidth = isSelected ? '3px' : '0px';
-
-  let showChildren = !admin && relevantChildrenSorted.length > 0;
 
   let moduleTypeIcon: string | null = null;
   let iconColor: string = '#2E7D32';
@@ -399,6 +401,7 @@ interface BaseKnowledgeMapProps {
   onMouseDown?: (e: MouseEvent, cancelPanZoom: () => void) => void,
   onMouseUp?: (e: MouseEvent, cancelPanZoom: () => void) => void;
   onClick?: (e: MouseEvent, cancelPanZoom: () => void) => void;
+  onSetPanToNodeFn?: (panFn: (nodeId: string) => void) => void;
 }
 export let BaseKnowledgeMap = ({
   knowledgeGraph,
@@ -414,14 +417,32 @@ export let BaseKnowledgeMap = ({
   onMouseDown,
   onMouseUp,
   onClick,
+  onSetPanToNodeFn,
 }: BaseKnowledgeMapProps) => {
   let divRef = React.useRef<HTMLDivElement | null>(null);
-  let [viewBox, setViewBox] = React.useState<ViewBox>({
-    x: 0, y: 0, w: 2000, h: 2000
+  let [viewBox, setViewBox] = React.useState<ViewBox>(() => {
+    return history.state?.mapViewBox || {x: 0, y: 0, w: 2000, h: 2000};
   });
+
+  const updateViewBoxWithHistory = React.useCallback((newViewBox: ViewBox) => {
+    setViewBox(newViewBox);
+    const currentState = history.state || {};
+    history.replaceState({
+      ...currentState,
+      mapViewBox: newViewBox
+    }, '');
+  }, []);
+
   React.useEffect(() => {
     let url = new URL(window.location.href);
     let scrollTo = url.searchParams.get('scroll');
+    let savedViewBox = history.state?.mapViewBox;
+
+    if (savedViewBox && !scrollTo) {
+      setViewBox(savedViewBox);
+      return;
+    }
+
     let minCell;
     if (scrollTo && knowledgeGraph.hasNode(scrollTo)) {
       minCell = knowledgeGraph.getNodeData(scrollTo).cell;
@@ -461,13 +482,116 @@ export let BaseKnowledgeMap = ({
     let {w, h} = visibleViewBoxSize(
       {x: 0, y: 0, w: 2000, h: 2000}, divRef.current!.getBoundingClientRect()
     );
-    setViewBox({
+    updateViewBoxWithHistory({
       x: pos.x - w / 2 + CELL_WIDTH / 2,
       y: pos.y - h / 2 + CELL_HEIGHT / 2,
       w: w,
       h: h,
     });
-  }, []);
+  }, [updateViewBoxWithHistory]);
+
+  const panToNodeRef = React.useRef<((nodeId: string) => void) | null>(null);
+
+  panToNodeRef.current = React.useCallback((nodeId: string) => {
+    if (knowledgeGraph.hasNode(nodeId)) {
+      const targetCell = knowledgeGraph.getNodeData(nodeId).cell;
+      const targetPos = nodePos(targetCell);
+      const containerRect = divRef.current?.getBoundingClientRect();
+      if (containerRect) {
+        const currentViewBox = viewBox;
+        const defaultZoomSize = {w: 2000, h: 2000};
+
+        const startViewBox = currentViewBox;
+        const startCenterX = startViewBox.x + startViewBox.w / 2;
+        const startCenterY = startViewBox.y + startViewBox.h / 2;
+        const targetCenterX = targetPos.x + CELL_WIDTH / 2;
+        const targetCenterY = targetPos.y + CELL_HEIGHT / 2;
+
+        const midPointX = (startCenterX + targetCenterX) / 2;
+        const midPointY = (startCenterY + targetCenterY) / 2;
+
+        const distance = Math.sqrt(
+          Math.pow(targetCenterX - startCenterX, 2) +
+          Math.pow(targetCenterY - startCenterY, 2)
+        );
+
+        const zoomOutFactor = Math.max(2, distance / 1000 + 1);
+        const currentViewportSize = visibleViewBoxSize(currentViewBox, containerRect);
+        const zoomedOutSize = {
+          w: currentViewportSize.w * zoomOutFactor,
+          h: currentViewportSize.h * zoomOutFactor,
+        };
+
+        const zoomedOutViewBox = {
+          x: midPointX - zoomedOutSize.w / 2,
+          y: midPointY - zoomedOutSize.h / 2,
+          w: zoomedOutSize.w,
+          h: zoomedOutSize.h,
+        };
+
+        const finalViewportSize = visibleViewBoxSize({w: defaultZoomSize.w, h: defaultZoomSize.h, x: 0, y: 0}, containerRect);
+        const targetViewBox = {
+          x: targetCenterX - finalViewportSize.w / 2,
+          y: targetCenterY - finalViewportSize.h / 2,
+          w: defaultZoomSize.w,
+          h: defaultZoomSize.h,
+        };
+
+        const duration = 2000;
+        const startTime = Date.now();
+        const targetFPS = 30;
+        const frameInterval = 1000 / targetFPS;
+        let lastFrameTime = 0;
+
+        const animate = () => {
+          const now = Date.now();
+          if (now - lastFrameTime < frameInterval) {
+            requestAnimationFrame(animate);
+            return;
+          }
+          lastFrameTime = now;
+
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+
+          let currentViewBox;
+          if (progress < 0.6) {
+            const zoomOutProgress = progress / 0.6;
+            const easeProgress = 1 - Math.pow(1 - zoomOutProgress, 3);
+            currentViewBox = {
+              x: startViewBox.x + (zoomedOutViewBox.x - startViewBox.x) * easeProgress,
+              y: startViewBox.y + (zoomedOutViewBox.y - startViewBox.y) * easeProgress,
+              w: startViewBox.w + (zoomedOutViewBox.w - startViewBox.w) * easeProgress,
+              h: startViewBox.h + (zoomedOutViewBox.h - startViewBox.h) * easeProgress,
+            };
+          } else {
+            const zoomInProgress = (progress - 0.6) / 0.4;
+            const easeProgress = 1 - Math.pow(1 - zoomInProgress, 3);
+            currentViewBox = {
+              x: zoomedOutViewBox.x + (targetViewBox.x - zoomedOutViewBox.x) * easeProgress,
+              y: zoomedOutViewBox.y + (targetViewBox.y - zoomedOutViewBox.y) * easeProgress,
+              w: zoomedOutViewBox.w + (targetViewBox.w - zoomedOutViewBox.w) * easeProgress,
+              h: zoomedOutViewBox.h + (targetViewBox.h - zoomedOutViewBox.h) * easeProgress,
+            };
+          }
+
+          updateViewBoxWithHistory(currentViewBox);
+
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          }
+        };
+
+        requestAnimationFrame(animate);
+      }
+    }
+  }, [knowledgeGraph, viewBox, updateViewBoxWithHistory]);
+
+  React.useEffect(() => {
+    if (onSetPanToNodeFn && panToNodeRef.current) {
+      onSetPanToNodeFn(panToNodeRef.current);
+    }
+  }, [onSetPanToNodeFn]);
 
   let topSorted = React.useMemo(() => {
     let ret = knowledgeGraph.overallOrder();
@@ -609,12 +733,28 @@ export let BaseKnowledgeMap = ({
 
       let relevantChildrenSorted: ChildInfoWithProgress[] = [];
       if (!admin && (node.moduleType === ModuleType.CHILD_DELEGATED || node.moduleType === ModuleType.CHILD_OWNED) && user.dto?.children) {
-        relevantChildrenSorted = user.dto.children
-            .filter((child: ChildInfoWithProgress) => {
-              const childReachable = childrenReachableSets.get(child.id);
-              return childReachable?.has(kmid) || false;
-            })
-            .sort((a: ChildInfoWithProgress, b: ChildInfoWithProgress) => a.name.localeCompare(b.name));
+        const isModuleReachableForUser = reachable?.has(kmid) || false;
+        let isModuleReachableForAnyChild = false;
+        for (let childReachable of childrenReachableSets.values()) {
+          if (childReachable.has(kmid)) {
+            isModuleReachableForAnyChild = true;
+            break;
+          }
+        }
+
+        if (!isModuleReachableForUser && !isModuleReachableForAnyChild) {
+          // Module not reachable for user or any children (grey module): pass all children
+          relevantChildrenSorted = user.dto.children
+              .sort((a: ChildInfoWithProgress, b: ChildInfoWithProgress) => a.name.localeCompare(b.name));
+        } else {
+          // Module is reachable: use normal logic (only children where module is reachable)
+          relevantChildrenSorted = user.dto.children
+              .filter((child: ChildInfoWithProgress) => {
+                const childReachable = childrenReachableSets.get(child.id);
+                return childReachable?.has(kmid) || false;
+              })
+              .sort((a: ChildInfoWithProgress, b: ChildInfoWithProgress) => a.name.localeCompare(b.name));
+        }
       }
 
       let isSelected = selectedCells.some(
@@ -727,7 +867,7 @@ export let BaseKnowledgeMap = ({
       viewLimitBox={viewLimitBox}
       minZoomWidth={1000}
       maxZoomWidth={40000}
-      onUpdateViewBox={setViewBox}
+      onUpdateViewBox={updateViewBoxWithHistory}
       onMouseDown={onMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={onMouseUp}
@@ -751,6 +891,7 @@ interface AdminKnowledgeMapProps {
   cols: number;
   selectedCells: Cell[];
   setSelectedCells: (cells: Cell[]) => void;
+  onSetPanToNodeFn?: (panFn: (nodeId: string) => void) => void;
 }
 let AdminKnowledgeMap = ({
   knowledgeMap,
@@ -761,6 +902,7 @@ let AdminKnowledgeMap = ({
   cols,
   selectedCells,
   setSelectedCells,
+  onSetPanToNodeFn,
 }: AdminKnowledgeMapProps) => {
   let user = useUserContext();
   let [mode, setMode] = React.useState<'select' | 'move'>('move');
@@ -1192,7 +1334,8 @@ let AdminKnowledgeMap = ({
         user={user}
         onHoverCellUpdated={setHoverCell}
         onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}/>
+        onMouseUp={handleMouseUp}
+        onSetPanToNodeFn={onSetPanToNodeFn}/>
       <AdminToolbar selectedCells={selectedCells}
         knowledgeGraph={knowledgeGraph}
         grid={grid}
@@ -1216,11 +1359,13 @@ interface UserKnowledgeMapProps {
   grid: string[][],
   rows: number,
   cols: number,
+  onSetPanToNodeFn?: (panFn: (nodeId: string) => void) => void;
 }
 
 let UserKnowledgeMap = ({
   knowledgeGraph,
   grid,
+  onSetPanToNodeFn,
 }: UserKnowledgeMapProps) => {
   let user = useUserContext();
 
@@ -1275,7 +1420,8 @@ let UserKnowledgeMap = ({
         admin={false}
         user={user}
         childrenReachableSets={childrenReachableSets}
-        childrenReachedSets={childrenReachedSets}/>
+        childrenReachedSets={childrenReachedSets}
+        onSetPanToNodeFn={onSetPanToNodeFn}/>
     </React.Fragment>
   );
 };
@@ -1313,6 +1459,31 @@ export let KnowledgeMap = () => {
   }, [knowledgeGraph]);
   let [selectedCells, setSelectedCells] = React.useState<Cell[]>([]);
 
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+  const [panToNodeFn, setPanToNodeFn] = React.useState<((nodeId: string) => void) | null>(null);
+
+  const handlePanToNode = React.useCallback((panFn: (nodeId: string) => void) => {
+    setPanToNodeFn(() => panFn);
+  }, []);
+
+  const handleSearchSelect = React.useCallback((result: SearchResult) => {
+    if (panToNodeFn) {
+      panToNodeFn(result.id);
+    }
+  }, [panToNodeFn]);
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === '/' && !isSearchOpen) {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isSearchOpen]);
+
   let ret;
   if (admin) {
     ret = (
@@ -1324,7 +1495,8 @@ export let KnowledgeMap = () => {
         rows={rows}
         cols={cols}
         selectedCells={selectedCells}
-        setSelectedCells={setSelectedCells}/>
+        setSelectedCells={setSelectedCells}
+        onSetPanToNodeFn={handlePanToNode}/>
     );
   } else {
     ret = (
@@ -1332,7 +1504,8 @@ export let KnowledgeMap = () => {
         knowledgeGraph={knowledgeGraph}
         grid={grid}
         rows={rows}
-        cols={cols}/>
+        cols={cols}
+        onSetPanToNodeFn={handlePanToNode}/>
     );
   }
   let containerStyle: React.CSSProperties = {
@@ -1346,6 +1519,12 @@ export let KnowledgeMap = () => {
       <div style={containerStyle}>
         {ret}
       </div>
+      <SearchOverlay
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        onSelect={handleSearchSelect}
+        knowledgeGraph={knowledgeGraph}
+      />
     </div>
   );
 };

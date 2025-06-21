@@ -253,6 +253,35 @@ export class User {
     }, {} as UserProgressDTO);
   }
 
+  async markReachedSplit(knowledgeGraph: TechTree, modules: Record<KMId, ProgressStatus>, childId?: number) {
+    if (this.isSelfManaged() && this.dto?.type === UserType.STUDENT) {
+      await this.markReached(modules);
+      return;
+    }
+
+    const progressEntries: UserProgressDTO = mapObject(modules, ([kmid, status]) => [kmid, {
+      status,
+      events: [{
+        time: Date.now(),
+        status,
+      }],
+    }]);
+
+    const { adultProgress, childProgress } = this.separateProgressByModuleType(knowledgeGraph, progressEntries);
+
+    if (Object.keys(adultProgress).length > 0) {
+      const adultModules: Record<KMId, ProgressStatus> = mapObject(adultProgress, ([kmid, entry]) => [kmid, entry.status]);
+      await this.markReached(adultModules);
+    }
+
+    if (childId && Object.keys(childProgress).length > 0) {
+      const childModules: Record<KMId, ProgressStatus> = mapObject(childProgress, ([kmid, entry]) => [kmid, entry.status]);
+      await this.markReached(childModules, childId);
+    } else if (Object.keys(childProgress).length > 0) {
+      console.error('Child modules found but no childId provided:', Object.keys(childProgress));
+    }
+  }
+
   async mergeToServer(onBehalfOfStudentId?: number) {
     const progress = typedLocalStorage.getJson('progress') || {};
     const progressVideo = typedLocalStorage.getJson('progressVideo') || {};
