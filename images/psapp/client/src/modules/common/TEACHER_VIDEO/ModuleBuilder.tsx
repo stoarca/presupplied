@@ -25,6 +25,7 @@ export interface VideoLectureExercise {
   preVideo?: Video,
   question: string,
   choices: Record<string, FollowUpSideEffect & FollowUpAction>,
+  skipIf?: () => boolean,
 }
 
 export interface VideoLecture {
@@ -62,7 +63,11 @@ let getNextExercisePath = (
   let pathAttempt = [...path];
   for (let i = pathAttempt.length - 1; i >= 0; --i) {
     pathAttempt[i].index += 1;
-    if (!!getExerciseFromLecture(lecture, pathAttempt)) {
+    let exercise = getExerciseFromLecture(lecture, pathAttempt);
+    if (exercise) {
+      if (exercise.skipIf && exercise.skipIf()) {
+        continue;
+      }
       return pathAttempt;
     }
     pathAttempt.pop();

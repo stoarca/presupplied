@@ -1,44 +1,45 @@
 import React from 'react';
 
-import {useExercise, Ex} from '@src/Module';
+import {useExercise, useTrainingDataRecorder, Ex} from '@src/Module';
 import {ModuleContext} from '@src/ModuleContext';
 import {ProbabilisticDeck} from '@src/util';
 import {STTModule} from '@src/modules/common/SPEECH_TO_TEXT_SHIM/ModuleBuilder';
 
-export type Variant = () => string;
-
-export interface MyEx extends Ex<Variant> {
-  displayText: string;
+interface MyEx<T> extends Ex<T> {
 }
 
-interface ModuleBuilderProps {
-  variants: Variant[];
-  maxScorePerVariant: number;
-  getInstructions: (exercise: MyEx) => string;
+interface ModuleBuilderProps<T extends string> {
+  variants: readonly T[],
+  maxScorePerVariant: number,
+  instructionAudio: string,
+  trainingKmid: string,
+  onFailureAudio?: (variant: T) => Promise<void>,
 }
 
-export let ModuleBuilder = ({
-  variants,
-  maxScorePerVariant,
-  getInstructions,
-}: ModuleBuilderProps) => {
+export let ModuleBuilder = <T extends string>({
+  variants, maxScorePerVariant, instructionAudio, trainingKmid, onFailureAudio
+}: ModuleBuilderProps<T>) => {
   return (props: void) => {
     let moduleContext = React.useContext(ModuleContext);
+    let trainingRecorder = useTrainingDataRecorder();
 
     let vlist = React.useMemo(
       () => new ProbabilisticDeck(variants.map(v => ({ variant: v, millicards: maxScorePerVariant * 1000 })), maxScorePerVariant * 1000), []
     );
-    let generateExercise = React.useCallback(() => {
+    let generateExercise = React.useCallback((): MyEx<T> => {
       let variant = vlist.pickVariant();
+      trainingRecorder.addEvent({
+        kmid: trainingKmid,
+        exerciseData: variant,
+        status: 'start',
+      });
       return {
         variant: variant,
-        displayText: variant(),
       };
-    }, [vlist]);
-    let playInstructions = React.useCallback(async (exercise: MyEx) => {
-      let instructions = getInstructions(exercise);
-      await moduleContext.playTTS(instructions);
-    }, [moduleContext]);
+    }, [vlist, trainingRecorder, trainingKmid]);
+    let playInstructions = React.useCallback(async (exercise: MyEx<T>) => {
+      await moduleContext.playAudio(instructionAudio);
+    }, [moduleContext, instructionAudio]);
     let {
       exercise,
       score,
@@ -47,28 +48,59 @@ export let ModuleBuilder = ({
       doFailure,
     } = useExercise({
       onGenExercise: generateExercise,
-      initialPartial: (): string[] => [],
+      initialPartial: () => 0,
       onPlayInstructions: playInstructions,
-      playOnEveryExercise: true,
+      playOnEveryExercise: false,
       vlist: vlist,
     });
 
-    let style: React.CSSProperties = {
+    let doingFailure = React.useRef(false);
+    let handleFailure = React.useCallback(async () => {
+      if (doingFailure.current) {
+        return;
+      }
+      trainingRecorder.addEvent({
+        kmid: trainingKmid,
+        exerciseData: exercise.variant,
+        status: 'fail',
+      });
+      doFailure();
+      doingFailure.current = true;
+      if (onFailureAudio) {
+        await onFailureAudio(exercise.variant);
+      }
+      doingFailure.current = false;
+    }, [exercise, trainingRecorder, doFailure, moduleContext, trainingKmid, onFailureAudio]);
+
+    let handleSuccess = React.useCallback(() => {
+      doSuccess();
+      trainingRecorder.addEvent({
+        kmid: trainingKmid,
+        exerciseData: exercise.variant,
+        status: 'success',
+      });
+      doingFailure.current = false;
+    }, [exercise, trainingRecorder, doSuccess, trainingKmid]);
+
+    let textStyle: React.CSSProperties = {
       fontFamily: 'sans-serif',
-      fontSize: '100px',
+      fontSize: '200px',
     };
+    let text = (
+      <text style={textStyle}
+        dominantBaseline="central"
+        textAnchor="middle"
+        x="50%"
+        y="50%">
+        {exercise.variant}
+      </text>
+    );
     return (
-      <STTModule doSuccess={doSuccess}
-        doFailure={doFailure}
+      <STTModule doSuccess={handleSuccess}
+        doFailure={handleFailure}
         score={score}
         maxScore={maxScore}>
-        <text style={style}
-          dominantBaseline="central"
-          textAnchor="middle"
-          y="200"
-          x="50%">
-          {exercise.displayText}
-        </text>
+        {text}
       </STTModule>
     );
   };

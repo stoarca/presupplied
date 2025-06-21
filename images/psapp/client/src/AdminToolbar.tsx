@@ -305,6 +305,68 @@ export let AdminToolbar = (props: ToolbarProps) => {
     props.onSelectIds(props.knowledgeMap.nodes.map(x => x.id));
   }, [props.onSelectIds]);
 
+  let handleSelectClosureOfDependencies = React.useCallback((e: M) => {
+    if (props.selectedCells.length === 0) {
+      return;
+    }
+
+    const selectedIds = props.selectedCells.map(cell => props.grid[cell.i][cell.j]);
+    const closure = new Set<string>();
+
+    const collectDependencies = (nodeId: string) => {
+      if (closure.has(nodeId)) {
+        return;
+      }
+      closure.add(nodeId);
+
+      try {
+        const dependencies = props.knowledgeGraph.directDependenciesOf(nodeId);
+        for (const dep of dependencies) {
+          collectDependencies(dep);
+        }
+      } catch {
+        // Node doesn't exist in graph, skip
+      }
+    };
+
+    for (const id of selectedIds) {
+      collectDependencies(id);
+    }
+
+    props.onSelectIds(Array.from(closure));
+  }, [props.selectedCells, props.grid, props.knowledgeGraph, props.onSelectIds]);
+
+  let handleSelectClosureOfDependents = React.useCallback((e: M) => {
+    if (props.selectedCells.length === 0) {
+      return;
+    }
+
+    const selectedIds = props.selectedCells.map(cell => props.grid[cell.i][cell.j]);
+    const closure = new Set<string>();
+
+    const collectDependents = (nodeId: string) => {
+      if (closure.has(nodeId)) {
+        return;
+      }
+      closure.add(nodeId);
+
+      try {
+        const dependents = props.knowledgeGraph.directDependentsOf(nodeId);
+        for (const dep of dependents) {
+          collectDependents(dep);
+        }
+      } catch {
+        // Node doesn't exist in graph, skip
+      }
+    };
+
+    for (const id of selectedIds) {
+      collectDependents(id);
+    }
+
+    props.onSelectIds(Array.from(closure));
+  }, [props.selectedCells, props.grid, props.knowledgeGraph, props.onSelectIds]);
+
   let downloadJson = React.useCallback((data: any, filename: string) => {
     let blob = new Blob(
       [JSON.stringify(data, undefined, 2)],
@@ -353,13 +415,25 @@ export let AdminToolbar = (props: ToolbarProps) => {
       {forOne}
       {forSelected}
       <div>
+        <button onClick={handleSelectClosureOfDependencies}>Select closure of dependencies</button>
+      </div>
+      <div>
+        <button onClick={handleSelectClosureOfDependents}>Select closure of dependents</button>
+      </div>
+      <div>
         <button onClick={handleSelectAll}>Select All</button>
       </div>
       <div>
         <button onClick={handleExportGraph}>Export Graph</button>
       </div>
       <div>
-        {props.knowledgeMap.nodes.length}
+        {(() => {
+          const total = props.knowledgeMap.nodes.length;
+          const implemented = props.knowledgeMap.nodes.filter(node => {
+            return moduleComponents[node.id] !== undefined;
+          }).length;
+          return `${implemented}/${total}`;
+        })()}
       </div>
       <div>
         {props.rows + 1}X{props.cols + 1}

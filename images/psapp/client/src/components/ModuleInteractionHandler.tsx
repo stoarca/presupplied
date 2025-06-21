@@ -155,7 +155,7 @@ export const useModuleInteraction = (
       setShowChoiceScreen(true);
     } else if (!isStudent && hasAnyVideos) {
       setShowChoiceScreen(true);
-    } else if (node.moduleType === ModuleType.CHILD_DELEGATED && relevantChildrenSorted.length > 1) {
+    } else if ((node.moduleType === ModuleType.CHILD_DELEGATED || node.moduleType === ModuleType.CHILD_OWNED) && relevantChildrenSorted.length > 1) {
       setShowChildSelector(true);
     } else if (isShiftClick) {
       // For shift-click on adult modules, mark progress directly for the current user
@@ -219,7 +219,7 @@ export const useModuleInteraction = (
   const handleMasteryChoice = React.useCallback(async () => {
     setShowChoiceScreen(false);
 
-    if (node.moduleType === ModuleType.CHILD_DELEGATED && relevantChildrenSorted.length > 1) {
+    if ((node.moduleType === ModuleType.CHILD_DELEGATED || node.moduleType === ModuleType.CHILD_OWNED) && relevantChildrenSorted.length > 1) {
       setShowChildSelector(true);
     } else if (wasShiftClick) {
       // For shift-click on adult modules, mark progress directly for the current user

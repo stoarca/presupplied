@@ -1,25 +1,38 @@
-import { writeFileSync, mkdirSync, readdirSync, existsSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readdirSync, existsSync, watch } from 'node:fs';
 import { join, basename, resolve } from 'node:path';
 import { context } from 'esbuild';
 
 const modulesDir = join(import.meta.dir, 'src/modules');
+
+const getModuleNames = () => {
+  const files = readdirSync(modulesDir);
+  return files
+      .map(f => basename(f))
+      .filter(f => f !== 'common');
+};
+
 const generateModulesList = () => {
   const autogenPath = join(import.meta.dir, 'src/autogen');
   if (!existsSync(autogenPath)) {
     mkdirSync(autogenPath, { recursive: true });
   }
 
-  const files = readdirSync(modulesDir);
-  const moduleNames = files
-      .map(f => basename(f))
-      .filter(f => f !== 'common');
-
+  const moduleNames = getModuleNames();
   const json = JSON.stringify(moduleNames);
   writeFileSync(
     join(autogenPath, 'available-modules.json'),
     json
   );
   console.log(`Writing ${moduleNames.length} modules to autogen/available-modules.json`);
+  return moduleNames;
+};
+
+const getEntryPoints = () => {
+  const entryPoints = ['src/index.tsx'];
+  getModuleNames().forEach(moduleName => {
+    entryPoints.push(`src/modules/${moduleName}/index.tsx`);
+  });
+  return entryPoints;
 };
 
 const moduleListPlugin = {
@@ -35,17 +48,10 @@ const moduleListPlugin = {
 const outdir = resolve(import.meta.dir, '../static/dist');
 console.log(`Output directory will be: ${outdir}`);
 
-const entryPoints = ['src/index.tsx'];
-readdirSync(modulesDir)
-    .filter(f => f !== 'common')
-    .forEach(moduleName => {
-      entryPoints.push(`src/modules/${moduleName}/index.tsx`);
-    });
-
 const isWatchMode = process.argv.includes('--watch');
 
-const buildOptions = {
-  entryPoints,
+const getBuildOptions = () => ({
+  entryPoints: getEntryPoints(),
   bundle: true,
   outdir,
   format: 'esm',
@@ -78,23 +84,46 @@ const buildOptions = {
       : '"development"'
   },
   plugins: [moduleListPlugin]
-};
+});
 
 async function run() {
   try {
-    const ctx = await context(buildOptions);
+    let ctx = await context(getBuildOptions());
+    let currentModules = new Set(getModuleNames());
 
     if (isWatchMode) {
       await ctx.watch();
       console.log('Watching for changes...');
 
+      const modulesWatcher = watch(modulesDir, { recursive: false }, async (eventType, filename) => {
+        if (eventType === 'rename' && filename) {
+          const newModules = new Set(getModuleNames());
+          const modulesChanged = currentModules.size !== newModules.size ||
+            [...currentModules].some(mod => !newModules.has(mod)) ||
+            [...newModules].some(mod => !currentModules.has(mod));
+
+          if (modulesChanged) {
+            console.log(`Module directory changed: ${filename}`);
+            console.log('Detected new/removed modules, rebuilding...');
+
+            await ctx.dispose();
+            currentModules = newModules;
+            ctx = await context(getBuildOptions());
+            await ctx.watch();
+            console.log('Rebuild completed, watching for changes...');
+          }
+        }
+      });
+
       process.stdin.on('end', async () => {
+        modulesWatcher.close();
         await ctx.dispose();
         process.exit(0);
       });
 
       process.on('SIGINT', async () => {
         console.log('Closing build context...');
+        modulesWatcher.close();
         await ctx.dispose();
         process.exit(0);
       });

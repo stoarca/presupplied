@@ -2,13 +2,18 @@ import React from 'react';
 
 type M = React.MouseEvent<SVGRectElement>;
 
-type ChoiceType = number | string;
+type ChoiceType = number | string | { imageUrl: string };
+
+const isImageChoice = (choice: ChoiceType): choice is { imageUrl: string } => {
+  return typeof choice === 'object' && choice !== null && 'imageUrl' in choice;
+};
 
 interface ChoiceSelectorProps<T extends ChoiceType> {
   choices: T[],
   howManyPerRow: number,
   getFill: (element: T) => string,
   onSelected: (index: number) => void,
+  position?: 'center' | 'bottom',
 }
 
 export let ChoiceSelector = <T extends ChoiceType, >(
@@ -25,7 +30,13 @@ export let ChoiceSelector = <T extends ChoiceType, >(
   let SQPAD = 10;
   let howManyRows = Math.ceil(props.choices.length / props.howManyPerRow);
   let startX = (window.innerWidth - (SQLEN + SQPAD) * props.howManyPerRow) / 2;
-  let startY = (window.innerHeight - (SQLEN + SQPAD) * howManyRows) / 2;
+  let startY;
+
+  if (props.position === 'bottom') {
+    startY = window.innerHeight - (SQLEN + SQPAD) * howManyRows - 50;
+  } else {
+    startY = (window.innerHeight - (SQLEN + SQPAD) * howManyRows) / 2;
+  }
   let textStyle = {
     fontFamily: 'sans-serif',
     fontSize: `${SQLEN - 20}px`,
@@ -33,9 +44,10 @@ export let ChoiceSelector = <T extends ChoiceType, >(
   } as React.CSSProperties;
   let choices = [];
   for (let i = 0; i < props.choices.length; ++i) {
+    const choice = props.choices[i];
     let x = startX + (i % props.howManyPerRow) * (SQLEN + SQPAD) + SQPAD / 2;
     let y = startY + Math.floor(i / props.howManyPerRow) * (SQLEN + SQPAD) + SQPAD / 2;
-    let fill = props.getFill(props.choices[i]);
+    let fill = props.getFill(choice);
     choices.push(
       <g key={`answer_${i}`} transform={`translate(${x}, ${-SQLEN / 2})`}>
         <rect data-choice-index={i}
@@ -45,16 +57,27 @@ export let ChoiceSelector = <T extends ChoiceType, >(
           height={SQLEN}
           rx={10}
           fill={fill}
-          stroke="black"
-          strokeWidth="5px"
+          stroke={isImageChoice(choice) ? 'none' : 'black'}
+          strokeWidth={isImageChoice(choice) ? '0' : '5px'}
           onClick={handleClick}/>
-        <text style={textStyle}
-          dominantBaseline="central"
-          textAnchor="middle"
-          transform={`translate(${SQLEN / 2}, ${SQLEN / 2})`}
-          y={y}>
-          {props.choices[i]}
-        </text>
+        {isImageChoice(choice) ? (
+          <image
+            href={choice.imageUrl}
+            x={10}
+            y={y + 10}
+            width={SQLEN - 20}
+            height={SQLEN - 20}
+            pointerEvents="none"
+          />
+        ) : (
+          <text style={textStyle}
+            dominantBaseline="central"
+            textAnchor="middle"
+            transform={`translate(${SQLEN / 2}, ${SQLEN / 2})`}
+            y={y}>
+            {choice}
+          </text>
+        )}
       </g>
     );
   }

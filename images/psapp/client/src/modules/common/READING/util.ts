@@ -175,4 +175,28 @@ export let WORDS = {
   custodian: custodianWord,
 };
 
+import zeroWord from '@src/modules/common/READING/words/zero';
+import oneWord from '@src/modules/common/READING/words/one';
+import twoWord from '@src/modules/common/READING/words/two';
+import threeWord from '@src/modules/common/READING/words/three';
+import fourWord from '@src/modules/common/READING/words/four';
+import fiveWord from '@src/modules/common/READING/words/five';
+import sixWord from '@src/modules/common/READING/words/six';
+import sevenWord from '@src/modules/common/READING/words/seven';
+import eightWord from '@src/modules/common/READING/words/eight';
+import nineWord from '@src/modules/common/READING/words/nine';
+
+export let DIGITS = {
+  '0': zeroWord.spoken,
+  '1': oneWord.spoken,
+  '2': twoWord.spoken,
+  '3': threeWord.spoken,
+  '4': fourWord.spoken,
+  '5': fiveWord.spoken,
+  '6': sixWord.spoken,
+  '7': sevenWord.spoken,
+  '8': eightWord.spoken,
+  '9': nineWord.spoken,
+};
+
 
