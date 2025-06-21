@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
+import crypto from 'crypto';
 import express from 'express';
 import fs from 'node:fs/promises';
 import jwt from 'jsonwebtoken';
@@ -106,6 +107,11 @@ let syncKnowledgeMapIdsToDb = async () => {
 
 AppDataSource.initialize().then(async () => {
   await syncKnowledgeMapIdsToDb();
+  
+  if (!env.MOMENT_API_KEY) {
+    throw new Error('MOMENT_API_KEY environment variable is required');
+  }
+  
   const app = express();
   app.use(express.json({limit: '1000kb'}));
   app.use(cookieParser());
@@ -133,34 +139,62 @@ AppDataSource.initialize().then(async () => {
     resp.status(204).end();
   });
 
-  const serveHtmlWithTestMode = async (req: express.Request, resp: express.Response) => {
+  const serveHtmlWithInjections = async (req: express.Request, resp: express.Response) => {
     const indexPath = path.join(__dirname, '../../static/index.html');
+    let content = await fs.readFile(indexPath, 'utf8');
     
-    if (isTestModeEnabled) {
-      const content = await fs.readFile(indexPath, 'utf8');
-      const injectedContent = content.replace(
-        '</head>',
-        '<script>window.__TEST_MODE__ = true;</script></head>'
-      );
-      resp.send(injectedContent);
-    } else {
-      resp.sendFile(indexPath);
+    const momentConfig: {
+      teamVanityId: string;
+      doChat: boolean;
+      doTimeTravel: boolean;
+      quadClickForFeedback: boolean;
+      email?: string;
+      hmac?: string;
+    } = {
+      teamVanityId: 'presupplied',
+      doChat: false,
+      doTimeTravel: true,
+      quadClickForFeedback: true,
+    };
+
+    if (req.jwtUser && req.jwtUser.email) {
+      momentConfig.email = req.jwtUser.email;
+      momentConfig.hmac = crypto
+        .createHmac('sha256', env.MOMENT_API_KEY!)
+        .update(req.jwtUser.email, 'utf8')
+        .digest('hex');
     }
+
+    let injections = '';
+    
+    if (!isTestModeEnabled) {
+      const momentEmbedScript = '<script src="https://www.momentcrm.com/embed"></script>';
+      const momentScript = `<script>MomentCRM('init', ${JSON.stringify(momentConfig)});</script>`;
+      injections += momentEmbedScript + momentScript;
+    } else {
+      injections += '<script>window.__TEST_MODE__ = true;</script>';
+    }
+    
+    if (injections) {
+      content = content.replace('</head>', `${injections}</head>`);
+    }
+    
+    resp.send(content);
   };
 
-  app.get('/', serveHtmlWithTestMode);
-  app.get('/map', serveHtmlWithTestMode);
-  app.get('/login', serveHtmlWithTestMode);
-  app.get('/register', serveHtmlWithTestMode);
-  app.get('/debug', serveHtmlWithTestMode);
-  app.get('/settings', serveHtmlWithTestMode);
-  app.get('/settings/general', serveHtmlWithTestMode);
-  app.get('/children', serveHtmlWithTestMode);
-  app.get('/create-child', serveHtmlWithTestMode);
-  app.get('/invitations', serveHtmlWithTestMode);
-  app.get('/sync-progress', serveHtmlWithTestMode);
-  app.get('/settings/*', serveHtmlWithTestMode);
-  app.get('/modules/*', serveHtmlWithTestMode);
+  app.get('/', serveHtmlWithInjections);
+  app.get('/map', serveHtmlWithInjections);
+  app.get('/login', serveHtmlWithInjections);
+  app.get('/register', serveHtmlWithInjections);
+  app.get('/debug', serveHtmlWithInjections);
+  app.get('/settings', serveHtmlWithInjections);
+  app.get('/settings/general', serveHtmlWithInjections);
+  app.get('/children', serveHtmlWithInjections);
+  app.get('/create-child', serveHtmlWithInjections);
+  app.get('/invitations', serveHtmlWithInjections);
+  app.get('/sync-progress', serveHtmlWithInjections);
+  app.get('/settings/*', serveHtmlWithInjections);
+  app.get('/modules/*', serveHtmlWithInjections);
 
   app.use('/', router);
 

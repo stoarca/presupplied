@@ -69,6 +69,7 @@ let config = {
         POSTGRES_CONNECTION_USER: 'presupplied',
         POSTGRES_CONNECTION_PASSWORD: secrets.POSTGRES_SUBUSER_PASSWORD,
         JWT_SIGNING_KEY: secrets.JWT_SIGNING_KEY,
+        MOMENT_API_KEY: secrets.MOMENT_API_KEY,
       }
     },
     pstts: {
