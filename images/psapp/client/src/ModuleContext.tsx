@@ -3,6 +3,7 @@ import availableModules from './autogen/available-modules.json';
 
 interface AudioOptions {
   channel?: number,
+  cancelRef?: { cancelled: boolean },
 }
 
 export interface ModuleContextProps {
@@ -18,7 +19,7 @@ export let ModuleContext = React.createContext<ModuleContextProps>({
 let channels: Array<HTMLAudioElement|null> = [null, null];
 let buildModuleContext = (moduleName: string): ModuleContextProps => {
   let ret = {
-    playAudio: (path: string, {channel = 0}: AudioOptions = {}) => {
+    playAudio: (path: string, {channel = 0, cancelRef}: AudioOptions = {}) => {
       if (channel >= channels.length) {
         throw new Error('invalid channel ' + channel);
       }
@@ -35,6 +36,9 @@ let buildModuleContext = (moduleName: string): ModuleContextProps => {
       return new Promise<void>(resolve => {
         let doResolve = () => {
           clearInterval(interval);
+          if (cancelInterval) {
+            clearInterval(cancelInterval);
+          }
           resolve();
         };
         let interval = setInterval(() => {
@@ -42,6 +46,18 @@ let buildModuleContext = (moduleName: string): ModuleContextProps => {
             doResolve();
           }
         }, 100);
+
+        // Set up cancellation check if cancelRef is provided
+        let cancelInterval: ReturnType<typeof setInterval> | null = null;
+        if (cancelRef) {
+          cancelInterval = setInterval(() => {
+            if (cancelRef.cancelled) {
+              (audio as any).hackyPause();
+              doResolve();
+            }
+          }, 20);
+        }
+
         audio.addEventListener('paused', () => {
           doResolve();
         }, {once: true});

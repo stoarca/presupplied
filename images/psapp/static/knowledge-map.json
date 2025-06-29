@@ -67,7 +67,7 @@
     {
       "id": "RECOGNIZE_OPPOSITES",
       "deps": [
-        "RECOGNIZE_IDENTICAL_OBJECT",
+        "RECOGNIZE_IDENTICAL_OBJECTS",
         "RECOGNIZE_FARM_ANIMALS",
         "RECOGNIZE_WILD_ANIMALS",
         "RECOGNIZE_INSECTS",
@@ -8667,7 +8667,7 @@
       ]
     },
     {
-      "id": "RECOGNIZE_IDENTICAL_OBJECT",
+      "id": "RECOGNIZE_IDENTICAL_OBJECTS",
       "title": "Recognizing identical objects",
       "description": "In this module, we learn to identify identical objects.",
       "studentVideos": [],
@@ -8755,7 +8755,7 @@
         "RECOGNIZE_INSECTS",
         "RECOGNIZE_WILD_ANIMALS",
         "RECOGNIZE_FARM_ANIMALS",
-        "RECOGNIZE_IDENTICAL_OBJECT",
+        "RECOGNIZE_IDENTICAL_OBJECTS",
         "RECOGNIZE_COLORS",
         "RECOGNIZE_SHAPES"
       ]

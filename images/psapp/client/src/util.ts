@@ -133,6 +133,7 @@ export class ProbabilisticDeck<T> {
   variants: readonly { variant: T; millicards: number }[];
   variantsMap: Map<T, { maxMillicards: number; millicards: number }>;
   private currentFailedVariant: T | null = null;
+  private scoreOffset: number;
 
   constructor(
     variants: readonly { variant: T; millicards: number }[],
@@ -151,6 +152,10 @@ export class ProbabilisticDeck<T> {
         millicards,
       });
     }
+
+    // Store the initial score as the offset
+    this.scoreOffset = 0;
+    this.scoreOffset = this.score();
 
     this.validateState();
   }
@@ -316,14 +321,17 @@ export class ProbabilisticDeck<T> {
       (sum, v) => sum + (v.maxMillicards - v.millicards),
       0
     );
-    return removed;
+    return removed - this.scoreOffset;
   }
 
   maxScore(): number {
-    return Array.from(this.variantsMap.values()).reduce(
+    const totalMaxScore = Array.from(this.variantsMap.values()).reduce(
       (sum, v) => sum + v.maxMillicards,
       0
     );
+    const adjustedMaxScore = totalMaxScore - this.scoreOffset;
+    // Round up to the nearest card (1000 millicards)
+    return Math.ceil(adjustedMaxScore / 1000) * 1000;
   }
 }
 

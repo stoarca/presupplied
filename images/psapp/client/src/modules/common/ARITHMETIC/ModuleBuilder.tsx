@@ -1,13 +1,9 @@
 import React from 'react';
-import { useExercise, Ex, Module } from '@src/Module';
-import { ModuleContext } from '@src/ModuleContext';
+import { ModuleBuilder as ChoiceModuleBuilder, MyEx, ChoiceItem } from '@modules/common/CHOICE/ModuleBuilder';
 import { ProbabilisticDeck } from '@src/util';
-import { ChoiceSelector } from '@src/ChoiceSelector';
+import { ModuleContext } from '@src/ModuleContext';
 
 export type Variant = [number, number];
-
-interface MyEx extends Ex<Variant> {
-}
 
 export interface VariantWithMillicards {
   variant: Variant;
@@ -26,108 +22,97 @@ export let ModuleBuilder = ({
   variants, maxMillicardsPerVariant, operation
 }: ModuleBuilderProps) => {
   return (props: void) => {
-    let moduleContext = React.useContext(ModuleContext);
+    const [highlightedPart, setHighlightedPart] = React.useState<'first' | 'operator' | 'second' | 'equals' | null>(null);
+    const moduleContext = React.useContext(ModuleContext);
 
-    let vlist = React.useMemo(
+    const vlist = React.useMemo(
       () => new ProbabilisticDeck(variants, maxMillicardsPerVariant),
       [variants, maxMillicardsPerVariant]
     );
-    let generateExercise = React.useCallback((): MyEx => {
-      let variant = vlist.pickVariant();
 
-      return {
-        variant: variant,
-      };
-    }, [vlist]);
+    const operatorSymbol = operation === 'add' ? '+' : '-';
 
-    const [highlightedPart, setHighlightedPart] = React.useState<'first' | 'operator' | 'second' | 'equals' | null>(null);
-
-    const playInstructions = React.useCallback((exercise: MyEx) => {
+    const playInstructions = React.useCallback((exercise: MyEx<Variant>, cancelRef: { cancelled: boolean }) => {
       (async () => {
-        await moduleContext.playTTS('What does');
+        if (cancelRef?.cancelled) {
+          return;
+        }
+        await moduleContext.playTTS('What does', { cancelRef });
         await new Promise(resolve => setTimeout(resolve, 100));
 
+        if (cancelRef?.cancelled) {
+          setHighlightedPart(null);
+          return;
+        }
         setHighlightedPart('first');
-        await moduleContext.playTTS(`${exercise.variant[0]}`);
+        await moduleContext.playTTS(`${exercise.variant[0]}`, { cancelRef });
         await new Promise(resolve => setTimeout(resolve, 100));
 
+        if (cancelRef?.cancelled) {
+          setHighlightedPart(null);
+          return;
+        }
         setHighlightedPart('operator');
-        await moduleContext.playTTS(operation === 'add' ? 'plus' : 'minus');
+        await moduleContext.playTTS(operation === 'add' ? 'plus' : 'minus', { cancelRef });
         await new Promise(resolve => setTimeout(resolve, 100));
 
+        if (cancelRef?.cancelled) {
+          setHighlightedPart(null);
+          return;
+        }
         setHighlightedPart('second');
-        await moduleContext.playTTS(`${exercise.variant[1]}`);
+        await moduleContext.playTTS(`${exercise.variant[1]}`, { cancelRef });
         await new Promise(resolve => setTimeout(resolve, 100));
 
+        if (cancelRef?.cancelled) {
+          setHighlightedPart(null);
+          return;
+        }
         setHighlightedPart('equals');
-        await moduleContext.playTTS('equal?');
+        await moduleContext.playTTS('equal?', { cancelRef });
 
+        if (cancelRef?.cancelled) {
+          setHighlightedPart(null);
+          return;
+        }
         setHighlightedPart(null);
       })();
-    }, [moduleContext, operation]);
+    }, [operation, moduleContext]);
 
-    let {
-      exercise,
-      partial,
-      score,
-      maxScore,
-      doSuccess,
-      doPartialSuccess,
-      doFailure,
-    } = useExercise({
-      onGenExercise: generateExercise,
-      initialPartial: (): number | null => null,
-      onPlayInstructions: playInstructions,
-      playOnEveryExercise: true,
-      vlist: vlist,
-    });
-
-    let choices = React.useMemo(() => {
+    const generateChoices = React.useCallback(() => {
       return Array.from({ length: 10 }, (_, i) => i);
     }, []);
 
-    let handleSelected = React.useCallback(async (index: number) => {
-      let selectedNumber = choices[index];
+
+    const isCorrectChoice = React.useCallback((choice: ChoiceItem, exercise: MyEx<Variant>, currentPartial?: number | null) => {
+      if (typeof choice !== 'number') {
+        return false;
+      }
+
+      // Build what the new partial would be if this choice was selected
+      const selectedNumber = choice as number;
+      const currentValue = currentPartial === null || currentPartial === undefined ? 0 : currentPartial;
+      const newPartial = currentValue * 10 + selectedNumber;
+
+      // Check if this new partial would be valid
       const correctAnswer = operation === 'add'
         ? exercise.variant[0] + exercise.variant[1]
         : exercise.variant[0] - exercise.variant[1];
 
-      const currentValue = partial === null ? 0 : partial;
-      const newValue = currentValue * 10 + selectedNumber;
-
-      const newValueStr = newValue.toString();
+      const newValueStr = newPartial.toString();
       const correctAnswerStr = correctAnswer.toString();
 
-      if (newValueStr.length === correctAnswerStr.length) {
-        if (newValue === correctAnswer) {
-          await doPartialSuccess(newValue);
-          await doSuccess();
-        } else {
-          await doFailure();
-        }
-      } else if (newValueStr.length < correctAnswerStr.length) {
-        if (correctAnswerStr.startsWith(newValueStr)) {
-          await doPartialSuccess(newValue);
-        } else {
-          await doFailure();
-        }
-      } else {
-        await doFailure();
+      if (newValueStr.length > correctAnswerStr.length) {
+        return false;
       }
-    }, [exercise, doSuccess, doPartialSuccess, doFailure, choices, partial, operation]);
 
-    let getFill = React.useCallback((choiceIndex: number) => {
-      if (partial !== null && choiceIndex === partial % 10) {
-        return '#00ff0033';
-      }
-      return 'white';
-    }, [partial]);
+      return correctAnswerStr.startsWith(newValueStr);
+    }, [operation]);
 
-    const displayValue = partial === null ? '?' : partial;
-    const operatorSymbol = operation === 'add' ? '+' : '-';
+    const getDisplay = React.useCallback((exercise: MyEx<Variant>, partial: number | null) => {
+      const displayValue = partial === null ? '?' : partial;
 
-    return (
-      <Module type="svg" score={score} maxScore={maxScore}>
+      return (
         <text
           x={window.innerWidth / 2}
           y={window.innerHeight / 3}
@@ -147,13 +132,79 @@ export let ModuleBuilder = ({
           <tspan fill={highlightedPart === 'equals' ? 'red' : 'black'}> = </tspan>
           {displayValue}
         </text>
-        <ChoiceSelector
-          choices={choices}
-          howManyPerRow={10}
-          getFill={getFill}
-          onSelected={handleSelected}
-        />
-      </Module>
-    );
+      );
+    }, [highlightedPart, operatorSymbol]);
+
+    const initialPartial = React.useCallback(() => null as number | null, []);
+
+    const buildPartialAnswer = React.useCallback((currentPartial: number | null, selectedChoice: ChoiceItem, exercise: MyEx<Variant>) => {
+      const selectedNumber = selectedChoice as number;
+      const currentValue = currentPartial === null ? 0 : currentPartial;
+      return currentValue * 10 + selectedNumber;
+    }, []);
+
+    const isPartialComplete = React.useCallback((partial: number | null, exercise: MyEx<Variant>) => {
+      const correctAnswer = operation === 'add'
+        ? exercise.variant[0] + exercise.variant[1]
+        : exercise.variant[0] - exercise.variant[1];
+
+      if (partial === null) {
+        return false;
+      }
+
+      const newValueStr = partial.toString();
+      const correctAnswerStr = correctAnswer.toString();
+
+      return newValueStr.length === correctAnswerStr.length && partial === correctAnswer;
+    }, [operation]);
+
+    const isPartialValid = React.useCallback((partial: number | null, exercise: MyEx<Variant>) => {
+      const correctAnswer = operation === 'add'
+        ? exercise.variant[0] + exercise.variant[1]
+        : exercise.variant[0] - exercise.variant[1];
+
+      if (partial === null) {
+        return true;
+      }
+
+      const newValueStr = partial.toString();
+      const correctAnswerStr = correctAnswer.toString();
+
+      if (newValueStr.length > correctAnswerStr.length) {
+        return false;
+      }
+
+      return correctAnswerStr.startsWith(newValueStr);
+    }, [operation]);
+
+    const getFill = React.useCallback((choice: ChoiceItem, exercise: MyEx<Variant>, partial: number | null, alreadyFailed: boolean) => {
+      const currentValue = partial || 0;
+      const lastDigit = currentValue % 10;
+
+      if (currentValue > 0 && choice === lastDigit) {
+        return 'correct';
+      }
+
+      if (alreadyFailed && isCorrectChoice(choice, exercise, partial)) {
+        return 'wrong';
+      }
+
+      return 'white';
+    }, [isCorrectChoice]);
+
+    return <ChoiceModuleBuilder
+      vlist={vlist}
+      generateChoices={generateChoices}
+      playInstructions={playInstructions}
+      isCorrectChoice={isCorrectChoice}
+      getDisplay={getDisplay}
+      getFill={getFill}
+      initialPartial={initialPartial}
+      buildPartialAnswer={buildPartialAnswer}
+      isPartialComplete={isPartialComplete}
+      isPartialValid={isPartialValid}
+      howManyPerRow={10}
+      playOnEveryExercise={true}
+    />;
   };
 };

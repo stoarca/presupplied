@@ -143,6 +143,8 @@ AppDataSource.initialize().then(async () => {
     const indexPath = path.join(__dirname, '../../static/index.html');
     let content = await fs.readFile(indexPath, 'utf8');
     
+    const isInModule = req.path.startsWith('/modules/');
+    
     const momentConfig: {
       teamVanityId: string;
       doChat: boolean;
@@ -154,7 +156,7 @@ AppDataSource.initialize().then(async () => {
       teamVanityId: 'presupplied',
       doChat: false,
       doTimeTravel: true,
-      quadClickForFeedback: true,
+      quadClickForFeedback: !isInModule,
     };
 
     if (req.jwtUser && req.jwtUser.email) {

@@ -1,4 +1,7 @@
-import {MyEx as ChoiceEx, ChoiceItem} from '@modules/common/CHOICE/ModuleBuilder';
+import React from 'react';
+import {ModuleBuilder as ChoiceModuleBuilder, MyEx as ChoiceEx, ChoiceItem} from '@modules/common/CHOICE/ModuleBuilder';
+import {ModuleContext} from '@src/ModuleContext';
+import {ProbabilisticDeck} from '@src/util';
 
 export type Type =
     'allbefore' | 'onebefore' | 'previous' | 'allafter' | 'oneafter' | 'next';
@@ -6,6 +9,18 @@ export type Type =
 export type Variant = [Type, number];
 
 export interface MyEx extends ChoiceEx<Variant> {
+}
+
+interface VariantWithMillicards {
+  variant: Variant;
+  millicards: number;
+}
+
+interface ModuleBuilderProps {
+  variants: readonly VariantWithMillicards[];
+  maxMillicardsPerVariant: number;
+  generateChoices: () => ChoiceItem[];
+  howManyPerRow?: number;
 }
 
 export let exerciseToSentence = (exercise: MyEx) => {
@@ -49,18 +64,96 @@ export let isCorrectChoice = (choice: ChoiceItem, exercise: MyEx): boolean => {
   }
 };
 
-export let getAllCorrectChoices = (exercise: MyEx, numNumbers: number): ChoiceItem[] => {
-  const type = exercise.variant[0];
-  const number = exercise.variant[1];
+export let ModuleBuilder = ({
+  variants,
+  maxMillicardsPerVariant,
+  generateChoices,
+  howManyPerRow = 5
+}: ModuleBuilderProps) => {
+  return () => {
+    const moduleContext = React.useContext(ModuleContext);
 
-  if (type === 'allbefore') {
-    return Array.from({length: number}, (_, i) => i);
-  } else if (type === 'allafter') {
-    return Array.from({length: numNumbers - number - 1}, (_, i) => number + 1 + i);
-  } else {
-    return [type === 'onebefore' || type === 'previous'
-      ? number - 1
-      : number + 1];
-  }
+    const vlist = React.useMemo(
+      () => new ProbabilisticDeck(variants, maxMillicardsPerVariant),
+      [variants, maxMillicardsPerVariant]
+    );
+
+    const playInstructions = React.useCallback(async (exercise: MyEx, cancelRef: { cancelled: boolean }) => {
+      await moduleContext.playTTS(exerciseToSentence(exercise), { cancelRef });
+    }, [moduleContext]);
+
+    const initialPartial = React.useCallback(() => [] as ChoiceItem[], []);
+
+    const buildPartialAnswer = React.useCallback((currentPartial: ChoiceItem[], selectedChoice: ChoiceItem, exercise: MyEx) => {
+      const currentNumbers = currentPartial as number[];
+      const selectedNumber = selectedChoice as number;
+
+      if (currentNumbers.includes(selectedNumber)) {
+        return currentPartial;
+      }
+
+      return [...currentNumbers, selectedNumber];
+    }, []);
+
+    const isPartialComplete = React.useCallback((partial: ChoiceItem[], exercise: MyEx) => {
+      const type = exercise.variant[0];
+      const number = exercise.variant[1];
+      const partialNumbers = partial as number[];
+
+      if (type === 'allbefore') {
+        const expectedNumbers: number[] = [];
+        for (let i = 0; i < number; i++) {
+          expectedNumbers.push(i);
+        }
+        return expectedNumbers.every(num => partialNumbers.includes(num)) &&
+               partialNumbers.every(num => expectedNumbers.includes(num));
+      } else if (type === 'allafter') {
+        const expectedNumbers: number[] = [];
+        for (let i = number + 1; i <= 10; i++) {
+          expectedNumbers.push(i);
+        }
+        return expectedNumbers.every(num => partialNumbers.includes(num)) &&
+               partialNumbers.every(num => expectedNumbers.includes(num));
+      } else {
+        return partialNumbers.length === 1;
+      }
+    }, []);
+
+    const getFill = React.useCallback((choice: ChoiceItem, exercise: MyEx, partial: ChoiceItem[], alreadyFailed: boolean) => {
+      if (typeof choice !== 'number') {
+        return 'white';
+      }
+
+      const questionNumber = exercise.variant[1];
+      const partialNumbers = partial as number[];
+
+      if (partialNumbers.includes(choice)) {
+        return 'correct';
+      }
+
+      if (choice === questionNumber) {
+        return 'focus';
+      }
+
+      if (alreadyFailed && isCorrectChoice(choice, exercise)) {
+        return 'wrong';
+      }
+
+      return 'white';
+    }, []);
+
+    return <ChoiceModuleBuilder
+      vlist={vlist}
+      generateChoices={generateChoices}
+      playInstructions={playInstructions}
+      isCorrectChoice={isCorrectChoice}
+      getFill={getFill}
+      initialPartial={initialPartial}
+      buildPartialAnswer={buildPartialAnswer}
+      isPartialComplete={isPartialComplete}
+      howManyPerRow={howManyPerRow}
+    />;
+  };
 };
+
 

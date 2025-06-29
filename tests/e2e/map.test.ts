@@ -217,6 +217,8 @@ describe('Map View E2E Tests', () => {
         ]));
       })
       .run(C.clickMapModule, 'PS_TESTING_DELEGATED')
+      .checkUntil(XC.visibleElementCount, C.userSelectorDialogSelector, 1)
+      .run(Onboarding.selectAccount, child2Id)
       .checkUntil(XC.elementText, 'body', (text) => text?.includes('This is a test delegated module. Click yes to complete.'))
       .checkUntil(XC.visibleElementCount, '[data-choice-index="0"]', 1)
       .run(XC.autoClick, '[data-choice-index="0"]')

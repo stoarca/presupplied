@@ -1,11 +1,4 @@
-import {ModuleBuilder} from '@modules/common/CHOICE/ModuleBuilder';
-import {
-  Variant,
-  Type,
-  exerciseToSentence,
-  isCorrectChoice,
-  getAllCorrectChoices
-} from '@src/modules/common/BEFORE_AFTER_NUMBERS/ModuleBuilder';
+import {ModuleBuilder, Variant, Type} from '@src/modules/common/BEFORE_AFTER_NUMBERS/ModuleBuilder';
 
 let numNumbers = 11;
 let f = (type: Type): Variant => {
@@ -27,25 +20,10 @@ let types: Type[] = [
 let VARIANTS: Variant[] = types.map(f);
 
 export default ModuleBuilder({
-  variants: VARIANTS,
-  generateChoices: () => {
-    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  },
-  getInstruction: (exercise) => {
-    return exerciseToSentence(exercise);
-  },
-  getHighlightedChoice: (exercise) => {
-    return exercise.variant[1];
-  },
-  isCorrectChoice: (choice, exercise) => {
-    return isCorrectChoice(choice, exercise);
-  },
-  allowMultipleSelections: true,
-  getAllCorrectChoices: (exercise) => {
-    return getAllCorrectChoices(exercise, numNumbers);
-  },
+  variants: VARIANTS.map(v => ({ variant: v, millicards: 5000 })),
+  maxMillicardsPerVariant: 5000,
+  generateChoices: () => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   howManyPerRow: 10,
-  maxScorePerVariant: 5000,
 });
 
 

@@ -1,5 +1,4 @@
-import {ModuleBuilder} from '@modules/common/CHOICE/ModuleBuilder';
-import {Variant, exerciseToSentence, isCorrectChoice} from '@src/modules/common/BEFORE_AFTER_NUMBERS/ModuleBuilder';
+import {ModuleBuilder, Variant} from '@src/modules/common/BEFORE_AFTER_NUMBERS/ModuleBuilder';
 
 const VARIANTS: Variant[] = [
   // Before variants (1-10)
@@ -27,21 +26,10 @@ const VARIANTS: Variant[] = [
 ];
 
 export default ModuleBuilder({
-  variants: VARIANTS,
-  generateChoices: () => {
-    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  },
-  getInstruction: (exercise) => {
-    return exerciseToSentence(exercise);
-  },
-  getHighlightedChoice: (exercise) => {
-    return exercise.variant[1];
-  },
-  isCorrectChoice: (choice, exercise) => {
-    return isCorrectChoice(choice, exercise);
-  },
+  variants: VARIANTS.map(v => ({ variant: v, millicards: 3000 })),
+  maxMillicardsPerVariant: 3000,
+  generateChoices: () => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   howManyPerRow: 10,
-  maxScorePerVariant: 3000,
 });
 
 
