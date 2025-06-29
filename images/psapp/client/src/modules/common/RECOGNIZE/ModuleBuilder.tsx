@@ -1,8 +1,11 @@
-import {ModuleBuilder as ChoiceModuleBuilder} from '@modules/common/CHOICE/ModuleBuilder';
+import React from 'react';
+import {ModuleBuilder as ChoiceModuleBuilder, ChoiceItem} from '@modules/common/CHOICE/ModuleBuilder';
+import {ModuleContext} from '@src/ModuleContext';
 import {
   pickFromBag,
   shuffle,
-  PRONUNCIATIONS
+  PRONUNCIATIONS,
+  ProbabilisticDeck
 } from '@src/util';
 
 export type Variant = string;
@@ -22,21 +25,24 @@ export let ModuleBuilder = ({
   getPronunciation,
   instructionPrefix = 'Which one is'
 }: ModuleBuilderProps) => {
-  return ChoiceModuleBuilder({
-    variants,
-    generateChoices: (variant, allVariants) => {
+  return <ChoiceModuleBuilder
+    vlist={new ProbabilisticDeck(
+      variants.map(v => ({ variant: v, millicards: 2000 })),
+      2000
+    )}
+    generateChoices={(variant) => {
       if (useAllVariantsAsChoices) {
-        return [...allVariants];
+        return [...variants];
       } else {
-        const others = pickFromBag(allVariants.filter(x => x !== variant), 5, {
+        const others = pickFromBag(variants.filter(x => x !== variant), 5, {
           withReplacement: false,
         });
         const allChoices = [...others, variant];
         shuffle(allChoices);
         return allChoices;
       }
-    },
-    getInstruction: (exercise) => {
+    }}
+    playInstructions={async (exercise, cancelRef) => {
       let pronunciation: string;
       if (getPronunciation) {
         pronunciation = getPronunciation(exercise.variant);
@@ -45,12 +51,20 @@ export let ModuleBuilder = ({
       } else {
         pronunciation = exercise.variant;
       }
-      return `${instructionPrefix} ${pronunciation}`;
-    },
-    isCorrectChoice: (choice, exercise) => {
+      const moduleContext = React.useContext(ModuleContext);
+      await moduleContext.playTTS(`${instructionPrefix} ${pronunciation}`, { cancelRef });
+    }}
+    isCorrectChoice={(choice, exercise) => {
       return choice === exercise.variant;
-    },
-    howManyPerRow,
-    playOnEveryExercise: true,
-  });
+    }}
+    getFill={(choice, exercise, partial, alreadyFailed) => {
+      if (alreadyFailed && choice === exercise.variant) {
+        return 'wrong';
+      }
+      return 'white';
+    }}
+    initialPartial={() => [] as ChoiceItem[]}
+    howManyPerRow={howManyPerRow}
+    playOnEveryExercise={true}
+  />;
 };

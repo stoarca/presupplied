@@ -19,7 +19,7 @@ export interface Ex<V> {
 interface UseExerciseOptions<E extends Ex<V>, V, P> {
   onGenExercise: (previous?: E) => E,
   initialPartial: () => P,
-  onPlayInstructions: (exercise: E) => Promise<void> | void,
+  onPlayInstructions: (exercise: E, cancelRef: { cancelled: boolean }) => Promise<void> | void,
   playOnEveryExercise: boolean,
   vlist: ProbabilisticDeck<V>,
 }
@@ -143,15 +143,26 @@ export let useExercise = <E extends Ex<V>, V, P>({
   let [partial, setPartial] = React.useState<P>(initialPartial);
   let [playingInstructions, setPlayingInstructions] = React.useState(false);
   let [lastActionTime, setLastActionTime] = React.useState(Date.now());
+  let currentCancelRef = React.useRef({ cancelled: false });
   React.useEffect(() => {
     (async () => {
+      // Create new cancel ref for this exercise
+      const newCancelRef = { cancelled: false };
+      currentCancelRef.current = newCancelRef;
+
       setPlayingInstructions(true);
-      await onPlayInstructions(exercise);
+      await onPlayInstructions(exercise, newCancelRef);
       setPlayingInstructions(false);
     })();
   }, [onPlayInstructions, moduleContext, playOnEveryExercise ? exercise : 0]);
   React.useEffect(() => {
-    let interval = setInterval(() => onPlayInstructions(exercise), 15000);
+    let interval = setInterval(() => {
+      // Create new cancel ref for interval replay
+      const newCancelRef = { cancelled: false };
+      currentCancelRef.current = newCancelRef;
+
+      onPlayInstructions(exercise, newCancelRef);
+    }, 15000);
     return () => clearInterval(interval);
   }, [onPlayInstructions, exercise, lastActionTime]);
 
@@ -175,14 +186,17 @@ export let useExercise = <E extends Ex<V>, V, P>({
       return;
     }
 
+    // Cancel current instructions immediately
+    currentCancelRef.current.cancelled = true;
+
     setLastActionTime(Date.now());
-    // TODO: what if a failure happens between the last partialSuccess and this
-    // success
+    // Prevent new actions during the entire success sequence
     setAlreadyCompleted(true);
+
     vlist.markSuccess(exercise.variant);
     setScore(vlist.score());
     setMaxScore(vlist.maxScore());
-    let p = moduleContext.playAudio(sound);
+    let p = moduleContext.playAudio(sound, {channel: 1});
     if (waitForSound) {
       await p;
     }
@@ -190,18 +204,22 @@ export let useExercise = <E extends Ex<V>, V, P>({
     setExercise(ex);
     setPartial(initialPartial);
     setAlreadyFailed(false);
+
+    // Only allow new actions after everything is ready
     setAlreadyCompleted(false);
-  }, [canTakeAction, moduleContext, vlist, exercise, onGenExercise]);
+  }, [canTakeAction, moduleContext, vlist, exercise, onGenExercise, currentCancelRef]);
   let doPartialSuccess = React.useCallback(async (_partial: P, doDing=true) => {
     if (!canTakeAction()) {
       return;
     }
 
+    setAlreadyCompleted(true);
     setLastActionTime(Date.now());
     setPartial(_partial);
     if (doDing) {
       await moduleContext.playAudio(goodDing);
     }
+    setAlreadyCompleted(false);
   }, [canTakeAction, moduleContext]);
   let [doingFailure, setDoingFailure] = React.useState(false);
   let doFailure = React.useCallback(async ({
@@ -229,7 +247,7 @@ export let useExercise = <E extends Ex<V>, V, P>({
 
     if (!doingFailure) {
       setDoingFailure(true);
-      await moduleContext.playAudio(sound);
+      await moduleContext.playAudio(sound, {channel: 1});
       setDoingFailure(false);
     }
   }, [

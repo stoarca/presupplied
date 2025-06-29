@@ -1,8 +1,7 @@
 import equal from 'fast-deep-equal';
 import React from 'react';
 
-import {ChoiceSelector} from '@src/ChoiceSelector';
-import {Module, useExercise, Ex} from '@src/Module';
+import {ModuleBuilder as ChoiceModuleBuilder, ChoiceItem, MyEx} from '@modules/common/CHOICE/ModuleBuilder';
 import {ModuleContext} from '@src/ModuleContext';
 import {ProbabilisticDeck} from '@src/util';
 import {LETTER_SOUNDS} from '@src/modules/common/READING/util';
@@ -53,51 +52,19 @@ let soundToLetters: {[key in keyof typeof LETTER_SOUNDS]: string[]} = {
 
 type Variant = keyof typeof soundToLetters;
 
-interface MyEx extends Ex<Variant> {
-}
-
 interface ModuleBuilderProps {
   variants: readonly Variant[];
 }
 
 export let ModuleBuilder = ({ variants }: ModuleBuilderProps) => {
-  return (props: void) => {
-    let moduleContext = React.useContext(ModuleContext);
-
-    let vlist = React.useMemo(() => new ProbabilisticDeck(variants.map(v => ({ variant: v, millicards: 2000 })), 2000), [variants]);
-
-    let generateExercise = React.useCallback(() => {
-      return {
-        variant: vlist.pickVariant(),
-      };
-    }, [vlist]);
-
-    let playInstructions = React.useCallback(async (exercise: MyEx) => {
-      await moduleContext.playAudio(whichLetter);
-      await moduleContext.playAudio(LETTER_SOUNDS[exercise.variant]);
-    }, [moduleContext]);
-
-    let {
-      exercise,
-      partial,
-      score,
-      maxScore,
-      doSuccess,
-      doPartialSuccess,
-      doFailure,
-    } = useExercise({
-      onGenExercise: generateExercise,
-      initialPartial: (): string[] => [],
-      onPlayInstructions: playInstructions,
-      playOnEveryExercise: true,
-      vlist: vlist,
-    });
-
-    const correctLetters = soundToLetters[exercise.variant];
-
+  return () => {
+    const moduleContext = React.useContext(ModuleContext);
     const allLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
-    const choices = React.useMemo(() => {
+    const vlist = React.useMemo(() => new ProbabilisticDeck(variants.map(v => ({ variant: v, millicards: 2000 })), 2000), [variants]);
+
+    const generateChoices = React.useCallback((variant: Variant) => {
+      const correctLetters = soundToLetters[variant];
       const incorrectLetters = allLetters.filter(letter => !correctLetters.includes(letter));
       const shuffledIncorrect = [...incorrectLetters].sort(() => Math.random() - 0.5);
 
@@ -108,41 +75,63 @@ export let ModuleBuilder = ({ variants }: ModuleBuilderProps) => {
       }
 
       return [...choiceSet].sort(() => Math.random() - 0.5);
-    }, [exercise.variant]);
+    }, []);
 
-    let handleSelected = React.useCallback(async (index: number) => {
-      const selectedLetter = choices[index];
+    const playInstructions = React.useCallback(async (exercise: MyEx<Variant>, cancelRef: { cancelled: boolean }) => {
+      await moduleContext.playAudio(whichLetter, { cancelRef });
+      await moduleContext.playAudio(LETTER_SOUNDS[exercise.variant], { cancelRef });
+    }, [moduleContext]);
 
-      if (correctLetters.includes(selectedLetter)) {
-        if (!partial.includes(selectedLetter)) {
-          let newPartial = [...partial, selectedLetter];
-          await doPartialSuccess(newPartial);
+    const isCorrectChoice = React.useCallback((choice: ChoiceItem, exercise: MyEx<Variant>) => {
+      const correctLetters = soundToLetters[exercise.variant];
+      return correctLetters.includes(choice as string);
+    }, []);
 
-          if (equal([...newPartial].sort(), [...correctLetters].sort())) {
-            doSuccess();
-          }
-        }
-      } else {
-        doFailure();
+    const initialPartial = React.useCallback(() => [] as string[], []);
+
+    const buildPartialAnswer = React.useCallback((currentPartial: string[], selectedChoice: ChoiceItem, exercise: MyEx<Variant>) => {
+      const currentPartialStrings = currentPartial as string[];
+      const selectedString = selectedChoice as string;
+
+      if (currentPartialStrings.includes(selectedString)) {
+        return currentPartial;
       }
-    }, [choices, correctLetters, partial, doSuccess, doPartialSuccess, doFailure]);
 
-    let getFill = React.useCallback((choice: string) => {
-      if (partial.includes(choice)) {
-        return '#00ff0033';
+      return [...currentPartialStrings, selectedString];
+    }, []);
+
+    const isPartialComplete = React.useCallback((partial: string[], exercise: MyEx<Variant>) => {
+      const correctLetters = soundToLetters[exercise.variant];
+      const partialStrings = partial as string[];
+      return equal([...partialStrings].sort(), [...correctLetters].sort());
+    }, []);
+
+    const getFill = React.useCallback((choice: ChoiceItem, exercise: MyEx<Variant>, partial: string[], alreadyFailed: boolean) => {
+      const correctLetters = soundToLetters[exercise.variant];
+      const partialStrings = partial as string[];
+
+      if (partialStrings.includes(choice as string)) {
+        return 'correct';
       }
+
+      if (alreadyFailed && correctLetters.includes(choice as string)) {
+        return 'wrong';
+      }
+
       return 'white';
-    }, [partial]);
+    }, []);
 
-    return (
-      <Module type="svg" score={score} maxScore={maxScore}>
-        <ChoiceSelector
-          choices={choices}
-          howManyPerRow={6}
-          getFill={getFill}
-          onSelected={handleSelected}
-        />
-      </Module>
-    );
+    return <ChoiceModuleBuilder
+      vlist={vlist}
+      generateChoices={generateChoices}
+      playInstructions={playInstructions}
+      isCorrectChoice={isCorrectChoice}
+      initialPartial={initialPartial}
+      buildPartialAnswer={buildPartialAnswer}
+      isPartialComplete={isPartialComplete}
+      getFill={getFill}
+      howManyPerRow={6}
+      playOnEveryExercise={true}
+    />;
   };
 };

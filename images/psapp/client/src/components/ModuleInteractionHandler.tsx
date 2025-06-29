@@ -155,7 +155,7 @@ export const useModuleInteraction = (
       setShowChoiceScreen(true);
     } else if (!isStudent && hasAnyVideos) {
       setShowChoiceScreen(true);
-    } else if ((node.moduleType === ModuleType.CHILD_DELEGATED || node.moduleType === ModuleType.CHILD_OWNED) && relevantChildrenSorted.length > 1) {
+    } else if ((node.moduleType === ModuleType.CHILD_DELEGATED || node.moduleType === ModuleType.CHILD_OWNED) && relevantChildrenSorted.length > 0) {
       setShowChildSelector(true);
     } else if (isShiftClick) {
       // For shift-click on adult modules, mark progress directly for the current user
@@ -196,11 +196,8 @@ export const useModuleInteraction = (
           });
         }
       }
-    } else if (node.moduleType === ModuleType.CHILD_DELEGATED && relevantChildrenSorted.length > 0) {
-      const returnTo = window.location.pathname;
-      navigate(`/modules/${kmid}?childId=${relevantChildrenSorted[0].id}&returnTo=${encodeURIComponent(returnTo)}`);
     } else {
-      navigate(`/modules/${kmid}`);
+      window.location.href = `/modules/${kmid}`;
     }
   }, [kmid, user, node, navigate, relevantChildrenSorted, showError]);
 
@@ -219,7 +216,7 @@ export const useModuleInteraction = (
   const handleMasteryChoice = React.useCallback(async () => {
     setShowChoiceScreen(false);
 
-    if ((node.moduleType === ModuleType.CHILD_DELEGATED || node.moduleType === ModuleType.CHILD_OWNED) && relevantChildrenSorted.length > 1) {
+    if ((node.moduleType === ModuleType.CHILD_DELEGATED || node.moduleType === ModuleType.CHILD_OWNED) && relevantChildrenSorted.length > 0) {
       setShowChildSelector(true);
     } else if (wasShiftClick) {
       // For shift-click on adult modules, mark progress directly for the current user
@@ -258,12 +255,9 @@ export const useModuleInteraction = (
           });
         }
       }
-    } else if (node.moduleType === ModuleType.CHILD_DELEGATED && relevantChildrenSorted.length > 0) {
-      const returnTo = window.location.pathname;
-      navigate(`/modules/${kmid}?childId=${relevantChildrenSorted[0].id}&returnTo=${encodeURIComponent(returnTo)}`);
     } else {
       const returnTo = window.location.pathname;
-      navigate(`/modules/${kmid}?returnTo=${encodeURIComponent(returnTo)}`);
+      window.location.href = `/modules/${kmid}?returnTo=${encodeURIComponent(returnTo)}`;
     }
   }, [navigate, kmid, wasShiftClick, user, node.moduleType, relevantChildrenSorted, showError]);
 
@@ -282,7 +276,7 @@ export const useModuleInteraction = (
       }, childId);
     } else {
       const returnTo = window.location.pathname;
-      navigate(`/modules/${kmid}?childId=${childId}&returnTo=${encodeURIComponent(returnTo)}`);
+      window.location.href = `/modules/${kmid}?childId=${childId}&returnTo=${encodeURIComponent(returnTo)}`;
     }
   }, [kmid, user, navigate, wasShiftClick]);
 

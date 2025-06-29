@@ -355,4 +355,26 @@ describe('ProbabilisticDeck', () => {
     const lastPick = deck.pickVariant();
     expect(lastPick).toBe('A');
   });
+
+  test('score and maxScore should handle scoreOffset correctly with unequal initial millicards', () => {
+    const variants = [
+      { variant: 'A', millicards: 500 },
+      { variant: 'B', millicards: 1000 },
+      { variant: 'C', millicards: 200 }
+    ];
+    const deck = new ProbabilisticDeck<string>(variants, 1000);
+
+    expect(deck.score()).toBe(0);
+    expect(deck.maxScore()).toBe(2000);
+
+    deck.markSuccess('B');
+    expect(deck.score()).toBe(1000);
+    expect(deck.maxScore()).toBe(2000);
+
+    deck.markSuccess('A');
+    expect(deck.score()).toBe(2000);
+    expect(deck.maxScore()).toBe(2000);
+
+    expect(() => deck.pickVariant()).toThrow('No more variants available to pick from');
+  });
 });
