@@ -50,6 +50,119 @@
     "url": "https://www.youtube.com/watch?v=-G0xX5OdeCg"
   },
   {
+    "id": "CALIBRATION_INTRO",
+    "title": "Can your child sing the alphabet without help?",
+    "url": "https://www.youtube.com/watch?v=aHxzgJWMnUI",
+    "endTimeSeconds": 18
+  },
+  {
+    "id": "CALIBRATION_LETTER_RECOGNITION",
+    "title": "Can your child recognize every uppercase and lowercase letter without help?",
+    "url": "https://www.youtube.com/watch?v=aHxzgJWMnUI",
+    "startTimeSeconds": 19,
+    "endTimeSeconds": 31
+  },
+  {
+    "id": "CALIBRATION_RANDOM_HARRY_POTTER_PAGE",
+    "title": "Can your child read a random page out of Harry Potter without help?",
+    "url": "https://www.youtube.com/watch?v=aHxzgJWMnUI",
+    "startTimeSeconds": 32,
+    "endTimeSeconds": 35
+  },
+  {
+    "id": "CALIBRATION_ADVANCED_READER",
+    "title": "Your child is doing great! Our curriculum has nothing to offer you at this time.",
+    "url": "https://www.youtube.com/watch?v=aHxzgJWMnUI",
+    "startTimeSeconds": 36,
+    "endTimeSeconds": 63
+  },
+  {
+    "id": "CALIBRATION_REPEAT_SOUNDS",
+    "title": "Can your child repeat at least 20 different sounds after you?",
+    "url": "https://www.youtube.com/watch?v=aHxzgJWMnUI",
+    "startTimeSeconds": 64,
+    "endTimeSeconds": 74
+  },
+  {
+    "id": "CALIBRATION_TRACKING",
+    "title": "Can your child follow sounds and objects with their eyes?",
+    "url": "https://www.youtube.com/watch?v=aHxzgJWMnUI",
+    "startTimeSeconds": 75,
+    "endTimeSeconds": 86
+  },
+  {
+    "id": "CALIBRATION_FINAL",
+    "title": "Do you have to watch every single video?",
+    "url": "https://www.youtube.com/watch?v=aHxzgJWMnUI",
+    "startTimeSeconds": 87
+  },
+  {
+    "id": "INTRODUCTION_QUESTION",
+    "title": "Did you watch the video?",
+    "url": "https://www.youtube.com/watch?v=7sNtpcKpRYU"
+  },
+  {
+    "id": "TRACKING_SOUND_QUESTION",
+    "title": "Can your baby turn his/her head or eyes to follow a sound in all directions?",
+    "url": "https://www.youtube.com/watch?v=j0jZWUcwUWM",
+    "startTimeSeconds": 51
+  },
+  {
+    "id": "SOCIAL_SMILE_QUESTION",
+    "title": "Does your baby display signs of affection when interacting with you and other loved ones?",
+    "url": "https://www.youtube.com/watch?v=x8iqKhAqzi0",
+    "startTimeSeconds": 41
+  },
+  {
+    "id": "TUMMY_LIFT_HEAD_QUESTION",
+    "title": "Can your baby keep his/her head up for more than 10 seconds?",
+    "url": "https://www.youtube.com/watch?v=V_t5WtG_MNY",
+    "startTimeSeconds": 48
+  },
+  {
+    "id": "BABBLE_QUESTION",
+    "title": "Can your baby consistently string together various vowels and consonants?",
+    "url": "https://www.youtube.com/watch?v=_TUN9auJXKE",
+    "startTimeSeconds": 54,
+    "endTimeSeconds": 63
+  },
+  {
+    "id": "RECOGNIZE_SAY_QUESTION",
+    "title": "Can your baby consistently repeat \"aah\" when prompted?",
+    "url": "https://www.youtube.com/watch?v=-G0xX5OdeCg",
+    "startTimeSeconds": 129
+  },
+  {
+    "id": "TRACKING_FACE_QUESTION",
+    "title": "Can your baby follow your face with their eyes?",
+    "url": "https://www.youtube.com/watch?v=XN2bOw64gIU",
+    "startTimeSeconds": 8
+  },
+  {
+    "id": "RECOGNIZE_EYES_FACES_QUESTION",
+    "title": "Can your baby consistently make eye contact with you?",
+    "url": "https://www.youtube.com/watch?v=2TZDgDCQ1Jo",
+    "startTimeSeconds": 100
+  },
+  {
+    "id": "REPEAT_SOUNDS_QUESTION",
+    "title": "Can your baby consistently repeat 10 different sounds when prompted?",
+    "url": "https://www.youtube.com/watch?v=pym0KCKT_tE",
+    "startTimeSeconds": 20
+  },
+  {
+    "id": "SING_ALPHABET_QUESTION", 
+    "title": "Can your child consistently sing the alphabet without making mistakes?",
+    "url": "https://www.youtube.com/watch?v=8jXJP8GR3x0",
+    "startTimeSeconds": 35
+  },
+  {
+    "id": "TRACKING_OBJECTS_QUESTION",
+    "title": "Can your baby follow objects with their eyes?",
+    "url": "https://www.youtube.com/watch?v=WcFIZ-eDMfU",
+    "startTimeSeconds": 17
+  },
+  {
     "id": "PS_TESTING_TEACHER_VIDEO",
     "title": "This is a test teaching video",
     "url": "https://www.youtube.com/watch?v=2TZDgDCQ1J"

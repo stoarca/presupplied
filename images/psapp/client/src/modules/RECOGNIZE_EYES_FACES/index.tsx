@@ -8,8 +8,7 @@ export default (props: never) => {
   let lecture: VideoLecture = {
     exercises: [{
       preVideo: {
-        youtubeId: '2TZDgDCQ1Jo',
-        startTimeSeconds: 100,
+        videoId: 'RECOGNIZE_EYES_FACES_QUESTION',
       },
       question: 'Can your baby consistently make eye contact with you?',
       choices: {

@@ -9,8 +9,7 @@ export default (props: never) => {
   let lecture: VideoLecture = {
     exercises: [{
       preVideo: {
-        youtubeId: 'V_t5WtG_MNY',
-        startTimeSeconds: 48,
+        videoId: 'TUMMY_LIFT_HEAD_QUESTION',
       },
       question: 'Can your baby keep his/her head up for more than 10 seconds?',
       choices: {

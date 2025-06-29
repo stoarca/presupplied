@@ -9,8 +9,7 @@ export default (props: never) => {
   let lecture: VideoLecture = {
     exercises: [{
       preVideo: {
-        youtubeId: 'pym0KCKT_tE',
-        startTimeSeconds: 20,
+        videoId: 'REPEAT_SOUNDS_QUESTION',
         hideControls: true,
       },
       question: 'Can your baby consistently repeat 10 different sounds when prompted?',

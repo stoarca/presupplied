@@ -77,6 +77,14 @@ export class User {
     return ret;
   }
 
+  videoProgress(): VideoProgressDTO {
+    if (this.dto) {
+      return this.dto.videoProgress;
+    } else {
+      return typedLocalStorage.getJson('progressVideo') || {};
+    }
+  }
+
   videos(kmid: KMId): VideoProgressDTO {
     if (this.dto) {
       const moduleNode = KNOWLEDGE_MAP.nodes.find(node => node.id === kmid);

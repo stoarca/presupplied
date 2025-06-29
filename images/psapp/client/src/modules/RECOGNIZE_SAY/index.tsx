@@ -9,8 +9,7 @@ export default (props: never) => {
   let lecture: VideoLecture = {
     exercises: [{
       preVideo: {
-        youtubeId: '-G0xX5OdeCg',
-        startTimeSeconds: 129,
+        videoId: 'RECOGNIZE_SAY_QUESTION',
         hideControls: true,
       },
       question: 'Can your baby consistently repeat "aah" when prompted?',
