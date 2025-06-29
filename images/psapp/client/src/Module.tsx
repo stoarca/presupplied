@@ -187,8 +187,6 @@ export let useExercise = <E extends Ex<V>, V, P>({
       await p;
     }
     let ex = onGenExercise(exercise);
-    console.log('generated exercise');
-    console.log(ex);
     setExercise(ex);
     setPartial(initialPartial);
     setAlreadyFailed(false);
@@ -257,6 +255,15 @@ export let useExercise = <E extends Ex<V>, V, P>({
 
 export let useWin = () => {
   let user = useUserContext();
+  // HACK: We use a ref to store the user object to break the dependency cycle.
+  // Without this, when doWin calls user.markReached(), it triggers a user object
+  // recreation, which causes doWin to be recreated, which triggers the effect
+  // in Module component again, causing an infinite loop of rerenders.
+  let userRef = React.useRef(user);
+
+  React.useEffect(() => {
+    userRef.current = user;
+  }, [user]);
 
   let [win, setWin] = React.useState(false);
 
@@ -268,9 +275,9 @@ export let useWin = () => {
       const childId = urlParams.get('childId');
 
       if (childId) {
-        await user.markReached({[kmid]: ProgressStatus.PASSED}, parseInt(childId));
+        await userRef.current.markReached({[kmid]: ProgressStatus.PASSED}, parseInt(childId));
       } else {
-        await user.markReached({[kmid]: ProgressStatus.PASSED});
+        await userRef.current.markReached({[kmid]: ProgressStatus.PASSED});
       }
 
       await new Promise(r => setTimeout(r, 2000));
@@ -283,7 +290,7 @@ export let useWin = () => {
         window.location.href = '/?scroll=' + kmid;
       }
     })();
-  }, [user]);
+  }, []);
 
   let element;
   if (win) {

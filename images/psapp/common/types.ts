@@ -189,6 +189,8 @@ export interface VideoInfo {
   id: string,
   title: string,
   url: string,
+  startTimeSeconds?: number,
+  endTimeSeconds?: number,
 }
 
 type VideoType = typeof _VIDEOS;

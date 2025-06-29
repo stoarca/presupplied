@@ -9,7 +9,7 @@ export default (props: never) => {
   let lecture: VideoLecture = {
     exercises: [{
       preVideo: {
-        youtubeId: '7sNtpcKpRYU',
+        videoId: 'INTRODUCTION_QUESTION',
       },
       question: 'Did you watch the video?',
       choices: {

@@ -14,7 +14,7 @@ COPY ./server/package.json ./server/bun.lock /presupplied/images/psapp/server/
 RUN cd /presupplied/images/psapp/server && bun install --frozen-lockfile
 
 COPY . /presupplied/images/psapp
-RUN cd /presupplied/images/psapp/client/ && bun run build
+RUN cd /presupplied/images/psapp/client/ && NODE_ENV=production bun run build
 
 COPY ./client_bun_install.sh /etc/my_init.d/50_client_bun_install.sh
 RUN chmod 755 /etc/my_init.d/50_client_bun_install.sh

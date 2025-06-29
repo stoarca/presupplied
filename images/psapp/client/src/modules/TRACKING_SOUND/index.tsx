@@ -9,8 +9,7 @@ export default (props: never) => {
   let lecture: VideoLecture = {
     exercises: [{
       preVideo: {
-        youtubeId: 'j0jZWUcwUWM',
-        startTimeSeconds: 51,
+        videoId: 'TRACKING_SOUND_QUESTION',
         hideControls: true,
       },
       question: 'Can your baby turn his/her head or eyes to follow a sound in all directions?',

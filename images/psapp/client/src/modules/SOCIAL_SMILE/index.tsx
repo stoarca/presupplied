@@ -9,8 +9,7 @@ export default (props: never) => {
   let lecture: VideoLecture = {
     exercises: [{
       preVideo: {
-        youtubeId: 'x8iqKhAqzi0',
-        startTimeSeconds: 41,
+        videoId: 'SOCIAL_SMILE_QUESTION',
       },
       question: 'Does your baby display signs of affection when interacting with you and other loved ones?',
       choices: {

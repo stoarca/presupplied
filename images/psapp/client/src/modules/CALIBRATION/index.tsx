@@ -11,96 +11,81 @@ let knowledgeGraph = buildGraph(KNOWLEDGE_MAP);
 
 export default (props: never) => {
   let user = useUserContext();
+  const urlParams = new URLSearchParams(window.location.search);
+  const childId = urlParams.get('childId');
+
+  const getChildProgress = React.useCallback(() => {
+    if (childId && user.dto?.children) {
+      const child = user.dto.children.find(c => c.id === parseInt(childId));
+      if (child && child.progress) {
+        return child.progress;
+      }
+    }
+    return user.progress();
+  }, [childId, user]);
+
   let bulkMarkReached = React.useCallback((modules: KMId[]) => {
     let acc: Record<KMId, ProgressStatus> = {};
     modules.forEach((kmid) => {
       acc[kmid] = ProgressStatus.PASSED;
     });
-    const urlParams = new URLSearchParams(window.location.search);
-    const childId = urlParams.get('childId');
     return user.markReachedSplit(knowledgeGraph, acc, childId ? parseInt(childId) : undefined);
-  }, [user]);
+  }, [user, childId]);
   let lecture: VideoLecture = {
     exercises: [{
       preVideo: {
-        youtubeId: 'aHxzgJWMnUI',
-        endTimeSeconds: 18,
+        videoId: 'CALIBRATION_INTRO',
         hideControls: true,
       },
       question: 'Can your child sing the alphabet without help?',
       choices: {
         yes: {
+          sideEffect: () => {
+            let modules = Array.from(new Set([
+              'SING_ALPHABET',
+              ...knowledgeGraph.dependenciesOf('SING_ALPHABET'),
+            ]));
+            return bulkMarkReached(modules);
+          },
           exercises: [{
             preVideo: {
-              youtubeId: 'aHxzgJWMnUI',
-              startTimeSeconds: 19,
-              endTimeSeconds: 31,
+              videoId: 'CALIBRATION_LETTER_RECOGNITION',
               hideControls: true,
             },
             question: 'Can your child recognize every uppercase and lowercase letter without help?',
             choices: {
               yes: {
+                sideEffect: () => {
+                  let modules = Array.from(new Set([
+                    'READ_LETTERS',
+                    ...knowledgeGraph.dependenciesOf('READ_LETTERS'),
+                  ]));
+                  return bulkMarkReached(modules);
+                },
                 exercises: [{
                   preVideo: {
-                    youtubeId: 'aHxzgJWMnUI',
-                    startTimeSeconds: 32,
-                    endTimeSeconds: 35,
+                    videoId: 'CALIBRATION_RANDOM_HARRY_POTTER_PAGE',
                     hideControls: true,
                   },
                   question: 'Can your child read a random page out of Harry Potter without help?',
                   choices: {
                     yes: {
-                      exercises: [{
-                        preVideo: {
-                          youtubeId: 'aHxzgJWMnUI',
-                          startTimeSeconds: 36,
-                          endTimeSeconds: 63,
-                          hideControls: true,
-                        },
-                        question: 'Your child is doing great! Our curriculum has nothing to offer you at this time. Would you like us to send you an email when we add other subjects?',
-                        choices: {
-                          yes: {
-                            sideEffect: () => {
-                              // TODO: Add an attribute to Moment so we can look
-                              // them up later
-                            },
-                            action: 'next',
-                          },
-                          no: {
-                            sideEffect: () => {
-                              // TODO: redirect somewhere
-                            },
-                            action: 'next',
-                          },
-                        },
-                      }],
-                    },
-                    no: {
                       sideEffect: () => {
-                        // recognize letters,
-                        // but probably cannot sound the letters
                         let modules = Array.from(new Set([
-                          'READ_LETTERS',
-                          ...knowledgeGraph.dependenciesOf('READ_LETTERS'),
-                          'SING_ALPHABET',
-                          ...knowledgeGraph.dependenciesOf('SING_ALPHABET'),
+                          'READ_PICTURE_BOOKS',
+                          ...knowledgeGraph.dependenciesOf('READ_PICTURE_BOOKS'),
                         ]));
                         return bulkMarkReached(modules);
                       },
+                      action: 'next',
+                    },
+                    no: {
                       action: 'next',
                     },
                   },
                 }],
               },
               no: {
-                sideEffect: () => {
-                  // can sing the alphabet, but not recognize letters
-                  let modules = Array.from(new Set([
-                    'SING_ALPHABET',
-                    ...knowledgeGraph.dependenciesOf('SING_ALPHABET'),
-                  ]));
-                  return bulkMarkReached(modules);
-                },
                 action: 'next',
               },
             },
@@ -109,9 +94,7 @@ export default (props: never) => {
         no: {
           exercises: [{
             preVideo: {
-              youtubeId: 'aHxzgJWMnUI',
-              startTimeSeconds: 64,
-              endTimeSeconds: 74,
+              videoId: 'CALIBRATION_REPEAT_SOUNDS',
               hideControls: true,
             },
             question: 'Can your child repeat at least 20 different sounds after you?',
@@ -130,9 +113,7 @@ export default (props: never) => {
               no: {
                 exercises: [{
                   preVideo: {
-                    youtubeId: 'aHxzgJWMnUI',
-                    startTimeSeconds: 75,
-                    endTimeSeconds: 86,
+                    videoId: 'CALIBRATION_TRACKING',
                     hideControls: true,
                   },
                   question: 'Can your child follow sounds and objects with their eyes?',
@@ -167,7 +148,7 @@ export default (props: never) => {
     }, {
       question: 'Can your child do a pincer grasp (pick up small objects with thumb and forefinger)?',
       skipIf: () => {
-        let currentProgress = user.progress();
+        let currentProgress = getChildProgress();
         return currentProgress['PINCER_GRASP']?.status === ProgressStatus.PASSED;
       },
       choices: {
@@ -186,9 +167,58 @@ export default (props: never) => {
         },
       },
     }, {
+      question: 'Can your child count to 20 without help?',
+      skipIf: () => {
+        let currentProgress = getChildProgress();
+        return currentProgress['COUNT_TO_20']?.status === ProgressStatus.PASSED;
+      },
+      choices: {
+        yes: {
+          sideEffect: () => {
+            let modules = Array.from(new Set([
+              'COUNT_TO_20',
+              ...knowledgeGraph.dependenciesOf('COUNT_TO_20'),
+            ]));
+            return bulkMarkReached(modules);
+          },
+          action: 'next',
+        },
+        no: {
+          action: 'next',
+        },
+      },
+    }, {
       preVideo: {
-        youtubeId: 'aHxzgJWMnUI',
-        startTimeSeconds: 87,
+        videoId: 'CALIBRATION_ADVANCED_READER',
+        hideControls: true,
+      },
+      question: 'Your child is doing great! Our curriculum has nothing to offer you at this time. Would you like us to send you an email when we add other subjects?',
+      skipIf: () => {
+        let currentProgress = getChildProgress();
+        return !(
+          currentProgress['READ_PICTURE_BOOKS']?.status === ProgressStatus.PASSED &&
+          currentProgress['PINCER_GRASP']?.status === ProgressStatus.PASSED &&
+          currentProgress['COUNT_TO_20']?.status === ProgressStatus.PASSED
+        );
+      },
+      choices: {
+        yes: {
+          sideEffect: () => {
+            // TODO: Add an attribute to Moment so we can look
+            // them up later
+          },
+          action: 'next',
+        },
+        no: {
+          sideEffect: () => {
+            // TODO: redirect somewhere
+          },
+          action: 'next',
+        },
+      },
+    }, {
+      preVideo: {
+        videoId: 'CALIBRATION_FINAL',
         hideControls: true,
       },
       question: 'Do you have to watch every single video?',

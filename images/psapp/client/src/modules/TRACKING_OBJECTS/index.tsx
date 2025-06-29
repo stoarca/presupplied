@@ -9,8 +9,7 @@ export default (props: never) => {
   let lecture: VideoLecture = {
     exercises: [{
       preVideo: {
-        youtubeId: 'WcFIZ-eDMfU',
-        startTimeSeconds: 17,
+        videoId: 'TRACKING_OBJECTS_QUESTION',
       },
       question: 'Can your baby follow objects with their eyes?',
       choices: {
