@@ -365,8 +365,8 @@
       "deps": [
         "FINGER_TOUCH_TARGET"
       ],
-      "title": "",
-      "description": "",
+      "title": "Recognizing digits",
+      "description": "In this module, we learn how to map the sound of a digit to its symbol.",
       "studentVideos": [],
       "teacherVideos": [],
       "cell": {
@@ -719,7 +719,7 @@
       },
       "i": 48,
       "j": 13,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_REVIEW_11",
@@ -5676,7 +5676,7 @@
         "READ_WORDS_SHORT_A_LIKE_AND",
         "READ_WORDS_SHORT_A_LIKE_ARE"
       ],
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_LONG_E",
@@ -5691,7 +5691,7 @@
       "deps": [
         "READ_WORDS_SHORT_E"
       ],
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_LONG_I",
@@ -5706,7 +5706,7 @@
       "deps": [
         "READ_WORDS_SHORT_I"
       ],
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_LONG_O",
@@ -5721,7 +5721,7 @@
       "deps": [
         "READ_WORDS_SHORT_O"
       ],
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_LONG_U",
@@ -5736,7 +5736,7 @@
       "deps": [
         "READ_WORDS_SHORT_U"
       ],
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_CH",
@@ -5770,7 +5770,7 @@
       ],
       "i": 35,
       "j": 12,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_TH_LIKE_THIS",
@@ -5821,7 +5821,7 @@
       ],
       "i": 31,
       "j": 12,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_OA",
@@ -5838,7 +5838,7 @@
       ],
       "i": 36,
       "j": 12,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_GHT",
@@ -5889,7 +5889,7 @@
       ],
       "i": 39,
       "j": 12,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_QU",
@@ -5940,7 +5940,7 @@
         "CONSONANT_TO_SOUND_N_TO_Z",
         "VOWEL_TO_SOUND_SHORT"
       ],
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_SOFT_G",
@@ -5955,7 +5955,7 @@
       "deps": [
         "READ_WORDS_HARD_G"
       ],
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_ST",
@@ -5972,7 +5972,7 @@
       ],
       "i": 42,
       "j": 12,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_TR",
@@ -6006,7 +6006,7 @@
       ],
       "i": 40,
       "j": 12,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_WR",
@@ -6065,7 +6065,7 @@
       ],
       "i": 41,
       "j": 12,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_WH",
@@ -6152,7 +6152,7 @@
       ],
       "i": 40,
       "j": 10,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_VOWEL_Y",
@@ -6169,7 +6169,7 @@
       ],
       "i": 40,
       "j": 11,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_EE",
@@ -6186,7 +6186,7 @@
       ],
       "i": 32,
       "j": 12,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_CH_EXCEPTION",
@@ -6221,7 +6221,7 @@
       ],
       "i": 33,
       "j": 12,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_GH_LIKE_LAUGH",
@@ -6383,7 +6383,7 @@
       ],
       "i": 48,
       "j": 11,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_REVIEW_3",
@@ -6403,7 +6403,7 @@
       ],
       "i": 48,
       "j": 12,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_SENTENCES_VERY_SHORT_2",
@@ -6977,7 +6977,7 @@
       "deps": [
         "READ_WORDS_REVIEW_2"
       ],
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_AY",
@@ -6995,7 +6995,7 @@
       ],
       "i": 29,
       "j": 12,
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_IE",
@@ -7010,7 +7010,7 @@
       "deps": [
         "READ_WORDS_REVIEW_2"
       ],
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_DR",
@@ -7042,7 +7042,7 @@
       "deps": [
         "READ_WORDS_REVIEW_2"
       ],
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_WORDS_VOICED_S",
@@ -7075,7 +7075,7 @@
       "deps": [
         "READ_WORDS_REVIEW_3"
       ],
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "BIGRAM_TO_SOUND_TRICKY",
@@ -7213,7 +7213,7 @@
         "READ_WORDS_LONG_E",
         "READ_WORDS_LONG_A"
       ],
-      "moduleType": "CHILD_OWNED"
+      "moduleType": "CHILD_DELEGATED"
     },
     {
       "id": "READ_SENTENCES_VERY_SHORT_1",

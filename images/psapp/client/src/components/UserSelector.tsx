@@ -64,11 +64,11 @@ export const UserSelector = ({ open, onClose, onSelect, title, subtitle, users, 
       <DialogContent>
         <Box sx={{ minWidth: 275, maxWidth: 600, mx: 'auto' }}>
           <Box sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
             gap: 4,
-            my: 4
+            my: 4,
+            justifyItems: 'center'
           }}>
             {users.map((user) => (
               <Box

@@ -37,8 +37,8 @@ export let ModuleBuilder = <T extends string>({
         variant: variant,
       };
     }, [vlist, trainingRecorder, trainingKmid]);
-    let playInstructions = React.useCallback(async (exercise: MyEx<T>) => {
-      await moduleContext.playAudio(instructionAudio);
+    let playInstructions = React.useCallback((exercise: MyEx<T>) => {
+      moduleContext.playAudio(instructionAudio);
     }, [moduleContext, instructionAudio]);
     let {
       exercise,
@@ -64,7 +64,7 @@ export let ModuleBuilder = <T extends string>({
         exerciseData: exercise.variant,
         status: 'fail',
       });
-      doFailure();
+      await doFailure();
       doingFailure.current = true;
       if (onFailureAudio) {
         await onFailureAudio(exercise.variant);

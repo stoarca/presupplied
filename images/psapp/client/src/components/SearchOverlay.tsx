@@ -26,7 +26,7 @@ export const SearchOverlay = ({ isOpen, onClose, onSelect, knowledgeGraph }: Sea
     }
 
     const normalizeText = (text: string) => text.toLowerCase().replace(/[_\s]+/g, ' ');
-    const term = normalizeText(searchTerm);
+    const searchWords = normalizeText(searchTerm).split(' ').filter(word => word.length > 0);
     const results: SearchResult[] = [];
     const allNodes = knowledgeGraph.overallOrder();
 
@@ -38,7 +38,8 @@ export const SearchOverlay = ({ isOpen, onClose, onSelect, knowledgeGraph }: Sea
         nodeData.description || ''
       ].join(' '));
 
-      if (searchableText.includes(term)) {
+      const matchesAllWords = searchWords.every(word => searchableText.includes(word));
+      if (matchesAllWords) {
         results.push({
           id: nodeData.id,
           title: nodeData.title || nodeData.id,

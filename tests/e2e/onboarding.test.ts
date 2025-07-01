@@ -63,6 +63,9 @@ describe('Presupplied Onboarding E2E Tests', () => {
     let child2Id = 0;
 
     await page.X
+      .checkUntil(XC.visibleElementCount, '[data-test="nav-button-home"]', 1)
+      .checkUntil(XC.visibleElementCount, '[data-test="nav-button-map"]', 1)
+      .checkUntil(XC.visibleElementCount, '[data-test="nav-button-children"]', 0)
       .run(Onboarding.navigateToRegister)
       .run(Onboarding.enterRegistrationDetails, {
         name: parentName,
@@ -86,6 +89,9 @@ describe('Presupplied Onboarding E2E Tests', () => {
       .run(Onboarding.submitRegistration)
       .checkUntil(XC.elementText, Onboarding.userMenuButton, (x: string | null) => 
         expect(x?.toLowerCase()).toBe(validEmail.toLowerCase()))
+      .checkUntil(XC.visibleElementCount, '[data-test="nav-button-home"]', 0)
+      .checkUntil(XC.visibleElementCount, '[data-test="nav-button-map"]', 0)
+      .checkUntil(XC.visibleElementCount, '[data-test="nav-button-children"]', 0)
       .run(Onboarding.createChildComplete, { 
         name: child1Name, 
         birthday: '05/15/2020',
@@ -103,6 +109,9 @@ describe('Presupplied Onboarding E2E Tests', () => {
         }
         return false;
       })
+      .checkUntil(XC.visibleElementCount, '[data-test="nav-button-home"]', 1)
+      .checkUntil(XC.visibleElementCount, '[data-test="nav-button-map"]', 1)
+      .checkUntil(XC.visibleElementCount, '[data-test="nav-button-children"]', 1)
       .run(Onboarding.openChildCreator)
       .run(Onboarding.createChildComplete, {
         name: child2Name,
@@ -453,6 +462,9 @@ describe('Presupplied Onboarding E2E Tests', () => {
         type: UserType.STUDENT
       })
       .checkUntil(C.getLocation, (location) => location.pathname === '/')
+      .checkUntil(XC.visibleElementCount, '[data-test="nav-button-home"]', 1)
+      .checkUntil(XC.visibleElementCount, '[data-test="nav-button-map"]', 1)
+      .checkUntil(XC.visibleElementCount, '[data-test="nav-button-children"]', 0)
       .checkUntil(XC.evaluate, () => {
         const progress = localStorage.getItem('progress');
         return progress ? JSON.parse(progress) : {};

@@ -16,6 +16,6 @@ export let ModuleBuilder = ({
     variants: variants,
     maxScorePerVariant: maxScorePerVariant,
     getAudio: (exercise) => LETTERS[exercise.variant],
-    displayText: (exercise) => `${exercise.variant.toUpperCase()} ${exercise.variant}`,
+    displayText: (exercise) => exercise.variant,
   });
 };

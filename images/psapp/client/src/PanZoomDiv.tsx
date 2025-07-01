@@ -118,6 +118,8 @@ export let PanZoomDiv = React.forwardRef<HTMLDivElement, PanZoomDivProps>(({
   let startZoom = React.useRef<StartZoom | null>(null);
   let allowNextClick = React.useRef(true);
   let simulateTouchClick = React.useRef(false);
+  let touchStartPos = React.useRef<Point | null>(null);
+  const DRAG_THRESHOLD = 10;
   React.useLayoutEffect(() => {
     let zoom = (sz: StartZoom, offset?: Point) => {
       if (sz.viewBox.w / sz.totalZoom > maxZoomWidth) {
@@ -246,7 +248,6 @@ export let PanZoomDiv = React.forwardRef<HTMLDivElement, PanZoomDivProps>(({
     };
     let handleTouchChange = (e: TouchEvent) => {
       if (e.touches.length === 1) {
-        action.current = 'pan';
         startPan.current = {
           mouse: pixelToViewBoxPos(
             { x: e.touches[0].clientX, y: e.touches[0].clientY },
@@ -271,6 +272,7 @@ export let PanZoomDiv = React.forwardRef<HTMLDivElement, PanZoomDivProps>(({
         };
       } else {
         action.current = null;
+        touchStartPos.current = null;
       }
     };
     let handleTouchStart = (e: TouchEvent) => {
@@ -278,15 +280,28 @@ export let PanZoomDiv = React.forwardRef<HTMLDivElement, PanZoomDivProps>(({
         return;
       }
       simulateTouchClick.current = e.touches.length === 1;
+      if (e.touches.length === 1) {
+        touchStartPos.current = {x: e.touches[0].clientX, y: e.touches[0].clientY};
+      }
       e.preventDefault();
       handleTouchChange(e);
     };
     let handleTouchMove = (e: TouchEvent) => {
-      simulateTouchClick.current = false;
       if (runAndCheckIfShouldCancel(onTouchMove, e)) {
         return;
       }
       e.preventDefault();
+
+      if (e.touches.length === 1 && touchStartPos.current && !action.current) {
+        const dx = e.touches[0].clientX - touchStartPos.current.x;
+        const dy = e.touches[0].clientY - touchStartPos.current.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance >= DRAG_THRESHOLD) {
+          action.current = 'pan';
+          simulateTouchClick.current = false;
+        }
+      }
+
       if (action.current === 'pan') {
         let vb = startPan.current.viewBox;
         let mouse = pixelToViewBoxPos(
@@ -338,6 +353,7 @@ export let PanZoomDiv = React.forwardRef<HTMLDivElement, PanZoomDivProps>(({
         }
       }
       e.preventDefault();
+      touchStartPos.current = null;
       handleTouchChange(e);
     };
     let cur = innerRef.current!;

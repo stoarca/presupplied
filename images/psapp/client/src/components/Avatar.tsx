@@ -9,6 +9,7 @@ import PersonIcon from '@mui/icons-material/Person';
 interface AvatarProps {
   userType?: UserType;
   profilePicture?: ProfilePicture;
+  text?: string;
   size?: number;
   selected?: boolean;
   onClick?: () => void;
@@ -19,6 +20,7 @@ interface AvatarProps {
 export const Avatar: React.FC<AvatarProps> = ({
   userType,
   profilePicture,
+  text,
   size = 40,
   selected = false,
   onClick,
@@ -72,7 +74,7 @@ export const Avatar: React.FC<AvatarProps> = ({
         ...customSx
       }}
     >
-      {!profilePicture?.image && getUserIcon(userType)}
+      {text || (!profilePicture?.image && getUserIcon(userType))}
     </MuiAvatar>
   );
 };
