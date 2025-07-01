@@ -131,7 +131,7 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
           relationshipType: RelationshipType.PRIMARY,
           pinRequired: child.pinRequired || false,
           isSelected: false as const
-        })).sort((a, b) => a.name.localeCompare(b.name));
+        }));
       }
 
       if (user.dto.type === UserType.STUDENT && user.dto.adults) {

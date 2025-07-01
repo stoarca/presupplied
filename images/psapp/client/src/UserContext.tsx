@@ -22,7 +22,18 @@ export class User {
   onUpdate: ((dto: UserDTO | null) => void) | null = null;
 
   constructor(dto: UserDTO | null) {
-    this.dto = dto;
+    this.dto = this.sortChildrenInDto(dto);
+  }
+
+  private sortChildrenInDto(dto: UserDTO | null): UserDTO | null {
+    if (!dto || !dto.children) {
+      return dto;
+    }
+
+    return {
+      ...dto,
+      children: [...dto.children].sort((a, b) => a.name.localeCompare(b.name))
+    };
   }
 
   async refreshUser() {
@@ -41,7 +52,7 @@ export class User {
         method: 'get'
       });
 
-      this.dto = response.user;
+      this.dto = this.sortChildrenInDto(response.user);
       if (this.onUpdate) {
         this.onUpdate(this.dto);
       }

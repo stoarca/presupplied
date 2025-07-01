@@ -85,7 +85,7 @@ export let ModuleBuilder = ({
         exerciseData: exercise.variant,
         status: 'fail',
       });
-      doFailure();
+      await doFailure();
       doingFailure.current = true;
       await moduleContext.playAudio(WORDS[
         exercise.variant.toLowerCase() as keyof typeof WORDS

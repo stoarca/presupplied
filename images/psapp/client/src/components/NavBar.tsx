@@ -71,6 +71,8 @@ export let NavBar = (props: NavBarProps) => {
     gap: 6,
   };
 
+  const missingFirstChild = user.dto && (user.dto.type === UserType.PARENT || user.dto.type === UserType.TEACHER) && (!user.dto.children || user.dto.children.length === 0);
+
   if (user.dto) {
     if (user.isSelfManaged()) {
       navLinks = (
@@ -208,37 +210,41 @@ export let NavBar = (props: NavBarProps) => {
               justifyContent: 'center',
               alignItems: 'center'
             }}>
-              <Button
-                component={RouterLink}
-                to="/"
-                sx={{
-                  color: 'text.primary',
-                  fontWeight: location === '/' ? 700 : 400,
-                  '&:hover': {
-                    fontWeight: 600,
-                    backgroundColor: 'transparent'
-                  }
-                }}
-                data-test="nav-button-home"
-              >
-                Home
-              </Button>
-              <Button
-                component={RouterLink}
-                to="/map"
-                sx={{
-                  color: 'text.primary',
-                  fontWeight: location === '/map' ? 700 : 400,
-                  '&:hover': {
-                    fontWeight: 600,
-                    backgroundColor: 'transparent'
-                  }
-                }}
-                data-test="nav-button-map"
-              >
-                Map
-              </Button>
-              {user.dto && (user.dto.type === UserType.PARENT || user.dto.type === UserType.TEACHER) && (
+              {(user.isSelfManaged() && !missingFirstChild) && (
+                <>
+                  <Button
+                    component={RouterLink}
+                    to="/"
+                    sx={{
+                      color: 'text.primary',
+                      fontWeight: location === '/' ? 700 : 400,
+                      '&:hover': {
+                        fontWeight: 600,
+                        backgroundColor: 'transparent'
+                      }
+                    }}
+                    data-test="nav-button-home"
+                  >
+                    Home
+                  </Button>
+                  <Button
+                    component={RouterLink}
+                    to="/map"
+                    sx={{
+                      color: 'text.primary',
+                      fontWeight: location === '/map' ? 700 : 400,
+                      '&:hover': {
+                        fontWeight: 600,
+                        backgroundColor: 'transparent'
+                      }
+                    }}
+                    data-test="nav-button-map"
+                  >
+                    Map
+                  </Button>
+                </>
+              )}
+              {!missingFirstChild && user.dto && (user.dto.type === UserType.PARENT || user.dto.type === UserType.TEACHER) && (
                 <Button
                   component={RouterLink}
                   to="/children"

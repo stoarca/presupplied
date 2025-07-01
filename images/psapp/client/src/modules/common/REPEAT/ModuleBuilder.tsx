@@ -36,13 +36,18 @@ export let ModuleBuilder = <T extends string | number, >({
         variant: variant,
       };
     }, [vlist]);
-    let [showVariant, setShowVariant] = React.useState(false);
-    let playInstructions = React.useCallback(async (exercise: MyEx<T>) => {
-      await moduleContext.playAudio(sayWord.spoken);
-      setShowVariant(true);
-      await moduleContext.playAudio(getAudio(exercise));
-      await new Promise(r => setTimeout(r, 2000));
-      setShowVariant(false);
+    let playInstructions = React.useCallback((exercise: MyEx<T>, cancelRef: { cancelled: boolean }) => {
+      // no await so that we don't get "wait please"
+      (async () => {
+        if (cancelRef.cancelled) {
+          return;
+        }
+        await moduleContext.playAudio(sayWord.spoken, { cancelRef });
+        if (cancelRef.cancelled) {
+          return;
+        }
+        await moduleContext.playAudio(getAudio(exercise), { cancelRef });
+      })();
     }, [moduleContext, getAudio]);
     let {
       exercise,
@@ -63,7 +68,7 @@ export let ModuleBuilder = <T extends string | number, >({
       if (doingFailure.current) {
         return;
       }
-      doFailure();
+      await doFailure();
       doingFailure.current = true;
       await moduleContext.playAudio(getAudio(exercise));
       doingFailure.current = false;
@@ -74,24 +79,19 @@ export let ModuleBuilder = <T extends string | number, >({
       doingFailure.current = false;
     }, [doSuccess]);
 
-    let text;
-    if (showVariant) {
-      let textStyle: React.CSSProperties = {
-        fontFamily: 'sans-serif',
-        fontSize: fontSize,
-      };
-      text = (
-        <text style={textStyle}
-          dominantBaseline="central"
-          textAnchor="middle"
-          x="50%"
-          y="50%">
-          {displayText ? displayText(exercise) : exercise.variant}
-        </text>
-      );
-    } else {
-      text = null;
-    }
+    let textStyle: React.CSSProperties = {
+      fontFamily: 'sans-serif',
+      fontSize: fontSize,
+    };
+    let text = (
+      <text style={textStyle}
+        dominantBaseline="central"
+        textAnchor="middle"
+        x="50%"
+        y="50%">
+        {displayText ? displayText(exercise) : exercise.variant}
+      </text>
+    );
     return (
       <STTModule doSuccess={handleSuccess}
         doFailure={handleFailure}

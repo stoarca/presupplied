@@ -16,6 +16,7 @@ import {Avatar} from './components/Avatar';
 import {useModuleInteraction} from './components/ModuleInteractionHandler';
 import {SearchOverlay, SearchResult} from './components/SearchOverlay';
 import {UserType} from '../../common/types';
+import {ModuleTypeIcon} from './components/ModuleTypeIcon';
 
 let autoIncrementingId = 0;
 let genId = () => {
@@ -168,25 +169,6 @@ let KnowledgeNode = ({
   let borderColor = isSelected ? '#00ccee' : 'transparent';
   let borderWidth = isSelected ? '3px' : '0px';
 
-  let moduleTypeIcon: string | null = null;
-  let iconColor: string = '#2E7D32';
-  if (admin) {
-    switch (node.moduleType) {
-      case ModuleType.CHILD_OWNED:
-        moduleTypeIcon = '/static/images/icons/child.png';
-        iconColor = '#2E7D32';
-        break;
-      case ModuleType.CHILD_DELEGATED:
-        moduleTypeIcon = '/static/images/icons/teacher_child_together.png';
-        iconColor = '#00ACC1';
-        break;
-      case ModuleType.ADULT_OWNED:
-        moduleTypeIcon = '/static/images/icons/teacher.png';
-        iconColor = '#1976D2';
-        break;
-    }
-  }
-
   return (
     <>
       <div
@@ -234,35 +216,13 @@ let KnowledgeNode = ({
             }}>
             {node.title || node.id}
           </div>
-          {moduleTypeIcon && (
-            <div
-              style={{
-                position: 'absolute',
-                top: '5px',
-                right: '5px',
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                backgroundColor: iconColor,
-                border: '2px solid white',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                overflow: 'hidden',
-              }}>
-              <img
-                src={moduleTypeIcon}
-                alt="Module type"
-                style={{
-                  width: node.moduleType === ModuleType.CHILD_OWNED ? '22px' : '32px',
-                  height: node.moduleType === ModuleType.CHILD_OWNED ? '22px' : '32px',
-                  objectFit: 'cover',
-                  borderRadius: '50%',
-                }}
-              />
-            </div>
-          )}
+          <ModuleTypeIcon
+            moduleType={node.moduleType}
+            user={user}
+            admin={admin}
+            size={36}
+            iconSize={node.moduleType === ModuleType.CHILD_OWNED ? 22 : 32}
+          />
           {admin && (node.studentVideos.length > 0 || node.teacherVideos.length > 0) && (
             <div
               style={{
@@ -327,12 +287,14 @@ let KnowledgeNode = ({
             <div
               data-test="map-module-children"
               style={{
-                display: 'flex',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(40px, 1fr))',
                 gap: '8px',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexWrap: 'nowrap',
-                overflow: 'hidden',
+                justifyItems: 'center',
+                alignItems: 'start',
+                width: '100%',
+                maxWidth: '250px',
+                margin: '0 auto',
               }}>
               {relevantChildrenSorted.slice(0, 3).map(child => (
                 <div
@@ -370,11 +332,36 @@ let KnowledgeNode = ({
               ))}
               {relevantChildrenSorted.length > 3 && (
                 <div style={{
-                  fontSize: '12px',
-                  color: '#666',
-                  fontWeight: 'bold',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '2px',
                 }}>
-                  +{relevantChildrenSorted.length - 3}
+                  <Avatar
+                    userType={UserType.STUDENT}
+                    text={`+${relevantChildrenSorted.length - 3}`}
+                    size={30}
+                    sx={{
+                      border: '2px solid white',
+                      boxShadow: 'none',
+                      bgcolor: '#ddd',
+                      fontSize: '12px',
+                      color: '#666',
+                      fontWeight: 'bold',
+                    }}
+                  />
+                  <div
+                    style={{
+                      fontSize: '10px',
+                      color: 'transparent',
+                      fontWeight: 'bold',
+                      maxWidth: '50px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}>
+                    more
+                  </div>
                 </div>
               )}
             </div>
@@ -744,16 +731,14 @@ export let BaseKnowledgeMap = ({
 
         if (!isModuleReachableForUser && !isModuleReachableForAnyChild) {
           // Module not reachable for user or any children (grey module): pass all children
-          relevantChildrenSorted = user.dto.children
-              .sort((a: ChildInfoWithProgress, b: ChildInfoWithProgress) => a.name.localeCompare(b.name));
+          relevantChildrenSorted = user.dto.children;
         } else {
           // Module is reachable: use normal logic (only children where module is reachable)
           relevantChildrenSorted = user.dto.children
               .filter((child: ChildInfoWithProgress) => {
                 const childReachable = childrenReachableSets.get(child.id);
                 return childReachable?.has(kmid) || false;
-              })
-              .sort((a: ChildInfoWithProgress, b: ChildInfoWithProgress) => a.name.localeCompare(b.name));
+              });
         }
       }
 
@@ -865,7 +850,7 @@ export let BaseKnowledgeMap = ({
       ref={divRef}
       viewBox={viewBox}
       viewLimitBox={viewLimitBox}
-      minZoomWidth={1000}
+      minZoomWidth={500}
       maxZoomWidth={40000}
       onUpdateViewBox={updateViewBoxWithHistory}
       onMouseDown={onMouseDown}

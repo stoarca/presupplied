@@ -86,7 +86,7 @@ export const ChildrenPage = () => {
       <NavBar />
       <Container maxWidth="lg" sx={{ py: 4, pb: 8, flex: 1 }}>
         <Grid container spacing={3}>
-          {[...children].sort((a, b) => a.name.localeCompare(b.name)).map((child) => (
+          {children.map((child) => (
             <Grid item xs={12} sm={6} md={4} key={child.id}>
               <Card
                 onClick={() => window.location.href = `/settings/child/${child.id}`}

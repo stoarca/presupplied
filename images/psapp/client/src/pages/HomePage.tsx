@@ -165,8 +165,7 @@ export let HomePage = () => {
                   .filter(child => {
                     const childReachable = childrenReachableSets.get(child.id);
                     return childReachable?.has(kmid) || false;
-                  })
-                  .sort((a, b) => a.name.localeCompare(b.name));
+                  });
             }
 
             return (
@@ -177,7 +176,7 @@ export let HomePage = () => {
                   verticalAlign: 'top',
                   margin: '20px 10px',
                   boxSizing: 'border-box',
-                  minWidth: `calc(${isSmallDevice ? '70vw' : window.innerWidth > 1000 ? '25vw' : '35vw'})`,
+                  minWidth: `calc(max(${isSmallDevice ? '70vw' : '300px'}, ${isSmallDevice ? '70vw' : window.innerWidth > 1000 ? '25vw' : '35vw'}))`,
                   maxWidth: '90vw'
                 }}>
                 <ActivityCard kmid={kmid} user={user} relevantChildrenSorted={relevantChildrenSorted} />

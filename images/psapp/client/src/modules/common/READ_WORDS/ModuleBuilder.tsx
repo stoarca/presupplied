@@ -128,7 +128,7 @@ export let ModuleBuilder = ({
       return;
     }
     addTrainingEvent('fail');
-    doFailure();
+    await doFailure();
     doingFailure.current = true;
     await pronounce();
     doingFailure.current = false;
@@ -148,10 +148,6 @@ export let ModuleBuilder = ({
     fontFamily: 'sans-serif',
     fontSize: '200px',
   };
-  console.log('rendering');
-  console.log(pronouncePosition);
-  console.log(exercise.variant.word);
-  console.log(exercise.variant.word.substring(0, pronouncePosition[0]));
   let text = (
     <text style={textStyle}
       dominantBaseline="central"
