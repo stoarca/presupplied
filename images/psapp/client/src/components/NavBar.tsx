@@ -172,22 +172,22 @@ export let NavBar = (props: NavBarProps) => {
   return (
     <React.Fragment>
       <AppBar position="static" style={{ flex: '0 0 auto', backgroundColor: 'transparent', boxShadow: 'none' }}>
-        <Toolbar style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ flex: 1 }}></div>
-
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           {!user.dto && showSaveWarning && (
             <Box sx={{
               display: 'flex',
-              gap: 2,
-              flex: 1,
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
+              px: 2,
+              py: 1
             }}>
               <Alert
                 severity="warning"
                 onClose={handleCloseWarning}
                 sx={{
-                  display: 'inline-flex',
+                  width: '100%',
+                  maxWidth: '600px',
+                  display: 'flex',
                   alignItems: 'center',
                   py: 0.5,
                   fontSize: '0.875rem'
@@ -198,8 +198,9 @@ export let NavBar = (props: NavBarProps) => {
               </Alert>
             </Box>
           )}
+          <Toolbar style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ flex: 1 }}></div>
 
-          {user.dto && (user.dto.type === UserType.PARENT || user.dto.type === UserType.TEACHER) && (
             <Box sx={{
               display: 'flex',
               gap: 2,
@@ -237,28 +238,30 @@ export let NavBar = (props: NavBarProps) => {
               >
                 Map
               </Button>
-              <Button
-                component={RouterLink}
-                to="/children"
-                sx={{
-                  color: 'text.primary',
-                  fontWeight: location === '/children' ? 700 : 400,
-                  '&:hover': {
-                    fontWeight: 600,
-                    backgroundColor: 'transparent'
-                  }
-                }}
-                data-test="nav-button-children"
-              >
-                Children
-              </Button>
+              {user.dto && (user.dto.type === UserType.PARENT || user.dto.type === UserType.TEACHER) && (
+                <Button
+                  component={RouterLink}
+                  to="/children"
+                  sx={{
+                    color: 'text.primary',
+                    fontWeight: location === '/children' ? 700 : 400,
+                    '&:hover': {
+                      fontWeight: 600,
+                      backgroundColor: 'transparent'
+                    }
+                  }}
+                  data-test="nav-button-children"
+                >
+                  Children
+                </Button>
+              )}
             </Box>
-          )}
 
-          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-            {navLinks}
-          </div>
-        </Toolbar>
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+              {navLinks}
+            </div>
+          </Toolbar>
+        </Box>
       </AppBar>
 
       <AccountSwitcher

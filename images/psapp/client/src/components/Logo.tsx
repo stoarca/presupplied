@@ -9,7 +9,8 @@ export const Logo = () => {
       bottom: '10px',
       left: '50%',
       transform: 'translateX(-50%)',
-      textAlign: 'center'
+      textAlign: 'center',
+      zIndex: 1
     }}>
       <Link to="/" style={{ display: 'inline-block' }}>
         <img src="/static/images/logodark.svg" style={{ height: '30px', cursor: 'pointer' }} />
