@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import Box from '@mui/material/Box';
 
@@ -12,6 +12,7 @@ import {
 import { isModuleForAdults } from '../../../common/utils';
 import { ActivityCard } from '../components/ActivityCard';
 import { Logo } from '../components/Logo';
+import { useIsSmallDevice } from '../hooks/useIsSmallDevice';
 
 let knowledgeGraph = buildGraph(KNOWLEDGE_MAP);
 
@@ -60,17 +61,7 @@ export let HomePage = () => {
     return new Set(Array.from(reachable).filter(x => !!moduleComponents[x]));
   }, [reachable]);
 
-  let [isSmallDevice, setIsSmallDevice] = useState(window.innerWidth <= 600);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSmallDevice(window.innerWidth <= 600);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  let isSmallDevice = useIsSmallDevice();
 
   const isStudent = user.dto?.type === UserType.STUDENT;
   const moduleCount = reachableAndImplemented.size;
@@ -85,11 +76,13 @@ export let HomePage = () => {
     flexDirection: isSmallDevice ? 'column' : 'row',
     paddingLeft: moduleCount > 2 && !isSmallDevice ? '20vw' : '0px',
     paddingRight: moduleCount > 2 && !isSmallDevice ? '20vw' : '0px',
+    paddingTop: isSmallDevice ? '120px' : '80px',
+    paddingBottom: isSmallDevice ? '60px' : '50px',
     scrollBehavior: 'smooth',
     overflowX: isSmallDevice ? 'hidden' : 'auto',
     overflowY: isSmallDevice ? 'auto' : 'hidden',
     whiteSpace: isSmallDevice ? 'normal' : 'nowrap',
-    boxSizing: 'border-box', // Ensure padding and border are included in the element's total width and height
+    boxSizing: 'border-box',
   };
 
   // Handle vertical scrolling with the mouse to scroll horizontally
@@ -133,9 +126,15 @@ export let HomePage = () => {
         minHeight: '100vh',
         background: 'linear-gradient(135deg, #bbfec4, #03dd74)',
         position: 'relative',
-        overflow: 'hidden'
+        overflow: isSmallDevice ? 'visible' : 'hidden'
       }}>
-        <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1 }}>
+        <Box sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 10
+        }}>
           <NavBar />
         </Box>
         <div

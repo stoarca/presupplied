@@ -331,6 +331,11 @@ export let PanZoomDiv = React.forwardRef<HTMLDivElement, PanZoomDivProps>(({
         if (runAndCheckIfShouldCancel(onClick, me)) {
           return;
         }
+        // Dispatch the event to the actual target element
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (target) {
+          target.dispatchEvent(me);
+        }
       }
       e.preventDefault();
       handleTouchChange(e);
