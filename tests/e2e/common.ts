@@ -32,6 +32,15 @@ export const childCardSelector = '[data-test="child-card"]';
 export const navButtonMapSelector = '[data-test="nav-button-map"]';
 export const navButtonHomeSelector = '[data-test="nav-button-home"]';
 export const navButtonChildrenSelector = '[data-test="nav-button-children"]';
+export const settingsMenuItemSelector = '[data-test="menu-item-settings"]';
+
+// PIN entry selectors
+export const pinDialogSelector = '[data-test="pin-dialog"]';
+export const pinInputSelector = '#pin';
+export const pinSubmitButton = '[data-test="pin-submit"]';
+export const pinBackspaceSelector = '[data-test="pin-backspace"]';
+export const pinErrorSelector = '[data-test="pin-error"]';
+export const getPinDigitButtonSelector = (digit: string) => `[data-test="pin-digit-${digit}"]`;
 
 // Map view selectors
 export const mapModuleNodeSelector = '[data-test^="map-module-node-"]';

@@ -4,7 +4,7 @@ import * as XC from 'xdotoolify/dist/common';
 import { UserType } from '/presupplied/images/psapp/common/types';
 import { typedFetch } from '/presupplied/images/psapp/client/src/typedFetch';
 import * as C from './common';
-import { moduleCardSelector, settingsLink, manageChildrenLink, childCardSelector, navButtonChildrenSelector } from './common';
+import { moduleCardSelector, settingsLink, manageChildrenLink, childCardSelector, navButtonChildrenSelector, pinDialogSelector, pinInputSelector, pinSubmitButton, pinBackspaceSelector, getPinDigitButtonSelector } from './common';
 
 interface RegistrationDetails {
   name: string;
@@ -50,7 +50,6 @@ export const userDisplayName = '[data-test="user-display-name"]';
 export const userAvatar = '[data-test="user-avatar"]';
 export const logoutButton = '[data-test="menu-item-logout"]';
 export const childModeButton = '[data-test="menu-item-child-mode"]';
-export const settingsMenuItem = '[data-test="menu-item-settings"]';
 export const mapViewMenuItem = '[data-test="menu-item-map-view"]';
 export const addChildMenuItem = '[data-test="menu-item-add-child"]';
 export const accountSwitcher = 'div[data-test="account-switcher"]';
@@ -83,11 +82,6 @@ export const switchToChildButton = '[data-test="switch-to-child-button"]';
 export const getAvatarSelector = (avatarId: string) => `[data-test="avatar-option-${avatarId}"]`;
 export const getSelectedAvatarSelector = (avatarId: string) => `${getAvatarSelector(avatarId)} .avatar-selected`;
 
-// PIN entry selectors
-export const pinDialogSelector = '[data-test="pin-dialog"]';
-export const pinInputSelector = '#pin';
-export const pinSubmitButton = 'button[data-test="pin-submit"]';
-export const getPinDigitButtonSelector = (digit: string) => `button[data-test="pin-digit-${digit}"]`;
 
 // Invitation selectors
 export const inviteAdultButton = '[data-test="invite-adult-button"]';
@@ -346,7 +340,8 @@ export const selectAccount = Xdotoolify.setupWithPage(async (page, accountId: nu
   await chain.do();
 });
 
-export const enterPIN = Xdotoolify.setupWithPage(async (page, pin: string) => {
+export const enterPIN = Xdotoolify.setupWithPage(async (page, pin: string, options?: { expectSuccess?: boolean }) => {
+  const expectSuccess = options?.expectSuccess ?? true;
   let displayedPin = '';
   
   for (const digit of pin) {
@@ -363,11 +358,15 @@ export const enterPIN = Xdotoolify.setupWithPage(async (page, pin: string) => {
       .do();
   }
 
-  await page.X
+  let chain = page.X
     .checkUntil(XC.visibleElementCount, pinSubmitButton, 1)
-    .run(XC.autoClick, pinSubmitButton)
-    .checkUntil(XC.visibleElementCount, pinDialogSelector, 0)
-    .do();
+    .run(XC.autoClick, pinSubmitButton);
+  
+  if (expectSuccess) {
+    chain = chain.checkUntil(XC.visibleElementCount, pinDialogSelector, 0);
+  }
+  
+  await chain.do();
 });
 
 // Error handling

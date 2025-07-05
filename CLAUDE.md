@@ -366,6 +366,7 @@ app.use((req, resp, next) => {
   - NEVER use if without {}
   - NEVER import \*, always import specific objects
   - ALWAYS use 2 spaces for indentation
+  - NEVER add trailing whitespace, especially on empty lines
   - before making changes, ALWAYS review the eslint config to understand the style
 
 2. **API Conventions**

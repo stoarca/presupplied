@@ -4,7 +4,6 @@ import { typedFetch, API_HOST } from '../typedFetch';
 import { UserType, RelationshipType, ProfilePicture } from '../../../common/types';
 import { UserSelector, UserOption } from './UserSelector';
 
-// MUI imports
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -52,24 +51,27 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
     classmates?: RelatedAccount[]
   }>({});
   const [error, setError] = useState<string | null>(null);
+  const [pinError, setPinError] = useState<string | null>(null);
+  const [usePassword, setUsePassword] = useState(false);
+  const [password, setPassword] = useState('');
   const user = useUserContext();
 
-  const switchAccount = useCallback(async (userId: number, pin?: string) => {
+  const switchAccount = useCallback(async (userId: number, credential?: string) => {
     try {
+      const body = {
+        targetId: userId.toString(),
+        ...(usePassword ? { password: credential } : { pin: credential })
+      };
+
       const response = await typedFetch({
         host: API_HOST,
         endpoint: '/api/auth/switch',
         method: 'post',
-        body: {
-          targetId: userId.toString(),
-          pin: pin
-        }
+        body
       });
 
       if ('success' in response && response.success) {
-        // HACK: if we don't delay this it causes a network error in the fetch
-        // above
-        setTimeout(() => window.location.href = '/', 50);
+        window.location.href = '/';
       } else if ('errorCode' in response) {
         setError(response.message);
       }
@@ -77,7 +79,7 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
       console.error('Error switching account:', error);
       setError('Failed to switch account');
     }
-  }, [setError]);
+  }, [setError, usePassword]);
 
   const handleClose = () => {
     props.onClose();
@@ -94,6 +96,7 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
 
     if (needsPin) {
       setSelectedAccount(account);
+      setPinError(null);
       setPinDialogOpen(true);
     } else {
       await switchAccount(account.id);
@@ -101,17 +104,57 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
   };
 
   const handlePinSubmit = useCallback(async () => {
-    if (selectedAccount && pin) {
-      await switchAccount(selectedAccount.id, pin);
-      setPinDialogOpen(false);
-      setPin('');
+    if (selectedAccount) {
+      const credential = usePassword ? password : pin;
+      if (credential) {
+        setPinError(null);
+        try {
+          const body = {
+            targetId: selectedAccount.id.toString(),
+            ...(usePassword ? { password: credential } : { pin: credential })
+          };
+
+          const response = await typedFetch({
+            host: API_HOST,
+            endpoint: '/api/auth/switch',
+            method: 'post',
+            body
+          });
+
+          if ('success' in response && response.success) {
+            setPinDialogOpen(false);
+            setTimeout(() => {
+              // HACK: if these are set immediately then there will be a UI
+              // flash because the layout will move
+              setPin('');
+              setPassword('');
+              setUsePassword(false);
+              setSelectedAccount(null);
+              setPinError(null);
+            }, 300);
+            window.location.href = '/';
+          } else if ('errorCode' in response) {
+            setPinError(response.message);
+          }
+        } catch (error) {
+          console.error('Error switching account:', error);
+          setPinError('Failed to switch account');
+        }
+      }
     }
-  }, [selectedAccount, pin, switchAccount]);
+  }, [selectedAccount, pin, password, usePassword]);
 
   const handlePinDialogClose = () => {
     setPinDialogOpen(false);
-    setPin('');
-    setSelectedAccount(null);
+    setTimeout(() => {
+      // HACK: if these are set immediately then there will be a UI
+      // flash because the layout will move
+      setPin('');
+      setPassword('');
+      setUsePassword(false);
+      setPinError(null);
+      setSelectedAccount(null);
+    }, 300);
   };
 
   useEffect(() => {
@@ -166,10 +209,9 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
     }
   }, [props.open, user.dto]);
 
-  // Handle keyboard events for PIN entry when dialog is open
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      if (pinDialogOpen) {
+      if (pinDialogOpen && !usePassword) {
         if (e.key === 'Enter' && pin) {
           handlePinSubmit();
           return;
@@ -191,9 +233,19 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
     return () => {
       document.removeEventListener('keydown', handleGlobalKeyDown);
     };
-  }, [pinDialogOpen, pin, handlePinSubmit]);
+  }, [pinDialogOpen, pin, usePassword, handlePinSubmit]);
 
-  // If the user is not logged in, don't render the component
+  useEffect(() => {
+    if (pinDialogOpen && usePassword) {
+      setTimeout(() => {
+        const passwordInput = document.getElementById('password') as HTMLInputElement;
+        if (passwordInput) {
+          passwordInput.focus();
+        }
+      }, 50);
+    }
+  }, [pinDialogOpen, usePassword]);
+
   if (!user.dto) {
     return null;
   }
@@ -271,10 +323,13 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
       />
 
       <Dialog open={pinDialogOpen} onClose={handlePinDialogClose} data-test="pin-dialog">
-        <DialogTitle>Enter PIN</DialogTitle>
+        <DialogTitle>{usePassword ? 'Enter Password' : 'Enter PIN'}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please enter the PIN for {selectedAccount?.name}'s account:
+            {usePassword
+              ? `Please enter your password to switch to ${selectedAccount?.name}'s account:`
+              : `Please enter the PIN for ${selectedAccount?.name}'s account:`
+            }
           </DialogContentText>
 
           <Box
@@ -285,94 +340,151 @@ export const AccountSwitcher = (props: AccountSwitcherProps) => {
               mt: 2
             }}
           >
-            <TextField
-              margin="dense"
-              id="pin"
-              label="PIN"
-              type="password"
-              variant="outlined"
-              value={pin}
-              inputProps={{
-                maxLength: 6,
-                inputMode: 'none', // Prevents mobile keyboard
-                readOnly: true, // Prevents keyboard but allows selection/focus
-                'aria-label': 'PIN code entry field'
-              }}
-              sx={{ mb: 2, width: '100%' }}
-              InputProps={{
-                sx: {
-                  letterSpacing: '8px',
-                  fontSize: '1.5rem',
-                  textAlign: 'center'
-                }
-              }}
-            />
+            {usePassword ? (
+              <TextField
+                margin="dense"
+                id="password"
+                label="Password"
+                type="password"
+                variant="outlined"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && password) {
+                    handlePinSubmit();
+                  }
+                }}
+                sx={{ mb: 2, width: '100%' }}
+                autoFocus
+                data-test="pin-dialog-password-input"
+              />
+            ) : (
+              <TextField
+                margin="dense"
+                id="pin"
+                label="PIN"
+                type="password"
+                variant="outlined"
+                value={pin}
+                helperText={selectedAccount && (selectedAccount.type === UserType.PARENT || selectedAccount.type === UserType.TEACHER) ? 'Default PIN: 4000' : ''}
+                inputProps={{
+                  maxLength: 6,
+                  inputMode: 'none',
+                  readOnly: true,
+                  'aria-label': 'PIN code entry field'
+                }}
+                sx={{ mb: 2, width: '100%' }}
+                InputProps={{
+                  sx: {
+                    letterSpacing: '8px',
+                    textAlign: 'center'
+                  }
+                }}
+              />
+            )}
 
-            <Box
-              sx={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: 1,
-                width: '100%',
-                maxWidth: 300
-              }}
-            >
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+            {!usePassword && (
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: 1,
+                  width: '100%',
+                  maxWidth: 300
+                }}
+              >
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                  <Button
+                    key={num}
+                    variant="outlined"
+                    data-test={`pin-digit-${num}`}
+                    onClick={() => setPin(prev => prev.length < 6 ? prev + num : prev)}
+                    sx={{
+                      minWidth: 60,
+                      height: 60,
+                      fontSize: '1.5rem'
+                    }}
+                  >
+                    {num}
+                  </Button>
+                ))}
                 <Button
-                  key={num}
                   variant="outlined"
-                  data-test={`pin-digit-${num}`}
-                  onClick={() => setPin(prev => prev.length < 6 ? prev + num : prev)}
+                  onClick={() => setPin(prev => prev.slice(0, -1))}
+                  data-test="pin-backspace"
                   sx={{
                     minWidth: 60,
                     height: 60,
-                    fontSize: '1.5rem'
+                    fontSize: '1.2rem',
+                    gridColumn: '1 / 2'
                   }}
                 >
-                  {num}
+                  ←
                 </Button>
-              ))}
-              <Button
-                variant="outlined"
-                onClick={() => setPin(prev => prev.slice(0, -1))}
-                data-test="pin-backspace"
-                sx={{
-                  minWidth: 60,
-                  height: 60,
-                  fontSize: '1.2rem',
-                  gridColumn: '1 / 2'
-                }}
-              >
-                ←
-              </Button>
-              <Button
-                variant="outlined"
-                onClick={() => setPin(prev => prev.length < 6 ? prev + '0' : prev)}
-                data-test="pin-digit-0"
-                sx={{
-                  minWidth: 60,
-                  height: 60,
-                  fontSize: '1.5rem',
-                  gridColumn: '2 / 3'
-                }}
-              >
-                0
-              </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => setPin(prev => prev.length < 6 ? prev + '0' : prev)}
+                  data-test="pin-digit-0"
+                  sx={{
+                    minWidth: 60,
+                    height: 60,
+                    fontSize: '1.5rem',
+                    gridColumn: '2 / 3'
+                  }}
+                >
+                  0
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={handlePinSubmit}
+                  disabled={!pin}
+                  data-test="pin-submit"
+                  sx={{
+                    minWidth: 60,
+                    height: 60,
+                    fontSize: '1.2rem',
+                    gridColumn: '3 / 4'
+                  }}
+                >
+                  ✓
+                </Button>
+              </Box>
+            )}
+
+            {usePassword && (
               <Button
                 variant="contained"
                 onClick={handlePinSubmit}
-                disabled={!pin}
-                data-test="pin-submit"
-                sx={{
-                  minWidth: 60,
-                  height: 60,
-                  fontSize: '1.2rem',
-                  gridColumn: '3 / 4'
-                }}
+                disabled={!password}
+                fullWidth
+                sx={{ mt: 1 }}
+                data-test="pin-dialog-password-submit"
               >
-                ✓
+                Submit
               </Button>
-            </Box>
+            )}
+
+            {selectedAccount && (selectedAccount.type === UserType.PARENT || selectedAccount.type === UserType.TEACHER) && (
+              <Button
+                variant="text"
+                onClick={() => {
+                  setUsePassword(!usePassword);
+                  setPin('');
+                  setPassword('');
+                  setPinError(null);
+                }}
+                sx={{ mt: 2, textTransform: 'none', color: 'text.secondary' }}
+                data-test="switch-auth-method"
+              >
+                {usePassword ? 'Use PIN instead' : 'Use password instead'}
+              </Button>
+            )}
+
+            {pinError && (
+              <Typography color="error" variant="body2" sx={{ mt: 2, textAlign: 'center' }} data-test="pin-error">
+                {pinError}
+              </Typography>
+            )}
           </Box>
         </DialogContent>
         <DialogActions>

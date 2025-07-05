@@ -1,5 +1,6 @@
 import express from 'express';
 import { In, Not } from 'typeorm';
+import bcrypt from 'bcrypt';
 
 import { AppDataSource } from '../data-source';
 import { User } from '../entity/User';
@@ -17,7 +18,6 @@ import {
 import { typedGet, typedPost } from '../typedRoutes';
 
 export const setupUserRoutes = (router: express.Router) => {
-  
 
   typedGet(router, '/api/user', async (req, resp) => {
     if (!req.jwtUser) {
@@ -184,10 +184,10 @@ export const setupUserRoutes = (router: express.Router) => {
         });
 
         if (childId && req.jwtUser) {
-          const loggedInAdult = adultRelationships.find(rel => 
+          const loggedInAdult = adultRelationships.find(rel =>
             rel.adult.email === req.jwtUser!.email
           );
-          
+
           if (loggedInAdult) {
             const classmateRelationships = await relationshipRepo.find({
               where: {
@@ -270,6 +270,35 @@ export const setupUserRoutes = (router: express.Router) => {
       if (req.body.gender !== undefined) {
         targetUser.gender = req.body.gender || null;
       }
+
+      // PIN update requires password verification for security
+      if (req.body.pin !== undefined && (currentUser.type === UserType.PARENT || currentUser.type === UserType.TEACHER)) {
+        if (!req.body.password) {
+          return resp.status(400).json({
+            errorCode: 'users.update.pinRequiresPassword',
+            message: 'Password is required to update PIN',
+          });
+        }
+
+        const passwordValid = await bcrypt.compare(req.body.password, currentUser.hashed!);
+        if (!passwordValid) {
+          return resp.status(401).json({
+            errorCode: 'users.update.invalidPassword',
+            message: 'Invalid password',
+          });
+        }
+
+        // Validate PIN format (4-6 digits)
+        if (req.body.pin && !/^\d{4,6}$/.test(req.body.pin)) {
+          return resp.status(400).json({
+            errorCode: 'users.update.invalidPinFormat',
+            message: 'PIN must be 4-6 digits',
+          });
+        }
+
+        targetUser.pin = req.body.pin || undefined;
+      }
+
       await userRepo.save(targetUser);
       return resp.json({
         success: true
@@ -370,7 +399,7 @@ export const setupUserRoutes = (router: express.Router) => {
         birthday: targetUser.birthday ? targetUser.birthday.toString() : null,
         gender: targetUser.gender || null
       };
-      
+
       return resp.json({
         user: userDTO
       });
