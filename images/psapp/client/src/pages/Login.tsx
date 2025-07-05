@@ -64,10 +64,7 @@ export let Login = (props: LoginProps) => {
           ...fields,
           email: {error: true, helperText: narrow.message}
         }));
-      } else if (
-        resp.errorCode === 'auth.login.password.invalid' ||
-        resp.errorCode === 'auth.login.password.notset'
-      ) {
+      } else if (resp.errorCode === 'auth.login.password.invalid') {
         let narrow = resp;
         setFields(fields => ({
           ...fields,

@@ -78,14 +78,7 @@ export const setupAuthRoutes = (router: express.Router) => {
       });
     }
 
-    if (!user.hashed) {
-      return resp.status(401).json({
-        errorCode: 'auth.login.password.notset',
-        message: 'User has no password set',
-      });
-    }
-
-    if (!await bcrypt.compare(req.body.password, user.hashed)) {
+    if (!await bcrypt.compare(req.body.password, user.hashed!)) {
       return resp.status(401).json({
         errorCode: 'auth.login.password.invalid',
         message: 'Password is not valid',
@@ -173,19 +166,34 @@ export const setupAuthRoutes = (router: express.Router) => {
     const isAdultSwitchingToChild = isAdultActingAsSelf && (targetUser.type === UserType.STUDENT);
 
     if (pinRequired && !isAdultSwitchingToChild) {
-      if (!req.body.pin) {
-        return resp.status(401).json({
-          errorCode: 'auth.switch.invalidPin',
-          message: 'PIN is required to access this account',
-        });
-      }
-
       const expectedPin = (isAdult && !targetUser.pin) ? defaultPin : targetUser.pin;
 
-      if (req.body.pin !== expectedPin) {
+      // Check if PIN is provided and valid
+      if (req.body.pin) {
+        if (req.body.pin === expectedPin) {
+          // PIN is correct, allow switch
+        } else {
+          return resp.status(401).json({
+            errorCode: 'auth.switch.invalidCredentials',
+            message: 'Incorrect PIN',
+          });
+        }
+      }
+      // If no PIN, check password for adult accounts
+      else if (req.body.password && isAdult && targetUser.hashed) {
+        const passwordValid = await bcrypt.compare(req.body.password, targetUser.hashed);
+        if (!passwordValid) {
+          return resp.status(401).json({
+            errorCode: 'auth.switch.invalidCredentials',
+            message: 'Incorrect password',
+          });
+        }
+      }
+      // Neither PIN nor password provided
+      else {
         return resp.status(401).json({
-          errorCode: 'auth.switch.invalidPin',
-          message: 'Incorrect PIN',
+          errorCode: 'auth.switch.invalidCredentials',
+          message: 'PIN or password is required to access this account',
         });
       }
     }

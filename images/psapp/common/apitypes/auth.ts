@@ -40,9 +40,6 @@ export type AuthEndpoints = {
         errorCode: 'auth.login.password.invalid',
         message: string,
       } | {
-        errorCode: 'auth.login.password.notset',
-        message: string,
-      } | {
         success: true,
       },
     },
@@ -64,6 +61,7 @@ export type AuthEndpoints = {
       Body: {
         targetId: string,
         pin?: string,
+        password?: string,
       },
       Response: {
         success: true,
@@ -74,7 +72,7 @@ export type AuthEndpoints = {
         errorCode: 'auth.switch.invalidUser',
         message: string,
       } | {
-        errorCode: 'auth.switch.invalidPin',
+        errorCode: 'auth.switch.invalidCredentials',
         message: string,
       } | {
         errorCode: 'auth.switch.notRelated',

@@ -44,6 +44,8 @@ export type UserEndpoints = {
         profilePicture?: ProfilePicture,
         birthday?: string | null,
         gender?: Gender | null,
+        pin?: string,
+        password?: string,
       },
       Response: {
         success: true,
@@ -58,6 +60,15 @@ export type UserEndpoints = {
         message: string,
       } | {
         errorCode: 'users.update.unauthorized',
+        message: string,
+      } | {
+        errorCode: 'users.update.pinRequiresPassword',
+        message: string,
+      } | {
+        errorCode: 'users.update.invalidPassword',
+        message: string,
+      } | {
+        errorCode: 'users.update.invalidPinFormat',
         message: string,
       },
     },
