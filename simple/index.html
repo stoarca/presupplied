@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Division Practice</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 24px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .timer-box {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e67e22;
+            margin-bottom: 15px;
+            transition: color 0.3s;
+        }
+        .timer-low {
+            color: #e74c3c;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0.5; }
+        }
+        .question-box {
+            font-size: 48px;
+            font-weight: bold;
+            color: #34495e;
+            margin: 20px 0;
+        }
+        input[type="number"] {
+            font-size: 24px;
+            width: 100px;
+            padding: 10px;
+            text-align: center;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input[type="number"]:focus {
+            border-color: #3498db;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        .feedback {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 27px;
+        }
+        .correct { color: #2ecc71; }
+        .incorrect { color: #e74c3c; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="game-screen">
+        <h1>Division Practice</h1>
+        <div class="stats">
+            <span id="remaining-count">Questions left: 0</span>
+            <span id="score-count">Score: 0/0</span>
+        </div>
+        
+        <div class="timer-box" id="timer-text">Time Left: 15s</div>
+        
+        <div class="question-box" id="question-text">0 ÷ 0 = ?</div>
+        
+        <form id="answer-form" autocomplete="off">
+            <input type="number" id="user-answer" min="0" required autofocus>
+            <button type="submit" id="submit-btn">Submit</button>
+        </form>
+        
+        <div class="feedback" id="feedback-text"></div>
+    </div>
+
+    <div id="end-screen" class="hidden">
+        <h1>🎉 Congratulations! 🎉</h1>
+        <p>You have successfully finished all the questions in your pool!</p>
+        <div class="question-box" style="font-size: 24px;" id="final-score"></div>
+        <button onclick="resetGame()">Play Again</button>
+    </div>
+</div>
+
+<script>
+    let questionPool = [];
+    let currentQuestion = null;
+    let totalAttempted = 0;
+    let totalCorrect = 0;
+    
+    // Timer variables
+    let timeLeft = 15;
+    let timerInterval = null;
+    let isProcessing = false; // Prevents double submissions during timeouts
+
+    const questionText = document.getElementById('question-text');
+    const userAnswer = document.getElementById('user-answer');
+    const answerForm = document.getElementById('answer-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const feedbackText = document.getElementById('feedback-text');
+    const remainingCount = document.getElementById('remaining-count');
+    const scoreCount = document.getElementById('score-count');
+    const timerText = document.getElementById('timer-text');
+    const gameScreen = document.getElementById('game-screen');
+    const endScreen = document.getElementById('end-screen');
+    const finalScore = document.getElementById('final-score');
+
+    function initGame() {
+        questionPool = [];
+        totalAttempted = 0;
+        totalCorrect = 0;
+        isProcessing = false;
+        
+        for (let i = 1; i <= 10; i++) {
+            for (let j = 1; j <= 10; j++) {
+                let product = i * j;
+                questionPool.push({
+                    dividend: product,
+                    divisor: i,
+                    answer: j
+                });
+            }
+        }
+        shufflePool();
+        nextQuestion();
+    }
+
+    function shufflePool() {
+        for (let i = questionPool.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [questionPool[i], questionPool[j]] = [questionPool[j], questionPool[i]];
+        }
+    }
+
+    function updateStats() {
+        remainingCount.textContent = `Questions left: ${questionPool.length}`;
+        scoreCount.textContent = `Score: ${totalCorrect}/${totalAttempted}`;
+    }
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timeLeft = 15;
+        timerText.textContent = `Time Left: ${timeLeft}s`;
+        timerText.className = "timer-box";
+
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            timerText.textContent = `Time Left: ${timeLeft}s`;
+            
+            if (timeLeft <= 5) {
+                timerText.className = "timer-box timer-low";
+            }
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                handleTimeout();
+            }
+        }, 1000);
+    }
+
+    function nextQuestion() {
+        if (questionPool.length === 0) {
+            clearInterval(timerInterval);
+            showEndScreen();
+            return;
+        }
+
+        isProcessing = false;
+        feedbackText.textContent = '';
+        feedbackText.className = 'feedback';
+        userAnswer.value = '';
+        userAnswer.disabled = false;
+        submitBtn.disabled = false;
+        userAnswer.focus();
+
+        currentQuestion = questionPool.shift(); 
+        questionText.textContent = `${currentQuestion.dividend} ÷ ${currentQuestion.divisor} =`;
+        updateStats();
+        startTimer();
+    }
+
+    function handleTimeout() {
+        if (isProcessing) return;
+        isProcessing = true;
+        
+        totalAttempted++;
+        lockInputs();
+        
+        feedbackText.textContent = `⏰ Time's up! ${currentQuestion.dividend} ÷ ${currentQuestion.divisor} = ${currentQuestion.answer}`;
+        feedbackText.className = "feedback incorrect";
+        
+        punishQuestion();
+        setTimeout(nextQuestion, 2500);
+    }
+
+    function punishQuestion() {
+        // Add 3 copies of this exact missed question back into the remaining pool
+        for(let k = 0; k < 3; k++) {
+            questionPool.push({
+                dividend: currentQuestion.dividend,
+                divisor: currentQuestion.divisor,
+                answer: currentQuestion.answer
+            });
+        }
+        shufflePool();
+    }
+
+    function lockInputs() {
+        userAnswer.disabled = true;
+        submitBtn.disabled = true;
+    }
+
+    function showEndScreen() {
+        gameScreen.classList.add('hidden');
+        endScreen.classList.remove('hidden');
+        finalScore.textContent = `Final Accuracy: ${totalAttempted > 0 ? Math.round((totalCorrect / totalAttempted) * 100) : 0}%`;
+    }
+
+    function resetGame() {
+        endScreen.classList.add('hidden');
+        gameScreen.classList.remove('hidden');
+        initGame();
+    }
+
+    answerForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Anti-ghosting bug fix: If input is empty, ignore the enter press entirely
+        if (userAnswer.value.trim() === '' || isProcessing) {
+            return;
+        }
+
+        isProcessing = true;
+        clearInterval(timerInterval);
+        totalAttempted++;
+        lockInputs();
+
+        const input = parseInt(userAnswer.value, 10);
+
+        if (input === currentQuestion.answer) {
+            totalCorrect++;
+            feedbackText.textContent = "Correct! Nailed it!";
+            feedbackText.className = "feedback correct";
+            setTimeout(nextQuestion, 1000);
+        } else {
+            feedbackText.textContent = `Oops! ${currentQuestion.dividend} ÷ ${currentQuestion.divisor} = ${currentQuestion.answer}`;
+            feedbackText.className = "feedback incorrect";
+            punishQuestion();
+            setTimeout(nextQuestion, 2500);
+        }
+    });
+
+    // Start the game loop on load
+    initGame();
+</script>
+
+</body>
+</html>
