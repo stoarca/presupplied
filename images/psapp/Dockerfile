@@ -1,7 +1,7 @@
 FROM phusion/baseimage:jammy-1.0.1
 
 RUN apt-get update && apt-get install -yq ca-certificates curl gnupg unzip
-RUN curl -fsSL https://bun.sh/install | bash && \
+RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.2.18" && \
     ln -s /root/.bun/bin/bun /usr/local/bin/bun
 
 # Fix for Git dependencies in Bun

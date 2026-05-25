@@ -15,7 +15,7 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
         with:
-          bun-version: latest
+          bun-version: 1.2.18
 
       - name: Navigate to client and install dependencies
         working-directory: images/psapp/client
@@ -71,7 +71,7 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
         with:
-          bun-version: latest
+          bun-version: 1.2.18
 
       - name: Generate self-signed certificates
         run: |

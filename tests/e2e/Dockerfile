@@ -1,4 +1,4 @@
-FROM selenium/standalone-firefox:latest
+FROM selenium/standalone-firefox:140.0
 
 USER root
 
@@ -10,7 +10,7 @@ RUN apt-get update && \
 
 
 # Install Bun to a specific location and make sure it's in PATH
-RUN curl -fsSL https://bun.sh/install | bash
+RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.2.18"
 
 # Set Firefox configuration
 ENV FIREFOX_BIN=/usr/bin/firefox
